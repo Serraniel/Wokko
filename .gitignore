@@ -1,0 +1,37 @@
+# Go
+*.exe
+*.test
+*.prof
+/backend/vendor/
+/backend/tmp/
+/backend/bin/
+
+# Node
+node_modules/
+.svelte-kit/
+build/
+dist/
+.env
+.env.local
+.env.*.local
+
+# Docker
+.env.docker
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Uploads (local dev)
+/backend/uploads/
+
+# Worktrees
+.worktrees/
+
+# Tmp (logo drafts, not for repo)
+/tmp/
