@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.PUBLIC_API_URL || '/api';
+// Always use a root-relative path — the SvelteKit server hook proxies /api/* to the backend.
+const API_BASE = '/api';
 
 interface RequestOptions {
   method?: string;
