@@ -1,0 +1,29 @@
+services:
+  db:
+    ports:
+      - "5432:5432"
+
+  backend:
+    image: ""
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://wokko:changeme@db:5432/wokko?sslmode=disable
+      JWT_SECRET: dev-secret-change-in-production
+      UPLOAD_PATH: /data/uploads
+      PORT: 8080
+      PUBLIC_URL: http://localhost:3000
+      ALLOW_PUBLIC_RECIPES: "true"
+      OPEN_REGISTRATION: "false"
+      RP_ID: localhost
+      RP_ORIGIN: http://localhost:3000
+
+  frontend:
+    image: ""
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      PUBLIC_API_URL: http://backend:8080
+      ORIGIN: http://localhost:3000
