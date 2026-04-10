@@ -46,7 +46,7 @@ Auth, Recipes, Ingredients, Units, Sharing, MCP, i18n, UI, Infra, Fix
 - JWT access tokens (15min) + refresh tokens (httpOnly cookie, 7 days)
 - Passkeys via WebAuthn (go-webauthn library)
 - Photos stored on filesystem at UPLOAD_PATH env var (default: /data/uploads)
-- Tandoor v1 API compatibility at /api/ for kitshn mobile app support
+- kitshn-compatible REST API at /api/ for mobile app support
 - Semantic versioning starting at 0.1.0
 - Footer version auto-populated from VITE_APP_VERSION env var (set at build time from git tag)
 - No Redis needed — JWT sessions are stateless

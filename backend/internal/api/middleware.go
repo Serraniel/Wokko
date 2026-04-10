@@ -26,7 +26,7 @@ func (s *Server) AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func (s *Server) TandoorAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func (s *Server) KitshnAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		header := c.Request().Header.Get("Authorization")
 		var token string
