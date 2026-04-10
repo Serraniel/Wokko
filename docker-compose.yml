@@ -48,7 +48,7 @@ services:
     depends_on:
       - backend
     environment:
-      PUBLIC_API_URL: ${PUBLIC_API_URL:-http://backend:8080}
+      BACKEND_URL: ${BACKEND_URL:-http://backend:8080}
       ORIGIN: ${PUBLIC_URL:-http://localhost:3000}
     ports:
       - "127.0.0.1:3000:3000"
