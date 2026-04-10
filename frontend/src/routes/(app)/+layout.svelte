@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
   import { authStore } from '$lib/stores/auth.svelte';
   import Nav from '$lib/components/Nav.svelte';
   import Footer from '$lib/components/Footer.svelte';
 
-  let { children } = $props();
-
-  onMount(() => {
+  // Initialize synchronously so nav and child page guards have auth state immediately
+  if (browser) {
     authStore.init();
-    if (!authStore.isLoggedIn) {
-      goto('/auth/login');
-    }
-  });
+  }
+
+  let { children } = $props();
 </script>
 
 <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
