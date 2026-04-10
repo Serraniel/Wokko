@@ -17,6 +17,7 @@ func RegisterRoutes(e *echo.Echo, pool *pgxpool.Pool, cfg *config.Config) {
 
 	// Auth (public)
 	authGroup := e.Group("/api/auth")
+	authGroup.GET("/setup/status", s.SetupStatus)
 	authGroup.POST("/setup", s.SetupAdmin)
 	authGroup.POST("/register", s.Register)
 	authGroup.POST("/login", s.Login)
