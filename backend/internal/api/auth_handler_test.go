@@ -8,7 +8,11 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/serraniel/wokko/backend/internal/config"
@@ -18,14 +22,35 @@ func newTestServer(t *testing.T) (*Server, *pgxpool.Pool) {
 	t.Helper()
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		t.Skip("DATABASE_URL not set, skipping integration test")
+		dbURL = "postgres://wokko:changeme@localhost:5432/wokko_test?sslmode=disable"
 	}
+
 	pool, err := pgxpool.New(context.Background(), dbURL)
 	if err != nil {
-		t.Fatalf("failed to connect to database: %v", err)
+		t.Skipf("no database available (%v) – skipping", err)
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := pool.Ping(ctx); err != nil {
+		pool.Close()
+		t.Skipf("no database available (%v) – skipping", err)
+	}
+
+	// Run migrations so tables exist.
+	m, err := migrate.New("file://../../migrations", dbURL)
+	if err != nil {
+		pool.Close()
+		t.Fatalf("create migrator: %v", err)
+	}
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		m.Close()
+		pool.Close()
+		t.Fatalf("run migrations: %v", err)
+	}
+	m.Close()
+
 	cfg := &config.Config{
-		UploadPath: t.TempDir(),
+		UploadPath:       t.TempDir(),
 		JWTSecret:        "test-secret-key-for-testing",
 		OpenRegistration: false,
 	}
@@ -79,8 +104,8 @@ func TestSetupAdmin(t *testing.T) {
 	e := setupEcho(s)
 
 	// Clean slate
-	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'testadmin'")
-	_, _ = pool.Exec(context.Background(), "UPDATE system_settings SET value = 'false' WHERE key = 'setup_complete'")
+	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'testadmin')")
+	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'testadmin' OR username = 'testadmin2'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 
 	t.Run("success", func(t *testing.T) {
@@ -109,7 +134,7 @@ func TestSetupAdmin(t *testing.T) {
 
 	// Cleanup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'testadmin')")
-	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'testadmin'")
+	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'testadmin' OR username = 'testadmin2'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 }
 
@@ -118,7 +143,6 @@ func TestLogin(t *testing.T) {
 	defer pool.Close()
 	e := setupEcho(s)
 
-	// Ensure setup is done first
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'loginuser'")
 	setupRec := doRequest(t, e, http.MethodPost, "/api/auth/setup", map[string]string{
@@ -159,7 +183,6 @@ func TestLogin(t *testing.T) {
 		}
 	})
 
-	// Cleanup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'loginuser')")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'loginuser'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
@@ -170,7 +193,6 @@ func TestRegisterWithoutInvite(t *testing.T) {
 	defer pool.Close()
 	e := setupEcho(s)
 
-	// Setup required first
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'adminforregtest'")
 	setupRec := doRequest(t, e, http.MethodPost, "/api/auth/setup", map[string]string{
@@ -191,7 +213,6 @@ func TestRegisterWithoutInvite(t *testing.T) {
 		}
 	})
 
-	// Cleanup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'adminforregtest')")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'adminforregtest'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
@@ -202,7 +223,6 @@ func TestRefreshToken(t *testing.T) {
 	defer pool.Close()
 	e := setupEcho(s)
 
-	// Setup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'refreshuser'")
 	setupRec := doRequest(t, e, http.MethodPost, "/api/auth/setup", map[string]string{
@@ -243,7 +263,6 @@ func TestRefreshToken(t *testing.T) {
 		}
 	})
 
-	// Cleanup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'refreshuser')")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'refreshuser'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
@@ -254,7 +273,6 @@ func TestGetCurrentUser(t *testing.T) {
 	defer pool.Close()
 	e := setupEcho(s)
 
-	// Setup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'meuser'")
 	setupRec := doRequest(t, e, http.MethodPost, "/api/auth/setup", map[string]string{
@@ -288,7 +306,6 @@ func TestGetCurrentUser(t *testing.T) {
 		}
 	})
 
-	// Cleanup
 	_, _ = pool.Exec(context.Background(), "DELETE FROM refresh_tokens WHERE user_id = (SELECT id FROM users WHERE username = 'meuser')")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE username = 'meuser'")
 	_, _ = pool.Exec(context.Background(), "DELETE FROM system_settings WHERE key = 'setup_complete'")
