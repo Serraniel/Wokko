@@ -8,14 +8,14 @@
 
 ## 1. Overview
 
-Wokko is a self-hosted recipe management web application. It is designed as a fast, lightweight, and maintainable alternative to Tandoor Recipes. The name "Wokko" is a playful take on "Wok" — cute, friendly, and cooking-focused.
+Wokko is a self-hosted recipe management web application. It is designed as a fast, lightweight, and maintainable self-hosted recipe management app. The name "Wokko" is a playful take on "Wok" — cute, friendly, and cooking-focused.
 
 ### Goals
 
 - Fast, responsive UI on desktop, tablet, and mobile
 - Simple enough for non-technical users
 - Easy self-hosting via Docker Compose
-- Tandoor API compatibility for kitshn mobile app
+- kitshn mobile app compatibility
 - No mandatory email — privacy-first user management
 - Passkey (WebAuthn) support
 - EN + DE localization (more languages later)
@@ -134,9 +134,9 @@ Registration does NOT require email. Email is optional for password reset only.
 - `DATABASE_URL` — PostgreSQL connection string
 - `UPLOAD_PATH` — file system path for uploads (default `/data/uploads`)
 
-### Tandoor API Compatibility
+### kitshn API Compatibility
 
-A subset of the Tandoor v1 REST API will be implemented at `/api/` to ensure kitshn compatibility:
+A compatible REST API will be implemented at `/api/` to ensure kitshn compatibility:
 
 - `GET /api/recipe/` — list recipes
 - `GET /api/recipe/{id}/` — recipe detail
@@ -144,7 +144,7 @@ A subset of the Tandoor v1 REST API will be implemented at `/api/` to ensure kit
 - `GET /api/unit/` — units
 - `GET /api/keyword/` — tags
 - `POST /api/recipe/` — create recipe
-- Auth: token-based (same format as Tandoor)
+- Auth: token-based (same token format)
 
 ### MCP Protocol (opt-in)
 
@@ -224,7 +224,7 @@ frontend/
 
 ## 5. Data — Default Sets
 
-To provide a useful out-of-the-box experience (similar to Tandoor's supermarket categories and food database):
+To provide a useful out-of-the-box experience (useful out-of-the-box):
 
 - **Seed file:** `backend/migrations/seeds/` with SQL inserts
 - **~200 common ingredients** in EN + DE with common units pre-assigned
@@ -307,7 +307,7 @@ The `docker-compose.yml` example will include all named volumes documented clear
 1. **v0.1.0 — Foundation** — Repo setup, CI/CD, auth, basic recipe CRUD
 2. **v0.2.0 — Recipe Features** — Steps, ingredients, units, photos, tags
 3. **v0.3.0 — Sharing** — Public recipes, share links, public gallery
-4. **v0.4.0 — kitshn Compat** — Tandoor API compatibility layer
+4. **v0.4.0 — kitshn Compat** — kitshn compatibility layer
 5. **v0.5.0 — Admin & UX** — Admin panel, user management, invite links
 6. **v0.6.0 — MCP** — MCP protocol, OAuth
 7. **v0.7.0 — i18n** — Full EN/DE, seed data localization

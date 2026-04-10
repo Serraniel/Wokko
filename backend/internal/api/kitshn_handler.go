@@ -22,8 +22,8 @@ func pgtypeUUIDToInt(id pgtype.UUID) int {
 	return uuidToInt(uid)
 }
 
-// Tandoor response shapes (minimal subset for kitshn)
-type TandoorRecipe struct {
+// Kitshn response shapes (minimal subset for kitshn)
+type KitshnRecipe struct {
 	ID          int              `json:"id"`
 	Name        string           `json:"name"`
 	Description string           `json:"description"`
@@ -31,80 +31,80 @@ type TandoorRecipe struct {
 	WorkingTime int              `json:"working_time"`
 	WaitingTime int              `json:"waiting_time"`
 	Servings    int              `json:"servings"`
-	Keywords    []TandoorKeyword `json:"keywords"`
-	Steps       []TandoorStep    `json:"steps"`
+	Keywords    []KitshnKeyword `json:"keywords"`
+	Steps       []KitshnStep    `json:"steps"`
 }
 
-type TandoorKeyword struct {
+type KitshnKeyword struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
-type TandoorStep struct {
+type KitshnStep struct {
 	ID          int                 `json:"id"`
 	Name        string              `json:"name"`
 	Instruction string              `json:"instruction"`
-	Ingredients []TandoorIngredient `json:"ingredients"`
+	Ingredients []KitshnIngredient `json:"ingredients"`
 	Time        int                 `json:"time"`
 }
 
-type TandoorIngredient struct {
+type KitshnIngredient struct {
 	ID     int          `json:"id"`
 	Amount float64      `json:"amount"`
-	Unit   *TandoorUnit `json:"unit"`
-	Food   TandoorFood  `json:"food"`
+	Unit   *KitshnUnit `json:"unit"`
+	Food   KitshnFood  `json:"food"`
 	Note   string       `json:"note"`
 }
 
-type TandoorUnit struct {
+type KitshnUnit struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
-type TandoorFood struct {
+type KitshnFood struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
-type TandoorListResponse struct {
+type KitshnListResponse struct {
 	Count    int         `json:"count"`
 	Next     *string     `json:"next"`
 	Previous *string     `json:"previous"`
 	Results  interface{} `json:"results"`
 }
 
-func (s *Server) buildTandoorRecipe(c echo.Context, q *dbq.Queries, r dbq.Recipe) (TandoorRecipe, error) {
+func (s *Server) buildKitshnRecipe(c echo.Context, q *dbq.Queries, r dbq.Recipe) (KitshnRecipe, error) {
 	ctx := c.Request().Context()
 	tags, _ := q.ListRecipeTags(ctx, r.ID)
 	rawSteps, _ := q.ListRecipeSteps(ctx, r.ID)
 
-	keywords := make([]TandoorKeyword, 0, len(tags))
+	keywords := make([]KitshnKeyword, 0, len(tags))
 	for _, t := range tags {
 		tid, _ := uuid.FromBytes(t.ID.Bytes[:])
-		keywords = append(keywords, TandoorKeyword{
+		keywords = append(keywords, KitshnKeyword{
 			ID:   uuidToInt(tid),
 			Name: t.Name,
 		})
 	}
 
-	steps := make([]TandoorStep, 0, len(rawSteps))
+	steps := make([]KitshnStep, 0, len(rawSteps))
 	for _, st := range rawSteps {
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		tandoorIngs := make([]TandoorIngredient, 0, len(ings))
+		kitshnIngs := make([]KitshnIngredient, 0, len(ings))
 		for _, ing := range ings {
 			ingDB, err := q.GetIngredientByID(ctx, ing.IngredientID)
 			if err != nil {
 				continue
 			}
-			ti := TandoorIngredient{
+			ti := KitshnIngredient{
 				ID:   pgtypeUUIDToInt(ing.ID),
-				Food: TandoorFood{ID: pgtypeUUIDToInt(ing.IngredientID), Name: ingDB.NameEn},
+				Food: KitshnFood{ID: pgtypeUUIDToInt(ing.IngredientID), Name: ingDB.NameEn},
 			}
 			if ing.UnitID.Valid {
 				unitDB, err := q.GetUnitByID(ctx, ing.UnitID)
 				if err == nil {
 					unitInt := pgtypeUUIDToInt(ing.UnitID)
-					ti.Unit = &TandoorUnit{ID: unitInt, Name: unitDB.NameEn}
+					ti.Unit = &KitshnUnit{ID: unitInt, Name: unitDB.NameEn}
 				}
 			}
 			if ing.Amount.Valid {
@@ -116,18 +116,18 @@ func (s *Server) buildTandoorRecipe(c echo.Context, q *dbq.Queries, r dbq.Recipe
 			if ing.Notes.Valid {
 				ti.Note = ing.Notes.String
 			}
-			tandoorIngs = append(tandoorIngs, ti)
+			kitshnIngs = append(kitshnIngs, ti)
 		}
 
 		dur := 0
 		if st.DurationMin.Valid {
 			dur = int(st.DurationMin.Int32)
 		}
-		steps = append(steps, TandoorStep{
+		steps = append(steps, KitshnStep{
 			ID:          pgtypeUUIDToInt(st.ID),
 			Name:        "",
 			Instruction: st.Description,
-			Ingredients: tandoorIngs,
+			Ingredients: kitshnIngs,
 			Time:        dur,
 		})
 	}
@@ -150,7 +150,7 @@ func (s *Server) buildTandoorRecipe(c echo.Context, q *dbq.Queries, r dbq.Recipe
 		image = &url
 	}
 
-	return TandoorRecipe{
+	return KitshnRecipe{
 		ID:          pgtypeUUIDToInt(r.ID),
 		Name:        r.Name,
 		Description: desc,
@@ -164,7 +164,7 @@ func (s *Server) buildTandoorRecipe(c echo.Context, q *dbq.Queries, r dbq.Recipe
 }
 
 // GET /api/recipe/
-func (s *Server) TandoorListRecipes(c echo.Context) error {
+func (s *Server) KitshnListRecipes(c echo.Context) error {
 	userID, _ := c.Get("user_id").(uuid.UUID)
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
@@ -186,22 +186,22 @@ func (s *Server) TandoorListRecipes(c echo.Context) error {
 
 	count, _ := q.CountRecipesByAuthor(ctx, uuidToPgtype(userID))
 
-	results := make([]TandoorRecipe, 0, len(recipes))
+	results := make([]KitshnRecipe, 0, len(recipes))
 	for _, r := range recipes {
-		tr, err := s.buildTandoorRecipe(c, q, r)
+		tr, err := s.buildKitshnRecipe(c, q, r)
 		if err == nil {
 			results = append(results, tr)
 		}
 	}
 
-	return c.JSON(http.StatusOK, TandoorListResponse{
+	return c.JSON(http.StatusOK, KitshnListResponse{
 		Count:   int(count),
 		Results: results,
 	})
 }
 
 // GET /api/recipe/:id/
-func (s *Server) TandoorGetRecipe(c echo.Context) error {
+func (s *Server) KitshnGetRecipe(c echo.Context) error {
 	userID, _ := c.Get("user_id").(uuid.UUID)
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
@@ -220,7 +220,7 @@ func (s *Server) TandoorGetRecipe(c echo.Context) error {
 		return c.JSON(http.StatusForbidden, map[string]string{"error": "forbidden"})
 	}
 
-	tr, err := s.buildTandoorRecipe(c, q, recipe)
+	tr, err := s.buildKitshnRecipe(c, q, recipe)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
@@ -228,7 +228,7 @@ func (s *Server) TandoorGetRecipe(c echo.Context) error {
 }
 
 // POST /api/recipe/
-func (s *Server) TandoorCreateRecipe(c echo.Context) error {
+func (s *Server) KitshnCreateRecipe(c echo.Context) error {
 	userID, _ := c.Get("user_id").(uuid.UUID)
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
@@ -262,12 +262,12 @@ func (s *Server) TandoorCreateRecipe(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	tr, _ := s.buildTandoorRecipe(c, q, recipe)
+	tr, _ := s.buildKitshnRecipe(c, q, recipe)
 	return c.JSON(http.StatusCreated, tr)
 }
 
 // GET /api/food/
-func (s *Server) TandoorListFood(c echo.Context) error {
+func (s *Server) KitshnListFood(c echo.Context) error {
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
 
@@ -286,18 +286,18 @@ func (s *Server) TandoorListFood(c echo.Context) error {
 	}
 
 	count, _ := q.CountIngredients(ctx)
-	results := make([]TandoorFood, 0, len(items))
+	results := make([]KitshnFood, 0, len(items))
 	for _, i := range items {
-		results = append(results, TandoorFood{
+		results = append(results, KitshnFood{
 			ID:   pgtypeUUIDToInt(i.ID),
 			Name: i.NameEn,
 		})
 	}
-	return c.JSON(http.StatusOK, TandoorListResponse{Count: int(count), Results: results})
+	return c.JSON(http.StatusOK, KitshnListResponse{Count: int(count), Results: results})
 }
 
 // GET /api/unit/
-func (s *Server) TandoorListUnits(c echo.Context) error {
+func (s *Server) KitshnListUnits(c echo.Context) error {
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
 
@@ -316,18 +316,18 @@ func (s *Server) TandoorListUnits(c echo.Context) error {
 	}
 
 	count, _ := q.CountUnits(ctx)
-	results := make([]TandoorUnit, 0, len(items))
+	results := make([]KitshnUnit, 0, len(items))
 	for _, u := range items {
-		results = append(results, TandoorUnit{
+		results = append(results, KitshnUnit{
 			ID:   pgtypeUUIDToInt(u.ID),
 			Name: u.NameEn,
 		})
 	}
-	return c.JSON(http.StatusOK, TandoorListResponse{Count: int(count), Results: results})
+	return c.JSON(http.StatusOK, KitshnListResponse{Count: int(count), Results: results})
 }
 
 // GET /api/keyword/
-func (s *Server) TandoorListKeywords(c echo.Context) error {
+func (s *Server) KitshnListKeywords(c echo.Context) error {
 	ctx := c.Request().Context()
 	q := dbq.New(s.pool)
 
@@ -336,13 +336,13 @@ func (s *Server) TandoorListKeywords(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	results := make([]TandoorKeyword, 0, len(tags))
+	results := make([]KitshnKeyword, 0, len(tags))
 	for _, t := range tags {
 		tid, _ := uuid.FromBytes(t.ID.Bytes[:])
-		results = append(results, TandoorKeyword{
+		results = append(results, KitshnKeyword{
 			ID:   uuidToInt(tid),
 			Name: t.Name,
 		})
 	}
-	return c.JSON(http.StatusOK, TandoorListResponse{Count: len(tags), Results: results})
+	return c.JSON(http.StatusOK, KitshnListResponse{Count: len(tags), Results: results})
 }

@@ -2,7 +2,7 @@
 
 > Self-hosted recipe management — fast, lightweight, and yours.
 
-Wokko is a modern alternative to Tandoor Recipes. It's designed to be quick, easy to use for non-technical users, and robust enough to run on a Raspberry Pi. Compatible with the [kitshn](https://github.com/aimok04/kitshn) mobile app.
+Wokko is a self-hosted recipe management app — fast, lightweight, and easy to use for non-technical users. Runs on a Raspberry Pi. Compatible with the [kitshn](https://github.com/aimok04/kitshn) mobile app.
 
 [![License: EUPL-1.2](https://img.shields.io/badge/License-EUPL--1.2-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/Serraniel/Wokko)](https://github.com/Serraniel/Wokko/releases)
@@ -19,7 +19,7 @@ Wokko is a modern alternative to Tandoor Recipes. It's designed to be quick, eas
 - **Invite-based registration** — closed by default, admin generates invite links
 - **Public gallery** — share your recipes without requiring visitor accounts
 - **Share links** — per-recipe or all-recipes shareable URLs
-- **kitshn compatible** — implements the Tandoor v1 API for kitshn mobile app
+- **kitshn compatible** — compatible with the kitshn iOS/Android mobile app
 - **EN + DE** — English and German UI out of the box
 - **Light & dark mode** — system default + manual toggle
 - **MCP protocol** — opt-in AI integration (OAuth-gated)
@@ -76,7 +76,7 @@ cat uploads.tar.gz | docker run --rm -i -v wokko-uploads:/data alpine tar xzf - 
 
 ## kitshn Compatibility
 
-Wokko implements a subset of the [Tandoor Recipes](https://github.com/TandoorRecipes/recipes) v1 REST API, making it compatible with the [kitshn](https://github.com/aimok04/kitshn) iOS/Android app.
+Wokko implements a compatible REST API, making it work with the [kitshn](https://github.com/aimok04/kitshn) iOS/Android app.
 
 Point kitshn at your Wokko instance URL and log in with your Wokko credentials.
 

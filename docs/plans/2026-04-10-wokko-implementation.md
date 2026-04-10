@@ -4,7 +4,7 @@
 
 **Goal:** Build Wokko — a self-hosted recipe management web app with Go API backend, SvelteKit frontend, PostgreSQL database, Docker deployment, and full CI/CD.
 
-**Architecture:** Go (Echo) REST API at `/api/` + SvelteKit frontend. Separated services in Docker Compose. PostgreSQL for data, local filesystem volume for photo uploads. Tandoor-compatible API layer for kitshn app support.
+**Architecture:** Go (Echo) REST API at `/api/` + SvelteKit frontend. Separated services in Docker Compose. PostgreSQL for data, local filesystem volume for photo uploads. kitshn-compatible-compatible API layer for kitshn app support.
 
 **Tech Stack:** Go 1.22, Echo v4, sqlc, golang-migrate, pgx v5, go-webauthn, golang-jwt/v5 | SvelteKit, TailwindCSS v4, Paraglide-JS, shadcn-svelte | PostgreSQL 16 | Docker + Docker Compose | GitHub Actions
 
@@ -116,7 +116,7 @@ Auth, Recipes, Ingredients, Units, Sharing, MCP, i18n, UI, Infra, Fix
 - JWT access tokens (15min) + refresh tokens (httpOnly cookie, 7 days)
 - Passkeys via WebAuthn (go-webauthn library)
 - Photos stored on filesystem at UPLOAD_PATH env var (default: /data/uploads)
-- Tandoor v1 API compatibility at /api/ for kitshn mobile app support
+- kitshn-compatible v1 API compatibility at /api/ for kitshn mobile app support
 - Semantic versioning starting at 0.1.0
 - Footer version auto-populated from VITE_APP_VERSION env var (set at build time from git tag)
 ```
@@ -181,7 +181,7 @@ git -c commit.gpgsign=false commit -m "chore(infra): initialize repository with 
 **Step 1: Create GitHub repository**
 
 ```bash
-gh repo create Serraniel/Wokko --public --description "Self-hosted recipe management — fast, lightweight Tandoor alternative" --homepage "" --push --source .
+gh repo create Serraniel/Wokko --public --description "Self-hosted recipe management — fast, lightweight kitshn-compatible alternative" --homepage "" --push --source .
 ```
 
 **Step 2: Create GitHub labels for PR categories**
@@ -205,7 +205,7 @@ gh label create "Fix" --color "d73a4a" --description "Bug fix"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.1.0 — Foundation" -f description="Repo setup, CI/CD, auth, basic recipe CRUD"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.2.0 — Recipe Features" -f description="Steps, ingredients, units, photos, tags"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.3.0 — Sharing" -f description="Public recipes, share links, public gallery"
-gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.4.0 — kitshn Compat" -f description="Tandoor API compatibility layer for kitshn app"
+gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.4.0 — kitshn Compat" -f description="kitshn-compatible API compatibility layer for kitshn app"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.5.0 — Admin & UX" -f description="Admin panel, user management, invite links"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.6.0 — MCP" -f description="Model Context Protocol, OAuth"
 gh api repos/Serraniel/Wokko/milestones -X POST -f title="v0.7.0 — i18n" -f description="Full EN/DE, seed data localization"
@@ -237,7 +237,7 @@ Milestone 3 (v0.3.0):
 - "All-recipes share link for users" [Sharing]
 
 Milestone 4 (v0.4.0):
-- "Tandoor v1 API compatibility layer for kitshn" [Recipes]
+- "kitshn-compatible v1 API compatibility layer for kitshn" [Recipes]
 
 Milestone 5 (v0.5.0):
 - "Admin panel: user management" [Auth]
@@ -1317,14 +1317,14 @@ func RegisterRoutes(e *echo.Echo, pool *pgxpool.Pool, cfg *config.Config) {
 	public.GET("/recipes/:id", s.GetPublicRecipe)
 	public.GET("/share/:token", s.GetSharedRecipes)
 
-	// Tandoor compat (for kitshn)
-	tandoor := e.Group("/api")
-	tandoor.GET("/recipe/", s.TandoorListRecipes, s.AuthMiddleware)
-	tandoor.GET("/recipe/:id/", s.TandoorGetRecipe, s.AuthMiddleware)
-	tandoor.POST("/recipe/", s.TandoorCreateRecipe, s.AuthMiddleware)
-	tandoor.GET("/food/", s.TandoorListFood, s.AuthMiddleware)
-	tandoor.GET("/unit/", s.TandoorListUnits, s.AuthMiddleware)
-	tandoor.GET("/keyword/", s.TandoorListKeywords, s.AuthMiddleware)
+	// kitshn-compatible compat (for kitshn)
+	kitshn-compat := e.Group("/api")
+	kitshn-compat.GET("/recipe/", s.kitshn-compatibleListRecipes, s.AuthMiddleware)
+	kitshn-compat.GET("/recipe/:id/", s.kitshn-compatibleGetRecipe, s.AuthMiddleware)
+	kitshn-compat.POST("/recipe/", s.kitshn-compatibleCreateRecipe, s.AuthMiddleware)
+	kitshn-compat.GET("/food/", s.kitshn-compatibleListFood, s.AuthMiddleware)
+	kitshn-compat.GET("/unit/", s.kitshn-compatibleListUnits, s.AuthMiddleware)
+	kitshn-compat.GET("/keyword/", s.kitshn-compatibleListKeywords, s.AuthMiddleware)
 }
 ```
 
@@ -1350,7 +1350,7 @@ git -c commit.gpgsign=false commit -m "feat(auth): implement JWT auth, passkeys,
 - Create: `backend/internal/api/ingredient_handler.go`
 - Create: `backend/internal/api/unit_handler.go`
 - Create: `backend/internal/api/admin_handler.go`
-- Create: `backend/internal/api/tandoor_handler.go`
+- Create: `backend/internal/api/kitshn-compat_handler.go`
 - Create: `backend/internal/api/public_handler.go`
 - Create: `backend/internal/storage/storage.go`
 
@@ -1427,13 +1427,13 @@ Implement all recipe CRUD handlers. Each handler:
 
 Same pattern as ingredients.
 
-**Step 5: tandoor_handler.go**
+**Step 5: kitshn-compat_handler.go**
 
-Map Wokko data models to Tandoor v1 API response format. Tandoor uses specific JSON shapes — implement the minimal subset kitshn needs:
+Map Wokko data models to kitshn-compatible v1 API response format. kitshn-compatible uses specific JSON shapes — implement the minimal subset kitshn needs:
 
 ```go
-// Tandoor Recipe response shape
-type TandoorRecipe struct {
+// kitshn-compatible Recipe response shape
+type kitshn-compatibleRecipe struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -1441,12 +1441,12 @@ type TandoorRecipe struct {
 	WorkingTime int    `json:"working_time"`
 	WaitingTime int    `json:"waiting_time"`
 	Servings    int    `json:"servings"`
-	Keywords    []TandoorKeyword `json:"keywords"`
-	Steps       []TandoorStep    `json:"steps"`
+	Keywords    []kitshn-compatibleKeyword `json:"keywords"`
+	Steps       []kitshn-compatibleStep    `json:"steps"`
 }
 ```
 
-Note: Tandoor uses integer IDs. Map UUID to a deterministic int by using a hash or sequential counter. Store a `tandoor_id_seq` counter in system_settings.
+Note: kitshn-compatible uses integer IDs. Map UUID to a deterministic int by using a hash or sequential counter. Store a `kitshn-compat_id_seq` counter in system_settings.
 
 **Step 6: Write tests for recipe handler**
 
@@ -1455,7 +1455,7 @@ Test list, create, get, update, delete with mock DB or test database.
 **Step 7: Commit**
 
 ```bash
-git -c commit.gpgsign=false commit -m "feat(recipes): implement recipe CRUD, ingredient/unit handlers, Tandoor compat"
+git -c commit.gpgsign=false commit -m "feat(recipes): implement recipe CRUD, ingredient/unit handlers, kitshn-compatible compat"
 ```
 
 ---
@@ -2413,7 +2413,7 @@ gh release create v0.1.0 \
 - Admin panel for user management
 - Public recipe gallery
 - Share links (per-recipe and all-user)
-- Tandoor API compatibility layer (kitshn app support)
+- kitshn-compatible API compatibility layer (kitshn app support)
 - EN + DE translations
 - Docker Compose deployment
 - 200+ seed ingredients, 30+ units (EN + DE)
