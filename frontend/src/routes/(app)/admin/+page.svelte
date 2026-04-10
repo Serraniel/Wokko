@@ -15,6 +15,7 @@
   let savingSettings = $state(false);
 
   onMount(async () => {
+    if (!authStore.initialized) authStore.init();
     if (!authStore.isAdmin) { goto('/recipes'); return; }
     await Promise.all([loadUsers(), loadInvites(), loadSettings()]);
     loading = false;
