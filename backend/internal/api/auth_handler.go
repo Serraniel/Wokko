@@ -275,6 +275,25 @@ func (s *Server) RefreshToken(c echo.Context) error {
 	return c.JSON(http.StatusOK, tokenResponse{AccessToken: accessToken})
 }
 
+// ValidateSession handles GET /api/auth/validate
+// It checks the refresh token cookie without rotating it.
+func (s *Server) ValidateSession(c echo.Context) error {
+	q := dbq.New(s.pool)
+
+	cookie, err := c.Cookie("refresh_token")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "missing refresh token")
+	}
+
+	tokenHash := hashToken(cookie.Value)
+	_, err = q.GetRefreshTokenByHash(c.Request().Context(), tokenHash)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "invalid or expired refresh token")
+	}
+
+	return c.JSON(http.StatusOK, map[string]bool{"valid": true})
+}
+
 // Logout handles POST /api/auth/logout
 func (s *Server) Logout(c echo.Context) error {
 	q := dbq.New(s.pool)
