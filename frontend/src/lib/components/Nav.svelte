@@ -17,7 +17,7 @@
 
 <nav class="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
   <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-    <a href="/recipes" class="flex items-center gap-2 font-bold text-lg">
+    <a href="/recipes" class="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white">
       <Logo size={32} />
       Wokko
     </a>
