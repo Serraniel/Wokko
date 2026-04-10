@@ -7,13 +7,14 @@
     error?: string;
     required?: boolean;
     disabled?: boolean;
+    autofocus?: boolean;
     class?: string;
     id?: string;
     autocomplete?: string;
     onchange?: (value: string) => void;
   }
   let { label, type = 'text', placeholder = '', value = $bindable(''),
-        error, required = false, disabled = false, class: className = '', id, autocomplete, onchange }: Props = $props();
+        error, required = false, disabled = false, autofocus = false, class: className = '', id, autocomplete, onchange }: Props = $props();
 
   const inputId = id || `input-${Math.random().toString(36).slice(2)}`;
 </script>
@@ -31,6 +32,7 @@
     {placeholder}
     {required}
     {disabled}
+    {autofocus}
     autocomplete={autocomplete as any}
     oninput={(e) => onchange?.((e.target as HTMLInputElement).value)}
     class="w-full rounded-lg border px-3 py-2 text-sm transition-colors
