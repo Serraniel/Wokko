@@ -25,6 +25,7 @@ func newTestServer(t *testing.T) (*Server, *pgxpool.Pool) {
 		t.Fatalf("failed to connect to database: %v", err)
 	}
 	cfg := &config.Config{
+		UploadPath: t.TempDir(),
 		JWTSecret:        "test-secret-key-for-testing",
 		OpenRegistration: false,
 	}

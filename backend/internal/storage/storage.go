@@ -16,6 +16,9 @@ type Storage struct {
 }
 
 func New(basePath string) *Storage {
+	if basePath == "" {
+		basePath = os.TempDir()
+	}
 	if err := os.MkdirAll(basePath, 0755); err != nil {
 		panic(fmt.Sprintf("storage: mkdir %s: %v", basePath, err))
 	}
