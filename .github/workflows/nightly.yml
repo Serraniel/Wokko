@@ -1,0 +1,120 @@
+name: Nightly Release
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-changes:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check.outputs.has_changes }}
+      new_version: ${{ steps.version.outputs.new_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commits since last release
+        id: check
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            CHANGES=$(git log "$LAST_TAG"..HEAD --oneline | wc -l)
+            if [ "$CHANGES" -gt 0 ]; then
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+            else
+              echo "has_changes=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Calculate next version
+        id: version
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION="${LAST_TAG#v}"
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+          NEW_PATCH=$((PATCH + 1))
+          echo "new_version=${MAJOR}.${MINOR}.${NEW_PATCH}" >> $GITHUB_OUTPUT
+
+  release:
+    name: Create release
+    needs: check-changes
+    if: needs.check-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          RANGE="${LAST_TAG:+${LAST_TAG}..}HEAD"
+
+          section() {
+            local scope="$1" title="$2"
+            local commits
+            commits=$(git log $RANGE --oneline --grep="($scope)" 2>/dev/null || true)
+            if [ -n "$commits" ]; then
+              printf "### %s\n" "$title"
+              echo "$commits" | while IFS= read -r line; do printf "- %s\n" "$line"; done
+              printf "\n"
+            fi
+          }
+
+          {
+            echo "## What's Changed"
+            echo ""
+            section "auth"        "Auth & Users"
+            section "recipes"     "Recipes"
+            section "ingredients" "Ingredients"
+            section "units"       "Units"
+            section "sharing"     "Sharing"
+            section "mcp"         "MCP"
+            section "i18n"        "Internationalization"
+            section "ui"          "UI"
+            section "infra"       "Infrastructure"
+            section "fix"         "Bug Fixes"
+          } > /tmp/changelog.md
+
+          {
+            echo "changelog<<CHANGELOG_EOF"
+            cat /tmp/changelog.md
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ needs.check-changes.outputs.new_version }}" -m "v${{ needs.check-changes.outputs.new_version }} (nightly)"
+          git push origin "v${{ needs.check-changes.outputs.new_version }}"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check-changes.outputs.new_version }}
+          name: v${{ needs.check-changes.outputs.new_version }} (nightly)
+          body: ${{ steps.changelog.outputs.changelog }}
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker:
+    name: Build & push Docker images
+    needs: [check-changes, release]
+    if: needs.check-changes.outputs.has_changes == 'true'
+    uses: ./.github/workflows/docker-publish.yml
+    with:
+      version: ${{ needs.check-changes.outputs.new_version }}
+    secrets: inherit
