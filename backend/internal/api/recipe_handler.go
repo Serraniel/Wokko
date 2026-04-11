@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -110,7 +111,7 @@ func parsePgtypeUUID(s string) (pgtype.UUID, error) {
 // resolveLang returns "de" if the Accept-Language header starts with "de", else "en".
 func resolveLang(c echo.Context) string {
 	al := c.Request().Header.Get("Accept-Language")
-	if len(al) >= 2 && al[:2] == "de" {
+	if strings.HasPrefix(al, "de") {
 		return "de"
 	}
 	return "en"
