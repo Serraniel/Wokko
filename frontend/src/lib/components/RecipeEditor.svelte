@@ -4,6 +4,7 @@
   import Button from './Button.svelte';
   import Input from './Input.svelte';
   import { Plus, Trash2, Upload } from 'lucide-svelte';
+  import Combobox from './Combobox.svelte';
 
   interface StepData {
     id?: string;
@@ -222,29 +223,43 @@
           onchange={(v) => { step.duration_min = v ? parseInt(v) : null; }}
           placeholder="Optional" class="max-w-xs" />
 
-        <!-- Step ingredients (simple text inputs) -->
+        <!-- Step ingredients -->
         <div class="space-y-3">
           <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Ingredients for this step</h4>
           {#each step.ingredients as ing, ingIdx}
             <div class="grid grid-cols-[2fr_1fr_80px_auto] gap-2 items-end">
-              <input
-                bind:value={ing.ingredient_name}
-                placeholder="Ingredient name..."
-                oninput={async (e) => {
-                  const val = (e.target as HTMLInputElement).value;
-                  ing.ingredient_name = val;
-                  if (val.length > 1) {
-                    const results = await api.searchIngredients(val, 5).catch(() => []);
-                    const match = results.find(r => r.name_en.toLowerCase() === val.toLowerCase());
-                    if (match) ing.ingredient_id = match.id;
-                  }
+              <Combobox
+                placeholder="Ingredient..."
+                value={ing.ingredient_id ? { id: ing.ingredient_id, label: ing.ingredient_name } : null}
+                onSearch={async (q) => {
+                  const list = await api.searchIngredients(q, 8).catch(() => []);
+                  return list.map(i => ({ id: i.id, label: i.name_en }));
                 }}
-                class="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800
-                       text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-wokko-red"
+                onSelect={(opt) => {
+                  ing.ingredient_id = opt?.id ?? '';
+                  ing.ingredient_name = opt?.label ?? '';
+                }}
+                onCreate={async (name) => {
+                  const created = await api.createIngredient({ name_en: name });
+                  return { id: created.id, label: created.name_en };
+                }}
               />
-              <input bind:value={ing.unit_name} placeholder="Unit (e.g. g)"
-                class="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800
-                       text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-wokko-red" />
+              <Combobox
+                placeholder="Unit..."
+                value={ing.unit_id ? { id: ing.unit_id, label: ing.unit_name } : null}
+                onSearch={async (q) => {
+                  const list = await api.searchUnits(q, 8).catch(() => []);
+                  return list.map(u => ({ id: u.id, label: u.abbreviation_en || u.name_en }));
+                }}
+                onSelect={(opt) => {
+                  ing.unit_id = opt?.id ?? '';
+                  ing.unit_name = opt?.label ?? '';
+                }}
+                onCreate={async (name) => {
+                  const created = await api.createUnit({ name_en: name, abbreviation_en: name });
+                  return { id: created.id, label: created.abbreviation_en || created.name_en };
+                }}
+              />
               <input bind:value={ing.amount} type="number" step="0.01" placeholder="Qty"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800
                        text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-wokko-red" />
