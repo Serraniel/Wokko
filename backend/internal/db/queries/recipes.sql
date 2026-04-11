@@ -60,8 +60,11 @@ VALUES ($1, $2, $3, $4, $5) RETURNING *;
 SELECT
     si.id, si.step_id, si.ingredient_id, si.unit_id, si.amount, si.notes,
     i.name_en AS ingredient_name,
+    COALESCE(i.name_de, '') AS ingredient_name_de,
     COALESCE(u.name_en, '') AS unit_name,
-    COALESCE(u.abbreviation_en, '') AS unit_abbr
+    COALESCE(u.name_de, '') AS unit_name_de,
+    COALESCE(u.abbreviation_en, '') AS unit_abbr,
+    COALESCE(u.abbreviation_de, '') AS unit_abbr_de
 FROM step_ingredients si
 JOIN ingredients i ON i.id = si.ingredient_id
 LEFT JOIN units u ON u.id = si.unit_id

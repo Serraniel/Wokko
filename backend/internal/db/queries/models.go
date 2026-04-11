@@ -112,9 +112,12 @@ type StepIngredient struct {
 	UnitID         pgtype.UUID    `json:"unit_id"`
 	Amount         pgtype.Numeric `json:"amount"`
 	Notes          pgtype.Text    `json:"notes"`
-	IngredientName string         `json:"ingredient_name"`
-	UnitName       string         `json:"unit_name"`
-	UnitAbbr       string         `json:"unit_abbr"`
+	IngredientName   string         `json:"ingredient_name"`
+	IngredientNameDe string         `json:"ingredient_name_de"`
+	UnitName         string         `json:"unit_name"`
+	UnitNameDe       string         `json:"unit_name_de"`
+	UnitAbbr         string         `json:"unit_abbr"`
+	UnitAbbrDe       string         `json:"unit_abbr_de"`
 }
 
 type SystemSetting struct {
