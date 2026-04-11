@@ -21,11 +21,14 @@ type TagResponse struct {
 }
 
 type StepIngredientResponse struct {
-	ID           string   `json:"id"`
-	IngredientID string   `json:"ingredient_id"`
-	UnitID       *string  `json:"unit_id"`
-	Amount       *float64 `json:"amount"`
-	Notes        *string  `json:"notes"`
+	ID             string   `json:"id"`
+	IngredientID   string   `json:"ingredient_id"`
+	UnitID         *string  `json:"unit_id"`
+	Amount         *float64 `json:"amount"`
+	Notes          *string  `json:"notes"`
+	IngredientName string   `json:"ingredient_name"`
+	UnitName       string   `json:"unit_name"`
+	UnitAbbr       string   `json:"unit_abbr"`
 }
 
 type RecipeStepResponse struct {
@@ -230,30 +233,7 @@ func (s *Server) GetRecipe(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := make([]StepIngredientResponse, 0, len(ings))
-		for _, ing := range ings {
-			iid, _ := uuid.FromBytes(ing.ID.Bytes[:])
-			ingID, _ := uuid.FromBytes(ing.IngredientID.Bytes[:])
-			ir := StepIngredientResponse{
-				ID:           iid.String(),
-				IngredientID: ingID.String(),
-			}
-			if ing.UnitID.Valid {
-				uid, _ := uuid.FromBytes(ing.UnitID.Bytes[:])
-				s := uid.String()
-				ir.UnitID = &s
-			}
-			if ing.Amount.Valid {
-				f, _ := ing.Amount.Float64Value()
-				if f.Valid {
-					ir.Amount = &f.Float64
-				}
-			}
-			if ing.Notes.Valid {
-				ir.Notes = &ing.Notes.String
-			}
-			ingResps = append(ingResps, ir)
-		}
+		ingResps := buildIngredientResponses(ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,
@@ -464,8 +444,11 @@ func buildIngredientResponses(ings []dbq.StepIngredient) []StepIngredientRespons
 		iid, _ := uuid.FromBytes(ing.ID.Bytes[:])
 		ingID, _ := uuid.FromBytes(ing.IngredientID.Bytes[:])
 		ir := StepIngredientResponse{
-			ID:           iid.String(),
-			IngredientID: ingID.String(),
+			ID:             iid.String(),
+			IngredientID:   ingID.String(),
+			IngredientName: ing.IngredientName,
+			UnitName:       ing.UnitName,
+			UnitAbbr:       ing.UnitAbbr,
 		}
 		if ing.UnitID.Valid {
 			uid, _ := uuid.FromBytes(ing.UnitID.Bytes[:])
