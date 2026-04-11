@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"net/http"
@@ -234,7 +233,7 @@ func (s *Server) GetRecipe(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := buildIngredientResponses(ctx, q, ings)
+		ingResps := buildIngredientResponses(ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,
@@ -424,7 +423,7 @@ func (s *Server) ListRecipeSteps(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := buildIngredientResponses(ctx, q, ings)
+		ingResps := buildIngredientResponses(ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,
@@ -439,28 +438,22 @@ func (s *Server) ListRecipeSteps(c echo.Context) error {
 	return c.JSON(http.StatusOK, steps)
 }
 
-func buildIngredientResponses(ctx context.Context, q *dbq.Queries, ings []dbq.StepIngredient) []StepIngredientResponse {
+func buildIngredientResponses(ings []dbq.StepIngredient) []StepIngredientResponse {
 	out := make([]StepIngredientResponse, 0, len(ings))
 	for _, ing := range ings {
 		iid, _ := uuid.FromBytes(ing.ID.Bytes[:])
 		ingID, _ := uuid.FromBytes(ing.IngredientID.Bytes[:])
 		ir := StepIngredientResponse{
-			ID:           iid.String(),
-			IngredientID: ingID.String(),
-		}
-		if ingredient, err := q.GetIngredientByID(ctx, ing.IngredientID); err == nil {
-			ir.IngredientName = ingredient.NameEn
+			ID:             iid.String(),
+			IngredientID:   ingID.String(),
+			IngredientName: ing.IngredientName,
+			UnitName:       ing.UnitName,
+			UnitAbbr:       ing.UnitAbbr,
 		}
 		if ing.UnitID.Valid {
 			uid, _ := uuid.FromBytes(ing.UnitID.Bytes[:])
 			s := uid.String()
 			ir.UnitID = &s
-			if unit, err := q.GetUnitByID(ctx, ing.UnitID); err == nil {
-				ir.UnitName = unit.NameEn
-				if unit.AbbreviationEn.Valid {
-					ir.UnitAbbr = unit.AbbreviationEn.String
-				}
-			}
 		}
 		if ing.Amount.Valid {
 			f, _ := ing.Amount.Float64Value()
