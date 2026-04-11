@@ -42,7 +42,7 @@
     </div>
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       <form onsubmit={handleRegister} class="space-y-4">
-        <Input label="Username" bind:value={username} placeholder="username" required />
+        <Input label="Username" bind:value={username} placeholder="username" required autofocus />
         <Input label="Password" type="password" bind:value={password} placeholder="Min. 8 characters" required />
         <Input label="Email (optional)" type="email" bind:value={email} placeholder="you@example.com" />
         <Input label="Invite Code" bind:value={inviteToken} placeholder="Paste your invite code" />
