@@ -5,12 +5,10 @@ interface RequestOptions {
   method?: string;
   body?: unknown;
   token?: string;
+  _retry?: boolean;
 }
 
-export async function apiRequest<T>(
-  path: string,
-  options: RequestOptions = {}
-): Promise<T> {
+async function doFetch(path: string, options: RequestOptions): Promise<Response> {
   const { method = 'GET', body, token } = options;
 
   const headers: Record<string, string> = {
@@ -24,12 +22,31 @@ export async function apiRequest<T>(
     if (stored) headers['Authorization'] = `Bearer ${stored}`;
   }
 
-  const res = await fetch(`${API_BASE}${path}`, {
+  return fetch(`${API_BASE}${path}`, {
     method,
     headers,
     credentials: 'include',
     body: body ? JSON.stringify(body) : undefined,
   });
+}
+
+export async function apiRequest<T>(
+  path: string,
+  options: RequestOptions = {}
+): Promise<T> {
+  let res = await doFetch(path, options);
+
+  // On 401, attempt a token refresh once then retry
+  if (res.status === 401 && !options._retry && path !== '/auth/refresh') {
+    const refreshRes = await doFetch('/auth/refresh', { method: 'POST', _retry: true });
+    if (refreshRes.ok) {
+      const data = await refreshRes.json();
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('access_token', data.access_token);
+      }
+      res = await doFetch(path, options);
+    }
+  }
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
