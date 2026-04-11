@@ -45,9 +45,7 @@
         <Input label="Username" bind:value={username} placeholder="username" required />
         <Input label="Password" type="password" bind:value={password} placeholder="Min. 8 characters" required />
         <Input label="Email (optional)" type="email" bind:value={email} placeholder="you@example.com" />
-        {#if inviteToken}
-          <Input label="Invite Code" bind:value={inviteToken} />
-        {/if}
+        <Input label="Invite Code" bind:value={inviteToken} placeholder="Paste your invite code" />
         {#if error}<p class="text-sm text-red-600 dark:text-red-400">{error}</p>{/if}
         <Button type="submit" class="w-full" loading={loading} disabled={!username || !password}>Create account</Button>
       </form>

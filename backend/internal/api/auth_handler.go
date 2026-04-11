@@ -113,6 +113,14 @@ func (s *Server) issueTokens(c echo.Context, q *dbq.Queries, user dbq.User) erro
 	return c.JSON(http.StatusOK, tokenResponse{AccessToken: accessToken})
 }
 
+// SetupStatus handles GET /api/auth/setup/status
+func (s *Server) SetupStatus(c echo.Context) error {
+	q := dbq.New(s.pool)
+	val, err := q.GetSetupComplete(c.Request().Context())
+	complete := err == nil && val == "true"
+	return c.JSON(http.StatusOK, map[string]bool{"setup_complete": complete})
+}
+
 // SetupAdmin handles POST /api/auth/setup
 func (s *Server) SetupAdmin(c echo.Context) error {
 	q := dbq.New(s.pool)
