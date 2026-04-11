@@ -15,8 +15,10 @@
       id?: string;
       ingredient_id: string;
       ingredient_name: string;
+      ingredient_name_de: string;
       unit_id: string;
       unit_name: string;
+      unit_name_de: string;
       amount: string;
       notes: string;
     }[];
@@ -40,8 +42,10 @@
         id: i.id,
         ingredient_id: i.ingredient_id,
         ingredient_name: i.ingredient_name || '',
+        ingredient_name_de: '',
         unit_id: i.unit_id || '',
         unit_name: i.unit_name || '',
+        unit_name_de: '',
         amount: i.amount?.toString() || '',
         notes: i.notes || '',
       })) || [],
@@ -63,7 +67,9 @@
 
   function addIngredient(stepIdx: number) {
     steps[stepIdx].ingredients = [...steps[stepIdx].ingredients, {
-      ingredient_id: '', ingredient_name: '', unit_id: '', unit_name: '', amount: '', notes: ''
+      ingredient_id: '', ingredient_name: '', ingredient_name_de: '',
+      unit_id: '', unit_name: '', unit_name_de: '',
+      amount: '', notes: ''
     }];
   }
 
@@ -228,22 +234,30 @@
         <div class="space-y-3">
           <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Ingredients for this step</h4>
           {#each step.ingredients as ing, ingIdx}
+            {@const ingredientResults = { current: [] as Ingredient[] }}
+            {@const unitResults = { current: [] as Unit[] }}
             <div class="grid grid-cols-[2fr_1fr_80px_auto] gap-2 items-end">
               <Combobox
                 placeholder="Ingredient..."
-                value={ing.ingredient_id ? { id: ing.ingredient_id, label: ing.ingredient_name } : null}
+                value={ing.ingredient_id ? {
+                  id: ing.ingredient_id,
+                  label: langStore.lang === 'de'
+                    ? (ing.ingredient_name_de || ing.ingredient_name)
+                    : ing.ingredient_name
+                } : null}
                 onSearch={async (q) => {
                   const list = await api.searchIngredients(q, 8).catch(() => []);
+                  ingredientResults.current = list;
                   return list.map(i => ({
                     id: i.id,
-                    label: langStore.lang === 'de'
-                      ? (i.name_de || i.name_en)
-                      : i.name_en,
+                    label: langStore.lang === 'de' ? (i.name_de || i.name_en) : i.name_en,
                   }));
                 }}
                 onSelect={(opt) => {
                   ing.ingredient_id = opt?.id ?? '';
-                  ing.ingredient_name = opt?.label ?? '';
+                  const found = ingredientResults.current.find(i => i.id === opt?.id);
+                  ing.ingredient_name = found?.name_en ?? opt?.label ?? '';
+                  ing.ingredient_name_de = found?.name_de ?? '';
                 }}
                 onCreate={async (name) => {
                   const created = await api.createIngredient({ name_en: name });
@@ -252,9 +266,15 @@
               />
               <Combobox
                 placeholder="Unit..."
-                value={ing.unit_id ? { id: ing.unit_id, label: ing.unit_name } : null}
+                value={ing.unit_id ? {
+                  id: ing.unit_id,
+                  label: langStore.lang === 'de'
+                    ? (ing.unit_name_de || ing.unit_name)
+                    : ing.unit_name
+                } : null}
                 onSearch={async (q) => {
                   const list = await api.searchUnits(q, 8).catch(() => []);
+                  unitResults.current = list;
                   return list.map(u => ({
                     id: u.id,
                     label: langStore.lang === 'de'
@@ -264,7 +284,9 @@
                 }}
                 onSelect={(opt) => {
                   ing.unit_id = opt?.id ?? '';
-                  ing.unit_name = opt?.label ?? '';
+                  const found = unitResults.current.find(u => u.id === opt?.id);
+                  ing.unit_name = found?.abbreviation_en || found?.name_en || opt?.label || '';
+                  ing.unit_name_de = found?.abbreviation_de || found?.name_de || '';
                 }}
                 onCreate={async (name) => {
                   const created = await api.createUnit({ name_en: name, abbreviation_en: name });
