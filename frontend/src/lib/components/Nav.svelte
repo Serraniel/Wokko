@@ -5,6 +5,7 @@
   import Logo from './Logo.svelte';
   import ThemeToggle from './ThemeToggle.svelte';
   import { Menu, X } from 'lucide-svelte';
+  import { langStore } from '$lib/stores/lang.svelte';
 
   let menuOpen = $state(false);
 
@@ -27,6 +28,13 @@
         <a href="/admin" class="text-gray-600 dark:text-gray-300 hover:text-wokko-red transition-colors">Admin</a>
       {/if}
       <ThemeToggle />
+      <button
+        onclick={() => langStore.set(langStore.lang === 'en' ? 'de' : 'en')}
+        class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-wokko-red transition-colors w-8 text-center"
+        title="Switch language"
+      >
+        {langStore.lang === 'en' ? 'DE' : 'EN'}
+      </button>
       <button onclick={logout} class="text-sm text-gray-500 dark:text-gray-400 hover:text-wokko-red transition-colors">
         Sign out
       </button>
@@ -44,6 +52,15 @@
       <div class="flex items-center justify-between py-2">
         <span class="text-gray-600 dark:text-gray-300 text-sm">Theme</span>
         <ThemeToggle />
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-gray-600 dark:text-gray-300 text-sm">Language</span>
+        <button
+          onclick={() => langStore.set(langStore.lang === 'en' ? 'de' : 'en')}
+          class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-wokko-red transition-colors"
+        >
+          {langStore.lang === 'en' ? 'Deutsch' : 'English'}
+        </button>
       </div>
       <button onclick={logout} class="py-2 text-left text-sm text-gray-500 dark:text-gray-400">Sign out</button>
     </div>

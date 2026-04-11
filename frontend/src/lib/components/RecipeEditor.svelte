@@ -5,6 +5,7 @@
   import Input from './Input.svelte';
   import { Plus, Trash2, Upload } from 'lucide-svelte';
   import Combobox from './Combobox.svelte';
+  import { langStore } from '$lib/stores/lang.svelte';
 
   interface StepData {
     id?: string;
@@ -233,7 +234,12 @@
                 value={ing.ingredient_id ? { id: ing.ingredient_id, label: ing.ingredient_name } : null}
                 onSearch={async (q) => {
                   const list = await api.searchIngredients(q, 8).catch(() => []);
-                  return list.map(i => ({ id: i.id, label: i.name_en }));
+                  return list.map(i => ({
+                    id: i.id,
+                    label: langStore.lang === 'de'
+                      ? (i.name_de || i.name_en)
+                      : i.name_en,
+                  }));
                 }}
                 onSelect={(opt) => {
                   ing.ingredient_id = opt?.id ?? '';
@@ -249,7 +255,12 @@
                 value={ing.unit_id ? { id: ing.unit_id, label: ing.unit_name } : null}
                 onSearch={async (q) => {
                   const list = await api.searchUnits(q, 8).catch(() => []);
-                  return list.map(u => ({ id: u.id, label: u.abbreviation_en || u.name_en }));
+                  return list.map(u => ({
+                    id: u.id,
+                    label: langStore.lang === 'de'
+                      ? (u.abbreviation_de || u.name_de || u.abbreviation_en || u.name_en)
+                      : (u.abbreviation_en || u.name_en),
+                  }));
                 }}
                 onSelect={(opt) => {
                   ing.unit_id = opt?.id ?? '';

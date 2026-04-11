@@ -1,4 +1,7 @@
 // Always use a root-relative path — the SvelteKit server hook proxies /api/* to the backend.
+import { browser } from '$app/environment';
+import { langStore } from '$lib/stores/lang.svelte';
+
 const API_BASE = '/api';
 
 interface RequestOptions {
@@ -20,6 +23,10 @@ async function doFetch(path: string, options: RequestOptions): Promise<Response>
   } else if (typeof localStorage !== 'undefined') {
     const stored = localStorage.getItem('access_token');
     if (stored) headers['Authorization'] = `Bearer ${stored}`;
+  }
+
+  if (browser) {
+    headers['Accept-Language'] = langStore.lang;
   }
 
   return fetch(`${API_BASE}${path}`, {
