@@ -3,9 +3,12 @@ import type { LayoutServerLoad } from './$types';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
 
-export const load: LayoutServerLoad = async ({ url }) => {
+export const load: LayoutServerLoad = async ({ url, cookies }) => {
   // Don't redirect if already heading to /setup
   if (url.pathname.startsWith('/setup')) return {};
+
+  // If the user has a refresh token, setup is already complete — skip the check
+  if (cookies.get('refresh_token')) return {};
 
   try {
     const res = await fetch(`${BACKEND_URL}/api/auth/setup/status`);
