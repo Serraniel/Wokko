@@ -81,7 +81,7 @@ func (s *Server) GetSharedRecipes(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := buildIngredientResponses(ings)
+		ingResps := buildIngredientResponses(resolveLang(c), ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,

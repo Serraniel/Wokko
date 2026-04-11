@@ -107,6 +107,23 @@ func parsePgtypeUUID(s string) (pgtype.UUID, error) {
 	return uuidToPgtype(id), nil
 }
 
+// resolveLang returns "de" if the Accept-Language header starts with "de", else "en".
+func resolveLang(c echo.Context) string {
+	al := c.Request().Header.Get("Accept-Language")
+	if len(al) >= 2 && al[:2] == "de" {
+		return "de"
+	}
+	return "en"
+}
+
+// pickLang returns deVal if lang=="de" and deVal is non-empty, else enVal.
+func pickLang(lang, enVal, deVal string) string {
+	if lang == "de" && deVal != "" {
+		return deVal
+	}
+	return enVal
+}
+
 // ---- helpers ----
 
 func intQueryParam(c echo.Context, name string, def, max int) int {
@@ -233,7 +250,7 @@ func (s *Server) GetRecipe(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := buildIngredientResponses(ings)
+		ingResps := buildIngredientResponses(resolveLang(c), ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,
@@ -423,7 +440,7 @@ func (s *Server) ListRecipeSteps(c echo.Context) error {
 	for _, st := range rawSteps {
 		stepID, _ := uuid.FromBytes(st.ID.Bytes[:])
 		ings, _ := q.ListStepIngredients(ctx, st.ID)
-		ingResps := buildIngredientResponses(ings)
+		ingResps := buildIngredientResponses(resolveLang(c), ings)
 		sr := RecipeStepResponse{
 			ID:          stepID.String(),
 			StepOrder:   st.StepOrder,
@@ -438,7 +455,7 @@ func (s *Server) ListRecipeSteps(c echo.Context) error {
 	return c.JSON(http.StatusOK, steps)
 }
 
-func buildIngredientResponses(ings []dbq.StepIngredient) []StepIngredientResponse {
+func buildIngredientResponses(lang string, ings []dbq.StepIngredient) []StepIngredientResponse {
 	out := make([]StepIngredientResponse, 0, len(ings))
 	for _, ing := range ings {
 		iid, _ := uuid.FromBytes(ing.ID.Bytes[:])
@@ -446,9 +463,9 @@ func buildIngredientResponses(ings []dbq.StepIngredient) []StepIngredientRespons
 		ir := StepIngredientResponse{
 			ID:             iid.String(),
 			IngredientID:   ingID.String(),
-			IngredientName: ing.IngredientName,
-			UnitName:       ing.UnitName,
-			UnitAbbr:       ing.UnitAbbr,
+			IngredientName: pickLang(lang, ing.IngredientName, ing.IngredientNameDe),
+			UnitName:       pickLang(lang, ing.UnitName, ing.UnitNameDe),
+			UnitAbbr:       pickLang(lang, ing.UnitAbbr, ing.UnitAbbrDe),
 		}
 		if ing.UnitID.Valid {
 			uid, _ := uuid.FromBytes(ing.UnitID.Bytes[:])
