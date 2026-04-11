@@ -5,5 +5,6 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
   if (!cookies.get('refresh_token')) {
     throw redirect(302, '/auth/login');
   }
+
   return {};
 };
