@@ -57,7 +57,15 @@ INSERT INTO step_ingredients (step_id, ingredient_id, unit_id, amount, notes)
 VALUES ($1, $2, $3, $4, $5) RETURNING *;
 
 -- name: ListStepIngredients :many
-SELECT * FROM step_ingredients WHERE step_id = $1;
+SELECT
+    si.id, si.step_id, si.ingredient_id, si.unit_id, si.amount, si.notes,
+    i.name_en AS ingredient_name,
+    COALESCE(u.name_en, '') AS unit_name,
+    COALESCE(u.abbreviation_en, '') AS unit_abbr
+FROM step_ingredients si
+JOIN ingredients i ON i.id = si.ingredient_id
+LEFT JOIN units u ON u.id = si.unit_id
+WHERE si.step_id = $1;
 
 -- name: DeleteStepIngredient :exec
 DELETE FROM step_ingredients WHERE id = $1;

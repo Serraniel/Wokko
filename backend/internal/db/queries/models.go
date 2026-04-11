@@ -106,12 +106,15 @@ type ShareLink struct {
 }
 
 type StepIngredient struct {
-	ID           pgtype.UUID    `json:"id"`
-	StepID       pgtype.UUID    `json:"step_id"`
-	IngredientID pgtype.UUID    `json:"ingredient_id"`
-	UnitID       pgtype.UUID    `json:"unit_id"`
-	Amount       pgtype.Numeric `json:"amount"`
-	Notes        pgtype.Text    `json:"notes"`
+	ID             pgtype.UUID    `json:"id"`
+	StepID         pgtype.UUID    `json:"step_id"`
+	IngredientID   pgtype.UUID    `json:"ingredient_id"`
+	UnitID         pgtype.UUID    `json:"unit_id"`
+	Amount         pgtype.Numeric `json:"amount"`
+	Notes          pgtype.Text    `json:"notes"`
+	IngredientName string         `json:"ingredient_name"`
+	UnitName       string         `json:"unit_name"`
+	UnitAbbr       string         `json:"unit_abbr"`
 }
 
 type SystemSetting struct {
