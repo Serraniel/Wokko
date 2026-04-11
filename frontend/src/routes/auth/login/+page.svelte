@@ -40,7 +40,7 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       <form onsubmit={handleLogin} class="space-y-4">
-        <Input label="Username" bind:value={username} placeholder="username" required autocomplete="username" />
+        <Input label="Username" bind:value={username} placeholder="username" required autocomplete="username" autofocus />
         <Input label="Password" type="password" bind:value={password} placeholder="••••••••" required autocomplete="current-password" />
         {#if error}<p class="text-sm text-red-600 dark:text-red-400">{error}</p>{/if}
         <Button type="submit" class="w-full" loading={loading} disabled={!username || !password}>Sign in</Button>

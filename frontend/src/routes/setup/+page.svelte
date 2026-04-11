@@ -43,7 +43,7 @@
       {#if step === 1}
         <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Create Admin Account</h2>
         <form onsubmit={(e) => { e.preventDefault(); step = 2; }} class="space-y-4">
-          <Input label="Username" bind:value={username} placeholder="admin" required />
+          <Input label="Username" bind:value={username} placeholder="admin" required autofocus />
           <Input label="Display Name (optional)" bind:value={displayName} placeholder="Your name" />
           <Button type="submit" class="w-full" disabled={!username}>Continue →</Button>
         </form>
