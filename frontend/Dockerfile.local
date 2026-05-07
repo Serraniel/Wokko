@@ -1,6 +1,6 @@
 # Local-only Dockerfile: assumes 'npm run build' has already been run on the host.
 # Skips npm ci inside Docker to avoid network issues during local development.
-FROM node:20-alpine
+FROM node:26-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY build ./build
