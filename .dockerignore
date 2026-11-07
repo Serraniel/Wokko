@@ -1,0 +1,10 @@
+.git
+.claude
+.playwright-mcp
+docs
+tmp
+**/node_modules
+frontend/.svelte-kit
+frontend/build
+frontend/e2e/screenshots
+backend/internal/web/dist

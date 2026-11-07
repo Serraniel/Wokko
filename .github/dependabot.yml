@@ -19,18 +19,6 @@ updates:
     labels: ["Infra"]
 
   - package-ecosystem: "docker"
-    directory: "/backend"
-    schedule:
-      interval: "daily"
-    labels: ["Infra"]
-
-  - package-ecosystem: "docker"
-    directory: "/frontend"
-    schedule:
-      interval: "daily"
-    labels: ["Infra"]
-
-  - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"

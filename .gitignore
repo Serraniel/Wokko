@@ -10,7 +10,6 @@
 node_modules/
 .svelte-kit/
 build/
-dist/
 .env
 .env.local
 .env.*.local
@@ -27,8 +26,15 @@ Thumbs.db
 .vscode/
 *.swp
 
-# Uploads (local dev)
-/backend/uploads/
+# Local runs
+/.e2e/
+/wokko
+/frontend/e2e/screenshots/
+
+# The frontend build is embedded at build time
+/backend/internal/web/dist/*
+!/backend/internal/web/dist/.gitkeep
+!/backend/internal/web/dist/
 
 # Worktrees
 .worktrees/
