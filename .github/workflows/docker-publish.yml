@@ -14,8 +14,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # attaches the files below to the release
       packages: write
+      id-token: write # signs the build provenance
+      attestations: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -35,7 +37,8 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.tag || github.ref_name }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag || github.ref_name }}
       # x86-64 for most servers, ARM64 for a Raspberry Pi.
-      - uses: docker/build-push-action@v7
+      - id: build
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -43,3 +46,52 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: VERSION=${{ inputs.tag || github.ref_name }}
+          sbom: true
+          provenance: mode=max
+      # Lets anyone check where an image came from: gh attestation verify oci://IMAGE --owner Serraniel
+      - uses: actions/attest-build-provenance@v4
+        with:
+          subject-name: ghcr.io/serraniel/wokko
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+      - uses: anchore/sbom-action/download-syft@v0
+        id: syft
+      # The frontend is bundled into the binary, where scanning the image can't see its packages,
+      # so the source gets its own SBOM next to one for each image.
+      - name: Create the release files
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+          IMAGE: ghcr.io/serraniel/wokko@${{ steps.build.outputs.digest }}
+          SYFT: ${{ steps.syft.outputs.cmd }}
+          # SvelteKit and the rest of the bundled frontend count as dev dependencies.
+          SYFT_JAVASCRIPT_INCLUDE_DEV_DEPENDENCIES: "true"
+        run: |
+          mkdir release
+          for format in spdx-json cyclonedx-json; do
+            name="${format%-json}"
+            "$SYFT" scan "dir:." --source-name wokko --source-version "$TAG" --exclude ./release -o "$format=release/wokko-$TAG-source.$name.json"
+            for arch in amd64 arm64; do
+              "$SYFT" scan "registry:$IMAGE" --platform "linux/$arch" --source-name wokko --source-version "$TAG" -o "$format=release/wokko-$TAG-image-$arch.$name.json"
+            done
+          done
+          echo "$IMAGE" > "release/wokko-$TAG-image-digest.txt"
+
+          # Starting the published image also proves that it runs.
+          docker run -d --name wokko -p 8080:8080 "$IMAGE"
+          for _ in $(seq 1 30); do
+            curl -fsS -o /dev/null http://localhost:8080/api/v1/health && break
+            sleep 1
+          done
+          curl -fsS http://localhost:8080/api/v1/status | grep -F "\"version\":\"$TAG\""
+          curl -fsS -o "release/wokko-$TAG-third-party-notices.txt" http://localhost:8080/third-party-notices.txt
+          docker rm -f wokko
+
+          (cd release && sha256sum -- * > SHA256SUMS)
+      - name: Attach them to the release
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # release-please has made the release already. A tag pushed by hand hasn't got one yet.
+          gh release view "$TAG" > /dev/null 2>&1 || gh release create "$TAG" --verify-tag --generate-notes
+          gh release upload "$TAG" release/* --clobber
