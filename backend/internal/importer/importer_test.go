@@ -175,7 +175,7 @@ func TestMinutes(t *testing.T) {
 }
 
 func TestOnlyPublicAddressesCount(t *testing.T) {
-	for _, s := range []string{"127.0.0.1", "10.0.0.1", "192.168.8.14", "172.17.0.1", "169.254.169.254", "100.64.0.1", "::1", "fe80::1", "fc00::1", "::ffff:127.0.0.1", "64:ff9b::7f00:1", "0.0.0.0"} {
+	for _, s := range []string{"127.0.0.1", "10.0.0.1", "192.168.1.20", "172.17.0.1", "169.254.169.254", "100.64.0.1", "::1", "fe80::1", "fc00::1", "::ffff:127.0.0.1", "64:ff9b::7f00:1", "0.0.0.0"} {
 		if publicIP(netip.MustParseAddr(s)) {
 			t.Errorf("%s counted as public", s)
 		}
@@ -195,7 +195,7 @@ func TestFetchRefusesPrivateTargetsEvenAfterRedirects(t *testing.T) {
 	if _, _, _, err := safe.Page(ctx, inner.URL); !errors.Is(err, ErrBadURL) && !errors.Is(err, ErrPrivate) {
 		t.Fatalf("direct: %v", err)
 	}
-	for _, bad := range []string{"http://127.0.0.1/", "http://localhost/", "http://[::1]/", "http://169.254.169.254/latest/meta-data/", "http://192.168.8.14/", "http://2130706433/"} {
+	for _, bad := range []string{"http://127.0.0.1/", "http://localhost/", "http://[::1]/", "http://169.254.169.254/latest/meta-data/", "http://192.168.1.20/", "http://2130706433/"} {
 		if _, _, _, err := safe.Page(ctx, bad); !errors.Is(err, ErrPrivate) && !errors.Is(err, ErrUnreachable) {
 			t.Errorf("%s: %v", bad, err)
 		} else if bad == "http://127.0.0.1/" && !errors.Is(err, ErrPrivate) {
