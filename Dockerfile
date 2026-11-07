@@ -1,5 +1,6 @@
 # One image holds everything: the frontend is embedded in the Go binary.
-FROM node:24-alpine AS frontend
+# Both build stages run natively and cross-compile, so an ARM64 image needs no slow emulation.
+FROM --platform=$BUILDPLATFORM node:24-alpine AS frontend
 WORKDIR /src/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
@@ -7,15 +8,17 @@ COPY frontend/ ./
 COPY CHANGELOG.md ../CHANGELOG.md
 RUN npm run build
 
-FROM golang:1.26-alpine AS backend
+FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS backend
 ARG VERSION=dev
+ARG TARGETOS
+ARG TARGETARCH
 WORKDIR /src/backend
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 COPY backend/ ./
 COPY --from=frontend /src/frontend/build/ internal/web/dist/
 RUN go run ./cmd/notices internal/web/dist/third-party-notices.txt
-RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o /out/wokko ./cmd/wokko
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o /out/wokko ./cmd/wokko
 RUN mkdir -p /out/data /out/backups
 
 FROM gcr.io/distroless/static-debian12:nonroot
