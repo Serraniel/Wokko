@@ -6,12 +6,14 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/serraniel/wokko/backend/internal/app"
+	"github.com/serraniel/wokko/backend/internal/importer"
 )
 
 func contains(s, sub string) bool { return strings.Contains(s, sub) }
@@ -486,4 +488,67 @@ func TestExportIsUsableWithoutWokko(t *testing.T) {
 	if len(names) != 2 || !strings.HasPrefix(names[1], "photos/") {
 		t.Fatalf("export files: %v", names)
 	}
+}
+
+func TestImportFromAPageGivesADraftAndSavesNothing(t *testing.T) {
+	e := newEnv(t)
+	photo := testPNG(t)
+	site := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/photo.png" {
+			w.Header().Set("Content-Type", "image/png")
+			_, _ = w.Write(photo)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		_, _ = w.Write([]byte(`<html><script type="application/ld+json">{"@type":"Recipe","name":"Tomatensoße","image":"/photo.png","recipeYield":"2 Portionen","prepTime":"PT10M","recipeIngredient":["800 g Tomaten","2 Zwiebeln","1 EL Olivenöl, kalt"],"recipeInstructions":[{"@type":"HowToStep","text":"Köcheln."}]}</script></html>`))
+	}))
+	defer site.Close()
+	e.svc.Fetcher = importer.NewFetcher("test", true)
+	me := e.admin()
+	var out app.ImportedRecipe
+	me.ok("POST", v1+"/import", app.ImportRequest{URL: site.URL + "/r"}, 200).decode(t, &out)
+	if out.Recipe.Name != "Tomatensoße" || out.Recipe.Servings != 2 || out.Recipe.WorkMinutes != 10 || out.Recipe.Visibility != "private" || out.Recipe.SourceURL != site.URL+"/r" {
+		t.Fatalf("draft: %+v", out.Recipe)
+	}
+	if out.ImageData == "" || out.ImageType != "image/png" {
+		t.Fatalf("photo: %q", out.ImageType)
+	}
+	ing := out.Recipe.Steps[0].Ingredients
+	if len(ing) != 3 || ing[0].UnitName != "gram" && ing[0].UnitName != "Gramm" || *ing[0].Amount != 800 || ing[2].Note != "kalt" {
+		t.Fatalf("ingredients: %+v", ing)
+	}
+	var list app.Page[app.RecipeSummary]
+	me.ok("GET", v1+"/recipes", nil, 200).decode(t, &list)
+	if list.Total != 0 {
+		t.Fatalf("an import must save nothing, found %d recipes", list.Total)
+	}
+	// The draft saves cleanly, and plural spellings find the catalog's foods.
+	saved := me.createRecipe(out.Recipe)
+	if got := saved.Steps[0].Ingredients[1].Food.Name; got != "onion" && got != "Zwiebel" {
+		t.Fatalf("plural created a new food instead of matching: %q", got)
+	}
+}
+
+func TestImportFromPastedText(t *testing.T) {
+	e := newEnv(t)
+	var out app.ImportedRecipe
+	e.admin().ok("POST", v1+"/import", app.ImportRequest{Text: "Suppe\nZutaten\n1 l Wasser\n2 Karotten\nZubereitung\nKochen."}, 200).decode(t, &out)
+	if out.Recipe.Name != "Suppe" || !out.Guessed || len(out.Recipe.Steps) != 1 || len(out.Recipe.Steps[0].Ingredients) != 2 {
+		t.Fatalf("got %+v", out)
+	}
+}
+
+func TestImportRefusals(t *testing.T) {
+	e := newEnv(t)
+	e.anon().wantCode("POST", v1+"/import", app.ImportRequest{URL: "https://example.com/"}, 401, "unauthorized")
+	me := e.admin()
+	me.wantCode("POST", v1+"/import", app.ImportRequest{}, 400, "import_empty")
+	me.wantCode("POST", v1+"/import", app.ImportRequest{URL: "file:///etc/passwd"}, 400, "import_bad_url")
+	me.wantCode("POST", v1+"/import", app.ImportRequest{URL: "http://127.0.0.1/"}, 400, "import_private")
+	me.wantCode("POST", v1+"/import", app.ImportRequest{URL: e.srv.URL + "/"}, 400, "import_bad_url")
+	me.wantCode("POST", v1+"/import", app.ImportRequest{Text: "just one line"}, 422, "import_no_recipe")
+	blocked := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusForbidden) }))
+	defer blocked.Close()
+	e.svc.Fetcher = importer.NewFetcher("test", true)
+	me.wantCode("POST", v1+"/import", app.ImportRequest{URL: blocked.URL}, 502, "import_blocked")
 }

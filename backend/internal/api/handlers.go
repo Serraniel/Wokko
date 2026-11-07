@@ -282,6 +282,18 @@ func (s *Server) listTrash(w http.ResponseWriter, r *http.Request, v app.Viewer)
 	return reply(w, t, err)
 }
 
+func (s *Server) importRecipe(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	if !s.importLimit.Allow(strconv.FormatInt(v.User.ID, 10)) {
+		return errTooMany
+	}
+	var in app.ImportRequest
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	out, err := s.svc.ImportRecipe(r.Context(), in)
+	return reply(w, out, err)
+}
+
 func (s *Server) uploadPhoto(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
 	id, err := pathID(r, "id")
 	if err != nil {

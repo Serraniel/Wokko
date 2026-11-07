@@ -241,3 +241,26 @@ export interface Health {
   checked_at: string;
   missing_photos: number /* int64 */;
 }
+/**
+ * ImportRequest asks for a recipe draft from a web address or from pasted text.
+ */
+export interface ImportRequest {
+  url: string;
+  text: string;
+}
+/**
+ * ImportedRecipe is a draft for the editor. Nothing has been saved yet.
+ */
+export interface ImportedRecipe {
+  recipe: RecipeInput;
+  /**
+   * ImageData is the source's photo in base64. The editor uploads it like any other photo
+   * when the person saves, so it passes through the normal checks.
+   */
+  image_data: string;
+  image_type: string;
+  /**
+   * Guessed means the result was read from the page's layout, not recipe data the site published.
+   */
+  guessed: boolean;
+}

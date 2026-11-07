@@ -140,10 +140,13 @@ SELECT count(*) FROM keywords k
 WHERE CAST(sqlc.arg(q) AS TEXT) = '' OR EXISTS (SELECT 1 FROM keyword_names n WHERE n.keyword_id = k.id AND n.search_name LIKE '%' || CAST(sqlc.arg(q) AS TEXT) || '%');
 
 -- name: FindFoodIDByName :one
-SELECT food_id FROM food_names WHERE name = ? COLLATE NOCASE LIMIT 1;
+SELECT food_id FROM food_names WHERE name = sqlc.arg(name) COLLATE NOCASE OR plural = sqlc.arg(name) COLLATE NOCASE LIMIT 1;
 
 -- name: FindUnitIDByName :one
-SELECT unit_id FROM unit_names WHERE name = sqlc.arg(name) COLLATE NOCASE OR abbreviation = sqlc.arg(name) COLLATE NOCASE LIMIT 1;
+SELECT unit_id FROM unit_names WHERE name = sqlc.arg(name) COLLATE NOCASE OR plural = sqlc.arg(name) COLLATE NOCASE OR abbreviation = sqlc.arg(name) COLLATE NOCASE LIMIT 1;
+
+-- name: ListAllUnitSpellings :many
+SELECT name, plural, abbreviation FROM unit_names;
 
 -- name: ListAllFoodSearchNames :many
 SELECT food_id, search_name FROM food_names WHERE food_id IN (sqlc.slice(ids));
