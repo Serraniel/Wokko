@@ -41,3 +41,7 @@ Thumbs.db
 
 # Tmp (logo drafts, not for repo)
 /tmp/
+
+# Local tools
+/.claude/
+/.playwright-mcp/

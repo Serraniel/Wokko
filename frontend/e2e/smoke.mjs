@@ -17,7 +17,7 @@ const step = async (n, fn) => { const t = Date.now(); await fn(); console.log('o
 
 await step('first run redirects to setup', async () => { await p.goto(base + '/'); await p.waitForURL('**/setup'); await shot('01-setup'); });
 await step('create admin', async () => {
-  await p.fill('#handle', 'daniel'); await p.fill('#display', 'Daniel'); await p.fill('#password', 'password123');
+  await p.fill('#handle', 'anna'); await p.fill('#display', 'Anna'); await p.fill('#password', 'password123');
   await p.click('button:has-text("Create account")'); await p.waitForURL('**/recipes'); await p.waitForSelector('text=No recipes yet'); await shot('02-empty');
 });
 await step('create recipe with new and existing ingredients', async () => {
@@ -92,7 +92,7 @@ await step('share sheet and link', async () => {
   const path = new URL(url, base).pathname; await p.click('dialog button[aria-label="Close"]');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'de-DE' }); const a = await anon.newPage();
   await a.goto(base + path); await a.waitForSelector('h1:has-text("My version")');
-  if (await a.locator('text=daniel').count()) throw new Error('author visible'); await anon.close();
+  if (await a.locator('text=anna').count()) throw new Error('author visible'); await anon.close();
 });
 await step('delete and undo', async () => {
   await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Delete")'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes'); await p.click('button:has-text("Undo")'); await p.waitForSelector('h1:has-text("My version")');
@@ -207,7 +207,7 @@ await step('import another app\'s file, check first, undo', async () => {
 });
 await step('offline: saved recipes open, shopping queues and syncs', async () => {
   const off = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const o = await off.newPage(); o.setDefaultTimeout(15000);
-  await o.goto(base + '/login'); await o.fill('#handle', 'daniel'); await o.fill('#password', 'password123'); await o.click('form button:has-text("Log in")'); await o.waitForURL('**/recipes');
+  await o.goto(base + '/login'); await o.fill('#handle', 'anna'); await o.fill('#password', 'password123'); await o.click('form button:has-text("Log in")'); await o.waitForURL('**/recipes');
   await o.evaluate(() => navigator.serviceWorker.ready); await o.waitForFunction(() => navigator.serviceWorker.controller); await o.reload(); await o.waitForSelector('a.recipe-card:has-text("My version")');
   await o.click('a.recipe-card:has-text("My version")'); await o.waitForSelector('h1:has-text("My version")'); await o.waitForTimeout(300);
   await o.goto(base + '/shopping'); await o.waitForSelector('#shopping-line'); await o.waitForTimeout(800); await o.goto(base + '/recipes'); await o.waitForSelector('a.recipe-card'); await o.waitForTimeout(800);
@@ -243,7 +243,7 @@ await step('passkeys with a virtual authenticator', async () => {
   const c3 = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US' }); const k = await c3.newPage();
   const cdp = await c3.newCDPSession(k); await cdp.send('WebAuthn.enable');
   await cdp.send('WebAuthn.addVirtualAuthenticator', { options: { protocol: 'ctap2', transport: 'internal', hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } });
-  await k.goto(local + '/login'); await k.fill('#handle', 'daniel'); await k.fill('#password', 'password123'); await k.click('form button:has-text("Log in"):not(:has-text("passkey"))'); await k.waitForURL('**/recipes');
+  await k.goto(local + '/login'); await k.fill('#handle', 'anna'); await k.fill('#password', 'password123'); await k.click('form button:has-text("Log in"):not(:has-text("passkey"))'); await k.waitForURL('**/recipes');
   await k.goto(local + '/settings'); await k.fill('input[aria-label="Name for this passkey"]', 'Test key'); await k.click('button:has-text("Add a passkey")'); await k.waitForSelector('li:has-text("Test key")'); await k.locator('li:has-text("Test key")').scrollIntoViewIfNeeded(); await k.screenshot({ path: `${shots}/31-passkey.png` });
   await c3.clearCookies(); await k.goto(local + '/login'); await k.click('button:has-text("Log in with a passkey")'); await k.waitForURL('**/recipes'); await c3.close();
 });
