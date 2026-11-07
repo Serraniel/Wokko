@@ -184,7 +184,7 @@
 			<ul class="divide-y divide-line">
 				{#each invites as inv (inv.id)}
 					<li class="flex items-center gap-2 py-2 text-sm">
-						<span class="min-w-0 flex-1">{t('admin.invite_used', { used: inv.use_count, max: inv.max_uses })}{#if inv.expires_at} · {t('share.expires', { date: formatDate(inv.expires_at) })}{/if}</span>
+						<span class="min-w-0 flex-1">{t('admin.invite_used', { used: inv.use_count, max: inv.max_uses })}{#if inv.expires_at}{' · '}{t('share.expires', { date: formatDate(inv.expires_at) })}{/if}</span>
 						<button class="btn btn-ghost btn-icon !min-h-9 !w-9 text-danger" aria-label={t('common.delete')} onclick={() => run(() => api.del(`/admin/invites/${inv.id}`))}><Trash2 size={17} /></button>
 					</li>
 				{/each}

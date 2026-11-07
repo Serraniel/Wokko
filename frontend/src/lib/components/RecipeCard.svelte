@@ -22,7 +22,7 @@
 		{/if}
 	</div>
 	<div class="px-0.5 pt-2">
-		<h3 class="line-clamp-2 text-sm leading-snug font-semibold group-hover:text-brand">{recipe.name}</h3>
+		<h2 class="line-clamp-2 text-sm leading-snug font-semibold group-hover:text-brand">{recipe.name}</h2>
 		<div class="mt-0.5 flex flex-wrap items-center gap-x-2.5 text-xs text-muted">
 			{#if minutes > 0}<span class="inline-flex items-center gap-1"><Clock size={12} />{formatMinutes(minutes)}</span>{/if}
 			<span class="inline-flex items-center gap-1"><Users size={12} />{recipe.servings}<span class="sr-only">{t('recipe.servings_count', { count: recipe.servings })}</span></span>

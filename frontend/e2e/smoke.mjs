@@ -146,6 +146,16 @@ await step('meal plan, shopping and books work together', async () => {
   await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/); await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Add to a book")'); await p.check('dialog[open] label:has-text("Weeknight") input');
   await p.goto(base + '/books'); await p.click('a:has-text("Weeknight")'); await p.waitForSelector('a.recipe-card:has-text("My version")');
 });
+await step('adding a planned week to shopping twice does not double it', async () => {
+  await p.goto(base + '/shopping'); await p.waitForSelector('[role=checkbox]'); const before = await p.locator('[role=checkbox]').count();
+  await p.goto(base + '/plan'); await p.click('button:has-text("Add this week to shopping")'); await p.waitForSelector('text=already on the list');
+  await p.goto(base + '/shopping'); await p.waitForSelector('[role=checkbox]'); if (await p.locator('[role=checkbox]').count() !== before) throw new Error('shopping list grew');
+});
+await step('narrow phones never scroll sideways', async () => {
+  await p.setViewportSize({ width: 320, height: 568 });
+  for (const u of ['/recipes', '/plan', '/shopping', '/settings', '/recipes/new']) { await p.goto(base + u); await p.waitForLoadState('networkidle'); const o = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); if (o > 0) throw new Error(u + ' overflows by ' + o); }
+  await p.setViewportSize({ width: 390, height: 844 });
+});
 await step('cooking mode, history and fractions', async () => {
   await p.goto(base + '/settings'); await p.selectOption('#amounts', 'fraction');
   await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/);
