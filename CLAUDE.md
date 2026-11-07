@@ -9,6 +9,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/app` — business logic and API types. All permission and data rules live here
 - `backend/internal/api` — HTTP layer of the web app, and all API tests
 - `backend/internal/kitshn` — Tandoor-compatible API for the kitshn mobile app
+- `backend/internal/importer` — recipe import from links and pasted text. Its downloads refuse private addresses at connection time
 - `backend/internal/store` — SQLite, migrations, sqlc queries
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text
@@ -64,9 +65,10 @@ Auth, Recipes, Ingredients, Units, Sharing, Kitshn, Backup, MCP, i18n, UI, Infra
 - Names of foods, units and keywords live in per-locale rows, so a new language needs no schema change
 - API types are defined in `app/types.go`. Frontend types are generated from them
 - Photos are re-encoded on upload and stored under `DATA_DIR/uploads`, and served only to people who may see the recipe
+- Imports only produce a draft for the editor, private by default. They use the site's published recipe data first and never pretend to be a browser
 - kitshn compatibility targets a stated version (`kitshn.SupportedKitshn`). Its response types match kitshn's data classes
 
 ## Logo
-- Primary: red fiery wok character (#C0392B + #E67E22 flame)
+- A plain wok and one flame (#C0392B + #E67E22). No face or character
 - The ghost is the 404 mascot only
 - See frontend/static/logo.svg

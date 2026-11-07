@@ -3,7 +3,7 @@
 	import { onMount, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { api, ApiError, errorText, query } from '#lib/api/client.ts';
-	import type { Food, Keyword, Page, Recipe, RecipeInput, Unit } from '#lib/api/types.gen.ts';
+	import type { Food, ImportedRecipe, Keyword, Page, Recipe, RecipeInput, Unit } from '#lib/api/types.gen.ts';
 	import { forget, remember } from '#lib/cache.ts';
 	import { clearDraft, draftKey, loadDraft, saveDraft } from '#lib/draft.ts';
 	import { parseAmount } from '#lib/format.ts';
@@ -12,6 +12,7 @@
 	import { toasts } from '#lib/toast.svelte.ts';
 	import Combobox, { type Option } from './Combobox.svelte';
 	import ErrorNote from './ErrorNote.svelte';
+	import ImportPanel from './ImportPanel.svelte';
 
 	let { recipe = null }: { recipe?: Recipe | null } = $props();
 
@@ -260,6 +261,48 @@
 		}
 	}
 
+	// The panel only shows while the form is untouched, so importing can't overwrite anyone's typing.
+	const pristine = $derived(!startRecipe && JSON.stringify(stripKeys($state.snapshot(form))) === startSnapshot);
+	let imported = $state<{ guessed: boolean } | null>(null);
+
+	function applyImport(d: ImportedRecipe) {
+		const r = d.recipe;
+		form = {
+			name: r.name,
+			description: r.description,
+			work: r.work_minutes ? String(r.work_minutes) : '',
+			wait: r.wait_minutes ? String(r.wait_minutes) : '',
+			servings: String(r.servings),
+			source: r.source_url,
+			visibility: r.visibility,
+			keywords: r.keywords,
+			steps: r.steps.map((s) => ({
+				key: nextKey++,
+				name: s.name,
+				instruction: s.instruction,
+				minutes: s.minutes ? String(s.minutes) : '',
+				ingredients: s.ingredients.map((i) => ({
+					key: nextKey++,
+					food_id: 0,
+					food_name: i.food_name,
+					unit_id: 0,
+					unit_name: i.unit_name,
+					amount: i.amount === null || i.amount === undefined ? '' : formatNumber(i.amount),
+					note: i.note,
+					showNote: !!i.note
+				}))
+			}))
+		};
+		showMore = true;
+		imported = { guessed: d.guessed };
+		if (d.image_data) {
+			const bytes = Uint8Array.from(atob(d.image_data), (c) => c.charCodeAt(0));
+			photoFile = new File([bytes], 'imported-photo', { type: d.image_type });
+			photoPreview = URL.createObjectURL(photoFile);
+		}
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
 	function choosePhoto(e: Event) {
 		const file = (e.currentTarget as HTMLInputElement).files?.[0];
 		if (!file) return;
@@ -293,7 +336,18 @@
 			</div>
 		</div>
 	{/if}
+	{#if imported}
+		<div class="rise rounded-xl p-3 text-sm {imported.guessed ? 'bg-warn-soft text-warn' : 'bg-brand-soft text-brand-soft-ink'}" role="status">
+			<p class="font-semibold">{t('import.done')}</p>
+			{#if imported.guessed}<p>{t('import.guessed')}</p>{/if}
+			<p>{t('import.split_hint')}</p>
+		</div>
+	{/if}
 	<ErrorNote text={error} />
+
+	{#if pristine && !imported}
+		<ImportPanel onimport={applyImport} />
+	{/if}
 
 	<section class="card space-y-4 p-4">
 		<label class="relative flex aspect-[16/9] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-surface-2 text-muted hover:bg-line">
@@ -334,7 +388,7 @@
 				</div>
 			{/if}
 		</div>
-		<button type="button" class="flex items-center gap-1 text-sm font-medium text-muted" aria-expanded={showMore} onclick={() => (showMore = !showMore)}>
+		<button type="button" class="flex min-h-9 items-center gap-1 text-sm font-medium text-muted" aria-expanded={showMore} onclick={() => (showMore = !showMore)}>
 			<ChevronDown size={16} class="transition-transform {showMore ? 'rotate-180' : ''}" />{t('editor.more_options')}
 		</button>
 		{#if showMore}
@@ -386,7 +440,7 @@
 						{#if ing.showNote}
 							<input class="input" bind:value={ing.note} placeholder={t('editor.note_placeholder')} aria-label={t('editor.note')} />
 						{:else}
-							<button type="button" class="text-sm font-medium text-muted hover:text-ink" onclick={() => (ing.showNote = true)}>{t('editor.add_note')}</button>
+							<button type="button" class="min-h-9 text-sm font-medium text-muted hover:text-ink" onclick={() => (ing.showNote = true)}>{t('editor.add_note')}</button>
 						{/if}
 					</div>
 				{/each}
@@ -412,7 +466,7 @@
 	<button type="button" class="btn btn-soft w-full" onclick={() => form.steps.push(newStep())}><Plus size={18} />{t('editor.add_step')}</button>
 
 	<!-- Always reachable: on phones it sits above the navigation bar. -->
-	<div class="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 border-t border-line bg-surface/95 p-3 backdrop-blur md:static md:border-0 md:bg-transparent md:p-0">
+	<div class="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-20 border-t border-line bg-surface/95 p-3 backdrop-blur md:static md:border-0 md:bg-transparent md:p-0">
 		<div class="mx-auto flex max-w-3xl gap-2">
 			<a class="btn btn-soft flex-1 md:flex-none" href={startRecipe ? `/recipes/${startRecipe.id}` : '/recipes'}>{t('common.cancel')}</a>
 			<button class="btn btn-primary flex-[2] md:flex-none" disabled={saving || !form.name.trim()}>{saving ? t('common.saving') : t('common.save')}</button>

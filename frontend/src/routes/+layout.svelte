@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { RefreshCw } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
-	import { goto, onNavigate } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { setUnauthorizedHandler } from '#lib/api/client.ts';
 	import Logo from '#lib/components/Logo.svelte';
@@ -36,16 +36,6 @@
 		if (session.ready && session.status && !session.status.setup_complete && page.url.pathname !== '/setup') goto('/setup', { replaceState: true });
 	});
 
-	// Quick cross-fades between pages where the browser supports it.
-	onNavigate((nav) => {
-		if (!document.startViewTransition || nav.from?.url.pathname === nav.to?.url.pathname) return;
-		return new Promise((resolve) => {
-			document.startViewTransition(async () => {
-				resolve();
-				await nav.complete;
-			});
-		});
-	});
 </script>
 
 {#if failed}
@@ -58,6 +48,6 @@
 {:else if session.ready}
 	{@render children()}
 {:else}
-	<div class="flex min-h-dvh items-center justify-center" aria-hidden="true"><Logo size={56} /></div>
+	<div class="late flex min-h-dvh items-center justify-center" aria-hidden="true"><Logo size={48} /></div>
 {/if}
 <Toasts />
