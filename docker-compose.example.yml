@@ -1,0 +1,52 @@
+# Wokko with a ready-made image. You only need this file, not the source code:
+#
+#   docker compose -f docker-compose.example.yml up -d
+#
+# or save it as docker-compose.yml, and leave out the -f part.
+# Then open http://localhost:8080 and create your admin account.
+
+name: wokko
+
+services:
+  wokko:
+    # A fixed version, so nothing updates by surprise. See "Updating" in the README.
+    image: ghcr.io/serraniel/wokko:0.1.0 # x-release-please-version
+    container_name: wokko
+    restart: unless-stopped
+    environment:
+      # The address people use to reach Wokko. Needed for share links, secure cookies,
+      # passkeys and Claude's hosted connectors.
+      # PUBLIC_URL: https://wokko.example.com
+      BACKUP_INTERVAL_HOURS: 24
+      BACKUP_RETENTION_DAYS: 30
+      TRASH_RETENTION_DAYS: 30
+    ports:
+      - "8080:8080"
+    volumes:
+      # Your recipes and photos. Must be on a local disk: Wokko refuses to start on a network
+      # share, because a database there can get corrupted.
+      - wokko-data:/data
+      # Backups, which are best kept on another disk, such as a NAS:
+      #   - /mnt/nas/wokko:/backups
+      # The folder must be writable for user ID 65532: sudo chown 65532:65532 /mnt/nas/wokko
+      - wokko-backups:/backups
+
+  # HTTPS, for offline use, sharing from your phone and passkeys. To use it:
+  #   1. Point a domain at this server, and open ports 80 and 443.
+  #   2. Remove these comment signs, and use your domain here and in PUBLIC_URL above.
+  #   3. Remove the "ports" section from the wokko service.
+  #
+  # caddy:
+  #   image: caddy:2
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   command: caddy reverse-proxy --from wokko.example.com --to wokko:8080
+  #   volumes:
+  #     - caddy-data:/data
+
+volumes:
+  wokko-data:
+  wokko-backups:
+  # caddy-data:
