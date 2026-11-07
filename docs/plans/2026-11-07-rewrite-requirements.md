@@ -423,6 +423,6 @@ The goal is stability. PostgreSQL is an excellent engine, and nothing suggests i
 | Sharing (S) | Done, including the all-recipes link (S-5) |
 | Language and UI (U) | Done. U-10 (mascot eyes) is dropped, since the new logo has no face. UI overhaul: `2026-11-07-ui-overhaul.md` |
 | Accounts (A) | Done, including passkeys (A-3) |
-| kitshn (K) | All of kitshn 2.1.5's API is covered with contract tests, apart from AI import, which fails cleanly. **K-1 is still unproven: it hasn't run on the owner's phone** |
+| kitshn (K) | All of kitshn 2.1.5's API is covered with contract tests, apart from AI import, which fails cleanly. K-1 is met: on 2026-11-07 the Play Store app logged in and loaded recipes on the owner's phone, and a capture showed every call answered with 200. Writing from the app has contract tests but hasn't been tried on the phone |
 | Meal plans, shopping lists, nutrition (P, L, F) | Done on the web, in kitshn and through MCP. Starting nutrition comes from USDA FoodData Central SR Legacy (CC0) for 160 of the 163 foods |
 | MCP (X-2, X-3) | Done: `2026-11-07-ai-integrations.md` |
