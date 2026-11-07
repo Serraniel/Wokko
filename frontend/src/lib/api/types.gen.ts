@@ -264,3 +264,170 @@ export interface ImportedRecipe {
    */
   guessed: boolean;
 }
+/**
+ * RecipeBook is a named collection of recipes, visible to its owner's household.
+ */
+export interface RecipeBook {
+  id: number /* int64 */;
+  name: string;
+  description: string;
+  recipe_count: number /* int64 */;
+  can_edit: boolean;
+  created_at: string;
+  updated_at: string;
+}
+export interface RecipeBookDetail extends RecipeBook {
+  recipes: RecipeSummary[];
+}
+export interface RecipeBookInput {
+  name: string;
+  description: string;
+}
+/**
+ * CollectionLink shares everything its owner hasn't kept private.
+ */
+export interface CollectionLink {
+  id: number /* int64 */;
+  url: string;
+  expires_at: string;
+  created_at: string;
+}
+/**
+ * MealType is a slot in the plan, such as breakfast or dinner.
+ */
+export interface MealType {
+  id: number /* int64 */;
+  name: string;
+  position: number /* int64 */;
+  time: string;
+  color: string;
+}
+export interface MealTypeInput {
+  name: string;
+  position: number /* int64 */;
+  time: string;
+  color: string;
+}
+/**
+ * MealPlan is one planned meal for the household. RecipeHidden means it points at a recipe
+ * this person isn't allowed to see, so only that fact is shown.
+ */
+export interface MealPlan {
+  id: number /* int64 */;
+  title: string;
+  note: string;
+  servings: number /* float64 */;
+  from_date: string;
+  to_date: string;
+  meal_type: MealType;
+  recipe: RecipeSummary | null;
+  recipe_hidden: boolean;
+  created_by: Person | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface MealPlanInput {
+  title: string;
+  note: string;
+  servings: number /* float64 */;
+  from_date: string;
+  to_date: string;
+  meal_type_id: number /* int64 */;
+  recipe_id: number /* int64 */;
+  add_to_shopping: boolean;
+}
+export interface SupermarketCategory {
+  id: number /* int64 */;
+  name: string;
+  description: string;
+}
+export interface CategoryInput {
+  name: string;
+  description: string;
+}
+export interface SupermarketOrderEntry {
+  id: number /* int64 */;
+  category: SupermarketCategory;
+  position: number /* int64 */;
+}
+export interface Supermarket {
+  id: number /* int64 */;
+  name: string;
+  description: string;
+  categories: SupermarketOrderEntry[];
+}
+/**
+ * ShoppingRecipe says which recipe and servings a group of shopping items came from.
+ */
+export interface ShoppingRecipe {
+  id: number /* int64 */;
+  name: string;
+  servings: number /* float64 */;
+  recipe_id: number /* int64 */;
+  meal_plan_id: number /* int64 */;
+}
+export interface ShoppingItem {
+  id: number /* int64 */;
+  food: FoodRef;
+  unit: UnitRef | null;
+  amount: number /* float64 */ | null;
+  note: string;
+  checked: boolean;
+  position: number /* int64 */;
+  category: SupermarketCategory | null;
+  recipe: ShoppingRecipe | null;
+  created_by: Person | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface ShoppingItemInput {
+  food_id: number /* int64 */;
+  food_name: string;
+  unit_id: number /* int64 */;
+  unit_name: string;
+  amount: number /* float64 */ | null;
+  note: string;
+  checked: boolean;
+}
+/**
+ * ShoppingAddRecipe adds a recipe's ingredients, scaled to the servings. IngredientIDs narrows
+ * that to some of them.
+ */
+export interface ShoppingAddRecipe {
+  recipe_id: number /* int64 */;
+  servings: number /* float64 */;
+  meal_plan_id: number /* int64 */;
+  ingredient_ids: number /* int64 */[];
+}
+export interface ShoppingCheckInput {
+  ids: number /* int64 */[];
+  checked: boolean;
+}
+export interface Nutrient {
+  id: number /* int64 */;
+  name: string;
+  unit: string;
+  position: number /* int64 */;
+}
+/**
+ * FoodNutrition is per 100 g of a food. PieceGrams is what one piece weighs.
+ */
+export interface FoodNutrition {
+  piece_grams: number /* float64 */ | null;
+  values: { [key: number /* int64 */]: number /* float64 */};
+}
+export interface RecipeNutrient {
+  nutrient: Nutrient;
+  total: number /* float64 */;
+  per_serving: number /* float64 */;
+}
+/**
+ * RecipeNutrition adds up what's known. Missing lists ingredients it couldn't count, so a
+ * partial result is never mistaken for a complete one.
+ */
+export interface RecipeNutrition {
+  nutrients: RecipeNutrient[];
+  counted: number /* int64 */;
+  total: number /* int64 */;
+  missing: string[];
+}

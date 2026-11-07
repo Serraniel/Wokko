@@ -18,6 +18,14 @@ type BackupRun struct {
 	Error      sql.NullString
 }
 
+type CollectionLink struct {
+	ID        int64
+	Token     string
+	OwnerID   int64
+	ExpiresAt sql.NullString
+	CreatedAt string
+}
+
 type CookLog struct {
 	ID        int64
 	RecipeID  int64
@@ -34,6 +42,7 @@ type Food struct {
 	CreatedBy     sql.NullInt64
 	CreatedAt     string
 	UpdatedAt     string
+	PieceGrams    sql.NullFloat64
 }
 
 type FoodAlias struct {
@@ -42,12 +51,24 @@ type FoodAlias struct {
 	SearchName string
 }
 
+type FoodCategory struct {
+	HouseholdID int64
+	FoodID      int64
+	CategoryID  int64
+}
+
 type FoodName struct {
 	FoodID     int64
 	Locale     string
 	Name       string
 	Plural     sql.NullString
 	SearchName string
+}
+
+type FoodNutrient struct {
+	FoodID     int64
+	NutrientID int64
+	Per100g    float64
 }
 
 type Friendship struct {
@@ -98,6 +119,45 @@ type KeywordName struct {
 	SearchName string
 }
 
+type MealPlan struct {
+	ID          int64
+	HouseholdID int64
+	CreatedBy   sql.NullInt64
+	RecipeID    sql.NullInt64
+	RecipeName  string
+	MealTypeID  int64
+	Title       string
+	Note        string
+	Servings    float64
+	FromDate    string
+	ToDate      string
+	CreatedAt   string
+	UpdatedAt   string
+}
+
+type MealType struct {
+	ID          int64
+	HouseholdID int64
+	Name        string
+	Position    int64
+	Time        string
+	Color       string
+	CreatedBy   sql.NullInt64
+	CreatedAt   string
+}
+
+type Nutrient struct {
+	ID       int64
+	Unit     string
+	Position int64
+}
+
+type NutrientName struct {
+	NutrientID int64
+	Locale     string
+	Name       string
+}
+
 type PasswordReset struct {
 	TokenHash string
 	UserID    int64
@@ -121,6 +181,23 @@ type Recipe struct {
 	CreatedAt    string
 	UpdatedAt    string
 	DeletedAt    sql.NullString
+}
+
+type RecipeBook struct {
+	ID          int64
+	OwnerID     int64
+	Name        string
+	Description string
+	CreatedAt   string
+	UpdatedAt   string
+}
+
+type RecipeBookEntry struct {
+	ID        int64
+	BookID    int64
+	RecipeID  int64
+	AddedBy   sql.NullInt64
+	CreatedAt string
 }
 
 type RecipeKeyword struct {
@@ -165,6 +242,32 @@ type ShareLink struct {
 	CreatedAt string
 }
 
+type ShoppingItem struct {
+	ID               int64
+	HouseholdID      int64
+	ShoppingRecipeID sql.NullInt64
+	FoodID           int64
+	UnitID           sql.NullInt64
+	Amount           sql.NullFloat64
+	Note             string
+	Position         int64
+	CheckedAt        sql.NullString
+	CreatedBy        sql.NullInt64
+	CreatedAt        string
+	UpdatedAt        string
+}
+
+type ShoppingRecipe struct {
+	ID          int64
+	HouseholdID int64
+	RecipeID    sql.NullInt64
+	MealPlanID  sql.NullInt64
+	Name        string
+	Servings    float64
+	CreatedBy   sql.NullInt64
+	CreatedAt   string
+}
+
 type Step struct {
 	ID          int64
 	RecipeID    int64
@@ -174,11 +277,35 @@ type Step struct {
 	Minutes     int64
 }
 
+type Supermarket struct {
+	ID          int64
+	HouseholdID int64
+	Name        string
+	Description string
+	CreatedAt   string
+}
+
+type SupermarketCategory struct {
+	ID          int64
+	HouseholdID int64
+	Name        string
+	Description string
+	CreatedAt   string
+}
+
+type SupermarketCategoryOrder struct {
+	ID            int64
+	SupermarketID int64
+	CategoryID    int64
+	Position      int64
+}
+
 type Unit struct {
 	ID        int64
 	CreatedBy sql.NullInt64
 	CreatedAt string
 	UpdatedAt string
+	Grams     sql.NullFloat64
 }
 
 type UnitAlias struct {

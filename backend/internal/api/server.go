@@ -90,6 +90,17 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("DELETE "+p+"/recipes/{id}/sharing/links/{lid}", s.user(s.revokeLink))
 	m.HandleFunc("GET "+p+"/recipes/{id}/cooklog", s.user(s.listCookLog))
 	m.HandleFunc("POST "+p+"/recipes/{id}/cooklog", s.user(s.addCookLog))
+	m.HandleFunc("GET "+p+"/recipes/{id}/books", s.user(s.recipeBooks))
+	m.HandleFunc("GET "+p+"/books", s.user(s.listBooks))
+	m.HandleFunc("POST "+p+"/books", s.user(s.createBook))
+	m.HandleFunc("GET "+p+"/books/{id}", s.user(s.getBook))
+	m.HandleFunc("PUT "+p+"/books/{id}", s.user(s.updateBook))
+	m.HandleFunc("DELETE "+p+"/books/{id}", s.user(s.deleteBook))
+	m.HandleFunc("PUT "+p+"/books/{id}/recipes/{rid}", s.user(s.addToBook))
+	m.HandleFunc("DELETE "+p+"/books/{id}/recipes/{rid}", s.user(s.removeFromBook))
+	m.HandleFunc("GET "+p+"/me/collection-links", s.user(s.listCollectionLinks))
+	m.HandleFunc("POST "+p+"/me/collection-links", s.user(s.createCollectionLink))
+	m.HandleFunc("DELETE "+p+"/me/collection-links/{id}", s.user(s.revokeCollectionLink))
 	m.HandleFunc("GET "+p+"/trash", s.user(s.listTrash))
 	m.HandleFunc("DELETE "+p+"/trash/{id}", s.user(s.purgeRecipe))
 
@@ -131,9 +142,13 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET "+p+"/admin/health", s.user(s.adminHealth))
 	m.HandleFunc("POST "+p+"/admin/backups", s.user(s.adminBackup))
 
+	s.planningRoutes(m, p)
+
 	m.HandleFunc("GET "+p+"/public/recipes", s.h(s.listPublic))
 	m.HandleFunc("GET "+p+"/public/recipes/{id}", s.h(s.getPublic))
 	m.HandleFunc("GET "+p+"/public/share/{token}", s.h(s.getShared))
+	m.HandleFunc("GET "+p+"/public/collections/{token}", s.h(s.listCollection))
+	m.HandleFunc("GET "+p+"/public/collections/{token}/recipes/{id}", s.h(s.getCollectionRecipe))
 	m.HandleFunc("GET /media/{file}", s.h(s.serveMedia))
 	// Unknown API paths get JSON, never the web app's HTML.
 	m.HandleFunc(p+"/", s.h(func(http.ResponseWriter, *http.Request) error { return app.ErrNotFound }))

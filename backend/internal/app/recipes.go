@@ -410,8 +410,15 @@ func (s *Service) resolveKeywords(ctx context.Context, q *sqlcgen.Queries, v Vie
 // It runs inside the save transaction, and new foods, units and keywords are created there
 // too, so a failed save leaves nothing behind.
 func (s *Service) writeContent(ctx context.Context, q *sqlcgen.Queries, v Viewer, recipeID int64, in RecipeInput) (string, error) {
-	if err := q.DeleteSteps(ctx, recipeID); err != nil {
+	// Steps keep their IDs from one save to the next, because kitshn holds on to them.
+	oldSteps, err := q.ListSteps(ctx, recipeID)
+	if err != nil {
 		return "", err
+	}
+	for i := len(in.Steps); i < len(oldSteps); i++ {
+		if err := q.DeleteStep(ctx, oldSteps[i].ID); err != nil {
+			return "", err
+		}
 	}
 	if err := q.DeleteRecipeKeywords(ctx, recipeID); err != nil {
 		return "", err
@@ -419,9 +426,20 @@ func (s *Service) writeContent(ctx context.Context, q *sqlcgen.Queries, v Viewer
 	parts := []string{in.Name, in.Description}
 	var foodIDs []int64
 	for i, st := range in.Steps {
-		stepID, err := q.CreateStep(ctx, sqlcgen.CreateStepParams{RecipeID: recipeID, Position: int64(i), Name: strings.TrimSpace(st.Name), Instruction: st.Instruction, Minutes: st.Minutes})
-		if err != nil {
-			return "", err
+		var stepID int64
+		if i < len(oldSteps) {
+			stepID = oldSteps[i].ID
+			if err := q.DeleteStepIngredients(ctx, stepID); err != nil {
+				return "", err
+			}
+			if err := q.UpdateStep(ctx, sqlcgen.UpdateStepParams{ID: stepID, Position: int64(i), Name: strings.TrimSpace(st.Name), Instruction: st.Instruction, Minutes: st.Minutes}); err != nil {
+				return "", err
+			}
+		} else {
+			stepID, err = q.CreateStep(ctx, sqlcgen.CreateStepParams{RecipeID: recipeID, Position: int64(i), Name: strings.TrimSpace(st.Name), Instruction: st.Instruction, Minutes: st.Minutes})
+			if err != nil {
+				return "", err
+			}
 		}
 		parts = append(parts, st.Name, st.Instruction)
 		for j, ing := range st.Ingredients {
@@ -747,6 +765,9 @@ func (s *Service) CanSeePhoto(ctx context.Context, v Viewer, file, shareToken st
 		}
 		if n > 0 {
 			return true, nil
+		}
+		if covered, err := s.collectionCovers(ctx, shareToken, r); err != nil || covered {
+			return covered, err
 		}
 	}
 	return s.canView(ctx, q, v, r)

@@ -212,7 +212,10 @@ func (s *Service) CreateFood(ctx context.Context, v Viewer, in FoodInput) (Food,
 			return err
 		}
 		id = f.ID
-		return writeFoodNames(ctx, q, id, names, in.Aliases)
+		if err := writeFoodNames(ctx, q, id, names, in.Aliases); err != nil {
+			return err
+		}
+		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})
 	if err != nil {
 		return Food{}, err
@@ -265,7 +268,10 @@ func (s *Service) UpdateFood(ctx context.Context, v Viewer, id int64, in FoodInp
 		if err := q.SetFoodDefaultUnit(ctx, sqlcgen.SetFoodDefaultUnitParams{DefaultUnitID: nullID(def), ID: id}); err != nil {
 			return err
 		}
-		return writeFoodNames(ctx, q, id, names, in.Aliases)
+		if err := writeFoodNames(ctx, q, id, names, in.Aliases); err != nil {
+			return err
+		}
+		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})
 	if err != nil {
 		return Food{}, err
@@ -289,7 +295,11 @@ func (s *Service) DeleteFood(ctx context.Context, v Viewer, id int64) error {
 		if err != nil {
 			return err
 		}
-		if err := inUse(uses); err != nil {
+		listed, err := q.CountFoodShoppingUses(ctx, id)
+		if err != nil {
+			return err
+		}
+		if err := inUse(uses + listed); err != nil {
 			return err
 		}
 		return q.DeleteFood(ctx, id)
@@ -326,7 +336,19 @@ func (s *Service) MergeFoods(ctx context.Context, v Viewer, in MergeInput) error
 		if err := q.MoveIngredientsToFood(ctx, sqlcgen.MoveIngredientsToFoodParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
 			return err
 		}
-		return q.DeleteFood(ctx, in.SourceID)
+		if err := q.MoveShoppingItemsToFood(ctx, sqlcgen.MoveShoppingItemsToFoodParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
+			return err
+		}
+		if err := q.MoveFoodCategories(ctx, sqlcgen.MoveFoodCategoriesParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
+			return err
+		}
+		if err := q.MoveFoodNutrients(ctx, sqlcgen.MoveFoodNutrientsParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
+			return err
+		}
+		if err := q.DeleteFood(ctx, in.SourceID); err != nil {
+			return err
+		}
+		return s.reindexFood(ctx, q, in.TargetID)
 	})
 }
 
@@ -502,6 +524,9 @@ func (s *Service) MergeUnits(ctx context.Context, v Viewer, in MergeInput) error
 			}
 		}
 		if err := q.MoveIngredientsToUnit(ctx, sqlcgen.MoveIngredientsToUnitParams{Target: nullID(in.TargetID), Source: nullID(in.SourceID)}); err != nil {
+			return err
+		}
+		if err := q.MoveShoppingItemsToUnit(ctx, sqlcgen.MoveShoppingItemsToUnitParams{Target: sql64(in.TargetID), Source: sql64(in.SourceID)}); err != nil {
 			return err
 		}
 		if err := q.MoveFoodDefaultsToUnit(ctx, sqlcgen.MoveFoodDefaultsToUnitParams{Target: nullID(in.TargetID), Source: nullID(in.SourceID)}); err != nil {

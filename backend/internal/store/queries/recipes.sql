@@ -179,3 +179,30 @@ SELECT * FROM backup_runs WHERE status = 'ok' ORDER BY id DESC LIMIT 1;
 
 -- name: ListBackupRuns :many
 SELECT * FROM backup_runs ORDER BY id DESC LIMIT ?;
+
+-- name: UpdateStep :exec
+UPDATE steps SET position = ?, name = ?, instruction = ?, minutes = ? WHERE id = ?;
+
+-- name: DeleteStep :exec
+DELETE FROM steps WHERE id = ?;
+
+-- name: DeleteStepIngredients :exec
+DELETE FROM ingredients WHERE step_id = ?;
+
+-- name: SetRecipeSearchText :exec
+UPDATE recipes SET search_text = ? WHERE id = ?;
+
+-- name: ListRecipeIDsUsingFood :many
+SELECT DISTINCT s.recipe_id FROM ingredients i JOIN steps s ON s.id = i.step_id WHERE i.food_id = ?;
+
+-- name: ListStepTexts :many
+SELECT name, instruction FROM steps WHERE recipe_id = ?;
+
+-- name: ListIngredientFacts :many
+SELECT i.food_id, i.note FROM ingredients i JOIN steps s ON s.id = i.step_id WHERE s.recipe_id = ?;
+
+-- name: ListFoodAliasSearchNames :many
+SELECT search_name FROM food_aliases WHERE food_id IN (sqlc.slice(ids));
+
+-- name: ListKeywordSearchNamesForRecipe :many
+SELECT n.search_name FROM keyword_names n JOIN recipe_keywords k ON k.keyword_id = n.keyword_id WHERE k.recipe_id = ?;

@@ -104,7 +104,7 @@ func (q *Queries) CountUnits(ctx context.Context, q_ string) (int64, error) {
 }
 
 const createFood = `-- name: CreateFood :one
-INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at
+INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at, piece_grams
 `
 
 type CreateFoodParams struct {
@@ -121,6 +121,7 @@ func (q *Queries) CreateFood(ctx context.Context, arg CreateFoodParams) (Food, e
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.PieceGrams,
 	)
 	return i, err
 }
@@ -137,7 +138,7 @@ func (q *Queries) CreateKeyword(ctx context.Context) (Keyword, error) {
 }
 
 const createUnit = `-- name: CreateUnit :one
-INSERT INTO units (created_by) VALUES (?) RETURNING id, created_by, created_at, updated_at
+INSERT INTO units (created_by) VALUES (?) RETURNING id, created_by, created_at, updated_at, grams
 `
 
 func (q *Queries) CreateUnit(ctx context.Context, createdBy sql.NullInt64) (Unit, error) {
@@ -148,6 +149,7 @@ func (q *Queries) CreateUnit(ctx context.Context, createdBy sql.NullInt64) (Unit
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Grams,
 	)
 	return i, err
 }
@@ -240,7 +242,7 @@ func (q *Queries) FindUnitIDByName(ctx context.Context, name string) (int64, err
 }
 
 const getFood = `-- name: GetFood :one
-SELECT id, default_unit_id, created_by, created_at, updated_at FROM foods WHERE id = ?
+SELECT id, default_unit_id, created_by, created_at, updated_at, piece_grams FROM foods WHERE id = ?
 `
 
 func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
@@ -252,6 +254,7 @@ func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.PieceGrams,
 	)
 	return i, err
 }
@@ -268,7 +271,7 @@ func (q *Queries) GetKeyword(ctx context.Context, id int64) (Keyword, error) {
 }
 
 const getUnit = `-- name: GetUnit :one
-SELECT id, created_by, created_at, updated_at FROM units WHERE id = ?
+SELECT id, created_by, created_at, updated_at, grams FROM units WHERE id = ?
 `
 
 func (q *Queries) GetUnit(ctx context.Context, id int64) (Unit, error) {
@@ -279,6 +282,7 @@ func (q *Queries) GetUnit(ctx context.Context, id int64) (Unit, error) {
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Grams,
 	)
 	return i, err
 }
