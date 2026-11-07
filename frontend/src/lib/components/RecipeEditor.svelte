@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { ArrowDown, ArrowUp, Camera, ChevronDown, Plus, Trash2, X } from '@lucide/svelte';
 	import { onMount, untrack } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
+	import { page } from '$app/state';
 	import { api, ApiError, errorText, query } from '#lib/api/client.ts';
 	import type { Food, ImportedRecipe, Keyword, Page, Recipe, RecipeInput, Unit } from '#lib/api/types.gen.ts';
 	import { forget, remember } from '#lib/cache.ts';
@@ -9,6 +10,7 @@
 	import { parseAmount } from '#lib/format.ts';
 	import { formatDate, formatNumber, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
+	import { readShared } from '#lib/share.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 	import Combobox, { type Option } from './Combobox.svelte';
 	import ErrorNote from './ErrorNote.svelte';
@@ -264,6 +266,8 @@
 	// The panel only shows while the form is untouched, so importing can't overwrite anyone's typing.
 	const pristine = $derived(!startRecipe && JSON.stringify(stripKeys($state.snapshot(form))) === startSnapshot);
 	let imported = $state<{ guessed: boolean } | null>(null);
+	// A link from "Share to Wokko" or the bookmark.
+	const shared = startRecipe ? { url: '', text: '' } : readShared(page.url.searchParams);
 
 	function applyImport(d: ImportedRecipe) {
 		const r = d.recipe;
@@ -295,6 +299,7 @@
 		};
 		showMore = true;
 		imported = { guessed: d.guessed };
+		if (shared.url || shared.text) replaceState('/recipes/new', {});
 		if (d.image_data) {
 			const bytes = Uint8Array.from(atob(d.image_data), (c) => c.charCodeAt(0));
 			photoFile = new File([bytes], 'imported-photo', { type: d.image_type });
@@ -346,7 +351,7 @@
 	<ErrorNote text={error} />
 
 	{#if pristine && !imported}
-		<ImportPanel onimport={applyImport} />
+		<ImportPanel onimport={applyImport} sharedUrl={shared.url} sharedText={shared.text} />
 	{/if}
 
 	<section class="card space-y-4 p-4">

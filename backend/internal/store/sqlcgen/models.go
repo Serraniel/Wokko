@@ -311,6 +311,7 @@ type ShoppingItem struct {
 	CreatedBy        sql.NullInt64
 	CreatedAt        string
 	UpdatedAt        string
+	ClientRef        sql.NullString
 }
 
 type ShoppingRecipe struct {

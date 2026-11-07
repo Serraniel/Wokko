@@ -1,21 +1,27 @@
 <script lang="ts">
-	import { Download, Link2 } from '@lucide/svelte';
+	import { Download, FileUp, Link2 } from '@lucide/svelte';
+	import { onMount, untrack } from 'svelte';
 	import { api, errorText } from '#lib/api/client.ts';
 	import type { ImportedRecipe } from '#lib/api/types.gen.ts';
 	import { t } from '#lib/i18n/index.svelte.ts';
 	import ErrorNote from './ErrorNote.svelte';
 
-	let { onimport }: { onimport: (draft: ImportedRecipe) => void } = $props();
+	let { onimport, sharedUrl = '', sharedText = '' }: { onimport: (draft: ImportedRecipe) => void; sharedUrl?: string; sharedText?: string } = $props();
 
-	let url = $state('');
-	let text = $state('');
-	let pasting = $state(false);
+	let url = $state(untrack(() => sharedUrl));
+	let text = $state(untrack(() => sharedText));
+	let pasting = $state(untrack(() => !sharedUrl && !!sharedText));
 	let working = $state(false);
 	let error = $state('');
 
-	async function run(e: Event) {
-		e.preventDefault();
-		e.stopPropagation();
+	// Something shared from another app starts right away.
+	onMount(() => {
+		if (sharedUrl || sharedText) run();
+	});
+
+	async function run(e?: Event) {
+		e?.preventDefault();
+		e?.stopPropagation();
 		if (working) return;
 		working = true;
 		error = '';
@@ -61,4 +67,5 @@
 	<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { pasting = !pasting; error = ''; }}>
 		<Link2 size={15} />{pasting ? t('import.link_instead') : t('import.paste_instead')}
 	</button>
+	<a class="ml-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href="/import"><FileUp size={15} />{t('import.from_file')}</a>
 </section>
