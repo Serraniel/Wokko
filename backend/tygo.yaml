@@ -1,0 +1,7 @@
+packages:
+  - path: github.com/serraniel/wokko/backend/internal/app
+    include_files: [types.go]
+    output_path: ../frontend/src/lib/api/types.gen.ts
+    frontmatter: |
+      // Generated from backend/internal/app/types.go by `make types`. Do not edit.
+    optional_type: "null"
