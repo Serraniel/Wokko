@@ -283,3 +283,176 @@ type ImportedRecipe struct {
 	// Guessed means the result was read from the page's layout, not recipe data the site published.
 	Guessed bool `json:"guessed"`
 }
+
+// RecipeBook is a named collection of recipes, visible to its owner's household.
+type RecipeBook struct {
+	ID          int64  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	RecipeCount int64  `json:"recipe_count"`
+	CanEdit     bool   `json:"can_edit"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+}
+
+type RecipeBookDetail struct {
+	RecipeBook `json:",inline" tstype:",extends"`
+	Recipes    []RecipeSummary `json:"recipes"`
+}
+
+type RecipeBookInput struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+// CollectionLink shares everything its owner hasn't kept private.
+type CollectionLink struct {
+	ID        int64  `json:"id"`
+	URL       string `json:"url"`
+	ExpiresAt string `json:"expires_at"`
+	CreatedAt string `json:"created_at"`
+}
+
+// MealType is a slot in the plan, such as breakfast or dinner.
+type MealType struct {
+	ID       int64  `json:"id"`
+	Name     string `json:"name"`
+	Position int64  `json:"position"`
+	Time     string `json:"time"`
+	Color    string `json:"color"`
+}
+
+type MealTypeInput struct {
+	Name     string `json:"name"`
+	Position int64  `json:"position"`
+	Time     string `json:"time"`
+	Color    string `json:"color"`
+}
+
+// MealPlan is one planned meal for the household. RecipeHidden means it points at a recipe
+// this person isn't allowed to see, so only that fact is shown.
+type MealPlan struct {
+	ID           int64          `json:"id"`
+	Title        string         `json:"title"`
+	Note         string         `json:"note"`
+	Servings     float64        `json:"servings"`
+	FromDate     string         `json:"from_date"`
+	ToDate       string         `json:"to_date"`
+	MealType     MealType       `json:"meal_type"`
+	Recipe       *RecipeSummary `json:"recipe"`
+	RecipeHidden bool           `json:"recipe_hidden"`
+	CreatedBy    *Person        `json:"created_by"`
+	CreatedAt    string         `json:"created_at"`
+	UpdatedAt    string         `json:"updated_at"`
+}
+
+type MealPlanInput struct {
+	Title         string  `json:"title"`
+	Note          string  `json:"note"`
+	Servings      float64 `json:"servings"`
+	FromDate      string  `json:"from_date"`
+	ToDate        string  `json:"to_date"`
+	MealTypeID    int64   `json:"meal_type_id"`
+	RecipeID      int64   `json:"recipe_id"`
+	AddToShopping bool    `json:"add_to_shopping"`
+}
+
+type SupermarketCategory struct {
+	ID          int64  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type CategoryInput struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type SupermarketOrderEntry struct {
+	ID       int64               `json:"id"`
+	Category SupermarketCategory `json:"category"`
+	Position int64               `json:"position"`
+}
+
+type Supermarket struct {
+	ID          int64                   `json:"id"`
+	Name        string                  `json:"name"`
+	Description string                  `json:"description"`
+	Categories  []SupermarketOrderEntry `json:"categories"`
+}
+
+// ShoppingRecipe says which recipe and servings a group of shopping items came from.
+type ShoppingRecipe struct {
+	ID         int64   `json:"id"`
+	Name       string  `json:"name"`
+	Servings   float64 `json:"servings"`
+	RecipeID   int64   `json:"recipe_id"`
+	MealPlanID int64   `json:"meal_plan_id"`
+}
+
+type ShoppingItem struct {
+	ID        int64                `json:"id"`
+	Food      FoodRef              `json:"food"`
+	Unit      *UnitRef             `json:"unit"`
+	Amount    *float64             `json:"amount"`
+	Note      string               `json:"note"`
+	Checked   bool                 `json:"checked"`
+	Position  int64                `json:"position"`
+	Category  *SupermarketCategory `json:"category"`
+	Recipe    *ShoppingRecipe      `json:"recipe"`
+	CreatedBy *Person              `json:"created_by"`
+	CreatedAt string               `json:"created_at"`
+	UpdatedAt string               `json:"updated_at"`
+}
+
+type ShoppingItemInput struct {
+	FoodID   int64    `json:"food_id"`
+	FoodName string   `json:"food_name"`
+	UnitID   int64    `json:"unit_id"`
+	UnitName string   `json:"unit_name"`
+	Amount   *float64 `json:"amount"`
+	Note     string   `json:"note"`
+	Checked  bool     `json:"checked"`
+}
+
+// ShoppingAddRecipe adds a recipe's ingredients, scaled to the servings. IngredientIDs narrows
+// that to some of them.
+type ShoppingAddRecipe struct {
+	RecipeID      int64   `json:"recipe_id"`
+	Servings      float64 `json:"servings"`
+	MealPlanID    int64   `json:"meal_plan_id"`
+	IngredientIDs []int64 `json:"ingredient_ids"`
+}
+
+type ShoppingCheckInput struct {
+	IDs     []int64 `json:"ids"`
+	Checked bool    `json:"checked"`
+}
+
+type Nutrient struct {
+	ID       int64  `json:"id"`
+	Name     string `json:"name"`
+	Unit     string `json:"unit"`
+	Position int64  `json:"position"`
+}
+
+// FoodNutrition is per 100 g of a food. PieceGrams is what one piece weighs.
+type FoodNutrition struct {
+	PieceGrams *float64          `json:"piece_grams"`
+	Values     map[int64]float64 `json:"values"`
+}
+
+type RecipeNutrient struct {
+	Nutrient   Nutrient `json:"nutrient"`
+	Total      float64  `json:"total"`
+	PerServing float64  `json:"per_serving"`
+}
+
+// RecipeNutrition adds up what's known. Missing lists ingredients it couldn't count, so a
+// partial result is never mistaken for a complete one.
+type RecipeNutrition struct {
+	Nutrients []RecipeNutrient `json:"nutrients"`
+	Counted   int64            `json:"counted"`
+	Total     int64            `json:"total"`
+	Missing   []string         `json:"missing"`
+}

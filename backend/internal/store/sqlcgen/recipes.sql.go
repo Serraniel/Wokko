@@ -356,6 +356,24 @@ func (q *Queries) DeleteShareLink(ctx context.Context, arg DeleteShareLinkParams
 	return err
 }
 
+const deleteStep = `-- name: DeleteStep :exec
+DELETE FROM steps WHERE id = ?
+`
+
+func (q *Queries) DeleteStep(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteStep, id)
+	return err
+}
+
+const deleteStepIngredients = `-- name: DeleteStepIngredients :exec
+DELETE FROM ingredients WHERE step_id = ?
+`
+
+func (q *Queries) DeleteStepIngredients(ctx context.Context, stepID int64) error {
+	_, err := q.db.ExecContext(ctx, deleteStepIngredients, stepID)
+	return err
+}
+
 const deleteSteps = `-- name: DeleteSteps :exec
 DELETE FROM steps WHERE recipe_id = ?
 `
@@ -721,6 +739,75 @@ func (q *Queries) ListExpiredTrash(ctx context.Context, deletedAt sql.NullString
 	return items, nil
 }
 
+const listFoodAliasSearchNames = `-- name: ListFoodAliasSearchNames :many
+SELECT search_name FROM food_aliases WHERE food_id IN (/*SLICE:ids*/?)
+`
+
+func (q *Queries) ListFoodAliasSearchNames(ctx context.Context, ids []int64) ([]string, error) {
+	query := listFoodAliasSearchNames
+	var queryParams []interface{}
+	if len(ids) > 0 {
+		for _, v := range ids {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:ids*/?", strings.Repeat(",?", len(ids))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
+	}
+	rows, err := q.db.QueryContext(ctx, query, queryParams...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var search_name string
+		if err := rows.Scan(&search_name); err != nil {
+			return nil, err
+		}
+		items = append(items, search_name)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listIngredientFacts = `-- name: ListIngredientFacts :many
+SELECT i.food_id, i.note FROM ingredients i JOIN steps s ON s.id = i.step_id WHERE s.recipe_id = ?
+`
+
+type ListIngredientFactsRow struct {
+	FoodID int64
+	Note   string
+}
+
+func (q *Queries) ListIngredientFacts(ctx context.Context, recipeID int64) ([]ListIngredientFactsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listIngredientFacts, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListIngredientFactsRow{}
+	for rows.Next() {
+		var i ListIngredientFactsRow
+		if err := rows.Scan(&i.FoodID, &i.Note); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listIngredientsForRecipe = `-- name: ListIngredientsForRecipe :many
 SELECT i.id, i.step_id, i.position, i.food_id, i.unit_id, i.amount, i.note FROM ingredients i JOIN steps s ON s.id = i.step_id WHERE s.recipe_id = ? ORDER BY s.position, i.position, i.id
 `
@@ -746,6 +833,33 @@ func (q *Queries) ListIngredientsForRecipe(ctx context.Context, recipeID int64) 
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listKeywordSearchNamesForRecipe = `-- name: ListKeywordSearchNamesForRecipe :many
+SELECT n.search_name FROM keyword_names n JOIN recipe_keywords k ON k.keyword_id = n.keyword_id WHERE k.recipe_id = ?
+`
+
+func (q *Queries) ListKeywordSearchNamesForRecipe(ctx context.Context, recipeID int64) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, listKeywordSearchNamesForRecipe, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var search_name string
+		if err := rows.Scan(&search_name); err != nil {
+			return nil, err
+		}
+		items = append(items, search_name)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -798,6 +912,33 @@ func (q *Queries) ListPublicRecipes(ctx context.Context, arg ListPublicRecipesPa
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listRecipeIDsUsingFood = `-- name: ListRecipeIDsUsingFood :many
+SELECT DISTINCT s.recipe_id FROM ingredients i JOIN steps s ON s.id = i.step_id WHERE i.food_id = ?
+`
+
+func (q *Queries) ListRecipeIDsUsingFood(ctx context.Context, foodID int64) ([]int64, error) {
+	rows, err := q.db.QueryContext(ctx, listRecipeIDsUsingFood, foodID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []int64{}
+	for rows.Next() {
+		var recipe_id int64
+		if err := rows.Scan(&recipe_id); err != nil {
+			return nil, err
+		}
+		items = append(items, recipe_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -1043,6 +1184,38 @@ func (q *Queries) ListShareLinks(ctx context.Context, recipeID int64) ([]ShareLi
 			&i.ExpiresAt,
 			&i.CreatedAt,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listStepTexts = `-- name: ListStepTexts :many
+SELECT name, instruction FROM steps WHERE recipe_id = ?
+`
+
+type ListStepTextsRow struct {
+	Name        string
+	Instruction string
+}
+
+func (q *Queries) ListStepTexts(ctx context.Context, recipeID int64) ([]ListStepTextsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listStepTexts, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListStepTextsRow{}
+	for rows.Next() {
+		var i ListStepTextsRow
+		if err := rows.Scan(&i.Name, &i.Instruction); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -1320,6 +1493,20 @@ func (q *Queries) SetRecipePhoto(ctx context.Context, arg SetRecipePhotoParams) 
 	return err
 }
 
+const setRecipeSearchText = `-- name: SetRecipeSearchText :exec
+UPDATE recipes SET search_text = ? WHERE id = ?
+`
+
+type SetRecipeSearchTextParams struct {
+	SearchText string
+	ID         int64
+}
+
+func (q *Queries) SetRecipeSearchText(ctx context.Context, arg SetRecipeSearchTextParams) error {
+	_, err := q.db.ExecContext(ctx, setRecipeSearchText, arg.SearchText, arg.ID)
+	return err
+}
+
 const softDeleteRecipe = `-- name: SoftDeleteRecipe :exec
 UPDATE recipes SET deleted_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ? AND deleted_at IS NULL
 `
@@ -1379,4 +1566,27 @@ func (q *Queries) UpdateRecipe(ctx context.Context, arg UpdateRecipeParams) (int
 		return 0, err
 	}
 	return result.RowsAffected()
+}
+
+const updateStep = `-- name: UpdateStep :exec
+UPDATE steps SET position = ?, name = ?, instruction = ?, minutes = ? WHERE id = ?
+`
+
+type UpdateStepParams struct {
+	Position    int64
+	Name        string
+	Instruction string
+	Minutes     int64
+	ID          int64
+}
+
+func (q *Queries) UpdateStep(ctx context.Context, arg UpdateStepParams) error {
+	_, err := q.db.ExecContext(ctx, updateStep,
+		arg.Position,
+		arg.Name,
+		arg.Instruction,
+		arg.Minutes,
+		arg.ID,
+	)
+	return err
 }
