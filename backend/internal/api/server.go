@@ -29,6 +29,7 @@ type Server struct {
 	log          *slog.Logger
 	loginLimit   *auth.Limiter
 	handleLimit  *auth.Limiter
+	importLimit  *auth.Limiter
 	secureCookie bool
 }
 
@@ -38,6 +39,7 @@ func New(svc *app.Service, log *slog.Logger) *Server {
 		log:          log,
 		loginLimit:   auth.NewLimiter(10, 15*time.Minute),
 		handleLimit:  auth.NewLimiter(30, time.Hour),
+		importLimit:  auth.NewLimiter(60, time.Hour),
 		secureCookie: strings.HasPrefix(svc.Cfg.PublicURL, "https://"),
 	}
 }
@@ -72,6 +74,7 @@ func (s *Server) routes(m *http.ServeMux) {
 
 	m.HandleFunc("GET "+p+"/recipes", s.user(s.listRecipes))
 	m.HandleFunc("POST "+p+"/recipes", s.user(s.createRecipe))
+	m.HandleFunc("POST "+p+"/import", s.user(s.importRecipe))
 	m.HandleFunc("GET "+p+"/recipes/{id}", s.user(s.getRecipe))
 	m.HandleFunc("PUT "+p+"/recipes/{id}", s.user(s.updateRecipe))
 	m.HandleFunc("DELETE "+p+"/recipes/{id}", s.user(s.deleteRecipe))

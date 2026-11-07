@@ -266,3 +266,20 @@ type Health struct {
 	CheckedAt       string      `json:"checked_at"`
 	MissingPhotos   int64       `json:"missing_photos"`
 }
+
+// ImportRequest asks for a recipe draft from a web address or from pasted text.
+type ImportRequest struct {
+	URL  string `json:"url"`
+	Text string `json:"text"`
+}
+
+// ImportedRecipe is a draft for the editor. Nothing has been saved yet.
+type ImportedRecipe struct {
+	Recipe RecipeInput `json:"recipe"`
+	// ImageData is the source's photo in base64. The editor uploads it like any other photo
+	// when the person saves, so it passes through the normal checks.
+	ImageData string `json:"image_data"`
+	ImageType string `json:"image_type"`
+	// Guessed means the result was read from the page's layout, not recipe data the site published.
+	Guessed bool `json:"guessed"`
+}

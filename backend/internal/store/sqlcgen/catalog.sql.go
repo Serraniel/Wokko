@@ -207,7 +207,7 @@ func (q *Queries) DeleteUnitNames(ctx context.Context, unitID int64) error {
 }
 
 const findFoodIDByName = `-- name: FindFoodIDByName :one
-SELECT food_id FROM food_names WHERE name = ? COLLATE NOCASE LIMIT 1
+SELECT food_id FROM food_names WHERE name = ?1 COLLATE NOCASE OR plural = ?1 COLLATE NOCASE LIMIT 1
 `
 
 func (q *Queries) FindFoodIDByName(ctx context.Context, name string) (int64, error) {
@@ -229,7 +229,7 @@ func (q *Queries) FindKeywordBySearchName(ctx context.Context, searchName string
 }
 
 const findUnitIDByName = `-- name: FindUnitIDByName :one
-SELECT unit_id FROM unit_names WHERE name = ?1 COLLATE NOCASE OR abbreviation = ?1 COLLATE NOCASE LIMIT 1
+SELECT unit_id FROM unit_names WHERE name = ?1 COLLATE NOCASE OR plural = ?1 COLLATE NOCASE OR abbreviation = ?1 COLLATE NOCASE LIMIT 1
 `
 
 func (q *Queries) FindUnitIDByName(ctx context.Context, name string) (int64, error) {
@@ -312,6 +312,39 @@ func (q *Queries) ListAllFoodSearchNames(ctx context.Context, ids []int64) ([]Li
 	for rows.Next() {
 		var i ListAllFoodSearchNamesRow
 		if err := rows.Scan(&i.FoodID, &i.SearchName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listAllUnitSpellings = `-- name: ListAllUnitSpellings :many
+SELECT name, plural, abbreviation FROM unit_names
+`
+
+type ListAllUnitSpellingsRow struct {
+	Name         string
+	Plural       sql.NullString
+	Abbreviation sql.NullString
+}
+
+func (q *Queries) ListAllUnitSpellings(ctx context.Context) ([]ListAllUnitSpellingsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listAllUnitSpellings)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListAllUnitSpellingsRow{}
+	for rows.Next() {
+		var i ListAllUnitSpellingsRow
+		if err := rows.Scan(&i.Name, &i.Plural, &i.Abbreviation); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
