@@ -3,7 +3,10 @@ name: wokko
 services:
   wokko:
     image: ghcr.io/serraniel/wokko:${WOKKO_VERSION:-0.1.0}
-    build: .
+    build:
+      context: .
+      args:
+        VERSION: ${WOKKO_VERSION:-0.1.0}
     container_name: wokko
     restart: unless-stopped
     environment:

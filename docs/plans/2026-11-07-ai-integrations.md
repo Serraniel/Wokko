@@ -1,6 +1,6 @@
-# AI integrations: plan
+# AI integrations
 
-Status: **plan only, nothing built.** Open decisions are at the end.
+Status: **built**, on 2026-11-07. Tested with Claude Code and the official MCP client, over HTTP and the stdio bridge. A hosted connector on claude.ai needs a public HTTPS address, so that path has been tested only against the OAuth flow itself. The owner uses Claude and wants both local and network use.
 
 ## Principle
 
@@ -44,24 +44,7 @@ Meal plan and shopping list tools follow once those features exist.
 - **Recipe text is untrusted.** Pages and shared recipes could contain text written to manipulate an assistant. Tool results mark it as data, and the risky actions above simply don't exist as tools, which limits what a manipulated assistant can do.
 - **Every write is recoverable.** One transaction, a version snapshot, trash instead of deletion. An assistant's mistake is undone like a person's.
 - **Visible.** A per-token activity log in settings shows what changed and when. Tools are rate limited per token.
-- **Marked.** Recipes created through MCP record which token made them.
-
-## Steps
-
-1. Tokens, settings page and activity log.
-2. Read-only tools. Test with one real desktop client and one mobile client.
-3. Write tools, with tests that a token can't exceed its owner's rights.
-4. OAuth (#21).
-5. Meal plan and shopping tools, after those features ship.
-
-Each step needs tests in `backend/internal/api`. The protocol version and SDK get chosen when work starts, because the spec moves quickly.
 
 ## Possibly later: AI inside Wokko
 
 Things like importing a recipe from a photo need a model. The owner ruled out AI import for now, so this stays parked. If it returns, it must be optional, use the person's own provider or local model, and show a draft for review like the current importer.
-
-## Decisions for the owner
-
-1. Which assistant should be tested first? This decides how soon OAuth is needed.
-2. Is Wokko reachable from outside your network? Cloud-hosted assistants can't reach a LAN-only server, while local desktop clients can.
-3. Should this come before or after meal plans and shopping lists? The recommendation is after kitshn is proven, and before meal plans, since MCP is small and independent.

@@ -11,6 +11,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/kitshn` — Tandoor-compatible API for the kitshn mobile app
 - `backend/internal/importer` — recipe import from links and pasted text. Its downloads refuse private addresses at connection time
 - `backend/internal/store` — SQLite, migrations, sqlc queries
+- `backend/internal/assistant` — MCP server and OAuth endpoints for AI assistants
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text
 - `docs/` — Design docs and plans
@@ -25,6 +26,7 @@ Use Conventional Commits with these scopes:
 - `feat(sharing)` — Public recipes, share links
 - `feat(kitshn)` — kitshn compatibility
 - `feat(backup)` — Backups, restore, data safety
+- `feat(plan)` — Meal plans, shopping lists, supermarkets, nutrition
 - `feat(mcp)` — Model Context Protocol integration
 - `feat(i18n)` — Internationalization
 - `feat(ui)` — Frontend UI components
@@ -51,10 +53,12 @@ Use Conventional Commits with these scopes:
 - Use `git commit` without `-c commit.gpgsign=false`
 - Hardcode a language: German is one language among others, English is the fallback
 - Let a user delete or catalog change remove recipe content implicitly
-- Offer partial matching, listing or suggestions of other users. People are reached only by exact handle, friendship or household, on every API including kitshn's
+- Offer partial matching, listing or suggestions of other users. People are reached only by exact handle, friendship or household, on every API including kitshn's and MCP's
+- Add an MCP tool that finds people, makes a recipe public, performs admin actions or deletes permanently
+- Call an AI model from Wokko. Assistants connect from outside through MCP
 
 ## Changelog Categories (for GitHub PR labels and release notes)
-Auth, Recipes, Ingredients, Units, Sharing, Kitshn, Backup, MCP, i18n, UI, Infra, Fix
+Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, i18n, UI, Infra, Fix
 
 ## Architecture Decisions
 - SQLite in WAL mode with `synchronous=FULL` and `foreign_keys=ON` on every connection, one writer connection. It replaced PostgreSQL on purpose: no separate service, credentials or major upgrades. Strict tables, stable integer IDs that are never reused
@@ -66,6 +70,8 @@ Auth, Recipes, Ingredients, Units, Sharing, Kitshn, Backup, MCP, i18n, UI, Infra
 - API types are defined in `app/types.go`. Frontend types are generated from them
 - Photos are re-encoded on upload and stored under `DATA_DIR/uploads`, and served only to people who may see the recipe
 - Imports only produce a draft for the editor, private by default. They use the site's published recipe data first and never pretend to be a browser
+- Meal plans, shopping and supermarkets belong to a household. A private recipe's name never reaches others through them
+- MCP is off by default. Tokens are stored hashed, act as their owner, and their scope decides which tools exist
 - kitshn compatibility targets a stated version (`kitshn.SupportedKitshn`). Its response types match kitshn's data classes
 
 ## Logo

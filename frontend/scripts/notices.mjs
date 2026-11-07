@@ -17,5 +17,6 @@ try {
 	modules = readFileSync('../backend/go.mod', 'utf8').split('\n').filter((l) => /^\s+\S+\s+v/.test(l)).map((l) => l.replace('// indirect', '').trim()).join('\n');
 }
 for (const line of modules.split('\n').slice(0).filter(Boolean)) if (!line.startsWith('github.com/serraniel/wokko')) lines.push(line);
+lines.push('', 'Data', '----', 'Starting nutrition values: USDA FoodData Central, SR Legacy (2018-04). Public domain (CC0).');
 lines.push('', 'Each package is under its own license, found in its source repository.', '');
 writeFileSync('build/third-party-notices.txt', lines.join('\n'));
