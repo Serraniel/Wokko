@@ -103,7 +103,7 @@ func TestKitshnStartupCallsParse(t *testing.T) {
 	cookie := kitshnLogin(t, e, "admin", "password123")
 
 	var settings map[string]any
-	json.Unmarshal(kitshnGet(t, e, cookie, "/api/server-settings/current/", 200), &settings)
+	json.Unmarshal(kitshnGet(t, e, cookie, 200), &settings)
 	requireFields(t, "server settings", settings, "version")
 
 	var prefs []any
@@ -264,7 +264,7 @@ func TestKitshnHasTheSamePermissions(t *testing.T) {
 	if strings.Contains(body, "john.doe") || strings.Contains(body, "admin") {
 		t.Fatalf("user list reveals strangers: %s", body)
 	}
-	for _, p := range []string{"/api/recipe/", "/api/food/", "/api/unit/", "/api/keyword/", "/api/user/", "/api/user-preference/", "/api/space/", "/api/space/current/", "/api/cook-log/", "/api/server-settings/current/", "/api/meal-plan/", "/api/step/1/", "/api/food/1/", "/api/unit/1/", "/api/keyword/1/", "/api/recipe/1/"} {
+	for _, p := range []string{"/api/recipe/", "/api/food/", "/api/unit/", "/api/keyword/", "/api/user/", "/api/user-preference/", "/api/space/", "/api/space/current/", "/api/cook-log/", "/api/meal-plan/", "/api/step/1/", "/api/food/1/", "/api/unit/1/", "/api/keyword/1/", "/api/recipe/1/"} {
 		kitshnGet(t, e, "", p, 403)
 	}
 }
@@ -301,5 +301,46 @@ func TestKitshnCookLog(t *testing.T) {
 	c.ok("GET", path("/recipes/%d", r.ID), nil, 200).decode(t, &got)
 	if got.Rating == nil || *got.Rating != 5 {
 		t.Fatalf("rating from kitshn must show on the web: %+v", got.Rating)
+	}
+}
+
+// TestKitshnSetupBeforeLogin follows OnboardingSignIn.kt. It checks the address as it's typed,
+// with nobody logged in, and shows "this version doesn't support Tandoor v1" if the server
+// settings call fails in any way.
+func TestKitshnSetupBeforeLogin(t *testing.T) {
+	e := newEnv(t)
+	e.admin()
+	res, err := http.Get(e.srv.URL + "/api/")
+	if err != nil {
+		t.Fatal(err)
+	}
+	res.Body.Close()
+	if res.StatusCode != 403 {
+		t.Fatalf("connection test: %d, kitshn needs exactly 403", res.StatusCode)
+	}
+	res, err = http.Get(e.srv.URL + "/api/server-settings/current/")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		t.Fatalf("server settings before login: %d", res.StatusCode)
+	}
+	var settings struct {
+		Version string `json:"version"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&settings); err != nil || settings.Version == "" {
+		t.Fatalf("version: %q %v", settings.Version, err)
+	}
+	// Nothing else is public.
+	for _, p := range []string{"/api/recipe/", "/api/user/", "/api/meal-plan/", "/api/shopping-list-entry/", "/api/space/current/"} {
+		res, err := http.Get(e.srv.URL + p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		res.Body.Close()
+		if res.StatusCode != 403 {
+			t.Errorf("%s while logged out: %d", p, res.StatusCode)
+		}
 	}
 }

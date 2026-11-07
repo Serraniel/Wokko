@@ -27,8 +27,9 @@ const (
 
 	// SupportedKitshn is the kitshn release this layer was written against.
 	SupportedKitshn = "2.1.5"
-	// tandoorVersion is reported to kitshn, which expects a Tandoor server.
-	tandoorVersion = "2.7.2"
+	// tandoorVersion is reported to kitshn, which expects a Tandoor server. kitshn 2.1.5 uses
+	// it only for a compatibility notice, and rates 2.5.x as fully compatible.
+	tandoorVersion = "2.5.3"
 )
 
 // NewSessionCookie is the session cookie used by both the web app and kitshn. An empty
@@ -58,7 +59,8 @@ func (l *Layer) Routes(m *http.ServeMux) {
 	m.HandleFunc("GET /_allauth/browser/v1/auth/session", l.session)
 	m.HandleFunc("POST /_allauth/browser/v1/auth/login", l.login)
 	m.HandleFunc("GET /api/{$}", l.authed(l.root))
-	m.HandleFunc("GET /api/server-settings/current/{$}", l.authed(l.serverSettings))
+	// Public, as in Tandoor: kitshn calls this during setup, before anyone has logged in.
+	m.HandleFunc("GET /api/server-settings/current/{$}", l.serverSettings)
 	m.HandleFunc("GET /api/user/{$}", l.authed(l.users))
 	m.HandleFunc("GET /api/user-preference/{$}", l.authed(l.preference))
 	m.HandleFunc("GET /api/space/{$}", l.authed(l.spaces))
@@ -183,9 +185,8 @@ func (l *Layer) root(w http.ResponseWriter, r *http.Request, _ app.Viewer) error
 	return nil
 }
 
-func (l *Layer) serverSettings(w http.ResponseWriter, r *http.Request, _ app.Viewer) error {
+func (l *Layer) serverSettings(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{"version": tandoorVersion})
-	return nil
 }
 
 type user struct {
