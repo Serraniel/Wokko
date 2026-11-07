@@ -103,7 +103,7 @@ func TestKitshnStartupCallsParse(t *testing.T) {
 	cookie := kitshnLogin(t, e, "admin", "password123")
 
 	var settings map[string]any
-	json.Unmarshal(kitshnGet(t, e, cookie, 200), &settings)
+	json.Unmarshal(kitshnGet(t, e, cookie, "/api/server-settings/current/", 200), &settings)
 	requireFields(t, "server settings", settings, "version")
 
 	var prefs []any
