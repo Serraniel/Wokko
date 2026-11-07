@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BookMarked, BookOpen, CalendarDays, Carrot, LogOut, Menu, Plus, Search, Settings, Shield, ShoppingCart, Users } from '@lucide/svelte';
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { api } from '#lib/api/client.ts';
@@ -9,6 +9,8 @@
 	import CommandPalette from '#lib/components/CommandPalette.svelte';
 	import Logo from '#lib/components/Logo.svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
+	import { connection } from '#lib/online.svelte.ts';
+	import { prepareForOffline } from '#lib/offline.ts';
 	import { session } from '#lib/session.svelte.ts';
 
 	let { children }: { children: Snippet } = $props();
@@ -28,10 +30,15 @@
 	]);
 	// A phone has room for the three things used most. The rest live behind "More".
 	const phoneItems = $derived([items[0], items[1], items[2], { href: '/more', icon: Menu, label: t('nav.more') }]);
-	const inMore = (path: string) => ['/more', '/books', '/ingredients', '/people', '/settings', '/trash', '/admin'].some((h) => path === h || path.startsWith(h + '/'));
+	const inMore = (path: string) => ['/more', '/import', '/books', '/ingredients', '/people', '/settings', '/trash', '/admin'].some((h) => path === h || path.startsWith(h + '/'));
 	const activeOnPhone = (href: string) => (href === '/more' ? inMore(page.url.pathname) : active(href));
 
 	const active = (href: string) => page.url.pathname === href || page.url.pathname.startsWith(href + '/');
+
+	onMount(() => {
+		const prepare = setTimeout(prepareForOffline, 1500);
+		return () => clearTimeout(prepare);
+	});
 
 	let paletteOpen = $state(false);
 	const isMac = typeof navigator !== 'undefined' && /mac|iphone|ipad/i.test(navigator.platform);
@@ -84,6 +91,7 @@
 		</aside>
 
 		<main class="min-w-0 flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
+			{#if !connection.online}<p class="print-hide bg-warn-soft px-4 py-2 text-sm text-warn" role="status">{t('offline.bar')}</p>{/if}
 			{@render children()}
 			<AppFooter />
 		</main>

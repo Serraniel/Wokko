@@ -1,6 +1,7 @@
 import { api, ApiError } from '#lib/api/client.ts';
 import type { Status, User } from '#lib/api/types.gen.ts';
 import { bestLocale, setLocale } from '#lib/i18n/index.svelte.ts';
+import { clearOfflineData } from '#lib/offline.ts';
 
 // One place knows who is logged in. It loads before any page shows, so pages never
 // have to guess, which is what caused the old app's admin and redirect bugs.
@@ -33,6 +34,7 @@ class Session {
 
 	signedOut() {
 		this.user = null;
+		clearOfflineData();
 	}
 }
 

@@ -209,8 +209,8 @@ func (q *Queries) CreateMealType(ctx context.Context, arg CreateMealTypeParams) 
 }
 
 const createShoppingItem = `-- name: CreateShoppingItem :one
-INSERT INTO shopping_items (household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, created_by, checked_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at
+INSERT INTO shopping_items (household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, created_by, checked_at, client_ref)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at, client_ref
 `
 
 type CreateShoppingItemParams struct {
@@ -223,6 +223,7 @@ type CreateShoppingItemParams struct {
 	Position         int64
 	CreatedBy        sql.NullInt64
 	CheckedAt        sql.NullString
+	ClientRef        sql.NullString
 }
 
 func (q *Queries) CreateShoppingItem(ctx context.Context, arg CreateShoppingItemParams) (ShoppingItem, error) {
@@ -236,6 +237,7 @@ func (q *Queries) CreateShoppingItem(ctx context.Context, arg CreateShoppingItem
 		arg.Position,
 		arg.CreatedBy,
 		arg.CheckedAt,
+		arg.ClientRef,
 	)
 	var i ShoppingItem
 	err := row.Scan(
@@ -251,6 +253,7 @@ func (q *Queries) CreateShoppingItem(ctx context.Context, arg CreateShoppingItem
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ClientRef,
 	)
 	return i, err
 }
@@ -458,7 +461,7 @@ func (q *Queries) GetMealType(ctx context.Context, id int64) (MealType, error) {
 }
 
 const getShoppingItem = `-- name: GetShoppingItem :one
-SELECT id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at FROM shopping_items WHERE id = ?
+SELECT id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at, client_ref FROM shopping_items WHERE id = ?
 `
 
 func (q *Queries) GetShoppingItem(ctx context.Context, id int64) (ShoppingItem, error) {
@@ -477,6 +480,37 @@ func (q *Queries) GetShoppingItem(ctx context.Context, id int64) (ShoppingItem, 
 		&i.CreatedBy,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.ClientRef,
+	)
+	return i, err
+}
+
+const getShoppingItemByClientRef = `-- name: GetShoppingItemByClientRef :one
+SELECT id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at, client_ref FROM shopping_items WHERE household_id = ? AND client_ref = ?
+`
+
+type GetShoppingItemByClientRefParams struct {
+	HouseholdID int64
+	ClientRef   sql.NullString
+}
+
+func (q *Queries) GetShoppingItemByClientRef(ctx context.Context, arg GetShoppingItemByClientRefParams) (ShoppingItem, error) {
+	row := q.db.QueryRowContext(ctx, getShoppingItemByClientRef, arg.HouseholdID, arg.ClientRef)
+	var i ShoppingItem
+	err := row.Scan(
+		&i.ID,
+		&i.HouseholdID,
+		&i.ShoppingRecipeID,
+		&i.FoodID,
+		&i.UnitID,
+		&i.Amount,
+		&i.Note,
+		&i.Position,
+		&i.CheckedAt,
+		&i.CreatedBy,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ClientRef,
 	)
 	return i, err
 }
@@ -809,7 +843,7 @@ func (q *Queries) ListNutrients(ctx context.Context, locale string) ([]ListNutri
 }
 
 const listShoppingItems = `-- name: ListShoppingItems :many
-SELECT id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at FROM shopping_items WHERE household_id = ? ORDER BY position, id
+SELECT id, household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, checked_at, created_by, created_at, updated_at, client_ref FROM shopping_items WHERE household_id = ? ORDER BY position, id
 `
 
 func (q *Queries) ListShoppingItems(ctx context.Context, householdID int64) ([]ShoppingItem, error) {
@@ -834,6 +868,7 @@ func (q *Queries) ListShoppingItems(ctx context.Context, householdID int64) ([]S
 			&i.CreatedBy,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ClientRef,
 		); err != nil {
 			return nil, err
 		}

@@ -417,6 +417,8 @@ type ShoppingItemInput struct {
 	Amount   *float64 `json:"amount"`
 	Note     string   `json:"note"`
 	Checked  bool     `json:"checked"`
+	// ClientRef makes adding safe to repeat: sending the same one again changes nothing.
+	ClientRef string `json:"client_ref"`
 }
 
 // ShoppingAddRecipe adds a recipe's ingredients, scaled to the servings. IngredientIDs narrows
