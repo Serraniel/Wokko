@@ -561,6 +561,27 @@ func (s *Service) ListKeywords(ctx context.Context, v Viewer, query string, limi
 	return Page[Keyword]{Items: items, Total: total}, nil
 }
 
+// CreateKeyword returns the existing keyword when the name is already taken.
+func (s *Service) CreateKeyword(ctx context.Context, v Viewer, name string) (Keyword, error) {
+	clean, err := cleanName(name)
+	if err != nil {
+		return Keyword{}, err
+	}
+	var id int64
+	err = s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
+		ids, err := s.resolveKeywords(ctx, q, v, []string{clean})
+		if err != nil {
+			return err
+		}
+		id = ids[0]
+		return nil
+	})
+	if err != nil {
+		return Keyword{}, err
+	}
+	return s.GetKeyword(ctx, v, id)
+}
+
 func (s *Service) GetKeyword(ctx context.Context, v Viewer, id int64) (Keyword, error) {
 	refs, err := keywordRefs(ctx, s.Store.Queries, []int64{id}, v.locale())
 	if err != nil {

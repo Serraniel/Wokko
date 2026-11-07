@@ -41,7 +41,12 @@
 		void week;
 		load();
 	});
-	api.get<MealType[]>('/meal-types').then((r) => (types = remember('meal-types', r))).catch(() => {});
+	api.get<MealType[]>('/meal-types')
+		.then((r) => {
+			types = remember('meal-types', r);
+			if (!form.mealType) form.mealType = r[2]?.id ?? r[0]?.id ?? 0; // The form may have opened first.
+		})
+		.catch(() => {});
 
 	// Arriving from a recipe's "Add to meal plan".
 	const arriving = page.url.searchParams.get('recipe');

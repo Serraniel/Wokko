@@ -883,6 +883,32 @@ func (s *Service) addRecipeToShopping(ctx context.Context, q *sqlcgen.Queries, v
 	return ShoppingRecipe{ID: group.ID, Name: group.Name, Servings: group.Servings, RecipeID: r.ID, MealPlanID: plan.Int64}, nil
 }
 
+// CreateShoppingItemFor adds an item to a group of a recipe, as kitshn's list_recipe does.
+func (s *Service) CreateShoppingItemFor(ctx context.Context, v Viewer, in ShoppingItemInput, group int64) (ShoppingItem, error) {
+	return s.createShoppingItem(ctx, v, in, group)
+}
+
+func (s *Service) DeleteShoppingGroup(ctx context.Context, v Viewer, id int64) error {
+	return s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
+		g, err := q.GetShoppingRecipe(ctx, id)
+		if isNoRows(err) || (err == nil && g.HouseholdID != v.User.HouseholdID) {
+			return ErrNotFound
+		}
+		if err != nil {
+			return err
+		}
+		if err := q.DeleteShoppingItemsOfRecipe(ctx, sql64(id)); err != nil {
+			return err
+		}
+		return q.DeleteShoppingRecipe(ctx, id)
+	})
+}
+
+// RecipeNutritionFor is GetRecipeNutrition for a recipe already loaded.
+func (s *Service) RecipeNutritionFor(ctx context.Context, locale string, rec Recipe) (RecipeNutrition, error) {
+	return s.recipeNutrition(ctx, s.Store.Queries, locale, rec)
+}
+
 // CreateShoppingGroup and the methods below serve kitshn, which builds a recipe's shopping
 // entries in two calls.
 func (s *Service) CreateShoppingGroup(ctx context.Context, v Viewer, recipeID int64, servings float64) (ShoppingRecipe, error) {

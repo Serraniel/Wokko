@@ -199,6 +199,114 @@ func (s *Service) RemoveFromBook(ctx context.Context, v Viewer, bookID, recipeID
 	})
 }
 
+// BookEntry is one recipe in a book, as kitshn sees it.
+type BookEntry struct {
+	ID     int64
+	BookID int64
+	Book   RecipeBook
+	Recipe RecipeSummary
+}
+
+// ListBookEntries returns the entries the viewer may see, for one book, one recipe, or both.
+func (s *Service) ListBookEntries(ctx context.Context, v Viewer, book, recipe int64) ([]BookEntry, error) {
+	q := s.Store.Queries
+	var rows []sqlcgen.RecipeBookEntry
+	var err error
+	switch {
+	case book != 0:
+		if _, err := s.bookAccess(ctx, q, v, book); err != nil {
+			return nil, err
+		}
+		rows, err = q.ListBookEntries(ctx, book)
+	case recipe != 0:
+		rows, err = q.ListBookEntriesForRecipe(ctx, recipe)
+	default:
+		books, err := q.ListBooksForHousehold(ctx, v.User.HouseholdID)
+		if err != nil {
+			return nil, err
+		}
+		for _, b := range books {
+			some, err := q.ListBookEntries(ctx, b.ID)
+			if err != nil {
+				return nil, err
+			}
+			rows = append(rows, some...)
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	out := []BookEntry{}
+	for _, e := range rows {
+		if recipe != 0 && e.RecipeID != recipe {
+			continue
+		}
+		entry, err := s.bookEntry(ctx, q, v, e)
+		if err == ErrNotFound {
+			continue
+		}
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, entry)
+	}
+	return out, nil
+}
+
+func (s *Service) bookEntry(ctx context.Context, q *sqlcgen.Queries, v Viewer, e sqlcgen.RecipeBookEntry) (BookEntry, error) {
+	b, err := s.bookAccess(ctx, q, v, e.BookID)
+	if err != nil {
+		return BookEntry{}, err
+	}
+	r, err := q.GetRecipe(ctx, e.RecipeID)
+	if err != nil {
+		return BookEntry{}, err
+	}
+	if ok, err := s.canView(ctx, q, v, r); err != nil {
+		return BookEntry{}, err
+	} else if !ok || r.DeletedAt.Valid {
+		return BookEntry{}, ErrNotFound
+	}
+	items, err := s.summaries(ctx, q, v, []sqlcgen.Recipe{r})
+	if err != nil {
+		return BookEntry{}, err
+	}
+	book, err := s.toBook(ctx, q, v, b)
+	if err != nil {
+		return BookEntry{}, err
+	}
+	return BookEntry{ID: e.ID, BookID: e.BookID, Book: book, Recipe: items[0]}, nil
+}
+
+// GetBookEntry returns one entry by its ID.
+func (s *Service) GetBookEntry(ctx context.Context, v Viewer, id int64) (BookEntry, error) {
+	q := s.Store.Queries
+	e, err := q.GetBookEntry(ctx, id)
+	if isNoRows(err) {
+		return BookEntry{}, ErrNotFound
+	}
+	if err != nil {
+		return BookEntry{}, err
+	}
+	return s.bookEntry(ctx, q, v, e)
+}
+
+func (s *Service) DeleteBookEntry(ctx context.Context, v Viewer, id int64) error {
+	return s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
+		e, err := q.GetBookEntry(ctx, id)
+		if isNoRows(err) {
+			return ErrNotFound
+		}
+		if err != nil {
+			return err
+		}
+		if _, err := s.bookAccess(ctx, q, v, e.BookID); err != nil {
+			return err
+		}
+		return q.DeleteBookEntry(ctx, id)
+	})
+}
+
 // BooksContaining lists the household's books that hold a recipe, for the recipe page.
 func (s *Service) BooksContaining(ctx context.Context, v Viewer, recipeID int64) ([]int64, error) {
 	q := s.Store.Queries

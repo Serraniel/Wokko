@@ -177,7 +177,6 @@
 					{#if recipe?.can_edit}<a class="btn btn-soft" href="/recipes/{recipe.id}/edit" aria-label={t('common.edit')}><Pencil size={18} /><span class="hidden sm:inline">{t('common.edit')}</span></a>{/if}
 					{#if recipe?.can_manage}
 						<button class="btn btn-soft" onclick={() => (shareOpen = true)} aria-label={t('share.button')}><Share2 size={18} /><span class="hidden sm:inline">{t('share.button')}</span></button>
-						<button class="btn btn-ghost btn-icon text-danger" aria-label={t('common.delete')} onclick={remove}><Trash2 size={18} /></button>
 					{/if}
 					<button class="btn btn-soft btn-icon" aria-label={t('recipe.more')} onclick={() => (moreOpen = true)}><MoreHorizontal size={18} /></button>
 				{/snippet}
@@ -208,6 +207,7 @@
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={addToShopping}><ShoppingCart size={18} class="text-muted" />{t('recipe.add_to_shopping')}</button>
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openBooks}><BookMarked size={18} class="text-muted" />{t('books.add_to')}</button>
 				{#if recipe.can_edit}<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openHistory}><History size={18} class="text-muted" />{t('recipe.history')}</button>{/if}
+				{#if recipe.can_manage}<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium text-danger" onclick={() => { moreOpen = false; remove(); }}><Trash2 size={18} />{t('common.delete')}</button>{/if}
 			</div>
 		</Sheet>
 		<Sheet bind:open={historyOpen} title={t('history.title')}>

@@ -62,7 +62,7 @@ await step('import pasted text into a draft, nothing saved until Save', async ()
   await shot('21-import-draft');
   if (await p.inputValue('#visibility') !== 'private') throw new Error('imports must start private');
   await p.click('form button:has-text("Save")'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('h1:has-text("Linsensuppe")');
-  await p.click('button[aria-label="Delete"]'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes');
+  await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Delete")'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes');
 });
 await step('typing hides the import panel so it cannot overwrite work', async () => {
   await p.goto(base + '/recipes/new'); await p.waitForSelector('#import-url'); await p.fill('#name', 'Mine');
@@ -95,7 +95,7 @@ await step('share sheet and link', async () => {
   if (await a.locator('text=anna').count()) throw new Error('author visible'); await anon.close();
 });
 await step('delete and undo', async () => {
-  await p.click('button[aria-label="Delete"]'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes'); await p.click('button:has-text("Undo")'); await p.waitForSelector('h1:has-text("My version")');
+  await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Delete")'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes'); await p.click('button:has-text("Undo")'); await p.waitForSelector('h1:has-text("My version")');
 });
 await step('German UI and ingredient names', async () => {
   await p.goto(base + '/settings'); await p.selectOption('#language', 'de'); await p.waitForSelector('h1:has-text("Einstellungen")'); await shot('09-settings-de');
