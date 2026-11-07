@@ -13,6 +13,7 @@ test:
 build:
 	cd frontend && npm run build
 	cp -r frontend/build/. backend/internal/web/dist/
+	cd backend && go run ./cmd/notices internal/web/dist/third-party-notices.txt
 	cd backend && CGO_ENABLED=0 go build -o ../wokko ./cmd/wokko
 
 generate: sqlc types

@@ -28,7 +28,7 @@
 <PublicShell>
 	<ErrorNote text={error} />
 	{#if recipe}
-		<RecipeView {recipe} />
+		<RecipeView {recipe} cookHref="/shared/{page.params.token}/{page.params.id}/cook" />
 	{:else if missing}
 		<div class="flex flex-col items-center gap-3 p-10 text-center">
 			<Mascot />

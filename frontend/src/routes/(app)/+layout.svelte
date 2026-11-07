@@ -5,6 +5,7 @@
 	import { page } from '$app/state';
 	import { api } from '#lib/api/client.ts';
 	import { forget } from '#lib/cache.ts';
+	import AppFooter from '#lib/components/AppFooter.svelte';
 	import CommandPalette from '#lib/components/CommandPalette.svelte';
 	import Logo from '#lib/components/Logo.svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
@@ -64,7 +65,7 @@
 {#if session.user}
 	<div class="flex min-h-dvh">
 		<!-- Desktop: a fixed side rail. -->
-		<aside class="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-0.5 border-r border-line p-2.5 md:flex">
+		<aside class="print-hide sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-0.5 border-r border-line p-2.5 md:flex">
 			<a href="/recipes" class="mb-2 flex items-center gap-2 px-2 py-1.5 font-semibold tracking-tight"><Logo size={24} />Wokko</a>
 			<button class="mb-2 flex h-9 items-center gap-2 rounded-lg bg-surface px-2.5 text-sm text-muted ring-1 ring-line ring-inset hover:bg-surface-2" onclick={() => (paletteOpen = true)}>
 				<Search size={15} /><span class="min-w-0 flex-1 truncate text-left">{t('palette.open')}</span><span class="kbd">{isMac ? '⌘K' : 'Ctrl K'}</span>
@@ -84,11 +85,12 @@
 
 		<main class="min-w-0 flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
 			{@render children()}
+			<AppFooter />
 		</main>
 	</div>
 
 	<!-- Phone: a bottom bar within thumb reach, with "new recipe" in the middle. -->
-	<nav class="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-bg/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg md:hidden" aria-label={t('nav.main')}>
+	<nav class="print-hide fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-bg/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg md:hidden" aria-label={t('nav.main')}>
 		{#each phoneItems.slice(0, 2) as item (item.href)}
 			{@const Icon = item.icon}
 			<a href={item.href} aria-current={activeOnPhone(item.href) ? 'page' : undefined} class="flex h-14 flex-col items-center justify-center gap-0.5 text-[0.625rem] font-medium {activeOnPhone(item.href) ? 'text-ink' : 'text-muted'}"><Icon size={20} strokeWidth={activeOnPhone(item.href) ? 2.4 : 1.8} /><span class="max-w-full truncate px-1">{item.label}</span></a>

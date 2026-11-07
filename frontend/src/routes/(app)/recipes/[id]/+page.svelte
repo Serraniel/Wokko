@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ArrowLeft, BookMarked, CalendarPlus, ChefHat, CookingPot, History, MoreHorizontal, Pencil, Share2, ShoppingCart, Star, Trash2 } from '@lucide/svelte';
+	import { ArrowLeft, BookMarked, CalendarPlus, CookingPot, History, MoreHorizontal, Pencil, Printer, Share2, ShoppingCart, Star, Trash2 } from '@lucide/svelte';
+	import { tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { api, ApiError, errorText } from '#lib/api/client.ts';
@@ -166,14 +167,13 @@
 <svelte:head><title>{recipe?.name ?? t('nav.recipes')} · Wokko</title></svelte:head>
 
 <div class="relative">
-	<a href="/recipes" class="btn btn-soft btn-icon absolute top-3 left-3 z-10 shadow-card md:hidden" aria-label={t('common.back')}><ArrowLeft size={20} /></a>
+	<a href="/recipes" class="print-hide btn btn-soft btn-icon absolute top-3 left-3 z-10 shadow-card md:hidden" aria-label={t('common.back')}><ArrowLeft size={20} /></a>
 	<ErrorNote text={error} />
 	{#if recipe}
 		<div class={recipe.photo_url ? '' : 'pt-12 md:pt-0'}>
-			<RecipeView {recipe}>
+			<RecipeView {recipe} cookHref="/recipes/{recipe.id}/cook">
 				{#snippet actions()}
-					{#if recipe?.steps.length}<a class="btn btn-primary flex-1 sm:flex-none" href="/recipes/{recipe.id}/cook"><ChefHat size={17} />{t('recipe.cook')}</a>{/if}
-					<button class="btn btn-soft flex-1 sm:flex-none" onclick={() => (cookOpen = true)}><CookingPot size={17} />{t('recipe.cooked_it')}</button>
+										<button class="btn btn-soft flex-1 sm:flex-none" onclick={() => (cookOpen = true)}><CookingPot size={17} />{t('recipe.cooked_it')}</button>
 					{#if recipe?.can_edit}<a class="btn btn-soft" href="/recipes/{recipe.id}/edit" aria-label={t('common.edit')}><Pencil size={18} /><span class="hidden sm:inline">{t('common.edit')}</span></a>{/if}
 					{#if recipe?.can_manage}
 						<button class="btn btn-soft" onclick={() => (shareOpen = true)} aria-label={t('share.button')}><Share2 size={18} /><span class="hidden sm:inline">{t('share.button')}</span></button>
@@ -203,6 +203,7 @@
 		{/if}
 		<Sheet bind:open={moreOpen} title={recipe.name}>
 			<div class="divide-y divide-line">
+				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={async () => { moreOpen = false; await tick(); window.print(); }}><Printer size={18} class="text-muted" />{t('recipe.print')}</button>
 				<a class="flex min-h-12 items-center gap-3 font-medium" href={planLink}><CalendarPlus size={18} class="text-muted" />{t('recipe.add_to_plan')}</a>
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={addToShopping}><ShoppingCart size={18} class="text-muted" />{t('recipe.add_to_shopping')}</button>
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openBooks}><BookMarked size={18} class="text-muted" />{t('books.add_to')}</button>

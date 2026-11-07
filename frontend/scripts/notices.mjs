@@ -1,22 +1,35 @@
-// Writes the third-party notices linked from the settings page, from what is actually installed.
-import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+// Writes the frontend's part of the third-party notices and copies the changelog into the
+// build. Licenses such as MIT require their full text to ship with the software, so this
+// includes each license's text, for the packages that really are in the bundle. The backend
+// adds its own part in backend/cmd/notices.
+import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
-const lines = ['Wokko is licensed under the EUPL-1.2. It includes the following third-party software.', '', 'Frontend', '--------'];
-for (const name of Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).sort()) {
-	const dep = JSON.parse(readFileSync(`node_modules/${name}/package.json`, 'utf8'));
-	if (name.startsWith('@types/') || ['svelte-check', 'typescript', 'vitest', 'playwright-core'].includes(name)) continue;
-	lines.push(`${name} ${dep.version} (${dep.license ?? 'see project'})`);
+const packages = JSON.parse(readFileSync('.svelte-kit/shipped-packages.json', 'utf8'));
+// Fonts arrive through CSS, which the record of JavaScript modules doesn't see.
+for (const css of ['@fontsource-variable/inter']) if (!packages.includes(css)) packages.push(css);
+
+const out = [
+	'Wokko is licensed under the EUPL-1.2. It includes the third-party software and data listed here, under their own licenses.',
+	'',
+	'Data',
+	'====',
+	'Starting nutrition values: USDA FoodData Central, SR Legacy (2018-04). Public domain (CC0 1.0).',
+	'',
+	'Frontend',
+	'========'
+];
+const missing = [];
+for (const name of packages.sort()) {
+	const dir = join('node_modules', name);
+	if (!existsSync(join(dir, 'package.json'))) continue;
+	const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
+	const file = readdirSync(dir).find((f) => /^(licen[cs]e|copying)(\.|-|$)/i.test(f));
+	out.push('', `${name} ${pkg.version} (${pkg.license ?? 'see below'})`, '-'.repeat(60));
+	if (file) out.push(readFileSync(join(dir, file), 'utf8').trim());
+	else if (pkg.license) out.push(`Licensed under ${pkg.license}. The package includes no separate license file.`);
+	else missing.push(name);
 }
-lines.push('', 'Backend', '-------');
-let modules = '';
-try {
-	modules = execFileSync('go', ['list', '-m', 'all'], { cwd: '../backend', encoding: 'utf8' });
-} catch {
-	modules = readFileSync('../backend/go.mod', 'utf8').split('\n').filter((l) => /^\s+\S+\s+v/.test(l)).map((l) => l.replace('// indirect', '').trim()).join('\n');
-}
-for (const line of modules.split('\n').slice(0).filter(Boolean)) if (!line.startsWith('github.com/serraniel/wokko')) lines.push(line);
-lines.push('', 'Data', '----', 'Starting nutrition values: USDA FoodData Central, SR Legacy (2018-04). Public domain (CC0).');
-lines.push('', 'Each package is under its own license, found in its source repository.', '');
-writeFileSync('build/third-party-notices.txt', lines.join('\n'));
+if (missing.length) throw new Error(`No license found for: ${missing.join(', ')}`);
+writeFileSync('build/third-party-notices.txt', out.join('\n') + '\n');
+if (existsSync('../CHANGELOG.md')) copyFileSync('../CHANGELOG.md', 'build/changelog.md');
