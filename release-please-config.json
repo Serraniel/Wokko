@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "b0f31ad78af1b0d6245c3616b253f4ccdfe34140",
   "release-type": "simple",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": false,
@@ -7,23 +8,63 @@
   "include-v-in-tag": true,
   "pull-request-title-pattern": "chore(infra): release ${version}",
   "changelog-sections": [
-    { "type": "feat", "section": "Features" },
-    { "type": "fix", "section": "Fixes" },
-    { "type": "perf", "section": "Performance" },
-    { "type": "revert", "section": "Reverts" },
-    { "type": "docs", "section": "Documentation", "hidden": true },
-    { "type": "chore", "section": "Maintenance", "hidden": true },
-    { "type": "refactor", "section": "Maintenance", "hidden": true },
-    { "type": "test", "section": "Maintenance", "hidden": true }
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Fixes"
+    },
+    {
+      "type": "perf",
+      "section": "Performance"
+    },
+    {
+      "type": "revert",
+      "section": "Reverts"
+    },
+    {
+      "type": "docs",
+      "section": "Documentation",
+      "hidden": true
+    },
+    {
+      "type": "chore",
+      "section": "Maintenance",
+      "hidden": true
+    },
+    {
+      "type": "refactor",
+      "section": "Maintenance",
+      "hidden": true
+    },
+    {
+      "type": "test",
+      "section": "Maintenance",
+      "hidden": true
+    }
   ],
   "packages": {
     ".": {
       "extra-files": [
         "docker-compose.yml",
         ".env.example",
-        { "type": "json", "path": "frontend/package.json", "jsonpath": "$.version" },
-        { "type": "json", "path": "frontend/package-lock.json", "jsonpath": "$.version" },
-        { "type": "json", "path": "frontend/package-lock.json", "jsonpath": "$.packages[''].version" }
+        {
+          "type": "json",
+          "path": "frontend/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "frontend/package-lock.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "frontend/package-lock.json",
+          "jsonpath": "$.packages[''].version"
+        }
       ]
     }
   }
