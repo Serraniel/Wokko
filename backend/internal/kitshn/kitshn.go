@@ -75,10 +75,13 @@ func (l *Layer) Routes(m *http.ServeMux) {
 	m.HandleFunc("GET /api/keyword/{id}/{$}", l.authed(l.getKeyword))
 	m.HandleFunc("GET /api/cook-log/{$}", l.authed(l.listCookLog))
 	m.HandleFunc("POST /api/cook-log/{$}", l.authed(l.addCookLog))
-	// Areas Wokko doesn't have yet answer with empty lists, so kitshn's screens stay usable.
-	for _, area := range []string{"meal-plan", "meal-type", "recipe-book", "recipe-book-entry", "shopping-list", "shopping-list-entry", "supermarket", "supermarket-category", "ai-provider"} {
+	// Tandoor features Wokko doesn't have answer with empty lists, so kitshn's screens stay usable.
+	for _, area := range []string{"shopping-list", "ai-provider"} {
 		m.HandleFunc("GET /api/"+area+"/{$}", l.authed(l.emptyList))
 	}
+	l.writeRoutes(m)
+	// Anything else fails as JSON, never with the web app's HTML, so kitshn reports it cleanly.
+	m.HandleFunc("/api/", l.authed(func(http.ResponseWriter, *http.Request, app.Viewer) error { return app.ErrNotFound }))
 }
 
 type handler func(w http.ResponseWriter, r *http.Request, v app.Viewer) error
@@ -364,11 +367,12 @@ type unit struct {
 }
 
 type food struct {
-	ID             int64   `json:"id"`
-	Name           string  `json:"name"`
-	PluralName     *string `json:"plural_name"`
-	FullName       string  `json:"full_name"`
-	IgnoreShopping bool    `json:"ignore_shopping"`
+	ID                  int64     `json:"id"`
+	Name                string    `json:"name"`
+	PluralName          *string   `json:"plural_name"`
+	FullName            string    `json:"full_name"`
+	IgnoreShopping      bool      `json:"ignore_shopping"`
+	SupermarketCategory *category `json:"supermarket_category"`
 }
 
 type ingredient struct {
@@ -395,27 +399,27 @@ type step struct {
 }
 
 type recipe struct {
-	ID                     int64          `json:"id"`
-	Name                   string         `json:"name"`
-	Description            string         `json:"description"`
-	Image                  *string        `json:"image"`
-	Keywords               []keyword      `json:"keywords"`
-	Steps                  []step         `json:"steps"`
-	WorkingTime            int64          `json:"working_time"`
-	WaitingTime            int64          `json:"waiting_time"`
-	CreatedBy              *user          `json:"created_by"`
-	CreatedAt              string         `json:"created_at"`
-	UpdatedAt              string         `json:"updated_at"`
-	SourceURL              *string        `json:"source_url"`
-	Internal               bool           `json:"internal"`
-	ShowIngredientOverview bool           `json:"show_ingredient_overview"`
-	Properties             []any          `json:"properties"`
-	FoodProperties         map[string]any `json:"food_properties"`
-	Servings               int64          `json:"servings"`
-	ServingsText           string         `json:"servings_text"`
-	Private                bool           `json:"private"`
-	Rating                 *float64       `json:"rating"`
-	LastCooked             *string        `json:"last_cooked"`
+	ID                     int64                   `json:"id"`
+	Name                   string                  `json:"name"`
+	Description            string                  `json:"description"`
+	Image                  *string                 `json:"image"`
+	Keywords               []keyword               `json:"keywords"`
+	Steps                  []step                  `json:"steps"`
+	WorkingTime            int64                   `json:"working_time"`
+	WaitingTime            int64                   `json:"waiting_time"`
+	CreatedBy              *user                   `json:"created_by"`
+	CreatedAt              string                  `json:"created_at"`
+	UpdatedAt              string                  `json:"updated_at"`
+	SourceURL              *string                 `json:"source_url"`
+	Internal               bool                    `json:"internal"`
+	ShowIngredientOverview bool                    `json:"show_ingredient_overview"`
+	Properties             []property              `json:"properties"`
+	FoodProperties         map[string]foodProperty `json:"food_properties"`
+	Servings               int64                   `json:"servings"`
+	ServingsText           string                  `json:"servings_text"`
+	Private                bool                    `json:"private"`
+	Rating                 *float64                `json:"rating"`
+	LastCooked             *string                 `json:"last_cooked"`
 }
 
 func strPtr(s string) *string {
@@ -471,7 +475,7 @@ func toRecipe(r app.Recipe) recipe {
 	out := recipe{
 		ID: r.ID, Name: r.Name, Description: r.Description, Image: strPtr(r.PhotoURL), Keywords: make([]keyword, len(r.Keywords)), Steps: make([]step, len(r.Steps)),
 		WorkingTime: r.WorkMinutes, WaitingTime: r.WaitMinutes, CreatedBy: owner(r.Owner), CreatedAt: r.CreatedAt, UpdatedAt: r.UpdatedAt, SourceURL: strPtr(r.SourceURL),
-		Internal: true, ShowIngredientOverview: true, Properties: []any{}, FoodProperties: map[string]any{}, Servings: r.Servings, ServingsText: r.ServingsText,
+		Internal: true, ShowIngredientOverview: true, Properties: []property{}, FoodProperties: map[string]foodProperty{}, Servings: r.Servings, ServingsText: r.ServingsText,
 		Private: r.Visibility == "private", Rating: r.Rating, LastCooked: strPtr(r.LastCooked),
 	}
 	for i, k := range r.Keywords {
@@ -497,22 +501,32 @@ func (l *Layer) listRecipes(w http.ResponseWriter, r *http.Request, v app.Viewer
 	p := readPage(r)
 	q := r.URL.Query()
 	f := app.RecipeQuery{Q: q.Get("query"), Limit: p.size, Offset: p.offset()}
-	for _, name := range []string{"keywords", "keywords_or", "keywords_and"} {
-		if id, err := strconv.ParseInt(q.Get(name), 10, 64); err == nil {
-			f.KeywordID = id
-			break
-		}
-	}
+	f.AnyKeyword = idList(q, "keywords", "keywords_or", "keywords_and")
+	f.AnyFood = idList(q, "foods", "foods_or", "foods_and")
+	f.AnyBook = idList(q, "books", "books_or", "books_and")
 	if id, err := strconv.ParseInt(q.Get("createdby"), 10, 64); err == nil {
 		f.Owner = id
 	}
-	switch {
-	case q.Get("random") == "true":
+	number := func(name string) int64 {
+		n, _ := strconv.ParseInt(q.Get(name), 10, 64) // a missing or odd value means no limit
+		return n
+	}
+	f.RatingMin, f.RatingMax = number("rating_gte"), number("rating_lte")
+	f.CookedMin, f.CookedMax = number("timescooked_gte"), number("timescooked_lte")
+	if n := number("rating"); n > 0 {
+		f.RatingMin, f.RatingMax = n, n
+	}
+	if n := number("timescooked"); n > 0 {
+		f.CookedMin, f.CookedMax = n, n
+	}
+	if q.Get("random") == "true" {
 		f.Sort = "random"
-	case strings.HasSuffix(q.Get("sort_order"), "name"):
-		f.Sort = "name"
-	case strings.HasSuffix(q.Get("sort_order"), "created_at"):
-		f.Sort = "created"
+	} else {
+		f.Sort = map[string]string{
+			"name": "name", "-name": "-name", "created_at": "-created", "-created_at": "created",
+			"rating": "rating", "-rating": "-rating", "favorite": "times", "-favorite": "-times",
+			"lastcooked": "cooked", "-lastcooked": "-cooked",
+		}[q.Get("sort_order")]
 	}
 	res, err := l.svc.ListRecipes(r.Context(), v, f)
 	if err != nil {
@@ -535,7 +549,7 @@ func (l *Layer) getRecipe(w http.ResponseWriter, r *http.Request, v app.Viewer) 
 	if err != nil {
 		return err
 	}
-	writeJSON(w, http.StatusOK, toRecipe(rec))
+	writeJSON(w, http.StatusOK, l.fullRecipe(r, v, rec))
 	return nil
 }
 
@@ -562,7 +576,7 @@ func (l *Layer) listFoods(w http.ResponseWriter, r *http.Request, v app.Viewer) 
 	}
 	items := make([]food, len(res.Items))
 	for i, f := range res.Items {
-		items[i] = toFood(f.FoodRef)
+		items[i] = l.foodFor(r, v, f.FoodRef)
 	}
 	writeJSON(w, http.StatusOK, toPaged(r, p, res.Total, items))
 	return nil
@@ -577,7 +591,7 @@ func (l *Layer) getFood(w http.ResponseWriter, r *http.Request, v app.Viewer) er
 	if err != nil {
 		return err
 	}
-	writeJSON(w, http.StatusOK, toFood(f.FoodRef))
+	writeJSON(w, http.StatusOK, l.foodFor(r, v, f.FoodRef))
 	return nil
 }
 

@@ -230,7 +230,7 @@
 			<span class="flex h-5 w-5 items-center justify-center rounded-md {r.checked ? 'bg-ink text-bg' : 'ring-1 ring-line ring-inset'}">{#if r.checked}<Check size={14} strokeWidth={3} />{/if}</span>
 		</button>
 		<button class="min-h-11 min-w-0 flex-1 py-1.5 text-left" onclick={() => startEdit(r)} aria-label={t('shopping.edit')}>
-			<span class="block text-sm {r.checked ? 'text-muted line-through' : ''}">{#if amountText(r)}<span class="font-semibold tabular-nums">{amountText(r)} </span>{/if}{r.name}{#if r.note}<span class="text-muted">, {r.note}</span>{/if}</span>
+			<span class="block text-sm {r.checked ? 'text-muted line-through' : ''}">{#if amountText(r)}<span class="font-semibold tabular-nums">{amountText(r)}</span>{' '}{/if}{r.name}{#if r.note}<span class="text-muted">, {r.note}</span>{/if}</span>
 			{#if r.recipes.length}<span class="block text-xs text-muted">{t('shopping.for_recipe', { name: r.recipes.join(', ') })}</span>{/if}
 		</button>
 	</li>

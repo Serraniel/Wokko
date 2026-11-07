@@ -238,11 +238,115 @@ func (s *Service) GetRecipe(ctx context.Context, v Viewer, id int64) (Recipe, er
 	return s.buildRecipe(ctx, q, v, r)
 }
 
+func (s *Service) statsFor(ctx context.Context, q *sqlcgen.Queries, v Viewer, keys []sqlcgen.ListVisibleRecipeKeysRow) (map[int64]sqlcgen.RecipeStatsRow, error) {
+	out := map[int64]sqlcgen.RecipeStatsRow{}
+	if len(keys) == 0 {
+		return out, nil
+	}
+	ids := make([]int64, len(keys))
+	for i, k := range keys {
+		ids[i] = k.ID
+	}
+	rows, err := q.RecipeStats(ctx, sqlcgen.RecipeStatsParams{UserID: v.id(), Ids: ids})
+	if err != nil {
+		return nil, err
+	}
+	for _, r := range rows {
+		out[r.RecipeID] = r
+	}
+	return out, nil
+}
+
+// narrowRecipes applies the filters only kitshn uses. They run after the permission check
+// in ListVisibleRecipeKeys, so they can only ever remove recipes from what's visible.
+func (s *Service) narrowRecipes(ctx context.Context, q *sqlcgen.Queries, v Viewer, keys []sqlcgen.ListVisibleRecipeKeysRow, f RecipeQuery) ([]sqlcgen.ListVisibleRecipeKeysRow, error) {
+	keep := func(allowed map[int64]bool) {
+		out := keys[:0:0]
+		for _, k := range keys {
+			if allowed[k.ID] {
+				out = append(out, k)
+			}
+		}
+		keys = out
+	}
+	if len(f.AnyKeyword) > 0 && len(keys) > 0 {
+		ids := make([]int64, len(keys))
+		for i, k := range keys {
+			ids[i] = k.ID
+		}
+		links, err := q.ListRecipeKeywordsFor(ctx, ids)
+		if err != nil {
+			return nil, err
+		}
+		want := map[int64]bool{}
+		for _, id := range f.AnyKeyword {
+			want[id] = true
+		}
+		allowed := map[int64]bool{}
+		for _, l := range links {
+			if want[l.KeywordID] {
+				allowed[l.RecipeID] = true
+			}
+		}
+		keep(allowed)
+	}
+	if len(f.AnyFood) > 0 {
+		allowed := map[int64]bool{}
+		for _, food := range f.AnyFood {
+			ids, err := q.ListRecipeIDsUsingFood(ctx, food)
+			if err != nil {
+				return nil, err
+			}
+			for _, id := range ids {
+				allowed[id] = true
+			}
+		}
+		keep(allowed)
+	}
+	if len(f.AnyBook) > 0 {
+		allowed := map[int64]bool{}
+		for _, book := range f.AnyBook {
+			if _, err := s.bookAccess(ctx, q, v, book); err != nil {
+				continue
+			}
+			rows, err := q.ListBookEntries(ctx, book)
+			if err != nil {
+				return nil, err
+			}
+			for _, e := range rows {
+				allowed[e.RecipeID] = true
+			}
+		}
+		keep(allowed)
+	}
+	if f.RatingMin > 0 || f.RatingMax > 0 || f.CookedMin > 0 || f.CookedMax > 0 {
+		stats, err := s.statsFor(ctx, q, v, keys)
+		if err != nil {
+			return nil, err
+		}
+		allowed := map[int64]bool{}
+		for _, k := range keys {
+			st := stats[k.ID]
+			if (f.RatingMin > 0 && st.Rating < float64(f.RatingMin)) || (f.RatingMax > 0 && st.Rating > float64(f.RatingMax)) ||
+				(f.CookedMin > 0 && st.TimesCooked < f.CookedMin) || (f.CookedMax > 0 && st.TimesCooked > f.CookedMax) {
+				continue
+			}
+			allowed[k.ID] = true
+		}
+		keep(allowed)
+	}
+	return keys, nil
+}
+
 // RecipeQuery filters a recipe list.
 type RecipeQuery struct {
 	Q, Sort          string
 	KeywordID, Owner int64
 	Limit, Offset    int64
+	// AnyKeyword, AnyFood and AnyBook keep recipes matching at least one of the IDs.
+	AnyKeyword, AnyFood, AnyBook []int64
+	// RatingMin and the like keep a range. Zero means no limit.
+	RatingMin, RatingMax, CookedMin, CookedMax int64
 }
 
 // ListRecipes returns what the viewer can reach: their own, their household's, shared with them.
@@ -255,11 +359,36 @@ func (s *Service) ListRecipes(ctx context.Context, v Viewer, f RecipeQuery) (Pag
 	if err != nil {
 		return Page[RecipeSummary]{}, err
 	}
+	if keys, err = s.narrowRecipes(ctx, q, v, keys, f); err != nil {
+		return Page[RecipeSummary]{}, err
+	}
+	var stats map[int64]sqlcgen.RecipeStatsRow
+	if strings.Contains(f.Sort, "rating") || strings.Contains(f.Sort, "cooked") || strings.Contains(f.Sort, "times") {
+		if stats, err = s.statsFor(ctx, q, v, keys); err != nil {
+			return Page[RecipeSummary]{}, err
+		}
+	}
 	switch f.Sort {
 	case "name":
 		sort.SliceStable(keys, func(i, j int) bool { return text.Normalize(keys[i].Name) < text.Normalize(keys[j].Name) })
+	case "-name":
+		sort.SliceStable(keys, func(i, j int) bool { return text.Normalize(keys[i].Name) > text.Normalize(keys[j].Name) })
 	case "created":
 		sort.SliceStable(keys, func(i, j int) bool { return keys[i].CreatedAt > keys[j].CreatedAt })
+	case "-created":
+		sort.SliceStable(keys, func(i, j int) bool { return keys[i].CreatedAt < keys[j].CreatedAt })
+	case "rating":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].Rating < stats[keys[j].ID].Rating })
+	case "-rating":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].Rating > stats[keys[j].ID].Rating })
+	case "times":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].TimesCooked < stats[keys[j].ID].TimesCooked })
+	case "-times":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].TimesCooked > stats[keys[j].ID].TimesCooked })
+	case "cooked":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].LastCooked < stats[keys[j].ID].LastCooked })
+	case "-cooked":
+		sort.SliceStable(keys, func(i, j int) bool { return stats[keys[i].ID].LastCooked > stats[keys[j].ID].LastCooked })
 	case "random":
 		rand.Shuffle(len(keys), func(i, j int) { keys[i], keys[j] = keys[j], keys[i] })
 	default:
@@ -1096,6 +1225,18 @@ func (s *Service) PurgeExpiredTrash(ctx context.Context) error {
 }
 
 // GetStep returns one step if the viewer may see its recipe, and its position in the recipe.
+// StepRecipe finds the recipe a step belongs to, if the viewer may see it.
+func (s *Service) StepRecipe(ctx context.Context, v Viewer, stepID int64) (Recipe, error) {
+	st, err := s.Store.Queries.GetStep(ctx, stepID)
+	if isNoRows(err) {
+		return Recipe{}, ErrNotFound
+	}
+	if err != nil {
+		return Recipe{}, err
+	}
+	return s.GetRecipe(ctx, v, st.RecipeID)
+}
+
 func (s *Service) GetStep(ctx context.Context, v Viewer, id int64) (Step, int, error) {
 	st, err := s.Store.Queries.GetStep(ctx, id)
 	if isNoRows(err) {

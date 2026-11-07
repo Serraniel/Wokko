@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"errors"
@@ -15,6 +16,41 @@ const maxImportText = 200_000
 // ImportRecipe reads a recipe into a draft for the editor. It saves nothing, and new foods
 // and units only appear when the person saves the recipe.
 func (s *Service) ImportRecipe(ctx context.Context, in ImportRequest) (ImportedRecipe, error) {
+	out, parsed, err := s.importDraft(ctx, in)
+	if err != nil {
+		return ImportedRecipe{}, err
+	}
+	if parsed.ImageURL != "" {
+		// A recipe without its photo is still a good import, so failing here is fine.
+		if data, mime, err := s.Fetcher.Image(ctx, parsed.ImageURL); err == nil {
+			out.ImageData, out.ImageType = base64.StdEncoding.EncodeToString(data), mime
+		} else {
+			s.Log.Info("imported recipe without its photo", "error", err)
+		}
+	}
+	return out, nil
+}
+
+// ImportForKitshn reads a draft and hands back the photo's address, which kitshn sends back
+// when it saves the recipe.
+func (s *Service) ImportForKitshn(ctx context.Context, url string) (ImportedRecipe, string, error) {
+	out, parsed, err := s.importDraft(ctx, ImportRequest{URL: url})
+	if err != nil {
+		return ImportedRecipe{}, "", err
+	}
+	return out, parsed.ImageURL, nil
+}
+
+// SetPhotoFromURL downloads a photo through the import's safe fetcher, then treats it as an upload.
+func (s *Service) SetPhotoFromURL(ctx context.Context, v Viewer, id int64, url string) (Recipe, error) {
+	data, _, err := s.Fetcher.Image(ctx, url)
+	if err != nil {
+		return Recipe{}, importError(err)
+	}
+	return s.SetPhoto(ctx, v, id, bytes.NewReader(data))
+}
+
+func (s *Service) importDraft(ctx context.Context, in ImportRequest) (ImportedRecipe, *importer.Recipe, error) {
 	var (
 		parsed *importer.Recipe
 		err    error
@@ -23,7 +59,7 @@ func (s *Service) ImportRecipe(ctx context.Context, in ImportRequest) (ImportedR
 	switch {
 	case pasted != "":
 		if len(pasted) > maxImportText {
-			return ImportedRecipe{}, invalid("import_too_long", "This text is too long to import")
+			return ImportedRecipe{}, nil, invalid("import_too_long", "This text is too long to import")
 		}
 		lower := strings.ToLower(pasted[:min(len(pasted), 2000)])
 		if strings.Contains(lower, "<html") || strings.Contains(lower, "<!doctype") {
@@ -42,26 +78,17 @@ func (s *Service) ImportRecipe(ctx context.Context, in ImportRequest) (ImportedR
 			parsed, err = importer.ParseHTML(body, contentType, final)
 		}
 	default:
-		return ImportedRecipe{}, invalid("import_empty", "Enter a link or paste a recipe")
+		return ImportedRecipe{}, nil, invalid("import_empty", "Enter a link or paste a recipe")
 	}
 	if err != nil {
-		return ImportedRecipe{}, importError(err)
+		return ImportedRecipe{}, nil, importError(err)
 	}
 
 	units, err := s.unitSpellings(ctx)
 	if err != nil {
-		return ImportedRecipe{}, err
+		return ImportedRecipe{}, nil, err
 	}
-	out := ImportedRecipe{Recipe: toRecipeInput(parsed, units), Guessed: parsed.Guessed}
-	if parsed.ImageURL != "" {
-		// A recipe without its photo is still a good import, so failing here is fine.
-		if data, mime, err := s.Fetcher.Image(ctx, parsed.ImageURL); err == nil {
-			out.ImageData, out.ImageType = base64.StdEncoding.EncodeToString(data), mime
-		} else {
-			s.Log.Info("imported recipe without its photo", "error", err)
-		}
-	}
-	return out, nil
+	return ImportedRecipe{Recipe: toRecipeInput(parsed, units), Guessed: parsed.Guessed}, parsed, nil
 }
 
 func importError(err error) error {
