@@ -46,3 +46,35 @@ export function parseAmount(input: string): number | null {
 	const n = Number(s);
 	return Number.isFinite(n) && n >= 0 ? n : null;
 }
+
+const FRACTIONS: [number, string][] = [[1 / 8, '⅛'], [1 / 4, '¼'], [1 / 3, '⅓'], [1 / 2, '½'], [2 / 3, '⅔'], [3 / 4, '¾']];
+
+/** Writes 1.5 as "1½" when a common kitchen fraction is close enough. Otherwise it returns null. */
+export function asFraction(n: number): string | null {
+	if (n <= 0 || n >= 100) return null;
+	const whole = Math.floor(n);
+	const rest = n - whole;
+	if (rest < 0.01) return String(whole);
+	if (rest > 0.99) return String(whole + 1);
+	for (const [value, sign] of FRACTIONS) {
+		if (Math.abs(rest - value) < 0.02) return (whole || '') + sign;
+	}
+	return null;
+}
+
+/** Monday of the week containing a date, in local time, as YYYY-MM-DD parts are awkward otherwise. */
+export function startOfWeek(d: Date): Date {
+	const out = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+	out.setDate(out.getDate() - ((out.getDay() + 6) % 7));
+	return out;
+}
+
+export function isoDate(d: Date): string {
+	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+export function addDays(d: Date, days: number): Date {
+	const out = new Date(d);
+	out.setDate(out.getDate() + days);
+	return out;
+}

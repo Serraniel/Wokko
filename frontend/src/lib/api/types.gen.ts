@@ -381,6 +381,10 @@ export interface ShoppingItem {
   updated_at: string;
 }
 export interface ShoppingItemInput {
+  /**
+   * Line is free text such as "2 kg potatoes", read like an imported ingredient.
+   */
+  line: string;
   food_id: number /* int64 */;
   food_name: string;
   unit_id: number /* int64 */;

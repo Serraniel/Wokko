@@ -406,6 +406,8 @@ type ShoppingItem struct {
 }
 
 type ShoppingItemInput struct {
+	// Line is free text such as "2 kg potatoes", read like an imported ingredient.
+	Line     string   `json:"line"`
 	FoodID   int64    `json:"food_id"`
 	FoodName string   `json:"food_name"`
 	UnitID   int64    `json:"unit_id"`

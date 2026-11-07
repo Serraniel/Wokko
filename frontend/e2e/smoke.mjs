@@ -106,7 +106,7 @@ await step('dark mode', async () => {
   await p.click('button:has-text("Dark")'); const dark = await p.evaluate(() => getComputedStyle(document.body).backgroundColor); console.log('   body', dark); await shot('11-settings-dark');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=My version'); await shot('12-recipes-dark');
   await p.reload(); await p.waitForSelector('text=My version'); if ((await p.evaluate(() => document.documentElement.dataset.theme)) !== 'dark') throw new Error('theme not kept');
-  await p.click('nav a[href="/settings"]'); await p.click('button:has-text("Light")');
+  await p.goto(base + '/settings'); await p.click('button:has-text("Light")');
 });
 await step('admin health and backup', async () => {
   await p.goto(base + '/admin'); await p.waitForSelector('text=Data safety'); await p.click('button:has-text("Back up now")'); await p.waitForSelector('text=Everything looks good', { timeout: 20000 }); await shot('13-admin');
@@ -133,9 +133,34 @@ await step('desktop layout and command palette', async () => {
   await p.keyboard.press('/'); await p.waitForSelector('dialog[open] [role=combobox]'); await p.keyboard.type('ingred'); await p.keyboard.press('Enter'); await p.waitForURL('**/ingredients');
   await p.goto(base + '/recipes'); await p.waitForSelector('aside'); await p.keyboard.press('n'); await p.waitForURL('**/recipes/new');
 });
+await step('meal plan, shopping and books work together', async () => {
+  await p.setViewportSize({ width: 390, height: 844 });
+  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/);
+  await p.click('button[aria-label="More"]'); await p.waitForSelector('dialog[open] >> text=Add to meal plan'); await p.click('dialog[open] a:has-text("Add to meal plan")'); await p.waitForURL(/plan/);
+  await p.waitForSelector('dialog[open] #plan-date'); await p.check('dialog[open] input[type=checkbox]'); await shot('24-plan-sheet'); await p.click('dialog[open] button:has-text("Save")');
+  await p.waitForSelector('section button:has-text("My version")'); await shot('25-plan');
+  await p.click('nav a[href="/shopping"]'); await p.waitForSelector('text=onions'); await p.fill('#shopping-line', '2 kg potatoes'); await p.keyboard.press('Enter'); await p.waitForSelector('button:has-text("potatoes")'); await shot('26-shopping');
+  await p.click('[role=checkbox][aria-label*="potato"]'); await p.waitForSelector('text=In the cart');
+  await p.click('button:has-text("Remove bought items")'); await p.waitForSelector('text=In the cart', { state: 'detached' });
+  await p.goto(base + '/books'); await p.click('button:has-text("New book")'); await p.fill('#book-name', 'Weeknight'); await p.click('dialog[open] button:has-text("Save")'); await p.waitForSelector('a:has-text("Weeknight")');
+  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/); await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Add to a book")'); await p.check('dialog[open] label:has-text("Weeknight") input');
+  await p.goto(base + '/books'); await p.click('a:has-text("Weeknight")'); await p.waitForSelector('a.recipe-card:has-text("My version")');
+});
+await step('cooking mode, history and fractions', async () => {
+  await p.goto(base + '/settings'); await p.selectOption('#amounts', 'fraction');
+  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/);
+  await p.waitForSelector('section.card li:has-text("1½")');
+  await p.click('a:has-text("Cook")'); await p.waitForURL(/cook$/); await p.waitForSelector('text=Step 1 of 2'); await shot('27-cook');
+  await p.click('button:has-text("Next step")'); await p.waitForSelector('text=Step 2 of 2'); await p.click('a:has-text("Done")'); await p.waitForSelector('dialog[open] >> text=Your rating'); await p.click('dialog[open] button[aria-label="Close"]');
+  await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Version history")'); await p.waitForSelector('dialog[open] button:has-text("Restore")'); await shot('28-history'); await p.click('dialog[open] button[aria-label="Close"]');
+  await p.goto(base + '/settings'); await p.selectOption('#amounts', 'decimal');
+  await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Link to your recipes"]');
+  const link = await p.inputValue('input[aria-label="Link to your recipes"]'); const anon = await b.newContext({ viewport: { width: 390, height: 844 } }); const a = await anon.newPage();
+  await a.goto(base + new URL(link, base).pathname); await a.waitForSelector('a.recipe-card:has-text("My version")'); await anon.close();
+});
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {
-  await p.goto(base + '/settings'); await p.click('aside button:has-text("Log out")'); await p.waitForURL('**/login**'); await p.goto(base + '/recipes'); await p.waitForURL('**/login**'); await shot('19-login');
+  await p.setViewportSize({ width: 1280, height: 800 }); await p.goto(base + '/settings'); await p.click('aside button:has-text("Log out")'); await p.waitForURL('**/login**'); await p.goto(base + '/recipes'); await p.waitForURL('**/login**'); await shot('19-login');
 });
 console.log('browser errors:', errors.length ? errors : 'none');
 if (errors.length) process.exitCode = 1;

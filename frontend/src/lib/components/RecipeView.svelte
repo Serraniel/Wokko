@@ -2,8 +2,10 @@
 	import { Clock, ExternalLink, Hourglass, Minus, Plus, Star, Users } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import type { Ingredient, Recipe, UnitRef } from '#lib/api/types.gen.ts';
-	import { combineIngredients, roundAmount } from '#lib/format.ts';
+	import { asFraction, combineIngredients, roundAmount } from '#lib/format.ts';
 	import { formatDate, formatMinutes, formatNumber, t } from '#lib/i18n/index.svelte.ts';
+	import { renderMarkdown } from '#lib/markdown.ts';
+	import { prefs } from '#lib/prefs.svelte.ts';
 
 	let { recipe, actions, footer }: { recipe: Recipe; actions?: Snippet; footer?: Snippet } = $props();
 
@@ -17,7 +19,9 @@
 	const perStep = $derived(recipe.steps.length === 1 || recipe.steps.filter((s) => s.ingredients.length).length > 1);
 
 	function amountText(amount: number | null | undefined): string {
-		return amount === null || amount === undefined ? '' : formatNumber(roundAmount(amount * scale));
+		if (amount === null || amount === undefined) return '';
+		const scaled = roundAmount(amount * scale);
+		return (prefs.amounts === 'fraction' ? asFraction(scaled) : null) ?? formatNumber(scaled);
 	}
 
 	function unitText(unit: UnitRef | null | undefined, amount: number | null | undefined): string {
@@ -92,7 +96,7 @@
 								<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface-2 text-xs font-semibold tabular-nums">{n + 1}</span>
 								<div class="min-w-0 flex-1 space-y-1.5">
 									{#if step.name}<h3 class="font-semibold">{step.name}</h3>{/if}
-									{#if step.instruction}<p class="whitespace-pre-line leading-relaxed">{step.instruction}</p>{/if}
+									{#if step.instruction}<p class="whitespace-pre-line leading-relaxed">{@html renderMarkdown(step.instruction)}</p>{/if}
 									{#if perStep && step.ingredients.length}
 										<ul class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
 											{#each step.ingredients as ing (ing.id)}<li>{line(ing)}{#if ing.note}, {ing.note}{/if}</li>{/each}

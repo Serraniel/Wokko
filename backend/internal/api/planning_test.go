@@ -133,6 +133,12 @@ func TestShoppingList(t *testing.T) {
 		t.Fatalf("item: %+v", loose)
 	}
 	admin.wantCode("POST", v1+"/shopping", app.ShoppingItemInput{}, 400, "ingredient_required")
+	var typed app.ShoppingItem
+	admin.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "2 kg Zwiebeln, rot"}, 201).decode(t, &typed)
+	if *typed.Amount != 2 || typed.Unit == nil || typed.Unit.Abbreviation != "kg" || typed.Food.Name != "onion" || typed.Note != "rot" {
+		t.Fatalf("typed line: %+v", typed)
+	}
+	admin.ok("DELETE", path("/shopping/%d", typed.ID), nil, 200)
 	var empty []app.ShoppingItem
 	stranger.ok("GET", v1+"/shopping", nil, 200).decode(t, &empty)
 	if len(empty) != 0 {
