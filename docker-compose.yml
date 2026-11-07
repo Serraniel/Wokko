@@ -1,3 +1,5 @@
+# Builds Wokko from this source code. To run a ready-made image without the source, use
+# docker-compose.example.yml instead.
 name: wokko
 
 services:
@@ -13,6 +15,7 @@ services:
       PUBLIC_URL: ${PUBLIC_URL:-}
       BACKUP_INTERVAL_HOURS: ${BACKUP_INTERVAL_HOURS:-24}
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+      TRASH_RETENTION_DAYS: ${TRASH_RETENTION_DAYS:-30}
     ports:
       - "${WOKKO_PORT:-8080}:8080"
     volumes:

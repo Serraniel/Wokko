@@ -13,7 +13,8 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/store` — SQLite, migrations, sqlc queries
 - `backend/internal/assistant` — MCP server and OAuth endpoints for AI assistants
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
-- `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text
+- `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text, and `src/service-worker/` keeps it usable offline
+- `docker-compose.yml` builds from source. `docker-compose.example.yml` is what the README tells people to run
 - `docs/` — Design docs and plans
 - `.github/` — CI/CD workflows and Dependabot config
 
@@ -74,6 +75,7 @@ Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, i18n,
 - Photos are re-encoded on upload and stored under `DATA_DIR/uploads`, and served only to people who may see the recipe
 - Imports only produce a draft for the editor, private by default. They use the site's published recipe data first and never pretend to be a browser
 - Meal plans, shopping and supermarkets belong to a household. A private recipe's name never reaches others through them
+- The service worker stores only an explicit list of read-only addresses, and logging out deletes them. Offline writes exist only for the shopping list, through a queue
 - MCP is off by default. Tokens are stored hashed, act as their owner, and their scope decides which tools exist
 - kitshn compatibility targets a stated version (`kitshn.SupportedKitshn`). Its response types match kitshn's data classes
 

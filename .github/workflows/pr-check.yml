@@ -47,5 +47,8 @@ jobs:
           CHROMIUM_PATH: /usr/bin/google-chrome
         run: make e2e
 
+      - name: Example compose file is valid
+        run: docker compose -f docker-compose.example.yml config --quiet
+
       - name: Container image builds
         run: docker build .
