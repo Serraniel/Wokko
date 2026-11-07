@@ -517,3 +517,24 @@ type OAuthApproval struct {
 type OAuthRedirect struct {
 	RedirectURL string `json:"redirect_url"`
 }
+
+// FileImportItem is one recipe found in an uploaded file.
+type FileImportItem struct {
+	Name        string `json:"name"`
+	Format      string `json:"format"`
+	Steps       int64  `json:"steps"`
+	Ingredients int64  `json:"ingredients"`
+	HasPhoto    bool   `json:"has_photo"`
+	Duplicate   bool   `json:"duplicate"`
+	// RecipeID is set once saved, and Error says why a recipe couldn't be.
+	RecipeID    int64  `json:"recipe_id"`
+	PhotoFailed bool   `json:"photo_failed"`
+	Error       string `json:"error"`
+}
+
+type FileImportResult struct {
+	Items    []FileImportItem `json:"items"`
+	Imported int64            `json:"imported"`
+	Skipped  int64            `json:"skipped"`
+	Failed   int64            `json:"failed"`
+}

@@ -6,12 +6,14 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/serraniel/wokko/backend/internal/app"
+	"github.com/serraniel/wokko/backend/internal/importer"
 	"github.com/serraniel/wokko/backend/internal/media"
 )
 
@@ -291,6 +293,45 @@ func (s *Server) importRecipe(w http.ResponseWriter, r *http.Request, v app.View
 		return err
 	}
 	out, err := s.svc.ImportRecipe(r.Context(), in)
+	return reply(w, out, err)
+}
+
+// importFile streams the upload to a temporary file beside the data, because archives are read
+// at random and can be far bigger than is sensible to hold in memory.
+func (s *Server) importFile(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	if !s.importLimit.Allow(strconv.FormatInt(v.User.ID, 10)) {
+		return errTooMany
+	}
+	bad := &app.Error{Status: http.StatusBadRequest, Code: "import_file_unknown", Message: "No recipes found in this file"}
+	r.Body = http.MaxBytesReader(w, r.Body, importer.MaxFileBytes+1<<20)
+	parts, err := r.MultipartReader()
+	if err != nil {
+		return bad
+	}
+	var part *multipart.Part
+	for {
+		if part, err = parts.NextPart(); err != nil {
+			return bad
+		}
+		if part.FormName() == "file" {
+			break
+		}
+	}
+	tmp, err := os.CreateTemp(s.svc.Cfg.DataDir, "import-*.tmp")
+	if err != nil {
+		return fmt.Errorf("create import file: %w", err)
+	}
+	defer os.Remove(tmp.Name())
+	defer tmp.Close()
+	size, err := io.Copy(tmp, part)
+	if err != nil {
+		var tooBig *http.MaxBytesError
+		if errors.As(err, &tooBig) {
+			return &app.Error{Status: http.StatusRequestEntityTooLarge, Code: "import_file_too_big", Message: "This file is too big to import"}
+		}
+		return bad
+	}
+	out, err := s.svc.ImportFile(r.Context(), v, tmp, size, part.FileName(), r.URL.Query().Get("dry_run") != "")
 	return reply(w, out, err)
 }
 

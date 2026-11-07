@@ -5,10 +5,13 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
+	"io"
 	"net/http"
 	"strings"
 
 	"github.com/serraniel/wokko/backend/internal/importer"
+	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
+	"github.com/serraniel/wokko/backend/internal/text"
 )
 
 const maxImportText = 200_000
@@ -156,6 +159,101 @@ func toRecipeInput(r *importer.Recipe, units map[string]string) RecipeInput {
 		in.Steps = append(in.Steps, StepInput{Ingredients: []IngredientInput{}})
 	}
 	in.Steps[0].Ingredients = ingredients
+	return in
+}
+
+// ImportFile reads another app's export. With dryRun it only reports what's inside. Otherwise
+// each recipe is saved on its own, private and skipping likely duplicates, so one bad recipe
+// doesn't cost the others and importing twice is harmless.
+func (s *Service) ImportFile(ctx context.Context, v Viewer, data io.ReaderAt, size int64, name string, dryRun bool) (FileImportResult, error) {
+	recipes, err := importer.ReadFile(data, size, name)
+	if errors.Is(err, importer.ErrFileTooBig) {
+		return FileImportResult{}, fail(http.StatusRequestEntityTooLarge, "import_file_too_big", "This file is too big to import")
+	}
+	if err != nil {
+		return FileImportResult{}, fail(http.StatusUnprocessableEntity, "import_file_unknown", "No recipes found in this file")
+	}
+	units, err := s.unitSpellings(ctx)
+	if err != nil {
+		return FileImportResult{}, err
+	}
+	keys, err := s.Store.Queries.ListVisibleRecipeKeys(ctx, sqlcgen.ListVisibleRecipeKeysParams{ViewerID: v.id(), HouseholdID: v.User.HouseholdID})
+	if err != nil {
+		return FileImportResult{}, err
+	}
+	known := map[string]bool{}
+	for _, k := range keys {
+		known[text.Normalize(k.Name)] = true
+	}
+	out := FileImportResult{Items: make([]FileImportItem, 0, len(recipes))}
+	for _, r := range recipes {
+		in := fileRecipeInput(r, units)
+		item := FileImportItem{Name: in.Name, Format: r.Format, Steps: int64(len(in.Steps)), HasPhoto: len(r.Photo) > 0}
+		for _, st := range in.Steps {
+			item.Ingredients += int64(len(st.Ingredients))
+		}
+		key := text.Normalize(in.Name)
+		item.Duplicate = known[key]
+		known[key] = true
+		switch {
+		case item.Duplicate:
+			out.Skipped++
+		case !dryRun:
+			saved, err := s.CreateRecipe(ctx, v, in)
+			if err != nil {
+				var ae *Error
+				if !errors.As(err, &ae) {
+					return out, err // A problem with the server, not with this recipe.
+				}
+				item.Error = ae.Code
+				out.Failed++
+				break
+			}
+			item.RecipeID = saved.ID
+			out.Imported++
+			if len(r.Photo) > 0 {
+				if _, err := s.SetPhoto(ctx, v, saved.ID, bytes.NewReader(r.Photo)); err != nil {
+					item.PhotoFailed = true // The recipe matters more than its picture.
+					s.Log.Info("imported recipe without its photo", "recipe", saved.ID, "error", err)
+				}
+			}
+		}
+		out.Items = append(out.Items, item)
+	}
+	return out, nil
+}
+
+func fileRecipeInput(r importer.FileRecipe, units map[string]string) RecipeInput {
+	in := RecipeInput{
+		Name: firstRunes(strings.TrimSpace(r.Name), 200), Description: r.Description, WorkMinutes: r.WorkMinutes, WaitMinutes: r.WaitMinutes,
+		Servings: r.Servings, ServingsText: firstRunes(r.ServingsText, 32), Visibility: "private", Keywords: []string{}, Steps: []StepInput{},
+	}
+	if in.Servings <= 0 {
+		in.Servings = 4
+	}
+	if strings.HasPrefix(r.Source, "http://") || strings.HasPrefix(r.Source, "https://") {
+		in.SourceURL = r.Source
+	}
+	for _, k := range r.Keywords {
+		if k = strings.TrimSpace(k); k != "" && len(in.Keywords) < 20 {
+			in.Keywords = append(in.Keywords, firstRunes(k, 60))
+		}
+	}
+	for _, st := range r.Steps {
+		step := StepInput{Name: st.Name, Instruction: st.Instruction, Minutes: max(st.Minutes, 0), Ingredients: []IngredientInput{}}
+		for _, i := range st.Ingredients {
+			ing := IngredientInput{FoodName: i.Food, UnitName: i.Unit, Amount: i.Amount, Note: i.Note}
+			if i.Line != "" {
+				p := importer.ParseIngredient(i.Line, units)
+				ing = IngredientInput{FoodName: p.Food, UnitName: p.Unit, Amount: p.Amount, Note: p.Note}
+			}
+			if strings.TrimSpace(ing.FoodName) != "" {
+				ing.FoodName = firstRunes(strings.TrimSpace(ing.FoodName), 200)
+				step.Ingredients = append(step.Ingredients, ing)
+			}
+		}
+		in.Steps = append(in.Steps, step)
+	}
 	return in
 }
 
