@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { ChevronLeft, ChevronRight, Plus, ShoppingCart, Trash2 } from '@lucide/svelte';
+	import { onMount } from 'svelte';
+	import { replaceState } from '$app/navigation';
 	import { page } from '$app/state';
 	import { api, errorText, query } from '#lib/api/client.ts';
-	import type { MealPlan, MealPlanInput, MealType, Page, RecipeSummary } from '#lib/api/types.gen.ts';
+	import type { MealPlan, MealPlanInput, MealType, Page, RecipeSummary, ShoppingItem } from '#lib/api/types.gen.ts';
 	import { cached, forget, remember } from '#lib/cache.ts';
 	import Combobox, { type Option } from '#lib/components/Combobox.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
 	import { addDays, isoDate, startOfWeek } from '#lib/format.ts';
-	import { currentLocale, t } from '#lib/i18n/index.svelte.ts';
+	import { currentLocale, formatNumber, t } from '#lib/i18n/index.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 
 	let week = $state(startOfWeek(new Date()));
@@ -50,6 +52,12 @@
 
 	// Arriving from a recipe's "Add to meal plan".
 	const arriving = page.url.searchParams.get('recipe');
+	// Reloading later shouldn't open the form again.
+	onMount(() => {
+		if (arriving) replaceState('/plan', {});
+		// On a phone the days stack up, and today can be well below the fold.
+		document.querySelector('[data-today]')?.scrollIntoView({ block: 'center' });
+	});
 	if (arriving) startNew(today, { id: Number(arriving), name: page.url.searchParams.get('name') ?? '', servings: page.url.searchParams.get('servings') ?? '4' });
 
 	function startNew(date: string, recipe?: { id: number; name: string; servings: string }) {
@@ -103,11 +111,13 @@
 	}
 
 	async function weekToShopping() {
-		const withRecipes = (plans ?? []).filter((p) => p.recipe);
 		try {
-			for (const p of withRecipes) await api.post('/shopping/recipes', { recipe_id: p.recipe!.id, servings: p.servings, meal_plan_id: p.id });
+			// Pressing this twice, or after planning with "add to shopping", mustn't buy things twice.
+			const listed = new Set((await api.get<ShoppingItem[]>('/shopping')).map((i) => i.recipe?.meal_plan_id));
+			const missing = (plans ?? []).filter((p) => p.recipe && !listed.has(p.id));
+			for (const p of missing) await api.post('/shopping/recipes', { recipe_id: p.recipe!.id, servings: p.servings, meal_plan_id: p.id });
 			forget('shopping');
-			toasts.show(t('plan.week_added', { count: withRecipes.length }));
+			toasts.show(missing.length ? t('plan.week_added', { count: missing.length }) : t('plan.week_already'));
 		} catch (err) {
 			toasts.error(errorText(err));
 		}
@@ -135,7 +145,7 @@
 	<div class="grid gap-2 lg:grid-cols-7">
 		{#each days as d (isoDate(d))}
 			{@const iso = isoDate(d)}
-			<section class="card flex flex-col p-3 lg:min-h-64 {iso === today ? 'ring-1 ring-brand' : ''}" aria-label={dayLabel(d)}>
+			<section data-today={iso === today ? '' : undefined} class="card flex flex-col p-3 lg:min-h-64 {iso === today ? 'ring-1 ring-brand' : ''}" aria-label={dayLabel(d)}>
 				<div class="mb-1 flex items-center justify-between">
 					<h2 class="text-sm font-semibold {iso === today ? 'text-brand' : ''}">{dayLabel(d)}</h2>
 					<button class="btn btn-ghost btn-icon !min-h-8 !w-8 text-muted" aria-label={t('plan.add')} onclick={() => startNew(iso)}><Plus size={16} /></button>
@@ -144,7 +154,7 @@
 					{#each onDay(d) as p (p.id)}
 						<li>
 							<button class="w-full rounded-lg bg-surface-2 px-2.5 py-1.5 text-left hover:bg-line" onclick={() => startEdit(p)}>
-								<span class="block text-xs text-muted">{p.meal_type.name}{p.servings ? ` · ${p.servings}` : ''}</span>
+								<span class="block text-xs text-muted">{p.meal_type.name}{p.servings ? ` · ${formatNumber(p.servings)}` : ''}</span>
 								<span class="block text-sm font-medium">{planName(p)}</span>
 								{#if p.note}<span class="block text-xs text-muted">{p.note}</span>{/if}
 							</button>

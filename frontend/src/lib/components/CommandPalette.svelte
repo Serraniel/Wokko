@@ -143,10 +143,10 @@
 					{@const Icon = item.icon}
 					{#if i === 0 && recipeItems.length}<li role="presentation" class="px-2.5 pt-1 pb-1 text-xs font-medium text-muted">{t('palette.recipes')}</li>{/if}
 					{#if i === recipeItems.length && matchingActions.length}<li role="presentation" class="px-2.5 pt-2 pb-1 text-xs font-medium text-muted">{t('palette.actions')}</li>{/if}
-					<li id="palette-{i}" role="option" aria-selected={i === selected}>
-						<button type="button" tabindex="-1" class="flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 text-left text-sm {i === selected ? 'bg-surface-2' : ''}" onpointermove={() => (selected = i)} onclick={() => choose(item)}>
-							<Icon size={16} class="shrink-0 text-muted" /><span class="truncate">{item.label}</span>
-						</button>
+					<!-- Arrow keys and Enter arrive through the search field, which keeps focus. -->
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<li id="palette-{i}" role="option" aria-selected={i === selected} class="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 text-sm {i === selected ? 'bg-surface-2' : ''}" onpointermove={() => (selected = i)} onclick={() => choose(item)}>
+						<Icon size={16} class="shrink-0 text-muted" /><span class="truncate">{item.label}</span>
 					</li>
 				{:else}
 					<li class="px-2.5 py-8 text-center text-sm text-muted">{t('palette.empty')}</li>
