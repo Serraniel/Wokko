@@ -6,12 +6,31 @@
 	import AuthCard from '#lib/components/AuthCard.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
+	import { passkeysAvailable, usePasskey } from '#lib/passkeys.ts';
 	import { session } from '#lib/session.svelte.ts';
+	import { query } from '#lib/api/client.ts';
 
 	let handle = $state('');
 	let password = $state('');
 	let error = $state('');
 	let busy = $state(false);
+
+	const canPasskey = passkeysAvailable();
+
+	async function passkeyLogin() {
+		busy = true;
+		error = '';
+		try {
+			const start = await api.post<{ flow: string; options: { publicKey: Record<string, unknown> } }>('/auth/passkey/begin');
+			const answer = await usePasskey(start.options);
+			await session.signedIn(await api.post<User>(`/auth/passkey/finish${query({ flow: start.flow })}`, answer));
+		} catch (e) {
+			// Closing the browser's own dialog isn't an error worth reporting.
+			if (!(e instanceof DOMException && e.name === 'NotAllowedError')) error = e instanceof DOMException ? t('err.passkey_failed') : errorText(e);
+		} finally {
+			busy = false;
+		}
+	}
 
 	function target(): string {
 		const next = page.url.searchParams.get('next') ?? '';
@@ -50,6 +69,7 @@
 			<input id="password" class="input" type="password" bind:value={password} required autocomplete="current-password" />
 		</div>
 		<button class="btn btn-primary w-full" disabled={busy}>{busy ? t('auth.logging_in') : t('auth.login')}</button>
+		{#if canPasskey}<button type="button" class="btn btn-soft w-full" disabled={busy} onclick={passkeyLogin}>{t('auth.passkey')}</button>{/if}
 	</form>
 	<div class="space-y-1 text-center text-sm text-muted">
 		<p><a class="font-semibold text-brand" href="/register">{t('auth.no_account')}</a></p>

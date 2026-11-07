@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/serraniel/wokko/backend/internal/app"
+	"github.com/serraniel/wokko/backend/internal/assistant"
 	"github.com/serraniel/wokko/backend/internal/auth"
 	"github.com/serraniel/wokko/backend/internal/kitshn"
 	"github.com/serraniel/wokko/backend/internal/text"
@@ -53,6 +54,7 @@ func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	s.routes(mux)
 	kitshn.New(s.svc, s.log, s.loginLimit, s.secureCookie).Routes(mux)
+	assistant.New(s.svc, s.log).Routes(mux)
 	mux.Handle("/", web.Handler())
 	return s.recoverer(s.securityHeaders(s.originCheck(mux)))
 }
@@ -98,6 +100,18 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("DELETE "+p+"/books/{id}", s.user(s.deleteBook))
 	m.HandleFunc("PUT "+p+"/books/{id}/recipes/{rid}", s.user(s.addToBook))
 	m.HandleFunc("DELETE "+p+"/books/{id}/recipes/{rid}", s.user(s.removeFromBook))
+	m.HandleFunc("POST "+p+"/auth/passkey/begin", s.h(s.passkeyLoginBegin))
+	m.HandleFunc("POST "+p+"/auth/passkey/finish", s.h(s.passkeyLoginFinish))
+	m.HandleFunc("GET "+p+"/me/passkeys", s.user(s.listPasskeys))
+	m.HandleFunc("POST "+p+"/me/passkeys/begin", s.user(s.passkeyAddBegin))
+	m.HandleFunc("POST "+p+"/me/passkeys/finish", s.user(s.passkeyAddFinish))
+	m.HandleFunc("DELETE "+p+"/me/passkeys/{id}", s.user(s.deletePasskey))
+	m.HandleFunc("GET "+p+"/me/tokens", s.user(s.listTokens))
+	m.HandleFunc("POST "+p+"/me/tokens", s.user(s.createToken))
+	m.HandleFunc("DELETE "+p+"/me/tokens/{id}", s.user(s.revokeToken))
+	m.HandleFunc("GET "+p+"/me/assistant-activity", s.user(s.assistantActivity))
+	m.HandleFunc("GET "+p+"/oauth/request", s.user(s.oauthRequest))
+	m.HandleFunc("POST "+p+"/oauth/approve", s.user(s.oauthApprove))
 	m.HandleFunc("GET "+p+"/me/collection-links", s.user(s.listCollectionLinks))
 	m.HandleFunc("POST "+p+"/me/collection-links", s.user(s.createCollectionLink))
 	m.HandleFunc("DELETE "+p+"/me/collection-links/{id}", s.user(s.revokeCollectionLink))
@@ -258,7 +272,10 @@ func (s *Server) securityHeaders(next http.Handler) http.Handler {
 // originCheck blocks cross-site form posts and scripts. kitshn sends no Origin header.
 func (s *Server) originCheck(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet && r.Method != http.MethodHead {
+		// MCP and OAuth's token calls carry their own credentials instead of cookies, so a
+		// cross-site page gains nothing from them.
+		machine := r.URL.Path == "/mcp" || r.URL.Path == "/oauth/token" || r.URL.Path == "/oauth/register"
+		if r.Method != http.MethodGet && r.Method != http.MethodHead && !machine {
 			if o := r.Header.Get("Origin"); o != "" {
 				u, err := url.Parse(o)
 				if err != nil || u.Host != r.Host {

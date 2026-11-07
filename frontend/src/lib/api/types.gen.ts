@@ -22,6 +22,7 @@ export interface Status {
   setup_complete: boolean;
   open_registration: boolean;
   allow_public: boolean;
+  mcp_enabled: boolean;
   version: string;
 }
 export interface Translation {
@@ -208,6 +209,7 @@ export interface InviteInput {
 export interface Settings {
   open_registration: boolean;
   allow_public: boolean;
+  mcp_enabled: boolean;
 }
 export interface BackupRun {
   id: number /* int64 */;
@@ -434,4 +436,58 @@ export interface RecipeNutrition {
   counted: number /* int64 */;
   total: number /* int64 */;
   missing: string[];
+}
+export interface Passkey {
+  id: number /* int64 */;
+  name: string;
+  created_at: string;
+  last_used_at: string;
+}
+/**
+ * APIToken lets an AI assistant act for its owner through MCP.
+ */
+export interface APIToken {
+  id: number /* int64 */;
+  name: string;
+  scope: string;
+  is_app: boolean;
+  expires_at: string;
+  last_used_at: string;
+  created_at: string;
+}
+export interface APITokenInput {
+  name: string;
+  scope: string;
+  expires_in_days: number /* int64 */;
+}
+/**
+ * NewAPIToken holds the secret, which is shown only this once.
+ */
+export interface NewAPIToken extends APIToken {
+  secret: string;
+}
+export interface AssistantActivity {
+  id: number /* int64 */;
+  token_name: string;
+  tool: string;
+  target: string;
+  created_at: string;
+}
+/**
+ * OAuthRequest describes an app asking for access, for the consent page.
+ */
+export interface OAuthRequest {
+  client_name: string;
+  redirect_host: string;
+  scope: string;
+}
+export interface OAuthApproval {
+  client_id: string;
+  redirect_uri: string;
+  code_challenge: string;
+  scope: string;
+  state: string;
+}
+export interface OAuthRedirect {
+  redirect_url: string;
 }

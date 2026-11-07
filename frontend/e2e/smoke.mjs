@@ -158,6 +158,27 @@ await step('cooking mode, history and fractions', async () => {
   const link = await p.inputValue('input[aria-label="Link to your recipes"]'); const anon = await b.newContext({ viewport: { width: 390, height: 844 } }); const a = await anon.newPage();
   await a.goto(base + new URL(link, base).pathname); await a.waitForSelector('a.recipe-card:has-text("My version")'); await anon.close();
 });
+await step('assistant access: admin switch, token and app approval', async () => {
+  await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');
+  await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);
+  await p.goto(base + '/settings'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
+  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.locator('text=Copy this token now').scrollIntoViewIfNeeded(); await shot('29-assistant');
+  const reg = await p.evaluate(async () => (await (await fetch('/oauth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_name: 'Claude', redirect_uris: ['http://127.0.0.1:33333/callback'] }) })).json()));
+  await p.route('http://127.0.0.1:33333/**', (r) => r.fulfill({ status: 200, contentType: 'text/html', body: 'ok' }));
+  const q = new URLSearchParams({ client_id: reg.client_id, redirect_uri: 'http://127.0.0.1:33333/callback', response_type: 'code', code_challenge: 'abc', code_challenge_method: 'S256', scope: 'write', state: 'xyz' });
+  await p.goto(base + '/oauth/authorize?' + q); await p.waitForSelector('h1:has-text("Allow access?")'); await p.waitForSelector('text=Claude wants to use Wokko'); await shot('30-consent');
+  await p.click('button.btn-primary:has-text("Allow")'); await p.waitForURL(/33333\/callback\?code=.+state=xyz|33333\/callback\?.*code=/);
+  await p.goto(base + '/oauth/authorize?' + q); await p.waitForSelector('button:has-text("Don\'t allow")'); await p.click('button:has-text("Don\'t allow")'); await p.waitForURL(/error=access_denied/);
+});
+await step('passkeys with a virtual authenticator', async () => {
+  const local = base.replace('127.0.0.1', 'localhost');
+  const c3 = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US' }); const k = await c3.newPage();
+  const cdp = await c3.newCDPSession(k); await cdp.send('WebAuthn.enable');
+  await cdp.send('WebAuthn.addVirtualAuthenticator', { options: { protocol: 'ctap2', transport: 'internal', hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } });
+  await k.goto(local + '/login'); await k.fill('#handle', 'anna'); await k.fill('#password', 'password123'); await k.click('form button:has-text("Log in"):not(:has-text("passkey"))'); await k.waitForURL('**/recipes');
+  await k.goto(local + '/settings'); await k.fill('input[aria-label="Name for this passkey"]', 'Test key'); await k.click('button:has-text("Add a passkey")'); await k.waitForSelector('li:has-text("Test key")'); await k.locator('li:has-text("Test key")').scrollIntoViewIfNeeded(); await k.screenshot({ path: `${shots}/31-passkey.png` });
+  await c3.clearCookies(); await k.goto(local + '/login'); await k.click('button:has-text("Log in with a passkey")'); await k.waitForURL('**/recipes'); await c3.close();
+});
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {
   await p.setViewportSize({ width: 1280, height: 800 }); await p.goto(base + '/settings'); await p.click('aside button:has-text("Log out")'); await p.waitForURL('**/login**'); await p.goto(base + '/recipes'); await p.waitForURL('**/login**'); await shot('19-login');

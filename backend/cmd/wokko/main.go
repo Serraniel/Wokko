@@ -2,9 +2,13 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"context"
 	"errors"
+	"flag"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
@@ -31,10 +35,12 @@ func main() {
 			err = restore(cfg, os.Args[2:])
 		case len(os.Args) > 1 && os.Args[1] == "healthcheck":
 			err = healthcheck(cfg)
+		case len(os.Args) > 1 && os.Args[1] == "mcp-stdio":
+			err = mcpStdio(cfg, os.Args[2:], os.Stdin, os.Stdout)
 		case len(os.Args) > 1 && os.Args[1] == "version":
 			fmt.Println(version)
 		case len(os.Args) > 1:
-			err = fmt.Errorf("unknown command %q. Commands: restore <backup file>, healthcheck, version", os.Args[1])
+			err = fmt.Errorf("unknown command %q. Commands: restore <backup file>, mcp-stdio --token <token> [--url <address>], healthcheck, version", os.Args[1])
 		default:
 			err = serve(cfg, log)
 		}
@@ -43,6 +49,55 @@ func main() {
 		log.Error("Wokko stopped", "reason", err)
 		os.Exit(1)
 	}
+}
+
+// mcpStdio lets an assistant that only speaks MCP over stdin and stdout reach a running
+// Wokko. It holds no data itself. Each line goes to the server's /mcp, and the answer comes back.
+func mcpStdio(cfg config.Config, args []string, in io.Reader, out io.Writer) error {
+	flags := flag.NewFlagSet("mcp-stdio", flag.ContinueOnError)
+	token := flags.String("token", os.Getenv("WOKKO_TOKEN"), "access token from Wokko's settings, or WOKKO_TOKEN")
+	address := flags.String("url", "http://127.0.0.1:"+cfg.Port+"/mcp", "address of Wokko's /mcp")
+	if err := flags.Parse(args); err != nil {
+		return err
+	}
+	if *token == "" {
+		return errors.New("usage: wokko mcp-stdio --token <token> [--url <address>]")
+	}
+	client := &http.Client{Timeout: time.Minute}
+	lines := bufio.NewScanner(in)
+	lines.Buffer(make([]byte, 1<<20), 16<<20)
+	for lines.Scan() {
+		req, err := http.NewRequest(http.MethodPost, *address, bytes.NewReader(lines.Bytes()))
+		if err != nil {
+			return err
+		}
+		req.Header.Set("Authorization", "Bearer "+*token)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Accept", "application/json, text/event-stream")
+		res, err := client.Do(req)
+		if err != nil {
+			return fmt.Errorf("can't reach Wokko at %s: %w", *address, err)
+		}
+		body, err := io.ReadAll(res.Body)
+		res.Body.Close()
+		if err != nil {
+			return err
+		}
+		switch {
+		case res.StatusCode == http.StatusUnauthorized:
+			return errors.New("Wokko didn't accept this token")
+		case res.StatusCode == http.StatusNotFound:
+			return errors.New("MCP is switched off in Wokko's admin settings")
+		case res.StatusCode >= 300:
+			return fmt.Errorf("Wokko answered with status %d", res.StatusCode)
+		}
+		if len(bytes.TrimSpace(body)) > 0 {
+			if _, err := fmt.Fprintf(out, "%s\n", bytes.TrimSpace(body)); err != nil {
+				return err
+			}
+		}
+	}
+	return lines.Err()
 }
 
 func restore(cfg config.Config, args []string) error {

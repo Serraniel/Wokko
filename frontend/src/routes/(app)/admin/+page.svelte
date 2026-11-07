@@ -203,6 +203,10 @@
 				<span><span class="block font-medium">{t('admin.allow_public')}</span><span class="block text-sm text-muted">{t('admin.allow_public_hint')}</span></span>
 				<input type="checkbox" class="h-5 w-5 shrink-0 accent-[var(--brand)]" bind:checked={settings.allow_public} onchange={saveSettings} />
 			</label>
+			<label class="flex items-center justify-between gap-3 py-2">
+				<span><span class="block font-medium">{t('admin.mcp')}</span><span class="block text-sm text-muted">{t('admin.mcp_hint')}</span></span>
+				<input id="mcp-enabled" type="checkbox" class="h-5 w-5 shrink-0 accent-[var(--brand)]" bind:checked={settings.mcp_enabled} onchange={saveSettings} />
+			</label>
 		</section>
 	{/if}
 </div>
