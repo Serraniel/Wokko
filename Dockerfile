@@ -1,6 +1,6 @@
 # One image holds everything: the frontend is embedded in the Go binary.
 # Both build stages run natively and cross-compile, so an ARM64 image needs no slow emulation.
-FROM --platform=$BUILDPLATFORM node:24-alpine AS frontend
+FROM --platform=$BUILDPLATFORM node:25-alpine AS frontend
 WORKDIR /src/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
