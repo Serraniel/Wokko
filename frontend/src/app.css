@@ -1,0 +1,269 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* Colors exist once, as tokens. Components never name a raw color, so both themes stay in step. */
+:root {
+	color-scheme: light;
+	--bg: #fbf7f2;
+	--surface: #ffffff;
+	--surface-2: #f4eee7;
+	--line: #e8e0d6;
+	--ink: #231c18;
+	--muted: #75695f;
+	--brand: #c0392b;
+	--brand-hover: #a93226;
+	--brand-ink: #ffffff;
+	--brand-soft: #fbe9e6;
+	--brand-soft-ink: #96281b;
+	--flame: #d76d12;
+	--ok: #1e7f4f;
+	--ok-soft: #e3f4ea;
+	--warn: #9a5b00;
+	--warn-soft: #fdf0d8;
+	--danger: #b3261e;
+	--danger-soft: #fbe6e4;
+	--shadow: 0 1px 2px rgb(58 40 25 / 0.06), 0 6px 20px rgb(58 40 25 / 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+		--bg: #141110;
+		--surface: #1e1a18;
+		--surface-2: #2a2522;
+		--line: #39322d;
+		--ink: #f5eee7;
+		--muted: #ab9f95;
+		--brand: #e2574a;
+		--brand-hover: #ec6b5e;
+		--brand-ink: #1b0f0d;
+		--brand-soft: #3a1f1b;
+		--brand-soft-ink: #f6a79e;
+		--flame: #f0953f;
+		--ok: #5cc48e;
+		--ok-soft: #17301f;
+		--warn: #efb45a;
+		--warn-soft: #362710;
+		--danger: #f28b82;
+		--danger-soft: #3b1c19;
+		--shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.3);
+	}
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--bg: #141110;
+	--surface: #1e1a18;
+	--surface-2: #2a2522;
+	--line: #39322d;
+	--ink: #f5eee7;
+	--muted: #ab9f95;
+	--brand: #e2574a;
+	--brand-hover: #ec6b5e;
+	--brand-ink: #1b0f0d;
+	--brand-soft: #3a1f1b;
+	--brand-soft-ink: #f6a79e;
+	--flame: #f0953f;
+	--ok: #5cc48e;
+	--ok-soft: #17301f;
+	--warn: #efb45a;
+	--warn-soft: #362710;
+	--danger: #f28b82;
+	--danger-soft: #3b1c19;
+	--shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.3);
+}
+
+@theme inline {
+	--color-bg: var(--bg);
+	--color-surface: var(--surface);
+	--color-surface-2: var(--surface-2);
+	--color-line: var(--line);
+	--color-ink: var(--ink);
+	--color-muted: var(--muted);
+	--color-brand: var(--brand);
+	--color-brand-hover: var(--brand-hover);
+	--color-brand-ink: var(--brand-ink);
+	--color-brand-soft: var(--brand-soft);
+	--color-brand-soft-ink: var(--brand-soft-ink);
+	--color-flame: var(--flame);
+	--color-ok: var(--ok);
+	--color-ok-soft: var(--ok-soft);
+	--color-warn: var(--warn);
+	--color-warn-soft: var(--warn-soft);
+	--color-danger: var(--danger);
+	--color-danger-soft: var(--danger-soft);
+	--shadow-card: var(--shadow);
+	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: transparent;
+}
+
+body {
+	background: var(--bg);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: 1rem;
+	line-height: 1.5;
+	min-height: 100dvh;
+	overscroll-behavior-y: none;
+}
+
+@layer base {
+	:focus-visible {
+		outline: 2px solid var(--brand);
+		outline-offset: 2px;
+	}
+}
+
+@layer components {
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		padding: 0 1rem;
+		border-radius: 0.75rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		white-space: nowrap;
+		cursor: pointer;
+		user-select: none;
+		transition: background-color 120ms, transform 80ms, opacity 120ms;
+	}
+	.btn:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+	.btn:disabled {
+		opacity: 0.55;
+		cursor: default;
+	}
+	.btn-primary {
+		background: var(--brand);
+		color: var(--brand-ink);
+	}
+	.btn-primary:hover:not(:disabled) {
+		background: var(--brand-hover);
+	}
+	.btn-soft {
+		background: var(--surface-2);
+		color: var(--ink);
+	}
+	.btn-soft:hover:not(:disabled) {
+		background: var(--line);
+	}
+	.btn-ghost {
+		color: var(--ink);
+	}
+	.btn-ghost:hover:not(:disabled) {
+		background: var(--surface-2);
+	}
+	.btn-danger {
+		background: var(--danger-soft);
+		color: var(--danger);
+	}
+	.btn-icon {
+		width: 2.75rem;
+		padding: 0;
+	}
+	.input {
+		width: 100%;
+		min-height: 2.75rem;
+		padding: 0.5rem 0.75rem;
+		border-radius: 0.75rem;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		color: var(--ink);
+		/* 16px keeps iOS from zooming into the field on focus. */
+		font-size: 1rem;
+		transition: border-color 120ms, box-shadow 120ms;
+	}
+	.input::placeholder {
+		color: var(--muted);
+	}
+	.input:focus {
+		outline: none;
+		border-color: var(--brand);
+		box-shadow: 0 0 0 3px var(--brand-soft);
+	}
+	.label {
+		display: block;
+		margin-bottom: 0.375rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+	.hint {
+		margin-top: 0.25rem;
+		font-size: 0.8125rem;
+		color: var(--muted);
+	}
+	.card {
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: 1rem;
+	}
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		min-height: 2rem;
+		padding: 0 0.75rem;
+		border-radius: 999px;
+		background: var(--surface-2);
+		font-size: 0.875rem;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+	.chip-active {
+		background: var(--brand);
+		color: var(--brand-ink);
+	}
+	.skeleton {
+		background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 50%, var(--surface-2) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.3s linear infinite;
+		border-radius: 0.5rem;
+	}
+	.no-scrollbar {
+		scrollbar-width: none;
+	}
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@keyframes shimmer {
+	to {
+		background-position: -200% 0;
+	}
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
+
+.rise {
+	animation: rise 160ms ease-out;
+}
+
+/* Pages cross-fade quickly, which reads as instant without feeling abrupt. */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 110ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

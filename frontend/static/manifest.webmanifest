@@ -1,0 +1,10 @@
+{
+  "name": "Wokko",
+  "short_name": "Wokko",
+  "description": "Your recipes, on your own server.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf7f2",
+  "theme_color": "#c0392b",
+  "icons": [{ "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
