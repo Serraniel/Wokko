@@ -51,6 +51,23 @@ await step('scale servings', async () => {
   const after = await p.locator('section.card li').first().innerText();
   if (before === after) throw new Error('amount did not scale'); console.log('   ', JSON.stringify(before), '->', JSON.stringify(after));
 });
+await step('import pasted text into a draft, nothing saved until Save', async () => {
+  await p.goto(base + '/recipes/new'); await p.waitForSelector('#import-url'); await shot('20-import-panel');
+  await p.click('button:has-text("Paste the text instead")');
+  await p.fill('#import-text', 'Linsensuppe\n\nZutaten\n200 g Linsen\n2 Zwiebeln\n\nZubereitung\n1. Kochen.\n2. Pürieren.');
+  await p.click('section button:has-text("Import")'); await p.waitForSelector('text=Imported. Please check it');
+  if (await p.inputValue('#name') !== 'Linsensuppe') throw new Error('name not filled');
+  if (await p.locator('#import-url, #import-text').count()) throw new Error('panel should hide after importing');
+  if (await p.locator('input[aria-label="Ingredient"]').count() !== 2) throw new Error('ingredients not filled');
+  await shot('21-import-draft');
+  if (await p.inputValue('#visibility') !== 'private') throw new Error('imports must start private');
+  await p.click('form button:has-text("Save")'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('h1:has-text("Linsensuppe")');
+  await p.click('button[aria-label="Delete"]'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes');
+});
+await step('typing hides the import panel so it cannot overwrite work', async () => {
+  await p.goto(base + '/recipes/new'); await p.waitForSelector('#import-url'); await p.fill('#name', 'Mine');
+  await p.waitForSelector('#import-url', { state: 'detached' }); await p.evaluate(() => { for (const k of Object.keys(localStorage)) if (k.includes('draft')) localStorage.removeItem(k); });
+});
 await step('draft survives reload', async () => {
   await p.goto(base + '/recipes/new'); await p.fill('#name', 'Unsaved idea'); await p.waitForTimeout(600); await p.reload();
   await p.waitForSelector('text=You have unsaved changes'); await shot('06-draft');
@@ -107,10 +124,14 @@ await step('invite, register second user, no discovery', async () => {
 await step('photo upload', async () => {
   await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/); await p.click('a[aria-label="Edit"]'); await p.waitForSelector('#name');
   await p.setInputFiles('input[type=file]', photo); await p.click('form button:has-text("Save")'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('article img'); await p.waitForTimeout(300); await shot('15-recipe-photo');
-  await p.goto(base + '/recipes'); await p.waitForSelector('a.card img'); await p.waitForTimeout(300); await shot('16-recipes');
+  await p.goto(base + '/recipes'); await p.waitForSelector('a.recipe-card img'); await p.waitForTimeout(300); await shot('16-recipes');
 });
-await step('desktop layout', async () => {
+await step('desktop layout and command palette', async () => {
   await p.setViewportSize({ width: 1280, height: 800 }); await p.goto(base + '/recipes'); await p.waitForSelector('aside'); await p.waitForTimeout(200); await shot('17-desktop');
+  await p.keyboard.press('Control+k'); await p.waitForSelector('dialog[open] [role=combobox]'); await p.keyboard.type('My ver'); await p.waitForSelector('[role=option]:has-text("My version")'); await p.waitForTimeout(100); await shot('22-palette');
+  await p.keyboard.press('Enter'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('h1:has-text("My version")'); await p.waitForTimeout(150); await shot('23-recipe-desktop');
+  await p.keyboard.press('/'); await p.waitForSelector('dialog[open] [role=combobox]'); await p.keyboard.type('ingred'); await p.keyboard.press('Enter'); await p.waitForURL('**/ingredients');
+  await p.goto(base + '/recipes'); await p.waitForSelector('aside'); await p.keyboard.press('n'); await p.waitForURL('**/recipes/new');
 });
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {

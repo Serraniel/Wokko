@@ -4,7 +4,7 @@
   "description": "Your recipes, on your own server.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fbf7f2",
-  "theme_color": "#c0392b",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
   "icons": [{ "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
 }

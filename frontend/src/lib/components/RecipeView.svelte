@@ -13,6 +13,8 @@
 	});
 	const scale = $derived(recipe.servings > 0 ? servings / recipe.servings : 1);
 	const overview = $derived(combineIngredients(recipe.steps));
+	// When one step holds everything, as after an import, repeating the list there adds nothing.
+	const perStep = $derived(recipe.steps.length === 1 || recipe.steps.filter((s) => s.ingredients.length).length > 1);
 
 	function amountText(amount: number | null | undefined): string {
 		return amount === null || amount === undefined ? '' : formatNumber(roundAmount(amount * scale));
@@ -33,75 +35,81 @@
 	}
 </script>
 
-<article class="mx-auto w-full max-w-3xl">
-	{#if recipe.photo_url}
-		<img src={recipe.photo_url} alt="" class="aspect-[16/10] w-full bg-surface-2 object-cover sm:mt-4 sm:rounded-2xl" />
-	{/if}
-	<div class="space-y-5 p-4">
-		<header class="space-y-3">
-			<h1 class="text-2xl leading-tight font-bold sm:text-3xl">{recipe.name}</h1>
+<article class="mx-auto w-full max-w-6xl">
+	<!-- On a phone the photo runs edge to edge. With room to spare it sits beside the title. -->
+	<div class="lg:grid lg:items-center lg:gap-8 lg:p-6 {recipe.photo_url ? 'lg:grid-cols-[minmax(0,1fr)_26rem]' : ''}">
+		{#if recipe.photo_url}
+			<img src={recipe.photo_url} alt="" class="aspect-[16/10] w-full bg-surface-2 object-cover lg:order-2 lg:rounded-2xl" />
+		{/if}
+		<header class="space-y-3 p-4 lg:p-0">
+			<h1 class="text-2xl leading-tight font-semibold lg:text-4xl">{recipe.name}</h1>
 			{#if recipe.description}<p class="whitespace-pre-line text-muted">{recipe.description}</p>{/if}
 			<div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-				{#if recipe.work_minutes}<span class="inline-flex items-center gap-1.5"><Clock size={16} />{t('recipe.work_short', { time: formatMinutes(recipe.work_minutes) })}</span>{/if}
-				{#if recipe.wait_minutes}<span class="inline-flex items-center gap-1.5"><Hourglass size={16} />{t('recipe.wait_short', { time: formatMinutes(recipe.wait_minutes) })}</span>{/if}
-				{#if recipe.rating}<span class="inline-flex items-center gap-1.5"><Star size={16} class="fill-flame text-flame" />{recipe.rating.toFixed(1)}</span>{/if}
+				{#if recipe.work_minutes}<span class="inline-flex items-center gap-1.5"><Clock size={15} />{t('recipe.work_short', { time: formatMinutes(recipe.work_minutes) })}</span>{/if}
+				{#if recipe.wait_minutes}<span class="inline-flex items-center gap-1.5"><Hourglass size={15} />{t('recipe.wait_short', { time: formatMinutes(recipe.wait_minutes) })}</span>{/if}
+				{#if recipe.rating}<span class="inline-flex items-center gap-1.5"><Star size={15} class="fill-flame text-flame" />{recipe.rating.toFixed(1)}</span>{/if}
 				{#if recipe.last_cooked}<span>{t('recipe.last_cooked', { date: formatDate(recipe.last_cooked) })}</span>{/if}
 			</div>
 			{#if recipe.keywords.length}
 				<div class="flex flex-wrap gap-1.5">
-					{#each recipe.keywords as k (k.id)}<span class="chip">{k.name}</span>{/each}
+					{#each recipe.keywords as k (k.id)}<span class="chip !min-h-7">{k.name}</span>{/each}
 				</div>
 			{/if}
 			{#if actions}<div class="flex flex-wrap gap-2">{@render actions()}</div>{/if}
 		</header>
+	</div>
 
+	<!-- Ingredients stay beside the steps while scrolling, for cooking at a laptop or tablet. -->
+	<div class="space-y-6 px-4 pb-4 lg:grid lg:grid-cols-[22rem_minmax(0,1fr)] lg:items-start lg:gap-8 lg:space-y-0 lg:px-6 lg:pb-6">
 		{#if overview.length}
-			<section class="card p-4">
-				<div class="mb-3 flex items-center justify-between gap-3">
-					<h2 class="text-lg font-semibold">{t('recipe.ingredients')}</h2>
+			<section class="card p-4 lg:sticky lg:top-4">
+				<div class="mb-2 flex items-center justify-between gap-3">
+					<h2 class="font-semibold">{t('recipe.ingredients')}</h2>
 					<div class="flex items-center gap-1" role="group" aria-label={t('recipe.servings')}>
-						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => (servings = Math.max(1, servings - 1))} aria-label={t('recipe.fewer_servings')}><Minus size={16} /></button>
-						<span class="inline-flex min-w-14 items-center justify-center gap-1 text-sm font-semibold tabular-nums" aria-live="polite"><Users size={15} />{servings}</span>
-						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => servings++} aria-label={t('recipe.more_servings')}><Plus size={16} /></button>
+						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => (servings = Math.max(1, servings - 1))} aria-label={t('recipe.fewer_servings')}><Minus size={15} /></button>
+						<span class="inline-flex min-w-11 items-center justify-center gap-1 text-sm font-semibold tabular-nums" aria-live="polite"><Users size={14} />{servings}</span>
+						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => servings++} aria-label={t('recipe.more_servings')}><Plus size={15} /></button>
 					</div>
 				</div>
-				<ul class="divide-y divide-line">
+				<ul class="divide-y divide-line text-sm">
 					{#each overview as i (i.key)}
-						<li class="flex items-baseline gap-3 py-2">
-							<span class="w-24 shrink-0 text-right font-semibold tabular-nums">{amountText(i.amount)} {unitText(i.unit, i.amount)}</span>
-							<span class="min-w-0">{foodText(i.name, i.plural, i.amount)}{#if i.notes.length}<span class="text-sm text-muted">, {i.notes.join('; ')}</span>{/if}</span>
+						<li class="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 py-2">
+							<span class="text-right font-semibold tabular-nums">{amountText(i.amount)} {unitText(i.unit, i.amount)}</span>
+							<span>{foodText(i.name, i.plural, i.amount)}{#if i.notes.length}<span class="text-muted">, {i.notes.join('; ')}</span>{/if}</span>
 						</li>
 					{/each}
 				</ul>
 			</section>
 		{/if}
 
-		{#if recipe.steps.length}
-			<section class="space-y-4">
-				<h2 class="text-lg font-semibold">{t('recipe.steps')}</h2>
-				<ol class="space-y-4">
-					{#each recipe.steps as step, n (step.id)}
-						<li class="flex gap-3">
-							<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand-soft-ink">{n + 1}</span>
-							<div class="min-w-0 flex-1 space-y-2 pt-0.5">
-								{#if step.name}<h3 class="font-semibold">{step.name}</h3>{/if}
-								{#if step.ingredients.length}
-									<ul class="flex flex-wrap gap-1.5">
-										{#each step.ingredients as ing (ing.id)}<li class="rounded-lg bg-surface-2 px-2 py-0.5 text-sm">{line(ing)}{#if ing.note}<span class="text-muted">, {ing.note}</span>{/if}</li>{/each}
-									</ul>
-								{/if}
-								{#if step.instruction}<p class="whitespace-pre-line">{step.instruction}</p>{/if}
-								{#if step.minutes}<p class="inline-flex items-center gap-1 text-sm text-muted"><Clock size={14} />{formatMinutes(step.minutes)}</p>{/if}
-							</div>
-						</li>
-					{/each}
-				</ol>
-			</section>
-		{/if}
+		<div class="space-y-6 {overview.length ? '' : 'lg:col-span-2'}">
+			{#if recipe.steps.length}
+				<section class="space-y-3">
+					<h2 class="font-semibold">{t('recipe.steps')}</h2>
+					<ol class="space-y-5">
+						{#each recipe.steps as step, n (step.id)}
+							<li class="flex gap-3">
+								<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface-2 text-xs font-semibold tabular-nums">{n + 1}</span>
+								<div class="min-w-0 flex-1 space-y-1.5">
+									{#if step.name}<h3 class="font-semibold">{step.name}</h3>{/if}
+									{#if step.instruction}<p class="whitespace-pre-line leading-relaxed">{step.instruction}</p>{/if}
+									{#if perStep && step.ingredients.length}
+										<ul class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+											{#each step.ingredients as ing (ing.id)}<li>{line(ing)}{#if ing.note}, {ing.note}{/if}</li>{/each}
+										</ul>
+									{/if}
+									{#if step.minutes}<p class="inline-flex items-center gap-1 text-xs text-muted"><Clock size={12} />{formatMinutes(step.minutes)}</p>{/if}
+								</div>
+							</li>
+						{/each}
+					</ol>
+				</section>
+			{/if}
 
-		{#if recipe.source_url}
-			<a href={recipe.source_url} rel="noopener noreferrer nofollow" target="_blank" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand underline-offset-2 hover:underline"><ExternalLink size={15} />{t('recipe.source')}</a>
-		{/if}
-		{#if footer}{@render footer()}{/if}
+			{#if recipe.source_url}
+				<a href={recipe.source_url} rel="noopener noreferrer nofollow" target="_blank" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted underline-offset-2 hover:text-ink hover:underline"><ExternalLink size={14} />{t('recipe.source')}</a>
+			{/if}
+			{#if footer}{@render footer()}{/if}
+		</div>
 	</div>
 </article>

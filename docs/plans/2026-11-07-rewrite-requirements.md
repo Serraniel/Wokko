@@ -419,10 +419,12 @@ The goal is stability. PostgreSQL is an excellent engine, and nothing suggests i
 |---|---|
 | Data safety (section 3) | Done: DS-1 to DS-15, DS-17 to DS-25. DS-16 and DS-22 no longer apply. Version history is in the API, without a UI yet |
 | Accounts (A) | Done, except passkeys (A-3) |
-| Recipes (R) | Done, except URL import (R-13), recipe books (R-17), Tandoor transfer (R-14) and fractions (R-15). R-12 is left to kitshn |
+| Recipes (R) | Done, except recipe books (R-17), Tandoor transfer (R-14) and fractions (R-15). R-12 is left to kitshn |
 | Ingredients and units (I) | Done, except I-8 and I-9 |
 | Sharing (S) | Done, except the all-recipes link (S-5) |
 | Language and UI (U) | Done, except mascot eyes (U-10) |
 | kitshn (K) | Read access, login, search, photos and cook log are in, with contract tests. **K-1 is unproven: it hasn't run against the real app yet.** Writing from kitshn isn't done |
 | Meal plans, shopping lists, nutrition (P, L, F) | Not started. kitshn gets empty lists |
-| MCP (X-2, X-3) | Not started |
+| MCP (X-2, X-3) | Planned, not started: `2026-11-07-ai-integrations.md` |
+| URL import (R-13) | Done in the web app: schema.org data, microdata, page layout and pasted text. Not offered through kitshn's `/recipe-from-source/` yet |
+| UI overhaul | Done: `2026-11-07-ui-overhaul.md` |

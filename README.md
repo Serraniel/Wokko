@@ -7,6 +7,7 @@ Your recipes, on your own server. A self-hosted recipe manager built to be simpl
 ## Features
 
 - **Recipes:** steps with their own ingredients, photos, tags, serving scaling, search and cook log
+- **Import:** from a link to most recipe sites and blogs, or from pasted text, with a draft to check before saving
 - **Your data is safe:** automatic verified backups, trash, version history and all-or-nothing saves
 - **Any language:** English and German included, and adding another takes one file
 - **Households and sharing:** share with a household, with friends, by link or publicly
