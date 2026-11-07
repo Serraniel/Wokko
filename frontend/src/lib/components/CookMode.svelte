@@ -184,7 +184,7 @@
 		</ul>
 	{/if}
 
-	<main class="min-h-0 flex-1 overflow-y-auto p-5" ontouchstart={(e) => (swipeFrom = e.touches[0].clientX)} ontouchend={swipeEnd}>
+	<div role="presentation" class="min-h-0 flex-1 overflow-y-auto p-5" ontouchstart={(e) => (swipeFrom = e.touches[0].clientX)} ontouchend={swipeEnd}>
 		<div class="mx-auto max-w-2xl space-y-5">
 			{#if showAll}
 				<div class="flex items-center justify-between gap-2">
@@ -227,7 +227,7 @@
 				{/if}
 			{/if}
 		</div>
-	</main>
+	</div>
 
 	<footer class="grid grid-cols-[auto_1fr] gap-2 border-t border-line p-3">
 		<button class="btn btn-soft !min-h-14 !w-16" disabled={index === 0} aria-label={t('cook.prev')} onclick={() => move(-1)}><ChevronLeft size={24} /></button>

@@ -65,7 +65,7 @@
 {#if session.user}
 	<div class="flex min-h-dvh">
 		<!-- Desktop: a fixed side rail. -->
-		<aside class="print-hide sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-0.5 border-r border-line p-2.5 md:flex">
+		<aside class="print-hide sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-line p-2.5 md:flex">
 			<a href="/recipes" class="mb-2 flex items-center gap-2 px-2 py-1.5 font-semibold tracking-tight"><Logo size={24} />Wokko</a>
 			<button class="mb-2 flex h-9 items-center gap-2 rounded-lg bg-surface px-2.5 text-sm text-muted ring-1 ring-line ring-inset hover:bg-surface-2" onclick={() => (paletteOpen = true)}>
 				<Search size={15} /><span class="min-w-0 flex-1 truncate text-left">{t('palette.open')}</span><span class="kbd">{isMac ? '⌘K' : 'Ctrl K'}</span>

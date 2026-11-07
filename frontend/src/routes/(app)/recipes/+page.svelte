@@ -83,9 +83,9 @@
 	<div class="sticky top-0 z-20 -mx-4 space-y-2 bg-bg/90 px-4 pt-3 pb-2 backdrop-blur-lg md:-mx-6 md:px-6 md:pt-4">
 		<header class="flex items-center justify-between gap-2">
 			<h1 class="flex items-baseline gap-2 text-xl font-semibold">{t('nav.recipes')}{#if page && !filtered && page.total}<span class="text-sm font-normal text-muted tabular-nums">{page.total}</span>{/if}</h1>
-			<div class="flex items-center gap-1">
-				<a class="btn btn-ghost btn-icon text-muted" href="/trash" aria-label={t('trash.title')}><Trash2 size={18} /></a>
-				<select class="input !min-h-9 !w-auto !py-0 !text-sm" bind:value={sort} onchange={load} aria-label={t('recipes.sort')}>
+			<div class="flex min-w-0 items-center gap-1">
+				<a class="btn btn-ghost btn-icon shrink-0 text-muted" href="/trash" aria-label={t('trash.title')}><Trash2 size={18} /></a>
+				<select class="input !min-h-9 !w-auto max-w-36 !py-0 !text-sm" bind:value={sort} onchange={load} aria-label={t('recipes.sort')}>
 					<option value="updated">{t('recipes.sort_updated')}</option>
 					<option value="name">{t('recipes.sort_name')}</option>
 					<option value="created">{t('recipes.sort_created')}</option>
