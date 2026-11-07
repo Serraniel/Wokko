@@ -49,6 +49,7 @@
     ".": {
       "extra-files": [
         "docker-compose.yml",
+        "docker-compose.example.yml",
         ".env.example",
         {
           "type": "json",

@@ -426,3 +426,4 @@ The goal is stability. PostgreSQL is an excellent engine, and nothing suggests i
 | kitshn (K) | All of kitshn 2.1.5's API is covered with contract tests, apart from AI import, which fails cleanly. K-1 is met: on 2026-11-07 the Play Store app logged in and loaded recipes on the owner's phone, and a capture showed every call answered with 200. Writing from the app has contract tests but hasn't been tried on the phone |
 | Meal plans, shopping lists, nutrition (P, L, F) | Done on the web, in kitshn and through MCP. Starting nutrition comes from USDA FoodData Central SR Legacy (CC0) for 160 of the 163 foods |
 | MCP (X-2, X-3) | Done: `2026-11-07-ai-integrations.md` |
+| Beyond the original list | Offline use, share to Wokko and imports from other apps: `2026-11-07-offline-share-import.md`. Printing and live cooking on shared links. Further ideas: `2026-11-07-ideas.md` |
