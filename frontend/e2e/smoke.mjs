@@ -150,13 +150,32 @@ await step('cooking mode, history and fractions', async () => {
   await p.goto(base + '/settings'); await p.selectOption('#amounts', 'fraction');
   await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/);
   await p.waitForSelector('section.card li:has-text("1½")');
-  await p.click('a:has-text("Cook")'); await p.waitForURL(/cook$/); await p.waitForSelector('text=Step 1 of 2'); await shot('27-cook');
-  await p.click('button:has-text("Next step")'); await p.waitForSelector('text=Step 2 of 2'); await p.click('a:has-text("Done")'); await p.waitForSelector('dialog[open] >> text=Your rating'); await p.click('dialog[open] button[aria-label="Close"]');
+  await p.click('a:has-text("Cook")'); await p.waitForURL(/cook\?/); await p.waitForSelector('text=Step 1 of 2'); await shot('27-cook');
+  await p.click('button:has-text("Next step")'); await p.waitForSelector('text=Step 2 of 2'); await p.click('button:has-text("Done")'); await p.waitForSelector('dialog[open] >> text=Your rating'); await p.click('dialog[open] button[aria-label="Close"]');
   await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Version history")'); await p.waitForSelector('dialog[open] button:has-text("Restore")'); await shot('28-history'); await p.click('dialog[open] button[aria-label="Close"]');
   await p.goto(base + '/settings'); await p.selectOption('#amounts', 'decimal');
   await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Link to your recipes"]');
   const link = await p.inputValue('input[aria-label="Link to your recipes"]'); const anon = await b.newContext({ viewport: { width: 390, height: 844 } }); const a = await anon.newPage();
   await a.goto(base + new URL(link, base).pathname); await a.waitForSelector('a.recipe-card:has-text("My version")'); await anon.close();
+});
+await step('live cooking and printing with only a share link', async () => {
+  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/); await p.click('button[aria-label="Share"]'); await p.waitForSelector('text=Who can see this');
+  await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Share link"]'); const url = await p.inputValue('input[aria-label="Share link"]'); await p.click('dialog button[aria-label="Close"]');
+  const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const a = await anon.newPage();
+  const path = new URL(url, base).pathname;
+  await a.goto(base + path); await a.waitForSelector('button:has-text("Print")'); await a.click('button[aria-label="More servings"]'); await a.emulateMedia({ media: 'print' }); await a.waitForTimeout(100); await a.screenshot({ path: `${shots}/32-print.png`, fullPage: true });
+  if (await a.locator('button:has-text("Print")').isVisible()) throw new Error('the print button should not print');
+  await a.emulateMedia({ media: 'screen' });
+  await a.click('a:has-text("Cook")'); await a.waitForURL(/\/cook\?servings=5/); await a.waitForSelector('text=Step 1 of 2'); await a.waitForSelector('button:has-text("2.5")');
+  await a.click('button:has-text("onion")'); await a.click('button[aria-label="All ingredients"]'); await a.waitForSelector('input[type=checkbox]');
+  await a.click('button[aria-label="All ingredients"]'); await a.click('button:has-text("Next step")'); await a.waitForSelector('text=Step 2 of 2'); await a.screenshot({ path: `${shots}/33-cook-shared.png` });
+  await a.reload(); await a.waitForSelector('text=Step 2 of 2');
+  await a.click('button:has-text("Done")'); await a.waitForURL(new RegExp(path + '$')); await anon.close();
+});
+await step('footer, changelog and licenses without an account', async () => {
+  const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US' }); const a = await anon.newPage();
+  await a.goto(base + '/login'); await a.waitForSelector('footer a:has-text("GitHub")'); await a.click('footer a:has-text("Third-party notices")'); await a.waitForURL('**/licenses'); await a.waitForSelector('pre:has-text("EUPL-1.2")'); await a.waitForSelector('pre:has-text("go-webauthn")'); await a.waitForSelector('pre:has-text("Permission is hereby granted")'); await a.waitForSelector('pre:has-text("svelte")');
+  await a.goto(base + '/changelog'); await a.waitForSelector('h2:has-text("0.1.0")'); await a.waitForSelector('footer'); await a.screenshot({ path: `${shots}/34-changelog.png` }); await anon.close();
 });
 await step('assistant access: admin switch, token and app approval', async () => {
   await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');

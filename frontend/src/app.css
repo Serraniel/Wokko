@@ -336,6 +336,52 @@ h3 {
 	animation: appear 150ms ease-out 400ms backwards;
 }
 
+.print-only {
+	display: none;
+}
+
+/* Paper is always light, whichever theme is on screen, and carries only the recipe. */
+@media print {
+	:root,
+	:root:not([data-theme='light']),
+	:root[data-theme='dark'] {
+		color-scheme: light !important;
+		--bg: #ffffff !important;
+		--surface: #ffffff !important;
+		--surface-2: #f2f2f2 !important;
+		--line: #cccccc !important;
+		--ink: #000000 !important;
+		--muted: #444444 !important;
+	}
+	.print-hide,
+	dialog,
+	[role='status'] {
+		display: none !important;
+	}
+	.print-only {
+		display: block;
+	}
+	main {
+		padding: 0 !important;
+	}
+	.recipe-photo {
+		max-height: 6cm;
+		width: auto !important;
+		border-radius: 0.5rem;
+	}
+	article li,
+	article section {
+		break-inside: avoid;
+	}
+	article h1 {
+		font-size: 1.5rem;
+	}
+	article a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	* {
 		animation-duration: 0.01ms !important;

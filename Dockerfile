@@ -4,7 +4,7 @@ WORKDIR /src/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY frontend/ ./
-COPY backend/go.mod ../backend/go.mod
+COPY CHANGELOG.md ../CHANGELOG.md
 RUN npm run build
 
 FROM golang:1.26-alpine AS backend
@@ -14,6 +14,7 @@ COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 COPY backend/ ./
 COPY --from=frontend /src/frontend/build/ internal/web/dist/
+RUN go run ./cmd/notices internal/web/dist/third-party-notices.txt
 RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o /out/wokko ./cmd/wokko
 RUN mkdir -p /out/data /out/backups
 

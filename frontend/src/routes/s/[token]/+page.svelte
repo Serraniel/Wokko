@@ -30,7 +30,7 @@
 <PublicShell>
 	<ErrorNote text={error} />
 	{#if recipe}
-		<RecipeView {recipe} />
+		<RecipeView {recipe} cookHref="/s/{page.params.token}/cook" />
 	{:else if missing}
 		<div class="flex flex-col items-center gap-3 p-10 text-center">
 			<Mascot />

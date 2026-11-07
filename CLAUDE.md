@@ -34,6 +34,9 @@ Use Conventional Commits with these scopes:
 - `chore(infra)` — Docker, CI, dependencies
 - `chore(ci)` — GitHub Actions workflows
 
+## Releases
+release-please reads Conventional Commits on `main`: `fix` bumps the patch, `feat` the minor version while before 1.0, and `feat!` the major one after. Merging its release PR tags the release, updates `CHANGELOG.md` and publishes the image. Never edit versions or the changelog by hand.
+
 ## ALWAYS
 - Use `git -c commit.gpgsign=false commit` for ALL commits (no GPG signing ever)
 - Run tests before committing: `make test`

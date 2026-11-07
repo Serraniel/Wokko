@@ -475,5 +475,10 @@
   "err.invalid_client": "Diese App ist unbekannt. Bitte starte noch einmal aus der App.",
   "err.invalid_redirect_uri": "Die Rücksprungadresse dieser App ist nicht erlaubt.",
   "err.invalid_request": "Diese App hat keine sichere Anmeldung verwendet.",
-  "err.bad_scope": "Unbekannte Zugriffsstufe."
+  "err.bad_scope": "Unbekannte Zugriffsstufe.",
+  "cook.timer_done_named": "Die Zeit ist um: {name}",
+  "cook.timer_label": "Schritt {step}, {time}",
+  "cook.timers": "Laufende Timer",
+  "changelog.releases": "Alle Versionen auf GitHub",
+  "recipe.print": "Drucken"
 }
