@@ -71,7 +71,7 @@
 				<label class="label" for="token-name">{t('assistant.name')}</label>
 				<input id="token-name" class="input" bind:value={name} required maxlength="100" placeholder={t('assistant.name_placeholder')} />
 			</div>
-			<div class="grid grid-cols-2 gap-2">
+			<div class="grid gap-2 sm:grid-cols-2">
 				<div>
 					<label class="label" for="token-scope">{t('assistant.scope')}</label>
 					<select id="token-scope" class="input" bind:value={scope}>

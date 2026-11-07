@@ -8,6 +8,12 @@ Your recipes, on your own server. A self-hosted recipe manager built to be simpl
 
 - **Recipes:** steps with their own ingredients, photos, tags, serving scaling, search and cook log
 - **Import:** from a link to most recipe sites and blogs, or from pasted text, with a draft to check before saving
+- **Meal plans and shopping:** plan the week, add it to a shared shopping list, and sort that list by aisle for each shop
+- **Cooking mode:** one step at a time in big text, with timers, keeping the screen on where the browser allows it
+- **Recipe books and nutrition:** group recipes, and see estimates per serving from public-domain USDA data
+- **kitshn:** use the kitshn mobile app, including creating and editing
+- **AI assistants, if you want them:** connect Claude or another MCP client. Wokko itself never calls an AI
+- **Passkeys:** log in with a fingerprint or device PIN, on HTTPS or localhost
 - **Your data is safe:** automatic verified backups, trash, version history and all-or-nothing saves
 - **Any language:** English and German included, and adding another takes one file
 - **Households and sharing:** share with a household, with friends, by link or publicly
@@ -62,13 +68,23 @@ A backup is a normal `tar.gz` with a SQLite database and your photos. Each user 
 
 ## Using kitshn
 
-Enter your Wokko address and log in with your handle and password. Written against kitshn 2.1.5.
+In kitshn, enter the address your phone can reach Wokko at, such as `http://192.168.1.20:8080`, and log in with your handle and password. `localhost` won't work there, because on a phone that means the phone itself. Written against kitshn 2.1.5.
 
-| Works | Not yet |
+Recipes, photos, search and filters, cook logs, meal plans, shopping lists, recipe books, nutrition and importing from a link all work, including creating and editing.
+
+These Tandoor features aren't in Wokko: AI import, shopping lists split into several named lists, and sharing a book with one person (books are shared with your household). Food names can only be edited in the web app, where every language is visible at once.
+
+## Connecting an AI assistant
+
+Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Settings > AI assistants**.
+
+Create a token under **Settings > AI assistants**, then connect:
+
+| Client | How |
 |---|---|
-| Log in, browse, search and filter by tag | Creating or editing recipes from kitshn |
-| Cook from a recipe, with photos and scaling | Meal plans and shopping lists (shown empty) |
-| Log a cook with a rating | Other Tandoor search filters, such as by rating |
+| Claude Code, on the same network | `claude mcp add --transport http wokko http://your-server:8080/mcp --header "Authorization: Bearer <token>"` |
+| Claude Desktop, or anything that starts a local MCP server | Run `docker exec -i wokko /wokko mcp-stdio --token <token>` as its command. On another computer, use the first row's address with `/wokko mcp-stdio --url` |
+| Claude on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set |
 
 ## Adding a language
 
