@@ -173,7 +173,7 @@
 		<div class={recipe.photo_url ? '' : 'pt-12 md:pt-0'}>
 			<RecipeView {recipe} cookHref="/recipes/{recipe.id}/cook">
 				{#snippet actions()}
-										<button class="btn btn-soft flex-1 sm:flex-none" onclick={() => (cookOpen = true)}><CookingPot size={17} />{t('recipe.cooked_it')}</button>
+										<button class="btn btn-soft !px-3 sm:!px-3.5" aria-label={t('recipe.cooked_it')} onclick={() => (cookOpen = true)}><CookingPot size={17} /><span class="hidden sm:inline">{t('recipe.cooked_it')}</span></button>
 					{#if recipe?.can_edit}<a class="btn btn-soft" href="/recipes/{recipe.id}/edit" aria-label={t('common.edit')}><Pencil size={18} /><span class="hidden sm:inline">{t('common.edit')}</span></a>{/if}
 					{#if recipe?.can_manage}
 						<button class="btn btn-soft" onclick={() => (shareOpen = true)} aria-label={t('share.button')}><Share2 size={18} /><span class="hidden sm:inline">{t('share.button')}</span></button>
@@ -185,7 +185,7 @@
 						<section class="card p-4" aria-labelledby="nutrition-title">
 							<h2 id="nutrition-title" class="mb-2 font-semibold">{t('recipe.nutrition')}</h2>
 							<table class="w-full text-sm">
-								<thead><tr class="text-left text-xs text-muted"><th class="font-medium"></th><th class="text-right font-medium">{t('recipe.per_serving')}</th><th class="text-right font-medium">{t('recipe.total')}</th></tr></thead>
+								<thead><tr class="text-left text-xs text-muted"><th class="font-medium"><span class="sr-only">{t('recipe.nutrition')}</span></th><th class="text-right font-medium">{t('recipe.per_serving')}</th><th class="text-right font-medium">{t('recipe.total')}</th></tr></thead>
 								<tbody class="divide-y divide-line">
 									{#each nutrition.nutrients as n (n.nutrient.id)}
 										<tr><td class="py-1.5">{n.nutrient.name}</td><td class="py-1.5 text-right font-medium tabular-nums">{formatNumber(Math.round(n.per_serving * 10) / 10)} {n.nutrient.unit}</td><td class="py-1.5 text-right text-muted tabular-nums">{formatNumber(Math.round(n.total))} {n.nutrient.unit}</td></tr>
