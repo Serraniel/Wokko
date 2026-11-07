@@ -3,6 +3,7 @@ module github.com/serraniel/wokko/backend
 go 1.26.0
 
 require (
+	github.com/descope/virtualwebauthn v1.0.5
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	golang.org/x/crypto v0.58.0
@@ -13,7 +14,6 @@ require (
 )
 
 require (
-	github.com/descope/virtualwebauthn v1.0.5 // indirect
 	github.com/dustin/go-humanize v1.1.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.4 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect

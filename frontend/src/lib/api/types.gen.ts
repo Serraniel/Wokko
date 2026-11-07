@@ -491,3 +491,26 @@ export interface OAuthApproval {
 export interface OAuthRedirect {
   redirect_url: string;
 }
+/**
+ * FileImportItem is one recipe found in an uploaded file.
+ */
+export interface FileImportItem {
+  name: string;
+  format: string;
+  steps: number /* int64 */;
+  ingredients: number /* int64 */;
+  has_photo: boolean;
+  duplicate: boolean;
+  /**
+   * RecipeID is set once saved, and Error says why a recipe couldn't be.
+   */
+  recipe_id: number /* int64 */;
+  photo_failed: boolean;
+  error: string;
+}
+export interface FileImportResult {
+  items: FileImportItem[];
+  imported: number /* int64 */;
+  skipped: number /* int64 */;
+  failed: number /* int64 */;
+}
