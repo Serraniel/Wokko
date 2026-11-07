@@ -152,7 +152,11 @@ See `CLAUDE.md` for conventions. Contributions are welcome: please use [Conventi
 
 ### Releases
 
-Versions follow [semantic versioning](https://semver.org), and [release-please](https://github.com/googleapis/release-please) works them out from the commit messages on `main`. It keeps a release PR open with the next version and changelog. Merging that PR tags the release and publishes the image for x86-64 and ARM64. The changelog is in [`CHANGELOG.md`](CHANGELOG.md), and in the app under **Changelog** in the footer.
+Versions follow [semantic versioning](https://semver.org), and [release-please](https://github.com/googleapis/release-please) works them out from the commit messages on `main`. It keeps a release PR open with the next version and changelog. Merging that PR tags the release and publishes the image for x86-64 and ARM64.
+
+Each [release](https://github.com/Serraniel/Wokko/releases) also has software bills of materials in SPDX and CycloneDX format, for the source and for each image, along with the third-party licenses, the image digest and checksums. To check that an image was really built here, run `gh attestation verify oci://ghcr.io/serraniel/wokko:<version> --owner Serraniel`.
+
+The changelog is in [`CHANGELOG.md`](CHANGELOG.md), and in the app under **Changelog** in the footer.
 
 ## License
 

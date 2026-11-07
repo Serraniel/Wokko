@@ -2,7 +2,7 @@ name: Release
 
 # Conventional Commits on main decide the next version (fix: patch, feat: minor before 1.0).
 # release-please keeps a release PR open with the version and changelog. Merging it tags the
-# release, which then publishes the image.
+# release, which then publishes the image and attaches SBOMs and licenses to the release.
 on:
   push:
     branches: [main]
@@ -30,8 +30,10 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.created == 'true'
     permissions:
-      contents: read
+      contents: write
       packages: write
+      id-token: write
+      attestations: write
     uses: ./.github/workflows/docker-publish.yml
     with:
       tag: ${{ needs.release-please.outputs.tag }}
