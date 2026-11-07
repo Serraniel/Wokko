@@ -68,7 +68,7 @@ A backup is a normal `tar.gz` with a SQLite database and your photos. Each user 
 
 ## Using kitshn
 
-In kitshn, enter the address your phone can reach Wokko at, such as `http://192.168.1.20:8080`, and log in with your handle and password. `localhost` won't work there, because on a phone that means the phone itself. Written against kitshn 2.1.5.
+In kitshn, enter the address your phone can reach Wokko at, such as `http://192.168.1.20:8080`, and log in with your handle and password. `localhost` won't work there, because on a phone that means the phone itself. Written against kitshn 2.1.5, and tested with the Play Store app.
 
 Recipes, photos, search and filters, cook logs, meal plans, shopping lists, recipe books, nutrition and importing from a link all work, including creating and editing.
 
