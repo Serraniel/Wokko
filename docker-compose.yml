@@ -4,11 +4,11 @@ name: wokko
 
 services:
   wokko:
-    image: ghcr.io/serraniel/wokko:${WOKKO_VERSION:-0.1.0} # x-release-please-version
+    image: ghcr.io/serraniel/wokko:${WOKKO_VERSION:-0.2.0} # x-release-please-version
     build:
       context: .
       args:
-        VERSION: ${WOKKO_VERSION:-0.1.0} # x-release-please-version
+        VERSION: ${WOKKO_VERSION:-0.2.0} # x-release-please-version
     container_name: wokko
     restart: unless-stopped
     environment:
