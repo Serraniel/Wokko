@@ -8,6 +8,27 @@ import (
 	"database/sql"
 )
 
+type ApiToken struct {
+	ID         int64
+	UserID     int64
+	Name       string
+	TokenHash  string
+	Scope      string
+	ClientID   string
+	ExpiresAt  sql.NullString
+	LastUsedAt sql.NullString
+	CreatedAt  string
+}
+
+type AssistantActivity struct {
+	ID        int64
+	UserID    int64
+	TokenName string
+	Tool      string
+	Target    string
+	CreatedAt string
+}
+
 type BackupRun struct {
 	ID         int64
 	StartedAt  string
@@ -156,6 +177,41 @@ type NutrientName struct {
 	NutrientID int64
 	Locale     string
 	Name       string
+}
+
+type OauthClient struct {
+	ClientID     string
+	Name         string
+	RedirectUris string
+	CreatedAt    string
+}
+
+type OauthCode struct {
+	CodeHash    string
+	ClientID    string
+	UserID      int64
+	RedirectUri string
+	Challenge   string
+	Scope       string
+	ExpiresAt   string
+}
+
+type OauthRefreshToken struct {
+	TokenHash string
+	ClientID  string
+	UserID    int64
+	Scope     string
+	ExpiresAt string
+}
+
+type Passkey struct {
+	ID           int64
+	UserID       int64
+	Name         string
+	CredentialID string
+	Credential   string
+	LastUsedAt   sql.NullString
+	CreatedAt    string
 }
 
 type PasswordReset struct {

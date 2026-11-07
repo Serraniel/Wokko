@@ -23,6 +23,7 @@ type Status struct {
 	SetupComplete    bool   `json:"setup_complete"`
 	OpenRegistration bool   `json:"open_registration"`
 	AllowPublic      bool   `json:"allow_public"`
+	MCPEnabled       bool   `json:"mcp_enabled"`
 	Version          string `json:"version"`
 }
 
@@ -233,6 +234,7 @@ type InviteInput struct {
 type Settings struct {
 	OpenRegistration bool `json:"open_registration"`
 	AllowPublic      bool `json:"allow_public"`
+	MCPEnabled       bool `json:"mcp_enabled"`
 }
 
 type BackupRun struct {
@@ -457,4 +459,61 @@ type RecipeNutrition struct {
 	Counted   int64            `json:"counted"`
 	Total     int64            `json:"total"`
 	Missing   []string         `json:"missing"`
+}
+
+type Passkey struct {
+	ID         int64  `json:"id"`
+	Name       string `json:"name"`
+	CreatedAt  string `json:"created_at"`
+	LastUsedAt string `json:"last_used_at"`
+}
+
+// APIToken lets an AI assistant act for its owner through MCP.
+type APIToken struct {
+	ID         int64  `json:"id"`
+	Name       string `json:"name"`
+	Scope      string `json:"scope"`
+	IsApp      bool   `json:"is_app"`
+	ExpiresAt  string `json:"expires_at"`
+	LastUsedAt string `json:"last_used_at"`
+	CreatedAt  string `json:"created_at"`
+}
+
+type APITokenInput struct {
+	Name          string `json:"name"`
+	Scope         string `json:"scope"`
+	ExpiresInDays int64  `json:"expires_in_days"`
+}
+
+// NewAPIToken holds the secret, which is shown only this once.
+type NewAPIToken struct {
+	APIToken `json:",inline" tstype:",extends"`
+	Secret   string `json:"secret"`
+}
+
+type AssistantActivity struct {
+	ID        int64  `json:"id"`
+	TokenName string `json:"token_name"`
+	Tool      string `json:"tool"`
+	Target    string `json:"target"`
+	CreatedAt string `json:"created_at"`
+}
+
+// OAuthRequest describes an app asking for access, for the consent page.
+type OAuthRequest struct {
+	ClientName   string `json:"client_name"`
+	RedirectHost string `json:"redirect_host"`
+	Scope        string `json:"scope"`
+}
+
+type OAuthApproval struct {
+	ClientID      string `json:"client_id"`
+	RedirectURI   string `json:"redirect_uri"`
+	CodeChallenge string `json:"code_challenge"`
+	Scope         string `json:"scope"`
+	State         string `json:"state"`
+}
+
+type OAuthRedirect struct {
+	RedirectURL string `json:"redirect_url"`
 }

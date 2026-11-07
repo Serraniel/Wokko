@@ -47,10 +47,11 @@ func invalid(code, msg string) *Error { return fail(http.StatusBadRequest, code,
 
 // Service holds everything the business logic needs.
 type Service struct {
-	Store *store.Store
-	Media media.Store
-	Cfg   config.Config
-	Log   *slog.Logger
+	Store    *store.Store
+	Media    media.Store
+	Cfg      config.Config
+	Log      *slog.Logger
+	passkeys passkeyFlows
 	// Fetcher downloads pages for recipe imports.
 	Fetcher *importer.Fetcher
 	Now     func() time.Time
@@ -141,7 +142,7 @@ func (s *Service) Status(ctx context.Context) (Status, error) {
 	if err != nil {
 		return Status{}, err
 	}
-	return Status{SetupComplete: n > 0, OpenRegistration: st.OpenRegistration, AllowPublic: st.AllowPublic, Version: s.Cfg.Version}, nil
+	return Status{SetupComplete: n > 0, OpenRegistration: st.OpenRegistration, AllowPublic: st.AllowPublic, MCPEnabled: st.MCPEnabled, Version: s.Cfg.Version}, nil
 }
 
 func (s *Service) GetSettings(ctx context.Context) (Settings, error) {
@@ -153,7 +154,11 @@ func (s *Service) GetSettings(ctx context.Context) (Settings, error) {
 	if err != nil {
 		return Settings{}, err
 	}
-	return Settings{OpenRegistration: o, AllowPublic: p}, nil
+	m, err := s.settingBool(ctx, "mcp_enabled")
+	if err != nil {
+		return Settings{}, err
+	}
+	return Settings{OpenRegistration: o, AllowPublic: p, MCPEnabled: m}, nil
 }
 
 func (s *Service) UpdateSettings(ctx context.Context, v Viewer, in Settings) (Settings, error) {
@@ -164,7 +169,10 @@ func (s *Service) UpdateSettings(ctx context.Context, v Viewer, in Settings) (Se
 		if err := q.SetSetting(ctx, sqlcgen.SetSettingParams{Key: "open_registration", Value: fmt.Sprint(in.OpenRegistration)}); err != nil {
 			return err
 		}
-		return q.SetSetting(ctx, sqlcgen.SetSettingParams{Key: "allow_public_recipes", Value: fmt.Sprint(in.AllowPublic)})
+		if err := q.SetSetting(ctx, sqlcgen.SetSettingParams{Key: "allow_public_recipes", Value: fmt.Sprint(in.AllowPublic)}); err != nil {
+			return err
+		}
+		return q.SetSetting(ctx, sqlcgen.SetSettingParams{Key: "mcp_enabled", Value: fmt.Sprint(in.MCPEnabled)})
 	})
 	if err != nil {
 		return Settings{}, err
