@@ -419,7 +419,7 @@ The goal is stability. PostgreSQL is an excellent engine, and nothing suggests i
 |---|---|
 | Data safety (section 3) | Done: DS-1 to DS-15, DS-17 to DS-25. DS-16 and DS-22 no longer apply. Version history is in the API, without a UI yet |
 | Recipes (R) | Done, including cooking mode (R-12), URL import (R-13), the Tandoor transfer (R-14), fractions (R-15) and books (R-17) |
-| Ingredients and units (I) | Done. I-8 is met by the counts on the admin page. I-9 (a bigger starter catalog) is left as a decision for the owner, since imports grow the catalog anyway |
+| Ingredients and units (I) | Done. I-8 is met by the counts on the admin page. I-9 (a bigger starter catalog) is declined, left to Claude by the owner: imports grow the catalog anyway, and a large list would need a licensed source |
 | Sharing (S) | Done, including the all-recipes link (S-5) |
 | Language and UI (U) | Done. U-10 (mascot eyes) is dropped, since the new logo has no face. UI overhaul: `2026-11-07-ui-overhaul.md` |
 | Accounts (A) | Done, including passkeys (A-3) |
