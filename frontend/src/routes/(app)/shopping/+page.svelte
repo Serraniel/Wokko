@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { ArrowDown, ArrowUp, Check, Plus, Settings2, ShoppingCart, Trash2, X } from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { api, errorText } from '#lib/api/client.ts';
+	import { api, ApiError, errorText } from '#lib/api/client.ts';
 	import type { ShoppingItem, Supermarket, SupermarketCategory } from '#lib/api/types.gen.ts';
 	import { cached, remember } from '#lib/cache.ts';
+	import { applyOps, enqueue, type ShoppingOp } from '#lib/outbox.ts';
+	import { session } from '#lib/session.svelte.ts';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
 	import { parseAmount, roundAmount } from '#lib/format.ts';
@@ -25,6 +27,73 @@
 	// While a change is on its way, a slower background refresh mustn't undo what's on screen.
 	let pending = 0;
 
+	// Changes wait here in order, surviving a closed app, until the server has them.
+	const outboxKey = `wokko-outbox:${session.user?.id ?? 0}`;
+	let waiting = $state<ShoppingOp[]>(readOutbox());
+	let flushing = false;
+	let nextTemp = -Date.now();
+
+	function readOutbox(): ShoppingOp[] {
+		try {
+			return JSON.parse(localStorage.getItem(`wokko-outbox:${session.user?.id ?? 0}`) ?? '[]');
+		} catch {
+			return [];
+		}
+	}
+
+	function saveOutbox() {
+		try {
+			if (waiting.length) localStorage.setItem(outboxKey, JSON.stringify(waiting));
+			else localStorage.removeItem(outboxKey);
+		} catch {
+			// Blocked storage: changes still wait for as long as this page is open.
+		}
+	}
+
+	async function sendOp(op: ShoppingOp) {
+		switch (op.kind) {
+			case 'check':
+				return api.post('/shopping/check', { ids: op.ids, checked: op.checked });
+			case 'delete':
+				return api.del(`/shopping/${op.id}`);
+			case 'clear':
+				return api.del('/shopping/checked');
+			case 'add':
+				return api.post('/shopping', { line: op.line, checked: op.checked, client_ref: op.ref });
+		}
+	}
+
+	/** Sends what's waiting, in order. It stops at the first sign the server is out of reach. */
+	async function flush() {
+		if (flushing) return;
+		flushing = true;
+		pending++;
+		try {
+			while (waiting.length) {
+				try {
+					await sendOp($state.snapshot(waiting[0]) as ShoppingOp);
+				} catch (e) {
+					const retry = !(e instanceof ApiError) || e.status === 0 || e.status === 401 || e.status === 429 || e.status >= 500;
+					if (retry) return;
+					// Refused for good, such as an item someone else already removed. Don't block the rest.
+					if (e.status !== 404) toasts.error(errorText(e));
+				}
+				waiting = waiting.slice(1);
+				saveOutbox();
+			}
+		} finally {
+			flushing = false;
+			pending--;
+		}
+	}
+
+	function dispatch(op: ShoppingOp) {
+		waiting = enqueue($state.snapshot(waiting) as ShoppingOp[], op);
+		saveOutbox();
+		items = applyOps($state.snapshot(items ?? []) as ShoppingItem[], [op]);
+		void flush().then(load);
+	}
+
 	function readMarket(): number {
 		try {
 			return Number(localStorage.getItem('wokko-shop')) || 0;
@@ -42,10 +111,11 @@
 	});
 
 	async function load() {
-		if (pending) return;
+		if (waiting.length) await flush();
+		if (pending || waiting.length) return;
 		try {
 			const res = await api.get<ShoppingItem[]>('/shopping');
-			if (!pending) items = remember('shopping', res);
+			if (!pending && !waiting.length) items = remember('shopping', res);
 			error = '';
 		} catch (e) {
 			if (!items) error = errorText(e);
@@ -61,8 +131,10 @@
 	}
 
 	onMount(() => {
+		if (waiting.length) items = applyOps(items ?? [], waiting);
 		load();
 		loadShops();
+		window.addEventListener('online', load);
 		// Household members see each other's ticks while shopping together.
 		const refresh = () => {
 			if (document.visibilityState === 'visible' && !editOpen && !manageOpen) load();
@@ -72,6 +144,7 @@
 		return () => {
 			clearInterval(timer);
 			document.removeEventListener('visibilitychange', refresh);
+			window.removeEventListener('online', load);
 		};
 	});
 
@@ -90,7 +163,8 @@
 	function rows(list: ShoppingItem[]): Row[] {
 		const out = new Map<string, Row>();
 		for (const i of list) {
-			const k = `${i.food.id}:${i.unit?.id ?? ''}:${i.amount === null || i.amount === undefined ? 'x' : ''}:${i.checked}`;
+			// Items not sent yet have no food of their own, so they can't count as the same one.
+			const k = i.id < 0 ? `new:${i.id}` : `${i.food.id}:${i.unit?.id ?? ''}:${i.amount === null || i.amount === undefined ? 'x' : ''}:${i.checked}`;
 			const cur = out.get(k);
 			if (cur) {
 				cur.ids.push(i.id);
@@ -135,21 +209,16 @@
 
 	function toggle(r: Row) {
 		const checked = !r.checked;
-		items = (items ?? []).map((i) => (r.ids.includes(i.id) ? { ...i, checked } : i));
-		change(() => api.post('/shopping/check', { ids: r.ids, checked }));
+		dispatch({ kind: 'check', ids: r.ids, checked });
 	}
 
 	function removeRow(r: Row) {
-		items = (items ?? []).filter((i) => !r.ids.includes(i.id));
 		editOpen = false;
-		change(async () => {
-			for (const id of r.ids) await api.del(`/shopping/${id}`);
-		});
+		for (const id of r.ids) dispatch({ kind: 'delete', id });
 	}
 
 	function clearDone() {
-		items = (items ?? []).filter((i) => !i.checked);
-		change(() => api.del('/shopping/checked'));
+		dispatch({ kind: 'clear' });
 	}
 
 	async function add(e: SubmitEvent) {
@@ -157,13 +226,12 @@
 		const text = line.trim();
 		if (!text) return;
 		line = '';
-		await change(async () => {
-			const made = await api.post<ShoppingItem>('/shopping', { line: text });
-			items = [...(items ?? []), made];
-		});
+		// The reference lets the server spot a repeat if its answer gets lost on the way back.
+		dispatch({ kind: 'add', temp: nextTemp--, ref: `${Date.now()}-${Math.random().toString(36).slice(2)}`, line: text, checked: false });
 	}
 
 	function startEdit(r: Row) {
+		if (r.ids.some((id) => id < 0)) return; // Not on the server yet, so there's nothing to edit.
 		editing = r;
 		editForm = { amount: r.amount === null ? '' : formatNumber(roundAmount(r.amount)), unit: r.item.unit?.name ?? '', note: r.note, category: r.item.category?.id ?? 0 };
 		editOpen = true;
@@ -255,6 +323,7 @@
 		<button class="btn btn-primary btn-icon shrink-0" aria-label={t('shopping.add')} disabled={!line.trim()}><Plus size={18} /></button>
 	</form>
 	<ErrorNote text={error} />
+	{#if waiting.length}<p class="rounded-lg bg-warn-soft px-3 py-2 text-sm text-warn" role="status">{t('offline.waiting', { count: waiting.length })}</p>{/if}
 
 	{#if items && items.length === 0}
 		<div class="flex flex-col items-center gap-2 py-14 text-center">
