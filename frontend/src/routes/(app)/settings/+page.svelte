@@ -3,7 +3,9 @@
 	import { api, errorText } from '#lib/api/client.ts';
 	import type { CollectionLink, User } from '#lib/api/types.gen.ts';
 	import { forget } from '#lib/cache.ts';
+	import AssistantsCard from '#lib/components/AssistantsCard.svelte';
 	import CopyField from '#lib/components/CopyField.svelte';
+	import PasskeysCard from '#lib/components/PasskeysCard.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import { prefs } from '#lib/prefs.svelte.ts';
 	import { currentLocale, languages, setLocale, t } from '#lib/i18n/index.svelte.ts';
@@ -159,6 +161,9 @@
 			<button class="btn btn-soft w-full">{t('settings.change_password')}</button>
 		</form>
 	</section>
+
+	<PasskeysCard />
+	<AssistantsCard />
 
 	<section class="card divide-y divide-line overflow-hidden">
 		<a class="flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/api/v1/me/export" download data-sveltekit-reload><Download size={20} class="shrink-0 text-muted" /><span><span class="block">{t('settings.export')}</span><span class="block text-sm font-normal text-muted">{t('settings.export_hint')}</span></span></a>

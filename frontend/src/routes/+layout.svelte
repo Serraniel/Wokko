@@ -13,7 +13,7 @@
 	let { children }: { children: Snippet } = $props();
 	let failed = $state(false);
 
-	const publicPaths = ['/login', '/register', '/reset', '/setup', '/gallery', '/s/'];
+	const publicPaths = ['/login', '/register', '/reset', '/setup', '/gallery', '/s/', '/shared/', '/oauth/'];
 
 	setUnauthorizedHandler(() => {
 		session.signedOut();
