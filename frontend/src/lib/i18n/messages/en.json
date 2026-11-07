@@ -480,5 +480,6 @@
   "cook.timer_label": "Step {step}, {time}",
   "cook.timers": "Running timers",
   "changelog.releases": "All releases on GitHub",
-  "recipe.print": "Print"
+  "recipe.print": "Print",
+  "plan.week_already": "This week's recipes are already on the list"
 }

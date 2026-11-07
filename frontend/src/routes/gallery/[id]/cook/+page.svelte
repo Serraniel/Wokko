@@ -21,9 +21,11 @@
 
 <svelte:head><meta name="robots" content="noindex" /></svelte:head>
 
-<ErrorNote text={error} />
-{#if recipe}
-	<CookMode {recipe} servings={Number(page.url.searchParams.get('servings')) || 0} exitHref={`/gallery/${page.params.id}`} doneHref={`/gallery/${page.params.id}`} />
-{:else if missing}
-	<div class="flex flex-col items-center gap-3 p-10 text-center"><Mascot /><h1 class="text-xl font-semibold">{t('share.link_gone')}</h1></div>
-{/if}
+<main>
+	<ErrorNote text={error} />
+	{#if recipe}
+		<CookMode {recipe} servings={Number(page.url.searchParams.get('servings')) || 0} exitHref={`/gallery/${page.params.id}`} doneHref={`/gallery/${page.params.id}`} />
+	{:else if missing}
+		<div class="flex flex-col items-center gap-3 p-10 text-center"><Mascot /><h1 class="text-xl font-semibold">{t('share.link_gone')}</h1></div>
+	{/if}
+</main>
