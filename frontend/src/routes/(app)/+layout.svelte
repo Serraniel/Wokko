@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookOpen, Carrot, LogOut, Plus, Search, Settings, Shield, Users } from '@lucide/svelte';
+	import { BookMarked, BookOpen, CalendarDays, Carrot, LogOut, Menu, Plus, Search, Settings, Shield, ShoppingCart, Users } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -18,10 +18,17 @@
 
 	const items = $derived([
 		{ href: '/recipes', icon: BookOpen, label: t('nav.recipes') },
+		{ href: '/plan', icon: CalendarDays, label: t('nav.plan') },
+		{ href: '/shopping', icon: ShoppingCart, label: t('nav.shopping') },
+		{ href: '/books', icon: BookMarked, label: t('nav.books') },
 		{ href: '/ingredients', icon: Carrot, label: t('nav.ingredients') },
 		{ href: '/people', icon: Users, label: t('nav.people') },
 		{ href: '/settings', icon: Settings, label: t('nav.settings') }
 	]);
+	// A phone has room for the three things used most. The rest live behind "More".
+	const phoneItems = $derived([items[0], items[1], items[2], { href: '/more', icon: Menu, label: t('nav.more') }]);
+	const inMore = (path: string) => ['/more', '/books', '/ingredients', '/people', '/settings', '/trash', '/admin'].some((h) => path === h || path.startsWith(h + '/'));
+	const activeOnPhone = (href: string) => (href === '/more' ? inMore(page.url.pathname) : active(href));
 
 	const active = (href: string) => page.url.pathname === href || page.url.pathname.startsWith(href + '/');
 
@@ -82,14 +89,14 @@
 
 	<!-- Phone: a bottom bar within thumb reach, with "new recipe" in the middle. -->
 	<nav class="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-bg/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg md:hidden" aria-label={t('nav.main')}>
-		{#each items.slice(0, 2) as item (item.href)}
+		{#each phoneItems.slice(0, 2) as item (item.href)}
 			{@const Icon = item.icon}
-			<a href={item.href} aria-current={active(item.href) ? 'page' : undefined} class="flex h-14 flex-col items-center justify-center gap-0.5 text-[0.625rem] font-medium {active(item.href) ? 'text-ink' : 'text-muted'}"><Icon size={20} strokeWidth={active(item.href) ? 2.4 : 1.8} /><span class="max-w-full truncate px-1">{item.label}</span></a>
+			<a href={item.href} aria-current={activeOnPhone(item.href) ? 'page' : undefined} class="flex h-14 flex-col items-center justify-center gap-0.5 text-[0.625rem] font-medium {activeOnPhone(item.href) ? 'text-ink' : 'text-muted'}"><Icon size={20} strokeWidth={activeOnPhone(item.href) ? 2.4 : 1.8} /><span class="max-w-full truncate px-1">{item.label}</span></a>
 		{/each}
 		<a href="/recipes/new" class="flex h-14 items-center justify-center" aria-label={t('recipes.new')}><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-brand-ink"><Plus size={22} /></span></a>
-		{#each items.slice(2) as item (item.href)}
+		{#each phoneItems.slice(2) as item (item.href)}
 			{@const Icon = item.icon}
-			<a href={item.href} aria-current={active(item.href) ? 'page' : undefined} class="flex h-14 flex-col items-center justify-center gap-0.5 text-[0.625rem] font-medium {active(item.href) ? 'text-ink' : 'text-muted'}"><Icon size={20} strokeWidth={active(item.href) ? 2.4 : 1.8} /><span class="max-w-full truncate px-1">{item.label}</span></a>
+			<a href={item.href} aria-current={activeOnPhone(item.href) ? 'page' : undefined} class="flex h-14 flex-col items-center justify-center gap-0.5 text-[0.625rem] font-medium {activeOnPhone(item.href) ? 'text-ink' : 'text-muted'}"><Icon size={20} strokeWidth={activeOnPhone(item.href) ? 2.4 : 1.8} /><span class="max-w-full truncate px-1">{item.label}</span></a>
 		{/each}
 	</nav>
 

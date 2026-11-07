@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { ArrowLeft, CookingPot, Pencil, Share2, Star, Trash2 } from '@lucide/svelte';
+	import { ArrowLeft, BookMarked, CalendarPlus, ChefHat, CookingPot, History, MoreHorizontal, Pencil, Share2, ShoppingCart, Star, Trash2 } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { api, ApiError, errorText } from '#lib/api/client.ts';
-	import type { Recipe } from '#lib/api/types.gen.ts';
+	import type { Recipe, RecipeBook, RecipeNutrition, RecipeVersion } from '#lib/api/types.gen.ts';
 	import { cached, forget, remember } from '#lib/cache.ts';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Mascot from '#lib/components/Mascot.svelte';
 	import RecipeView from '#lib/components/RecipeView.svelte';
 	import ShareSheet from '#lib/components/ShareSheet.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
-	import { t } from '#lib/i18n/index.svelte.ts';
+	import { formatDate, formatNumber, t } from '#lib/i18n/index.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 
 	const id = $derived(page.params.id);
@@ -22,6 +22,84 @@
 	let rating = $state(0);
 	let comment = $state('');
 	let logging = $state(false);
+	let moreOpen = $state(false);
+	let historyOpen = $state(false);
+	let booksOpen = $state(false);
+	let versions = $state<RecipeVersion[]>([]);
+	let books = $state<RecipeBook[]>([]);
+	let inBooks = $state<number[]>([]);
+	let nutrition = $state<RecipeNutrition | null>(null);
+
+	$effect(() => {
+		if (page.url.searchParams.get('cooked')) cookOpen = true;
+	});
+
+	$effect(() => {
+		const current = id;
+		nutrition = null;
+		api.get<RecipeNutrition>(`/recipes/${current}/nutrition`)
+			.then((n) => {
+				if (current === id) nutrition = n;
+			})
+			.catch(() => {}); // Nutrition is extra. The recipe matters here.
+	});
+
+	async function openHistory() {
+		moreOpen = false;
+		historyOpen = true;
+		try {
+			versions = await api.get<RecipeVersion[]>(`/recipes/${id}/versions`);
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	async function restore(v: RecipeVersion) {
+		try {
+			recipe = remember(`recipe:${id}`, await api.post<Recipe>(`/recipes/${id}/versions/${v.id}/restore`));
+			forget('recipes');
+			historyOpen = false;
+			toasts.show(t('history.restored'));
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	async function openBooks() {
+		moreOpen = false;
+		booksOpen = true;
+		try {
+			[books, inBooks] = await Promise.all([api.get<RecipeBook[]>('/books'), api.get<number[]>(`/recipes/${id}/books`)]);
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	async function toggleBook(b: RecipeBook) {
+		const had = inBooks.includes(b.id);
+		inBooks = had ? inBooks.filter((x) => x !== b.id) : [...inBooks, b.id];
+		try {
+			if (had) await api.del(`/books/${b.id}/recipes/${id}`);
+			else await api.put(`/books/${b.id}/recipes/${id}`, {});
+			forget('books');
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	async function addToShopping() {
+		moreOpen = false;
+		if (!recipe) return;
+		try {
+			await api.post('/shopping/recipes', { recipe_id: recipe.id, servings: recipe.servings });
+			forget('shopping');
+			toasts.show(t('shopping.added'));
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	const planLink = $derived(recipe ? `/plan?recipe=${recipe.id}&name=${encodeURIComponent(recipe.name)}&servings=${recipe.servings}` : '/plan');
 
 	$effect(() => {
 		const current = id;
@@ -94,11 +172,29 @@
 		<div class={recipe.photo_url ? '' : 'pt-12 md:pt-0'}>
 			<RecipeView {recipe}>
 				{#snippet actions()}
-					<button class="btn btn-primary flex-1 sm:flex-none" onclick={() => (cookOpen = true)}><CookingPot size={18} />{t('recipe.cooked_it')}</button>
+					{#if recipe?.steps.length}<a class="btn btn-primary flex-1 sm:flex-none" href="/recipes/{recipe.id}/cook"><ChefHat size={17} />{t('recipe.cook')}</a>{/if}
+					<button class="btn btn-soft flex-1 sm:flex-none" onclick={() => (cookOpen = true)}><CookingPot size={17} />{t('recipe.cooked_it')}</button>
 					{#if recipe?.can_edit}<a class="btn btn-soft" href="/recipes/{recipe.id}/edit" aria-label={t('common.edit')}><Pencil size={18} /><span class="hidden sm:inline">{t('common.edit')}</span></a>{/if}
 					{#if recipe?.can_manage}
 						<button class="btn btn-soft" onclick={() => (shareOpen = true)} aria-label={t('share.button')}><Share2 size={18} /><span class="hidden sm:inline">{t('share.button')}</span></button>
 						<button class="btn btn-ghost btn-icon text-danger" aria-label={t('common.delete')} onclick={remove}><Trash2 size={18} /></button>
+					{/if}
+					<button class="btn btn-soft btn-icon" aria-label={t('recipe.more')} onclick={() => (moreOpen = true)}><MoreHorizontal size={18} /></button>
+				{/snippet}
+				{#snippet footer()}
+					{#if nutrition && nutrition.counted > 0}
+						<section class="card p-4" aria-labelledby="nutrition-title">
+							<h2 id="nutrition-title" class="mb-2 font-semibold">{t('recipe.nutrition')}</h2>
+							<table class="w-full text-sm">
+								<thead><tr class="text-left text-xs text-muted"><th class="font-medium"></th><th class="text-right font-medium">{t('recipe.per_serving')}</th><th class="text-right font-medium">{t('recipe.total')}</th></tr></thead>
+								<tbody class="divide-y divide-line">
+									{#each nutrition.nutrients as n (n.nutrient.id)}
+										<tr><td class="py-1.5">{n.nutrient.name}</td><td class="py-1.5 text-right font-medium tabular-nums">{formatNumber(Math.round(n.per_serving * 10) / 10)} {n.nutrient.unit}</td><td class="py-1.5 text-right text-muted tabular-nums">{formatNumber(Math.round(n.total))} {n.nutrient.unit}</td></tr>
+									{/each}
+								</tbody>
+							</table>
+							<p class="hint">{nutrition.counted < nutrition.total ? t('recipe.nutrition_partial', { counted: nutrition.counted, total: nutrition.total, names: nutrition.missing.join(', ') }) : t('recipe.nutrition_estimate')}</p>
+						</section>
 					{/if}
 				{/snippet}
 			</RecipeView>
@@ -106,6 +202,39 @@
 		{#if recipe.can_manage}
 			<ShareSheet bind:open={shareOpen} {recipe} onchange={(r) => (recipe = remember(`recipe:${r.id}`, r))} />
 		{/if}
+		<Sheet bind:open={moreOpen} title={recipe.name}>
+			<div class="divide-y divide-line">
+				<a class="flex min-h-12 items-center gap-3 font-medium" href={planLink}><CalendarPlus size={18} class="text-muted" />{t('recipe.add_to_plan')}</a>
+				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={addToShopping}><ShoppingCart size={18} class="text-muted" />{t('recipe.add_to_shopping')}</button>
+				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openBooks}><BookMarked size={18} class="text-muted" />{t('books.add_to')}</button>
+				{#if recipe.can_edit}<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openHistory}><History size={18} class="text-muted" />{t('recipe.history')}</button>{/if}
+			</div>
+		</Sheet>
+		<Sheet bind:open={historyOpen} title={t('history.title')}>
+			{#if versions.length === 0}
+				<p class="py-4 text-sm text-muted">{t('history.empty')}</p>
+			{:else}
+				<ul class="divide-y divide-line">
+					{#each versions as v (v.id)}
+						<li class="flex min-h-12 items-center justify-between gap-2">
+							<span class="text-sm"><span class="font-medium">{t('history.version', { version: v.version })}</span><span class="block text-xs text-muted">{formatDate(v.created_at, 'datetime')}</span></span>
+							<button class="btn btn-soft" onclick={() => restore(v)}>{t('history.restore')}</button>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</Sheet>
+		<Sheet bind:open={booksOpen} title={t('books.add_to')}>
+			{#if books.length === 0}
+				<p class="py-4 text-sm text-muted">{t('books.none')} <a class="underline" href="/books">{t('books.title')}</a></p>
+			{:else}
+				<ul class="divide-y divide-line">
+					{#each books as b (b.id)}
+						<li><label class="flex min-h-12 items-center gap-3 font-medium"><input type="checkbox" class="h-4 w-4 accent-[var(--brand)]" checked={inBooks.includes(b.id)} onchange={() => toggleBook(b)} />{b.name}</label></li>
+					{/each}
+				</ul>
+			{/if}
+		</Sheet>
 		<Sheet bind:open={cookOpen} title={t('recipe.cooked_it')}>
 			<form class="space-y-4" onsubmit={logCooked}>
 				<div>

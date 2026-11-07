@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/serraniel/wokko/backend/internal/importer"
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
 )
 
@@ -662,6 +663,14 @@ func (s *Service) CreateShoppingItem(ctx context.Context, v Viewer, in ShoppingI
 // createShoppingItem also takes the shopping-recipe group an item belongs to, which only
 // kitshn sets by hand.
 func (s *Service) createShoppingItem(ctx context.Context, v Viewer, in ShoppingItemInput, group int64) (ShoppingItem, error) {
+	if line := strings.TrimSpace(in.Line); line != "" {
+		units, err := s.unitSpellings(ctx)
+		if err != nil {
+			return ShoppingItem{}, err
+		}
+		p := importer.ParseIngredient(line, units)
+		in.FoodName, in.UnitName, in.Amount, in.Note = p.Food, p.Unit, p.Amount, p.Note
+	}
 	if in.FoodID <= 0 && strings.TrimSpace(in.FoodName) == "" {
 		return ShoppingItem{}, invalid("ingredient_required", "Each ingredient needs a name")
 	}

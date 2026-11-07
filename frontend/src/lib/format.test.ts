@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { combineIngredients, parseAmount, roundAmount } from './format.ts';
+import { addDays, asFraction, combineIngredients, isoDate, parseAmount, roundAmount, startOfWeek } from './format.ts';
 import type { Step } from './api/types.gen.ts';
 
 describe('parseAmount', () => {
@@ -45,5 +45,27 @@ describe('combineIngredients', () => {
 	it('keeps different units and missing amounts apart', () => {
 		const got = combineIngredients(steps([[ing(1, 1, 1, 100), ing(2, 1, 2, 1), ing(3, 1, 1, null)]]));
 		expect(got).toHaveLength(3);
+	});
+});
+
+describe('asFraction', () => {
+	it('writes common fractions', () => {
+		expect(asFraction(0.5)).toBe('½');
+		expect(asFraction(1.5)).toBe('1½');
+		expect(asFraction(0.33)).toBe('⅓');
+		expect(asFraction(2)).toBe('2');
+		expect(asFraction(2.999)).toBe('3');
+	});
+	it('gives up rather than mislead', () => {
+		expect(asFraction(0.57)).toBeNull();
+		expect(asFraction(250)).toBeNull();
+	});
+});
+
+describe('week helpers', () => {
+	it('finds the Monday and writes local dates', () => {
+		expect(isoDate(startOfWeek(new Date(2026, 10, 8)))).toBe('2026-11-02');
+		expect(isoDate(startOfWeek(new Date(2026, 10, 9)))).toBe('2026-11-09');
+		expect(isoDate(addDays(new Date(2026, 11, 31), 1))).toBe('2027-01-01');
 	});
 });

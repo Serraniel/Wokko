@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookOpen, Carrot, Download, Moon, Plus, Search, Settings, Shield, Trash2, Users } from '@lucide/svelte';
+	import { BookMarked, BookOpen, CalendarDays, Carrot, Download, Moon, Plus, Search, Settings, Shield, ShoppingCart, Trash2, Users } from '@lucide/svelte';
 	import { tick, type Component } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { api, query } from '#lib/api/client.ts';
@@ -32,6 +32,9 @@
 		{ id: 'new', label: t('palette.new'), icon: Plus, run: () => goto('/recipes/new') },
 		{ id: 'import', label: t('palette.import'), icon: Download, run: () => goto('/recipes/new').then(async () => { await tick(); document.getElementById('import-url')?.focus(); }) },
 		{ id: 'recipes', label: t('nav.recipes'), icon: BookOpen, run: () => goto('/recipes') },
+		{ id: 'plan', label: t('nav.plan'), icon: CalendarDays, run: () => goto('/plan') },
+		{ id: 'shopping', label: t('nav.shopping'), icon: ShoppingCart, run: () => goto('/shopping') },
+		{ id: 'books', label: t('nav.books'), icon: BookMarked, run: () => goto('/books') },
 		{ id: 'ingredients', label: t('nav.ingredients'), icon: Carrot, run: () => goto('/ingredients') },
 		{ id: 'people', label: t('nav.people'), icon: Users, run: () => goto('/people') },
 		{ id: 'settings', label: t('nav.settings'), icon: Settings, run: () => goto('/settings') },

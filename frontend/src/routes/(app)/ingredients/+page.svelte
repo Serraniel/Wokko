@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { Plus, Search } from '@lucide/svelte';
 	import { api, errorText, query } from '#lib/api/client.ts';
-	import type { Food, Page, Translation, Unit } from '#lib/api/types.gen.ts';
+	import type { Food, FoodNutrition, Nutrient, Page, Translation, Unit } from '#lib/api/types.gen.ts';
 	import Combobox, { type Option } from '#lib/components/Combobox.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
-	import { currentLocale, languages, t } from '#lib/i18n/index.svelte.ts';
+	import { parseAmount } from '#lib/format.ts';
+	import { currentLocale, formatNumber, languages, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 
@@ -65,8 +66,44 @@
 		editOpen = true;
 	}
 
+	let nutrients = $state<Nutrient[]>([]);
+	let nutrition = $state<Record<number, string>>({});
+	let pieceGrams = $state('');
+	let nutritionLoaded = $state(false);
+
+	async function loadNutrition(id: number) {
+		nutritionLoaded = false;
+		nutrition = {};
+		pieceGrams = '';
+		try {
+			if (!nutrients.length) nutrients = await api.get<Nutrient[]>('/nutrients');
+			const n = await api.get<FoodNutrition>(`/foods/${id}/nutrition`);
+			nutrition = Object.fromEntries(Object.entries(n.values).map(([k, v]) => [Number(k), formatNumber(v)]));
+			pieceGrams = n.piece_grams ? formatNumber(n.piece_grams) : '';
+			nutritionLoaded = true;
+		} catch (err) {
+			formError = errorText(err);
+		}
+	}
+
+	async function saveNutrition() {
+		if (!editing) return;
+		const values: Record<number, number> = {};
+		for (const [k, v] of Object.entries(nutrition)) {
+			const parsed = parseAmount(v);
+			if (parsed !== null) values[Number(k)] = parsed;
+		}
+		try {
+			await api.put(`/foods/${editing.id}/nutrition`, { piece_grams: parseAmount(pieceGrams), values });
+			toasts.show(t('catalog.nutrition_saved'));
+		} catch (err) {
+			formError = errorText(err);
+		}
+	}
+
 	function openEntry(e: Entry) {
 		editing = e;
+		if (kind === 'foods') loadNutrition(e.id);
 		rows = buildRows(e.translations);
 		aliases = e.aliases.join(', ');
 		formError = '';
@@ -189,6 +226,27 @@
 		</fieldset>
 		{#if !readOnly}<button class="btn btn-primary w-full" disabled={busy}>{t('common.save')}</button>{/if}
 	</form>
+
+	{#if editing && kind === 'foods' && nutritionLoaded}
+		<details class="mt-4 border-t border-line pt-3">
+			<summary class="min-h-9 cursor-pointer font-medium">{t('catalog.nutrition')}</summary>
+			<fieldset class="mt-2 space-y-2" disabled={readOnly}>
+				<div class="grid grid-cols-2 gap-2">
+					{#each nutrients as n (n.id)}
+						<div>
+							<label class="label" for="nutrient-{n.id}">{n.name} ({n.unit})</label>
+							<input id="nutrient-{n.id}" class="input" inputmode="decimal" bind:value={nutrition[n.id]} />
+						</div>
+					{/each}
+				</div>
+				<div>
+					<label class="label" for="piece-grams">{t('catalog.piece_grams')}</label>
+					<input id="piece-grams" class="input" inputmode="decimal" bind:value={pieceGrams} />
+				</div>
+				{#if !readOnly}<button type="button" class="btn btn-soft w-full" onclick={saveNutrition}>{t('common.save')}</button>{/if}
+			</fieldset>
+		</details>
+	{/if}
 
 	{#if editing && session.isAdmin}
 		<div class="mt-6 space-y-2 border-t border-line pt-4">

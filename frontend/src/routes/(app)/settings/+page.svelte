@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { Download, LogOut, Monitor, Moon, Shield, Sun, Trash2 } from '@lucide/svelte';
 	import { api, errorText } from '#lib/api/client.ts';
-	import type { User } from '#lib/api/types.gen.ts';
+	import type { CollectionLink, User } from '#lib/api/types.gen.ts';
 	import { forget } from '#lib/cache.ts';
+	import CopyField from '#lib/components/CopyField.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
+	import { prefs } from '#lib/prefs.svelte.ts';
 	import { currentLocale, languages, setLocale, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import { theme, type ThemeChoice } from '#lib/theme.svelte.ts';
@@ -14,6 +16,26 @@
 	let next = $state('');
 	let error = $state('');
 	let pwError = $state('');
+
+	let links = $state<CollectionLink[]>([]);
+	api.get<CollectionLink[]>('/me/collection-links').then((l) => (links = l)).catch(() => {});
+
+	async function createLink() {
+		try {
+			links = [...links, await api.post<CollectionLink>('/me/collection-links', {})];
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
+
+	async function revokeLink(id: number) {
+		try {
+			await api.del(`/me/collection-links/${id}`);
+			links = links.filter((l) => l.id !== id);
+		} catch (e) {
+			toasts.error(errorText(e));
+		}
+	}
 
 	const themes: { id: ThemeChoice; icon: typeof Sun; key: string }[] = [
 		{ id: 'system', icon: Monitor, key: 'settings.theme_system' },
@@ -98,6 +120,28 @@
 			</div>
 			<button class="btn btn-soft shrink-0">{t('common.save')}</button>
 		</form>
+	</section>
+
+	<section class="card space-y-3 p-4">
+		<div>
+			<label class="label" for="amounts">{t('settings.amounts')}</label>
+			<select id="amounts" class="input" value={prefs.amounts} onchange={(e) => prefs.setAmounts(e.currentTarget.value === 'fraction' ? 'fraction' : 'decimal')}>
+				<option value="decimal">{t('settings.amounts_decimal')}</option>
+				<option value="fraction">{t('settings.amounts_fraction')}</option>
+			</select>
+		</div>
+	</section>
+
+	<section class="card space-y-3 p-4">
+		<h2 class="font-semibold">{t('settings.collection')}</h2>
+		<p class="hint !mt-0">{t('settings.collection_hint')}</p>
+		{#each links as l (l.id)}
+			<div class="flex items-center gap-2">
+				<div class="min-w-0 flex-1"><CopyField value={l.url} label={t('settings.collection_label')} /></div>
+				<button class="btn btn-ghost btn-icon shrink-0 text-danger" aria-label={t('share.revoke')} onclick={() => revokeLink(l.id)}><Trash2 size={17} /></button>
+			</div>
+		{/each}
+		{#if !links.length}<button class="btn btn-soft w-full" onclick={createLink}>{t('settings.collection_create')}</button>{/if}
 	</section>
 
 	<section class="card p-4">
