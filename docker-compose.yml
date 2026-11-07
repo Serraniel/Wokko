@@ -1,0 +1,24 @@
+name: wokko
+
+services:
+  wokko:
+    image: ghcr.io/serraniel/wokko:${WOKKO_VERSION:-0.1.0}
+    build: .
+    container_name: wokko
+    restart: unless-stopped
+    environment:
+      PUBLIC_URL: ${PUBLIC_URL:-}
+      BACKUP_INTERVAL_HOURS: ${BACKUP_INTERVAL_HOURS:-24}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+    ports:
+      - "${WOKKO_PORT:-8080}:8080"
+    volumes:
+      # Must stay on a local disk. Wokko refuses to start on a network share.
+      - wokko-data:/data
+      # Backups can go anywhere, and a NAS is a good place. To use one, replace this with a
+      # path such as /mnt/nas/wokko:/backups, and make it writable for user ID 65532.
+      - wokko-backups:/backups
+
+volumes:
+  wokko-data:
+  wokko-backups:
