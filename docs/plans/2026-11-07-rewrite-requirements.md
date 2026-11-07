@@ -418,13 +418,11 @@ The goal is stability. PostgreSQL is an excellent engine, and nothing suggests i
 | Area | Status |
 |---|---|
 | Data safety (section 3) | Done: DS-1 to DS-15, DS-17 to DS-25. DS-16 and DS-22 no longer apply. Version history is in the API, without a UI yet |
-| Accounts (A) | Done, except passkeys (A-3) |
-| Recipes (R) | Done, except recipe books (R-17), Tandoor transfer (R-14) and fractions (R-15). R-12 is left to kitshn |
-| Ingredients and units (I) | Done, except I-8 and I-9 |
-| Sharing (S) | Done, except the all-recipes link (S-5) |
-| Language and UI (U) | Done, except mascot eyes (U-10) |
-| kitshn (K) | Read access, login, search, photos and cook log are in, with contract tests. **K-1 is unproven: it hasn't run against the real app yet.** Writing from kitshn isn't done |
-| Meal plans, shopping lists, nutrition (P, L, F) | Not started. kitshn gets empty lists |
-| MCP (X-2, X-3) | Planned, not started: `2026-11-07-ai-integrations.md` |
-| URL import (R-13) | Done in the web app: schema.org data, microdata, page layout and pasted text. Not offered through kitshn's `/recipe-from-source/` yet |
-| UI overhaul | Done: `2026-11-07-ui-overhaul.md` |
+| Recipes (R) | Done, including cooking mode (R-12), URL import (R-13), the Tandoor transfer (R-14), fractions (R-15) and books (R-17) |
+| Ingredients and units (I) | Done. I-8 is met by the counts on the admin page. I-9 (a bigger starter catalog) is left as a decision for the owner, since imports grow the catalog anyway |
+| Sharing (S) | Done, including the all-recipes link (S-5) |
+| Language and UI (U) | Done. U-10 (mascot eyes) is dropped, since the new logo has no face. UI overhaul: `2026-11-07-ui-overhaul.md` |
+| Accounts (A) | Done, including passkeys (A-3) |
+| kitshn (K) | All of kitshn 2.1.5's API is covered with contract tests, apart from AI import, which fails cleanly. **K-1 is still unproven: it hasn't run on the owner's phone** |
+| Meal plans, shopping lists, nutrition (P, L, F) | Done on the web, in kitshn and through MCP. Starting nutrition comes from USDA FoodData Central SR Legacy (CC0) for 160 of the 163 foods |
+| MCP (X-2, X-3) | Done: `2026-11-07-ai-integrations.md` |
