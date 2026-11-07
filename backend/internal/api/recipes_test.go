@@ -5,10 +5,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"maps"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -551,4 +554,118 @@ func TestImportRefusals(t *testing.T) {
 	defer blocked.Close()
 	e.svc.Fetcher = importer.NewFetcher("test", true)
 	me.wantCode("POST", v1+"/import", app.ImportRequest{URL: blocked.URL}, 502, "import_blocked")
+}
+
+func importUpload(t *testing.T, c *client, dryRun bool, content []byte) result {
+	t.Helper()
+	var buf bytes.Buffer
+	mw := multipart.NewWriter(&buf)
+	part, err := mw.CreateFormFile("file", "export.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, _ = part.Write(content)
+	_ = mw.Close()
+	url := c.e.srv.URL + v1 + "/import/file"
+	if dryRun {
+		url += "?dry_run=1"
+	}
+	req, err := http.NewRequest("POST", url, &buf)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Content-Type", mw.FormDataContentType())
+	return c.send(req)
+}
+
+func zipOf(t *testing.T, files map[string][]byte) []byte {
+	t.Helper()
+	var buf bytes.Buffer
+	w := zip.NewWriter(&buf)
+	names := slices.Sorted(maps.Keys(files)) // a stable order, because order decides duplicates
+	for _, name := range names {
+		f, err := w.Create(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_, _ = f.Write(files[name])
+	}
+	_ = w.Close()
+	return buf.Bytes()
+}
+
+func TestImportFromAnotherAppsFile(t *testing.T) {
+	e := newEnv(t)
+	c := e.admin()
+	in := simpleRecipe("Already here")
+	c.createRecipe(in)
+	tandoor := func(name string, withPhoto []byte) []byte {
+		body := `{"name":"` + name + `","description":"D","keywords":[{"name":"Altbau"}],"working_time":5,"waiting_time":0,"servings":2,"servings_text":"","source_url":null,"steps":[{"name":"","instruction":"Do.","time":0,"ingredients":[{"food":{"name":"Zwiebel"},"unit":{"name":"EL"},"amount":"1.000","note":"","is_header":false,"no_amount":false}]}]}`
+		files := map[string][]byte{"recipe.json": []byte(body)}
+		if withPhoto != nil {
+			files["image.png"] = withPhoto
+		}
+		return zipOf(t, files)
+	}
+	file := zipOf(t, map[string][]byte{
+		"1.zip": tandoor("Neu eins", testPNG(t)),
+		"2.zip": tandoor("Already Here", nil),
+		"3.zip": tandoor("Kaputtes Bild", []byte("not an image")),
+		"4.zip": tandoor("neu eins", nil), // the same recipe twice in one file
+	})
+
+	var preview app.FileImportResult
+	importUpload(t, c, true, file).decode(t, &preview)
+	if len(preview.Items) != 4 || preview.Imported != 0 || preview.Skipped != 2 {
+		t.Fatalf("preview: %+v", preview)
+	}
+	var list app.Page[app.RecipeSummary]
+	c.ok("GET", v1+"/recipes", nil, 200).decode(t, &list)
+	if list.Total != 1 {
+		t.Fatalf("a dry run saved %d recipes", list.Total-1)
+	}
+
+	var done app.FileImportResult
+	importUpload(t, c, false, file).decode(t, &done)
+	if done.Imported != 2 || done.Skipped != 2 || done.Failed != 0 {
+		t.Fatalf("result: %+v", done)
+	}
+	var saved, broken app.FileImportItem
+	for _, it := range done.Items {
+		switch it.Name {
+		case "Neu eins":
+			saved = it
+		case "Kaputtes Bild":
+			broken = it
+		}
+	}
+	if !broken.PhotoFailed || broken.RecipeID == 0 {
+		t.Fatalf("a bad photo must not lose the recipe: %+v", broken)
+	}
+	var r app.Recipe
+	c.ok("GET", path("/recipes/%d", saved.RecipeID), nil, 200).decode(t, &r)
+	if r.Visibility != "private" || r.PhotoURL == "" || r.Steps[0].Ingredients[0].Food.Name != "onion" || *r.Steps[0].Ingredients[0].Amount != 1 || r.Keywords[0].Name != "Altbau" {
+		t.Fatalf("recipe: %+v", r)
+	}
+	// Importing the same file again changes nothing.
+	importUpload(t, c, false, file).decode(t, &done)
+	if done.Imported != 0 || done.Skipped != 4 {
+		t.Fatalf("second time: %+v", done)
+	}
+	if res := importUpload(t, c, false, []byte("hello")); res.status != 422 || !contains(string(res.body), "import_file_unknown") {
+		t.Fatalf("not recipes: %d %s", res.status, res.body)
+	}
+	if res := importUpload(t, e.anon(), false, file); res.status != 401 {
+		t.Fatalf("logged out: %d", res.status)
+	}
+	// Nothing is left behind beside the data.
+	entries, err := os.ReadDir(e.cfg.DataDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range entries {
+		if strings.HasSuffix(f.Name(), ".tmp") {
+			t.Fatalf("left behind: %s", f.Name())
+		}
+	}
 }
