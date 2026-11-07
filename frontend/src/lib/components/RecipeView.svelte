@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Clock, ExternalLink, Hourglass, Minus, Plus, Star, Users } from '@lucide/svelte';
+	import { ChefHat, Clock, ExternalLink, Hourglass, Minus, Plus, Printer, Star, Users } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import type { Ingredient, Recipe, UnitRef } from '#lib/api/types.gen.ts';
 	import { asFraction, combineIngredients, roundAmount } from '#lib/format.ts';
@@ -7,7 +7,7 @@
 	import { renderMarkdown } from '#lib/markdown.ts';
 	import { prefs } from '#lib/prefs.svelte.ts';
 
-	let { recipe, actions, footer }: { recipe: Recipe; actions?: Snippet; footer?: Snippet } = $props();
+	let { recipe, actions, footer, cookHref }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string } = $props();
 
 	let servings = $state(0);
 	$effect(() => {
@@ -43,7 +43,7 @@
 	<!-- On a phone the photo runs edge to edge. With room to spare it sits beside the title. -->
 	<div class="lg:grid lg:items-center lg:gap-8 lg:p-6 {recipe.photo_url ? 'lg:grid-cols-[minmax(0,1fr)_26rem]' : ''}">
 		{#if recipe.photo_url}
-			<img src={recipe.photo_url} alt="" class="aspect-[16/10] w-full bg-surface-2 object-cover lg:order-2 lg:rounded-2xl" />
+			<img src={recipe.photo_url} alt="" class="recipe-photo aspect-[16/10] w-full bg-surface-2 object-cover lg:order-2 lg:rounded-2xl" />
 		{/if}
 		<header class="space-y-3 p-4 lg:p-0">
 			<h1 class="text-2xl leading-tight font-semibold lg:text-4xl">{recipe.name}</h1>
@@ -59,7 +59,10 @@
 					{#each recipe.keywords as k (k.id)}<span class="chip !min-h-7">{k.name}</span>{/each}
 				</div>
 			{/if}
-			{#if actions}<div class="flex flex-wrap gap-2">{@render actions()}</div>{/if}
+			<div class="print-hide flex flex-wrap gap-2">
+				{#if cookHref && recipe.steps.length}<a class="btn btn-primary flex-1 sm:flex-none" href="{cookHref}?servings={servings}"><ChefHat size={17} />{t('recipe.cook')}</a>{/if}
+				{#if actions}{@render actions()}{:else}<button class="btn btn-soft" onclick={() => window.print()}><Printer size={17} />{t('recipe.print')}</button>{/if}
+			</div>
 		</header>
 	</div>
 
@@ -70,9 +73,9 @@
 				<div class="mb-2 flex items-center justify-between gap-3">
 					<h2 class="font-semibold">{t('recipe.ingredients')}</h2>
 					<div class="flex items-center gap-1" role="group" aria-label={t('recipe.servings')}>
-						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => (servings = Math.max(1, servings - 1))} aria-label={t('recipe.fewer_servings')}><Minus size={15} /></button>
+						<button class="print-hide btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => (servings = Math.max(1, servings - 1))} aria-label={t('recipe.fewer_servings')}><Minus size={15} /></button>
 						<span class="inline-flex min-w-11 items-center justify-center gap-1 text-sm font-semibold tabular-nums" aria-live="polite"><Users size={14} />{servings}</span>
-						<button class="btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => servings++} aria-label={t('recipe.more_servings')}><Plus size={15} /></button>
+						<button class="print-hide btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => servings++} aria-label={t('recipe.more_servings')}><Plus size={15} /></button>
 					</div>
 				</div>
 				<ul class="divide-y divide-line text-sm">
@@ -111,7 +114,8 @@
 			{/if}
 
 			{#if recipe.source_url}
-				<a href={recipe.source_url} rel="noopener noreferrer nofollow" target="_blank" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted underline-offset-2 hover:text-ink hover:underline"><ExternalLink size={14} />{t('recipe.source')}</a>
+				<a href={recipe.source_url} rel="noopener noreferrer nofollow" target="_blank" class="print-hide inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted underline-offset-2 hover:text-ink hover:underline"><ExternalLink size={14} />{t('recipe.source')}</a>
+				<p class="print-only text-xs">{recipe.source_url}</p>
 			{/if}
 			{#if footer}{@render footer()}{/if}
 		</div>

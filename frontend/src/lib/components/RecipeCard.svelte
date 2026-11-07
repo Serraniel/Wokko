@@ -28,5 +28,10 @@
 			<span class="inline-flex items-center gap-1"><Users size={12} />{recipe.servings}<span class="sr-only">{t('recipe.servings_count', { count: recipe.servings })}</span></span>
 			{#if recipe.rating}<span class="inline-flex items-center gap-1"><Star size={12} class="fill-flame text-flame" />{recipe.rating.toFixed(1)}</span>{/if}
 		</div>
+		{#if recipe.keywords.length}
+			<ul class="mt-1 flex h-5 flex-wrap gap-1 overflow-hidden" aria-label={t('editor.tags')}>
+				{#each recipe.keywords.slice(0, 3) as k (k.id)}<li class="max-w-full truncate rounded bg-surface-2 px-1.5 text-[0.6875rem] leading-5 text-muted">{k.name}</li>{/each}
+			</ul>
+		{/if}
 	</div>
 </a>

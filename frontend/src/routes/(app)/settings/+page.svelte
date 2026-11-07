@@ -172,11 +172,4 @@
 		<button class="flex w-full items-center gap-3 p-4 text-left font-medium hover:bg-surface-2" onclick={logout}><LogOut size={20} class="text-muted" />{t('auth.logout')}</button>
 	</section>
 
-	<footer class="flex flex-wrap justify-center gap-x-3 gap-y-1 py-2 text-sm text-muted">
-		<a class="hover:underline" href="https://github.com/Serraniel/Wokko" rel="noopener noreferrer" target="_blank">GitHub</a>
-		<span>·</span><span>v{session.status?.version}</span>
-		<span>·</span><a class="hover:underline" href="https://github.com/Serraniel/Wokko/releases" rel="noopener noreferrer" target="_blank">{t('settings.changelog')}</a>
-		<span>·</span><a class="hover:underline" href="https://eupl.eu/1.2/" rel="noopener noreferrer" target="_blank">EUPL-1.2</a>
-		<span>·</span><a class="hover:underline" href="/third-party-notices.txt" target="_blank" data-sveltekit-reload>{t('settings.notices')}</a>
-	</footer>
 </div>

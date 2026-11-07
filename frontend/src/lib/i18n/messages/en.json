@@ -475,5 +475,10 @@
   "err.invalid_client": "This app isn't known. Please start again from the app.",
   "err.invalid_redirect_uri": "This app's return address isn't allowed.",
   "err.invalid_request": "This app didn't use a secure sign-in.",
-  "err.bad_scope": "Unknown access level."
+  "err.bad_scope": "Unknown access level.",
+  "cook.timer_done_named": "Time's up: {name}",
+  "cook.timer_label": "Step {step}, {time}",
+  "cook.timers": "Running timers",
+  "changelog.releases": "All releases on GitHub",
+  "recipe.print": "Print"
 }

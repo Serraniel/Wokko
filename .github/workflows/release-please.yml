@@ -1,0 +1,37 @@
+name: Release
+
+# Conventional Commits on main decide the next version (fix: patch, feat: minor before 1.0).
+# release-please keeps a release PR open with the version and changelog. Merging it tags the
+# release, which then publishes the image.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      created: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # A tag pushed by this workflow's own token doesn't start other workflows, so the image is
+  # published from here.
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.created == 'true'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-publish.yml
+    with:
+      tag: ${{ needs.release-please.outputs.tag }}
