@@ -34,7 +34,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.tag || github.ref_name }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag || github.ref_name }}
-      # amd64 for servers such as a mini PC, arm64 for a Raspberry Pi.
+      # x86-64 for most servers, ARM64 for a Raspberry Pi.
       - uses: docker/build-push-action@v7
         with:
           context: .
