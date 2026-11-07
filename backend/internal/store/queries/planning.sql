@@ -119,8 +119,11 @@ SELECT r.id FROM shopping_recipes r LEFT JOIN shopping_items i ON i.shopping_rec
 WHERE r.household_id = ? AND i.id IS NULL;
 
 -- name: CreateShoppingItem :one
-INSERT INTO shopping_items (household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, created_by, checked_at)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;
+INSERT INTO shopping_items (household_id, shopping_recipe_id, food_id, unit_id, amount, note, position, created_by, checked_at, client_ref)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;
+
+-- name: GetShoppingItemByClientRef :one
+SELECT * FROM shopping_items WHERE household_id = ? AND client_ref = ?;
 
 -- name: GetShoppingItem :one
 SELECT * FROM shopping_items WHERE id = ?;

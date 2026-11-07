@@ -66,6 +66,28 @@ docker compose start wokko
 
 A backup is a normal `tar.gz` with a SQLite database and your photos. Each user can also download their own recipes under **Settings** as a ZIP with JSON and photos, readable without Wokko.
 
+## HTTPS, offline use and sharing from your phone
+
+Wokko works over plain HTTP, but browsers keep these for HTTPS: using Wokko offline, installing it and sharing to it from other apps, passkeys, and keeping the screen on while cooking. Set `PUBLIC_URL` to the HTTPS address. With a domain pointing at your server, [Caddy](https://caddyserver.com) takes care of the certificate. Add this to `docker-compose.yml`, with `caddy_data:` under `volumes:`:
+
+```yaml
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from wokko.example.com --to wokko:8080
+    volumes:
+      - caddy_data:/data
+```
+
+**Offline:** the shopping list, this week's plan and recently used recipes stay available. Ticking, adding and removing shopping items wait and are sent when you're back. Logging out deletes what's stored on the device.
+
+**Sharing:** add Wokko to your home screen from the browser's menu, and it appears when you share a page from another app. Over plain HTTP, use the bookmark under **More > Bring in your recipes** instead.
+
+## Moving from another app
+
+Under **More > Bring in your recipes**, choose an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
+
 ## Using kitshn
 
 In kitshn, enter the address your phone can reach Wokko at, such as `http://192.168.1.20:8080`, and log in with your handle and password. `localhost` won't work there, because on a phone that means the phone itself. Written against kitshn 2.1.5, and tested with the Play Store app.

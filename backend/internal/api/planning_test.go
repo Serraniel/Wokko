@@ -3,6 +3,7 @@ package api_test
 import (
 	"encoding/json"
 	"math"
+	"strings"
 	"testing"
 
 	"github.com/serraniel/wokko/backend/internal/app"
@@ -287,4 +288,34 @@ func TestNutritionAddsUpAndAdmitsWhatItDoesNotKnow(t *testing.T) {
 	}
 	var raw map[string]any
 	_ = json.Unmarshal(res.body, &raw)
+}
+
+// On bad signal a reply can get lost after the server saved the item, so the app sends it again.
+func TestAddingTheSameShoppingItemAgainChangesNothing(t *testing.T) {
+	e := newEnv(t)
+	admin, member, stranger := household(t, e)
+	var first, again, theirs app.ShoppingItem
+	admin.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "3 Tomaten", ClientRef: "ref-1", Checked: true}, 201).decode(t, &first)
+	admin.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "3 Tomaten", ClientRef: "ref-1", Checked: true}, 201).decode(t, &again)
+	if first.ID != again.ID || !again.Checked {
+		t.Fatalf("repeat made another item: %+v %+v", first, again)
+	}
+	// The same household shares references, while another one has its own.
+	member.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "3 Tomaten", ClientRef: "ref-1"}, 201).decode(t, &again)
+	if again.ID != first.ID {
+		t.Fatalf("household member: %+v", again)
+	}
+	stranger.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "Salz", ClientRef: "ref-1"}, 201).decode(t, &theirs)
+	if theirs.ID == first.ID {
+		t.Fatal("a reference must not reach another household's item")
+	}
+	// Items without a reference stay separate, as when someone really wants two lines.
+	admin.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "Salz"}, 201)
+	admin.ok("POST", v1+"/shopping", app.ShoppingItemInput{Line: "Salz"}, 201)
+	var items []app.ShoppingItem
+	admin.ok("GET", v1+"/shopping", nil, 200).decode(t, &items)
+	if len(items) != 3 {
+		t.Fatalf("items: %+v", items)
+	}
+	admin.wantCode("POST", v1+"/shopping", app.ShoppingItemInput{Line: "x", ClientRef: strings.Repeat("r", 101)}, 400, "bad_request")
 }

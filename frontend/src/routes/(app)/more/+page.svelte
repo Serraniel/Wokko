@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { BookMarked, Carrot, ChevronRight, Settings, Shield, Trash2, Users } from '@lucide/svelte';
+	import { BookMarked, Carrot, ChevronRight, Download, Settings, Shield, Trash2, Users } from '@lucide/svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 
 	const links = $derived([
 		{ href: '/books', icon: BookMarked, label: t('nav.books') },
+		{ href: '/import', icon: Download, label: t('fileimport.title') },
 		{ href: '/ingredients', icon: Carrot, label: t('nav.ingredients') },
 		{ href: '/people', icon: Users, label: t('nav.people') },
 		{ href: '/settings', icon: Settings, label: t('nav.settings') },

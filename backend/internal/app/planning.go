@@ -635,6 +635,13 @@ func (s *Service) shoppingItems(ctx context.Context, q *sqlcgen.Queries, v Viewe
 	return out, nil
 }
 
+func refOrNull(ref string) sql.NullString {
+	if ref == "" {
+		return sql.NullString{}
+	}
+	return nullStr(ref)
+}
+
 // dropEmptyGroups removes shopping-recipe groups whose last item is gone.
 func dropEmptyGroups(ctx context.Context, q *sqlcgen.Queries, household int64) error {
 	ids, err := q.ListUnusedShoppingRecipes(ctx, household)
@@ -678,7 +685,25 @@ func (s *Service) createShoppingItem(ctx context.Context, v Viewer, in ShoppingI
 		return ShoppingItem{}, invalid("bad_amount", "Amounts can't be negative")
 	}
 	var out ShoppingItem
+	ref := strings.TrimSpace(in.ClientRef)
+	if len(ref) > 100 {
+		return ShoppingItem{}, invalid("bad_request", "The request could not be read")
+	}
 	err := s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
+		if ref != "" {
+			existing, err := q.GetShoppingItemByClientRef(ctx, sqlcgen.GetShoppingItemByClientRefParams{HouseholdID: v.User.HouseholdID, ClientRef: nullStr(ref)})
+			if err == nil {
+				items, err := s.shoppingItems(ctx, q, v, existing.ID)
+				if err != nil {
+					return err
+				}
+				out = items[0]
+				return nil
+			}
+			if !isNoRows(err) {
+				return err
+			}
+		}
 		ing := IngredientInput{FoodID: in.FoodID, FoodName: in.FoodName, UnitID: in.UnitID, UnitName: in.UnitName}
 		food, err := s.resolveFood(ctx, q, v, ing)
 		if err != nil {
@@ -707,7 +732,7 @@ func (s *Service) createShoppingItem(ctx context.Context, v Viewer, in ShoppingI
 			}
 			groupID = sql64(group)
 		}
-		item, err := q.CreateShoppingItem(ctx, sqlcgen.CreateShoppingItemParams{HouseholdID: v.User.HouseholdID, ShoppingRecipeID: groupID, FoodID: food, UnitID: unit, Amount: amount, Note: strings.TrimSpace(in.Note), Position: pos, CreatedBy: nullID(v.id()), CheckedAt: s.checkStamp(in.Checked)})
+		item, err := q.CreateShoppingItem(ctx, sqlcgen.CreateShoppingItemParams{HouseholdID: v.User.HouseholdID, ShoppingRecipeID: groupID, FoodID: food, UnitID: unit, Amount: amount, Note: strings.TrimSpace(in.Note), Position: pos, CreatedBy: nullID(v.id()), CheckedAt: s.checkStamp(in.Checked), ClientRef: refOrNull(ref)})
 		if err != nil {
 			return err
 		}

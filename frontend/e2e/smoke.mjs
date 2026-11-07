@@ -187,6 +187,45 @@ await step('footer, changelog and licenses without an account', async () => {
   await a.goto(base + '/login'); await a.waitForSelector('footer a:has-text("GitHub")'); await a.click('footer a:has-text("Third-party notices")'); await a.waitForURL('**/licenses'); await a.waitForSelector('pre:has-text("EUPL-1.2")'); await a.waitForSelector('pre:has-text("go-webauthn")'); await a.waitForSelector('pre:has-text("Permission is hereby granted")'); await a.waitForSelector('pre:has-text("svelte")');
   await a.goto(base + '/changelog'); await a.waitForSelector('h2:has-text("0.1.0")'); await a.waitForSelector('footer'); await a.screenshot({ path: `${shots}/34-changelog.png` }); await anon.close();
 });
+await step('share to Wokko and the bookmark import from a link', async () => {
+  const seen = []; await p.route('**/api/v1/import', (r) => { seen.push(r.request().postDataJSON()); r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ recipe: { name: 'Geteilt', description: '', work_minutes: 0, wait_minutes: 0, servings: 2, servings_text: '', source_url: 'https://e.com/r', visibility: 'private', keywords: [], steps: [{ name: '', instruction: 'Kochen.', minutes: 0, ingredients: [] }], base_version: 0 }, image_data: '', image_type: '', guessed: false }) }); });
+  await p.goto(base + '/recipes/new?' + new URLSearchParams({ title: 'Toll', text: 'Schau mal https://e.com/r.' })); await p.waitForSelector('text=Imported. Please check it');
+  if (seen[0]?.url !== 'https://e.com/r') throw new Error('shared link: ' + JSON.stringify(seen)); if (await p.inputValue('#name') !== 'Geteilt') throw new Error('draft not filled'); if (new URL(p.url()).search) throw new Error('reload would import again');
+  await p.unroute('**/api/v1/import'); await p.evaluate(() => { for (const k of Object.keys(localStorage)) if (k.includes('draft')) localStorage.removeItem(k); });
+  await p.goto(base + '/recipes/new?' + new URLSearchParams({ title: 'Suppe', text: 'Zutaten\n2 Karotten\n1 l Wasser\nZubereitung\nKochen.' })); await p.waitForSelector('text=Imported. Please check it'); if (await p.inputValue('#name') !== 'Suppe') throw new Error('text share');
+  await p.evaluate(() => { for (const k of Object.keys(localStorage)) if (k.includes('draft')) localStorage.removeItem(k); });
+});
+await step('import another app\'s file, check first, undo', async () => {
+  const recipes = [{ '@type': 'Recipe', name: 'Aus Datei eins', recipeIngredient: ['200 g Mehl', '2 Eier'], recipeInstructions: ['Mischen.'] }, { '@type': 'Recipe', name: 'My version', recipeIngredient: ['1 Salz'] }];
+  await p.goto(base + '/more'); await p.click('a:has-text("Bring in your recipes")'); await p.waitForURL('**/import');
+  await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) });
+  await p.waitForSelector('text=Found 2 recipes'); await p.waitForSelector('li:has-text("My version") >> text=Already here'); await shot('35-file-preview');
+  await p.goto(base + '/recipes'); await p.waitForSelector('a.recipe-card'); if (await p.locator('text=Aus Datei eins').count()) throw new Error('a preview saved something');
+  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
+  await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
+  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
+});
+await step('offline: saved recipes open, shopping queues and syncs', async () => {
+  const off = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const o = await off.newPage(); o.setDefaultTimeout(15000);
+  await o.goto(base + '/login'); await o.fill('#handle', 'daniel'); await o.fill('#password', 'password123'); await o.click('form button:has-text("Log in")'); await o.waitForURL('**/recipes');
+  await o.evaluate(() => navigator.serviceWorker.ready); await o.waitForFunction(() => navigator.serviceWorker.controller); await o.reload(); await o.waitForSelector('a.recipe-card:has-text("My version")');
+  await o.click('a.recipe-card:has-text("My version")'); await o.waitForSelector('h1:has-text("My version")'); await o.waitForTimeout(300);
+  await o.goto(base + '/shopping'); await o.waitForSelector('#shopping-line'); await o.waitForTimeout(800); await o.goto(base + '/recipes'); await o.waitForSelector('a.recipe-card'); await o.waitForTimeout(800);
+  await off.setOffline(true);
+  await o.reload(); await o.waitForSelector('a.recipe-card:has-text("My version")'); await o.waitForSelector('text=You\'re offline'); await o.screenshot({ path: `${shots}/36-offline.png` });
+  await o.click('a.recipe-card:has-text("My version")'); await o.waitForSelector('h1:has-text("My version")'); await o.waitForSelector('article img');
+  await o.goto(base + '/shopping'); await o.waitForSelector('#shopping-line'); await o.fill('#shopping-line', '3 Offline-Tomaten'); await o.keyboard.press('Enter'); await o.waitForSelector('button:has-text("Offline-Tomaten")'); await o.fill('#shopping-line', 'Offline-Gurken'); await o.keyboard.press('Enter'); await o.waitForSelector('button:has-text("Offline-Gurken")'); await o.waitForSelector('button:has-text("Offline-Tomaten")'); await o.waitForSelector('text=waiting to be sent'); await o.screenshot({ path: `${shots}/37-offline-shopping.png` });
+  await o.reload(); await o.waitForSelector('button:has-text("Offline-Tomaten")'); await o.waitForSelector('button:has-text("Offline-Gurken")');
+  await off.setOffline(false); await o.waitForSelector('text=waiting to be sent', { state: 'detached' });
+  const back = await o.evaluate(async () => (await (await fetch('/api/v1/shopping')).json()).filter((i) => i.food.name.includes('Offline-Tomaten')).length); if (back !== 1) throw new Error('sent ' + back + ' times');
+  // The server saves an item, but its answer never arrives. The app sends it again.
+  let lost = 0; await o.route('**/api/v1/shopping', async (r) => { if (r.request().method() === 'POST' && !lost++) { await r.fetch(); return r.abort(); } return r.continue(); });
+  await o.fill('#shopping-line', 'Verlorene-Antwort'); await o.keyboard.press('Enter'); await o.waitForSelector('text=waiting to be sent'); await o.waitForSelector('text=waiting to be sent', { state: 'detached', timeout: 12000 }); await o.unroute('**/api/v1/shopping');
+  const once = await o.evaluate(async () => (await (await fetch('/api/v1/shopping')).json()).filter((i) => i.food.name.includes('Verlorene-Antwort')).length); if (lost < 2 || once !== 1) throw new Error(`lost answer: sent ${lost} times, ${once} on the list`);
+  await o.goto(base + '/settings'); await o.locator('button:has-text("Log out")').last().click(); await o.waitForURL('**/login**'); await o.waitForTimeout(300);
+  const left = await o.evaluate(async () => (await caches.keys()).filter((k) => k === 'wokko-data' || k === 'wokko-media')); if (left.length) throw new Error('kept after logout: ' + left);
+  await off.close();
+});
 await step('assistant access: admin switch, token and app approval', async () => {
   await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');
   await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);

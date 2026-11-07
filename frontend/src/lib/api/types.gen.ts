@@ -394,6 +394,10 @@ export interface ShoppingItemInput {
   amount: number /* float64 */ | null;
   note: string;
   checked: boolean;
+  /**
+   * ClientRef makes adding safe to repeat: sending the same one again changes nothing.
+   */
+  client_ref: string;
 }
 /**
  * ShoppingAddRecipe adds a recipe's ingredients, scaled to the servings. IngredientIDs narrows
