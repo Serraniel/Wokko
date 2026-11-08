@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/Serraniel/Wokko/compare/v0.2.0...v0.3.0) (2026-11-08)
+
+
+### Features
+
+* **ui:** add Integrations with setup for each AI app and a choice of access ([#82](https://github.com/Serraniel/Wokko/issues/82)) ([287a3d5](https://github.com/Serraniel/Wokko/commit/287a3d585a1bff770a41cf760be1377dba186e3c))
+
+
+### Fixes
+
+* **ui:** line up the AI assistants setting on the admin page ([#81](https://github.com/Serraniel/Wokko/issues/81)) ([658d997](https://github.com/Serraniel/Wokko/commit/658d9978bf3f26ee7a6a1df636f065282c529f3a)), closes [#80](https://github.com/Serraniel/Wokko/issues/80)
+
 ## [0.2.0](https://github.com/Serraniel/Wokko/compare/v0.1.0...v0.2.0) (2026-11-07)
 
 
