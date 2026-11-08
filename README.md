@@ -122,7 +122,7 @@ These Tandoor features aren't in Wokko: AI import, shopping lists split into sev
 
 Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Integrations**.
 
-Set it up under **Integrations**, which shows the address to use. Apps that connect by address need no token. For the others, create a token there, then connect:
+Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Claude Code, Codex, Gemini CLI or Cursor, and Wokko shows its steps. Apps that connect by address need no token. For the others, create a token there, then connect:
 
 | Client | How |
 |---|---|
