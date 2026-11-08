@@ -229,6 +229,7 @@ await step('offline: saved recipes open, shopping queues and syncs', async () =>
 await step('assistant access: admin switch, token and app approval', async () => {
   await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');
   await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);
+  const rows = await p.locator('section:has(#mcp-enabled) input[type=checkbox]').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().right))); if (rows.length !== 3 || new Set(rows).size !== 1) throw new Error('admin settings out of line: ' + rows);
   await p.goto(base + '/settings'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
   await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.locator('text=Copy this token now').scrollIntoViewIfNeeded(); await shot('29-assistant');
   const reg = await p.evaluate(async () => (await (await fetch('/oauth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_name: 'Claude', redirect_uris: ['http://127.0.0.1:33333/callback'] }) })).json()));
