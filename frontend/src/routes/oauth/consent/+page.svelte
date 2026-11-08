@@ -34,11 +34,17 @@
 			.catch((e) => (error = errorText(e)));
 	});
 
+	// The app asks for a level of access, and the person can always give less, or more.
+	let chosen = $state('write');
+	$effect(() => {
+		if (info) chosen = info.scope;
+	});
+
 	async function allow() {
 		busy = true;
 		error = '';
 		try {
-			const out = await api.post<OAuthRedirect>('/oauth/approve', { client_id: clientID, redirect_uri: redirectURI, code_challenge: challenge, scope: info?.scope, state: stateParam });
+			const out = await api.post<OAuthRedirect>('/oauth/approve', { client_id: clientID, redirect_uri: redirectURI, code_challenge: challenge, scope: chosen, state: stateParam });
 			location.assign(out.redirect_url);
 		} catch (e) {
 			error = errorText(e);
@@ -64,7 +70,14 @@
 		<ErrorNote text={error} />
 		{#if info}
 			<p>{t('oauth.intro', { name: info.client_name })}</p>
-			<p class="rounded-lg bg-surface-2 px-3 py-2 text-sm font-medium">{t(`oauth.scope_${info.scope}`)}</p>
+			<fieldset class="space-y-1">
+				<legend class="label">{t('oauth.choose')}</legend>
+				{#each ['read', 'write', 'delete'] as sc (sc)}
+					<label class="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium {chosen === sc ? 'bg-surface-2' : 'hover:bg-surface-2'}">
+						<input type="radio" name="scope" value={sc} class="h-4 w-4 shrink-0 accent-[var(--brand)]" bind:group={chosen} />{t(`oauth.scope_${sc}`)}
+					</label>
+				{/each}
+			</fieldset>
 			<p class="hint !mt-0">{t('oauth.never')}</p>
 			<p class="hint !mt-0">{t('oauth.after', { host: info.redirect_host })}</p>
 			<div class="flex gap-2">

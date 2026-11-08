@@ -122,7 +122,7 @@ These Tandoor features aren't in Wokko: AI import, shopping lists split into sev
 
 Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Integrations**.
 
-Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Claude Code, Codex, Gemini CLI or Cursor, and Wokko shows its steps. Apps that connect by address need no token. For the others, create a token there, then connect:
+Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Claude Code, Codex, Gemini CLI, Cursor, VS Code, OpenClaw or Hermes Agent, and Wokko shows its steps. For Claude, Cursor and VS Code, a button opens the app with everything filled in. Apps that connect by address need no token. For the others, create a token there, then connect:
 
 | Client | How |
 |---|---|
@@ -130,7 +130,7 @@ Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Clau
 | Claude Code | `claude mcp add --transport http wokko http://your-server:8080/mcp --header "Authorization: Bearer <token>"` |
 | Claude Desktop, or anything that starts a local MCP server, on the same computer as Wokko | Use `docker exec -i wokko /wokko mcp-stdio --token <token>` as its command |
 | The same, on another computer with Docker | Use `docker run -i --rm ghcr.io/serraniel/wokko:<version> mcp-stdio --url http://your-server:8080/mcp --token <token>` as its command |
-| Claude, ChatGPT or another app with custom connectors, on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set. Tested with Claude |
+| Claude, ChatGPT or another app with custom connectors, on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks, choosing whether it may only read. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set. Tested with Claude |
 
 ## Adding a language
 

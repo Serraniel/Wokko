@@ -412,6 +412,21 @@ func TestOAuthFlowForAssistants(t *testing.T) {
 	}
 	s := connect(t, e, tokens["access_token"].(string))
 	names := toolNames(t, s)
+
+	// The app asked for write access, and the person chose to give it read access only.
+	var low app.OAuthRedirect
+	admin.ok("POST", v1+"/oauth/approve", app.OAuthApproval{ClientID: id, RedirectURI: redirect, CodeChallenge: challenge, Scope: "read", State: "xyz"}, 200).decode(t, &low)
+	lowURL, err := url.Parse(low.RedirectURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	status, lowTokens := exchange(lowURL.Query().Get("code"), verifier)
+	if status != 200 {
+		t.Fatalf("read-only exchange: %d", status)
+	}
+	if readOnly := toolNames(t, connect(t, e, lowTokens["access_token"].(string))); len(readOnly) == 0 || len(readOnly) >= len(names) {
+		t.Fatalf("read-only app got %v, write app %v", readOnly, names)
+	}
 	if !slices.Contains(names, "create_recipe") || slices.Contains(names, "delete_recipe") {
 		t.Fatalf("scope: %v", names)
 	}
