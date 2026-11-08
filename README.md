@@ -38,7 +38,7 @@ docker compose up -d
 
 Open `http://localhost:8080`, or `http://<server address>:8080` from another device, and create your admin account. The first account becomes the admin. After that, people join through invite links from **Admin**.
 
-[`docker-compose.example.yml`](docker-compose.example.yml) explains each setting, including backups on a NAS and HTTPS. Images are on the [GitHub Container Registry](https://github.com/Serraniel/Wokko/pkgs/container/wokko), tagged by version such as `0.2.0` or `0.2`. There is deliberately no `latest` tag, so an update only happens when you choose one.
+[`docker-compose.example.yml`](docker-compose.example.yml) explains each setting, including backups on a NAS and HTTPS. Images are on the [GitHub Container Registry](https://github.com/Serraniel/Wokko/pkgs/container/wokko), tagged by version such as `0.2.0` or `0.2`. The example file uses a fixed version instead of `latest`, so an update only happens when you choose one.
 
 ### From source
 
