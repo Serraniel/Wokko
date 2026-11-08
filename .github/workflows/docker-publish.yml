@@ -1,10 +1,17 @@
 name: Publish image
 
 on:
-  # Called by the release workflow. Pushing a tag by hand publishes too.
+  # Called by the release workflow. Pushing a tag by hand publishes too, and running it by
+  # hand redoes a release's image and files.
   workflow_call:
     inputs:
       tag:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag, such as v0.3.0
         required: true
         type: string
   push:
@@ -54,24 +61,26 @@ jobs:
           subject-name: ghcr.io/serraniel/wokko
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
-      - uses: anchore/sbom-action/download-syft@v0
-        id: syft
       # The frontend is bundled into the binary, where scanning the image can't see its packages,
       # so the source gets its own SBOM next to one for each image.
       - name: Create the release files
         env:
           TAG: ${{ inputs.tag || github.ref_name }}
           IMAGE: ghcr.io/serraniel/wokko@${{ steps.build.outputs.digest }}
-          SYFT: ${{ steps.syft.outputs.cmd }}
-          # SvelteKit and the rest of the bundled frontend count as dev dependencies.
-          SYFT_JAVASCRIPT_INCLUDE_DEV_DEPENDENCIES: "true"
         run: |
           mkdir release
+          # A fixed syft image: the installer that sbom-action uses fetches an address GitHub
+          # now refuses. SvelteKit and the rest of the bundled frontend count as dev
+          # dependencies, so they're included.
+          syft() {
+            docker run --rm -u "$(id -u):$(id -g)" --tmpfs /tmp:exec,mode=1777 -e HOME=/tmp \
+              -v "$PWD:/src" -w /src -e SYFT_JAVASCRIPT_INCLUDE_DEV_DEPENDENCIES=true anchore/syft:v1.57.0 "$@"
+          }
           for format in spdx-json cyclonedx-json; do
             name="${format%-json}"
-            "$SYFT" scan "dir:." --source-name wokko --source-version "$TAG" --exclude ./release -o "$format=release/wokko-$TAG-source.$name.json"
+            syft scan "dir:." --source-name wokko --source-version "$TAG" --exclude ./release -o "$format=release/wokko-$TAG-source.$name.json"
             for arch in amd64 arm64; do
-              "$SYFT" scan "registry:$IMAGE" --platform "linux/$arch" --source-name wokko --source-version "$TAG" -o "$format=release/wokko-$TAG-image-$arch.$name.json"
+              syft scan "registry:$IMAGE" --platform "linux/$arch" --source-name wokko --source-version "$TAG" -o "$format=release/wokko-$TAG-image-$arch.$name.json"
             done
           done
           echo "$IMAGE" > "release/wokko-$TAG-image-digest.txt"
