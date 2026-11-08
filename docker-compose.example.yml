@@ -10,7 +10,7 @@ name: wokko
 services:
   wokko:
     # A fixed version, so nothing updates by surprise. See "Updating" in the README.
-    image: ghcr.io/serraniel/wokko:0.2.0 # x-release-please-version
+    image: ghcr.io/serraniel/wokko:0.3.0 # x-release-please-version
     container_name: wokko
     restart: unless-stopped
     environment:
