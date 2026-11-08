@@ -197,13 +197,14 @@ await step('share to Wokko and the bookmark import from a link', async () => {
 });
 await step('import another app\'s file, check first, undo', async () => {
   const recipes = [{ '@type': 'Recipe', name: 'Aus Datei eins', recipeIngredient: ['200 g Mehl', '2 Eier'], recipeInstructions: ['Mischen.'] }, { '@type': 'Recipe', name: 'My version', recipeIngredient: ['1 Salz'] }];
-  await p.goto(base + '/more'); await p.click('a:has-text("Bring in your recipes")'); await p.waitForURL('**/import');
+  await p.goto(base + '/more'); await p.click('a:has-text("Integrations")'); await p.waitForURL('**/integrations');
   await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) });
   await p.waitForSelector('text=Found 2 recipes'); await p.waitForSelector('li:has-text("My version") >> text=Already here'); await shot('35-file-preview');
   await p.goto(base + '/recipes'); await p.waitForSelector('a.recipe-card'); if (await p.locator('text=Aus Datei eins').count()) throw new Error('a preview saved something');
-  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
+  // The old address still works.
+  await p.goto(base + '/import'); await p.waitForURL('**/integrations'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
-  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
+  await p.goto(base + '/integrations'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
 });
 await step('offline: saved recipes open, shopping queues and syncs', async () => {
   const off = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const o = await off.newPage(); o.setDefaultTimeout(15000);
@@ -227,11 +228,11 @@ await step('offline: saved recipes open, shopping queues and syncs', async () =>
   await off.close();
 });
 await step('assistant access: admin switch, token and app approval', async () => {
-  await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');
+  await p.goto(base + '/settings'); await p.click('a:has-text("Integrations")'); await p.waitForSelector('text=Turn this on in the admin settings first');
   await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);
   const rows = await p.locator('section:has(#mcp-enabled) input[type=checkbox]').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().right))); if (rows.length !== 3 || new Set(rows).size !== 1) throw new Error('admin settings out of line: ' + rows);
-  await p.goto(base + '/settings'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
-  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.locator('text=Copy this token now').scrollIntoViewIfNeeded(); await shot('29-assistant');
+  await p.goto(base + '/integrations'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
+  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.waitForSelector('text=Address and header for any app'); await p.locator('text=Copy this token now').scrollIntoViewIfNeeded(); await shot('29-assistant');
   const reg = await p.evaluate(async () => (await (await fetch('/oauth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_name: 'Claude', redirect_uris: ['http://127.0.0.1:33333/callback'] }) })).json()));
   await p.route('http://127.0.0.1:33333/**', (r) => r.fulfill({ status: 200, contentType: 'text/html', body: 'ok' }));
   const q = new URLSearchParams({ client_id: reg.client_id, redirect_uri: 'http://127.0.0.1:33333/callback', response_type: 'code', code_challenge: 'abc', code_challenge_method: 'S256', scope: 'write', state: 'xyz' });

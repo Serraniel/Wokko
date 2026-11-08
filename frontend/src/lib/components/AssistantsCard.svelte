@@ -17,7 +17,8 @@
 
 	const on = $derived(session.status?.mcp_enabled);
 	const address = $derived(`${location.origin}/mcp`);
-	const codeCommand = $derived(`claude mcp add --transport http wokko ${address} --header "Authorization: Bearer ${created?.secret ?? ''}"`);
+	const header = $derived(`Authorization: Bearer ${created?.secret ?? ''}`);
+	const codeCommand = $derived(`claude mcp add --transport http wokko ${address} --header "${header}"`);
 	const desktopConfig = $derived(JSON.stringify({ mcpServers: { wokko: { command: 'docker', args: ['exec', '-i', 'wokko', '/wokko', 'mcp-stdio', '--token', created?.secret ?? ''] } } }, null, 2));
 
 	async function load() {
@@ -62,10 +63,12 @@
 		<p class="rounded-lg bg-surface-2 px-3 py-2 text-sm text-muted">{session.isAdmin ? t('assistant.off_admin') : t('assistant.off')}</p>
 	{:else}
 		<div>
-			<p class="label">{t('assistant.setup_web')}</p>
+			<h3 class="label">{t('assistant.setup_web')}</h3>
 			<CopyField value={address} label={t('assistant.setup_address')} />
 			<p class="hint">{t('assistant.setup_web_hint')}</p>
 		</div>
+		<h3 class="label !mb-0">{t('assistant.setup_token')}</h3>
+		<p class="hint !mt-0">{t('assistant.setup_token_hint')}</p>
 		<form class="space-y-2" onsubmit={create}>
 			<div>
 				<label class="label" for="token-name">{t('assistant.name')}</label>
@@ -99,13 +102,17 @@
 				</div>
 				<CopyField value={created.secret} label={t('assistant.secret_title')} />
 				<div class="text-ink">
-					<p class="label">{t('assistant.setup_code')}</p>
+					<p class="label">{t('assistant.setup_any')}</p>
+					<CopyField value={address} label={t('assistant.setup_address')} />
+					<div class="mt-2"><CopyField value={header} label={t('assistant.setup_header')} /></div>
+				</div>
+				<details class="text-ink">
+					<summary class="min-h-9 cursor-pointer text-sm font-medium">{t('assistant.setup_examples')}</summary>
+					<p class="label mt-2">{t('assistant.setup_code')}</p>
 					<CopyField value={codeCommand} label={t('assistant.setup_code')} />
-				</div>
-				<div class="text-ink">
-					<p class="label">{t('assistant.setup_desktop')}</p>
+					<p class="label mt-3">{t('assistant.setup_desktop')}</p>
 					<pre class="overflow-x-auto rounded-lg bg-surface p-2 text-xs">{desktopConfig}</pre>
-				</div>
+				</details>
 			</div>
 		{/if}
 		{#if tokens.length}
