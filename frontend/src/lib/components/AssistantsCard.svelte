@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Bot, Trash2 } from '@lucide/svelte';
+	import { Bot, ExternalLink, Trash2, TriangleAlert } from '@lucide/svelte';
 	import { api, errorText } from '#lib/api/client.ts';
 	import type { APIToken, AssistantActivity, NewAPIToken } from '#lib/api/types.gen.ts';
 	import { formatDate, t } from '#lib/i18n/index.svelte.ts';
@@ -17,8 +17,30 @@
 
 	const on = $derived(session.status?.mcp_enabled);
 	const address = $derived(`${location.origin}/mcp`);
-	const codeCommand = $derived(`claude mcp add --transport http wokko ${address} --header "Authorization: Bearer ${created?.secret ?? ''}"`);
-	const desktopConfig = $derived(JSON.stringify({ mcpServers: { wokko: { command: 'docker', args: ['exec', '-i', 'wokko', '/wokko', 'mcp-stdio', '--token', created?.secret ?? ''] } } }, null, 2));
+	const secure = location.protocol === 'https:';
+
+	// Each app's own way in. Apps that connect by address log in through Wokko and need no
+	// token. The others get a snippet that fills in the token once it's created.
+	type App = { id: string; name: string; byAddress?: boolean; steps: number; snippet?: (token: string) => string; link?: (token: string) => string; doc?: string };
+	// What Cursor and VS Code store for a server that's reached over HTTP with a token.
+	const remote = (tk: string) => ({ url: address, headers: { Authorization: `Bearer ${tk}` } });
+	const apps: App[] = [
+		{ id: 'claude', name: 'Claude', byAddress: true, steps: 3, doc: 'https://www.claude.com/docs/connectors/custom/remote-mcp', link: () => `https://claude.ai/customize/connectors?${new URLSearchParams({ modal: 'add-custom-connector', connectorName: 'Wokko', connectorUrl: address })}` },
+		{ id: 'chatgpt', name: 'ChatGPT', byAddress: true, steps: 3 },
+		{ id: 'claude_code', name: 'Claude Code', steps: 1, snippet: (tk) => `claude mcp add --transport http wokko ${address} --header "Authorization: Bearer ${tk}"` },
+		{ id: 'codex', name: 'Codex', steps: 1, doc: 'https://developers.openai.com/codex/mcp', snippet: (tk) => `export WOKKO_TOKEN=${tk}\ncodex mcp add wokko --url ${address} --bearer-token-env-var WOKKO_TOKEN` },
+		{ id: 'gemini', name: 'Gemini CLI', steps: 1, snippet: (tk) => `gemini mcp add --transport http --header "Authorization: Bearer ${tk}" wokko ${address}` },
+		{ id: 'cursor', name: 'Cursor', steps: 1, doc: 'https://cursor.com/docs/mcp/install-links', snippet: (tk) => JSON.stringify({ mcpServers: { wokko: remote(tk) } }, null, 2), link: (tk) => `cursor://anysphere.cursor-deeplink/mcp/install?name=wokko&config=${encodeURIComponent(btoa(JSON.stringify(remote(tk))))}` },
+		{ id: 'vscode', name: 'VS Code', steps: 1, snippet: (tk) => JSON.stringify({ servers: { wokko: { type: 'http', ...remote(tk) } } }, null, 2), link: (tk) => `vscode:mcp/install?${encodeURIComponent(JSON.stringify({ name: 'wokko', type: 'http', ...remote(tk) }))}` },
+		{ id: 'openclaw', name: 'OpenClaw', steps: 1, doc: 'https://docs.openclaw.ai/gateway/configuration-reference', snippet: (tk) => JSON.stringify({ mcp: { servers: { wokko: { url: address, transport: 'streamable-http', headers: { Authorization: `Bearer ${tk}` } } } } }, null, 2) },
+		{ id: 'hermes', name: 'Hermes Agent', steps: 1, doc: 'https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp', snippet: (tk) => `mcp_servers:\n  wokko:\n    url: "${address}"\n    headers:\n      Authorization: "Bearer ${tk}"` },
+		{ id: 'other', name: t('assistant.app_other'), steps: 2, snippet: (tk) => `Authorization: Bearer ${tk}` }
+	];
+	let appId = $state('claude');
+	let createdFor = $state('');
+	const app = $derived(apps.find((a) => a.id === appId) ?? apps[0]);
+	const token = $derived(created && createdFor === app.id ? created.secret : '<token>');
+	const localConfig = $derived(JSON.stringify({ mcpServers: { wokko: { command: 'docker', args: ['exec', '-i', 'wokko', '/wokko', 'mcp-stdio', '--token', token] } } }, null, 2));
 
 	async function load() {
 		try {
@@ -33,7 +55,8 @@
 		e.preventDefault();
 		error = '';
 		try {
-			created = await api.post<NewAPIToken>('/me/tokens', { name, scope, expires_in_days: days });
+			created = await api.post<NewAPIToken>('/me/tokens', { name: name.trim() || app.name, scope, expires_in_days: days });
+			createdFor = app.id;
 			name = '';
 			await load();
 		} catch (err) {
@@ -62,52 +85,79 @@
 		<p class="rounded-lg bg-surface-2 px-3 py-2 text-sm text-muted">{session.isAdmin ? t('assistant.off_admin') : t('assistant.off')}</p>
 	{:else}
 		<div>
-			<p class="label">{t('assistant.setup_web')}</p>
-			<CopyField value={address} label={t('assistant.setup_address')} />
-			<p class="hint">{t('assistant.setup_web_hint')}</p>
+			<h3 class="label" id="assistant-app">{t('assistant.choose')}</h3>
+			<div class="flex flex-wrap gap-2" role="group" aria-labelledby="assistant-app">
+				{#each apps as a (a.id)}
+					<button type="button" class="chip {a.id === appId ? 'chip-active' : 'hover:bg-surface-2'}" aria-pressed={a.id === appId} onclick={() => (appId = a.id)}>{a.name}</button>
+				{/each}
+			</div>
 		</div>
-		<form class="space-y-2" onsubmit={create}>
-			<div>
-				<label class="label" for="token-name">{t('assistant.name')}</label>
-				<input id="token-name" class="input" bind:value={name} required maxlength="100" placeholder={t('assistant.name_placeholder')} />
-			</div>
-			<div class="grid gap-2 sm:grid-cols-2">
-				<div>
-					<label class="label" for="token-scope">{t('assistant.scope')}</label>
-					<select id="token-scope" class="input" bind:value={scope}>
-						<option value="read">{t('assistant.scope_read')}</option>
-						<option value="write">{t('assistant.scope_write')}</option>
-						<option value="delete">{t('assistant.scope_delete')}</option>
-					</select>
-				</div>
-				<div>
-					<label class="label" for="token-days">{t('assistant.expires')}</label>
-					<select id="token-days" class="input" bind:value={days}>
-						<option value={0}>{t('assistant.expires_never')}</option>
-						<option value={30}>{t('assistant.expires_30')}</option>
-						<option value={365}>{t('assistant.expires_365')}</option>
-					</select>
-				</div>
-			</div>
-			<button class="btn btn-soft w-full">{t('assistant.new')}</button>
-		</form>
-		{#if created}
-			<div class="rise space-y-3 rounded-xl bg-warn-soft p-3 text-warn">
-				<div>
-					<p class="text-sm font-semibold">{t('assistant.secret_title')}</p>
-					<p class="text-sm">{t('assistant.secret_hint')}</p>
-				</div>
-				<CopyField value={created.secret} label={t('assistant.secret_title')} />
-				<div class="text-ink">
-					<p class="label">{t('assistant.setup_code')}</p>
-					<CopyField value={codeCommand} label={t('assistant.setup_code')} />
-				</div>
-				<div class="text-ink">
-					<p class="label">{t('assistant.setup_desktop')}</p>
-					<pre class="overflow-x-auto rounded-lg bg-surface p-2 text-xs">{desktopConfig}</pre>
-				</div>
-			</div>
-		{/if}
+
+		<div class="space-y-3 rounded-xl bg-surface-2 p-3">
+			<ol class="list-decimal space-y-1 pl-5 text-sm">
+				{#each Array.from({ length: app.steps }, (_, n) => n + 1) as n (n)}<li>{t(`assistant.${app.id}_${n}`)}</li>{/each}
+			</ol>
+			{#if app.byAddress}
+				{#if app.link}<a class="btn btn-primary w-full" href={app.link('')} target="_blank" rel="noopener noreferrer">{t('assistant.add_to', { app: app.name })}</a>{/if}
+				<CopyField value={address} label={t('assistant.setup_address')} />
+				{#if !secure}<p class="flex items-start gap-2 text-sm text-warn"><TriangleAlert size={15} class="mt-0.5 shrink-0" />{t('assistant.needs_https')}</p>{/if}
+			{:else}
+				{#if app.id === 'other'}<CopyField value={address} label={t('assistant.setup_address')} />{/if}
+				<form class="space-y-2" onsubmit={create}>
+					<div class="grid gap-2 sm:grid-cols-3">
+						<div>
+							<label class="label" for="token-name">{t('assistant.name')}</label>
+							<input id="token-name" class="input" bind:value={name} maxlength="100" placeholder={app.name} />
+						</div>
+						<div>
+							<label class="label" for="token-scope">{t('assistant.scope')}</label>
+							<select id="token-scope" class="input" bind:value={scope}>
+								<option value="read">{t('assistant.scope_read')}</option>
+								<option value="write">{t('assistant.scope_write')}</option>
+								<option value="delete">{t('assistant.scope_delete')}</option>
+							</select>
+						</div>
+						<div>
+							<label class="label" for="token-days">{t('assistant.expires')}</label>
+							<select id="token-days" class="input" bind:value={days}>
+								<option value={0}>{t('assistant.expires_never')}</option>
+								<option value={30}>{t('assistant.expires_30')}</option>
+								<option value={365}>{t('assistant.expires_365')}</option>
+							</select>
+						</div>
+					</div>
+					<button class="btn btn-soft w-full">{t('assistant.new')}</button>
+				</form>
+				{#if created && createdFor === app.id}
+					<div class="rise rounded-xl bg-warn-soft p-3 text-sm text-warn">
+						<p class="font-semibold">{t('assistant.secret_title')}</p>
+						<p>{t('assistant.secret_hint')}</p>
+					</div>
+				{/if}
+				{#if app.link && created && createdFor === app.id}
+					<a class="btn btn-primary w-full" href={app.link(created.secret)}>{t('assistant.add_to', { app: app.name })}</a>
+					<p class="hint !mt-0">{t('assistant.or_by_hand')}</p>
+				{/if}
+				{#if app.snippet}
+					<div>
+						<p class="label">{app.id === 'other' ? t('assistant.setup_header') : t('assistant.setup_run')}</p>
+						{#if app.snippet(token).includes('\n')}
+							<pre class="overflow-x-auto rounded-lg bg-surface p-2 text-xs">{app.snippet(token)}</pre>
+						{:else}
+							<CopyField value={app.snippet(token)} label={app.name} />
+						{/if}
+					</div>
+				{/if}
+				{#if app.id === 'other'}
+					<details>
+						<summary class="min-h-9 cursor-pointer text-sm font-medium">{t('assistant.setup_local')}</summary>
+						<p class="hint !mt-0">{t('assistant.setup_local_hint')}</p>
+						<pre class="mt-2 overflow-x-auto rounded-lg bg-surface p-2 text-xs">{localConfig}</pre>
+					</details>
+				{/if}
+			{/if}
+			{#if app.doc}<a class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href={app.doc} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('assistant.their_guide', { app: app.name })}</a>{/if}
+		</div>
 		{#if tokens.length}
 			<div>
 				<h3 class="label">{t('assistant.tokens')}</h3>

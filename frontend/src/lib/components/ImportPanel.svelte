@@ -67,5 +67,5 @@
 	<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { pasting = !pasting; error = ''; }}>
 		<Link2 size={15} />{pasting ? t('import.link_instead') : t('import.paste_instead')}
 	</button>
-	<a class="ml-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href="/import"><FileUp size={15} />{t('import.from_file')}</a>
+	<a class="ml-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href="/integrations"><FileUp size={15} />{t('import.from_file')}</a>
 </section>

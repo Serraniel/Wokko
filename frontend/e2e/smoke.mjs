@@ -197,13 +197,14 @@ await step('share to Wokko and the bookmark import from a link', async () => {
 });
 await step('import another app\'s file, check first, undo', async () => {
   const recipes = [{ '@type': 'Recipe', name: 'Aus Datei eins', recipeIngredient: ['200 g Mehl', '2 Eier'], recipeInstructions: ['Mischen.'] }, { '@type': 'Recipe', name: 'My version', recipeIngredient: ['1 Salz'] }];
-  await p.goto(base + '/more'); await p.click('a:has-text("Bring in your recipes")'); await p.waitForURL('**/import');
+  await p.goto(base + '/more'); await p.click('a:has-text("Integrations")'); await p.waitForURL('**/integrations');
   await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) });
   await p.waitForSelector('text=Found 2 recipes'); await p.waitForSelector('li:has-text("My version") >> text=Already here'); await shot('35-file-preview');
   await p.goto(base + '/recipes'); await p.waitForSelector('a.recipe-card'); if (await p.locator('text=Aus Datei eins').count()) throw new Error('a preview saved something');
-  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
+  // The old address still works.
+  await p.goto(base + '/import'); await p.waitForURL('**/integrations'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
-  await p.goto(base + '/import'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
+  await p.goto(base + '/integrations'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
 });
 await step('offline: saved recipes open, shopping queues and syncs', async () => {
   const off = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const o = await off.newPage(); o.setDefaultTimeout(15000);
@@ -227,16 +228,23 @@ await step('offline: saved recipes open, shopping queues and syncs', async () =>
   await off.close();
 });
 await step('assistant access: admin switch, token and app approval', async () => {
-  await p.goto(base + '/settings'); await p.waitForSelector('text=Turn this on in the admin settings first');
+  await p.goto(base + '/settings'); await p.click('a:has-text("Integrations")'); await p.waitForSelector('text=Turn this on in the admin settings first');
   await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);
   const rows = await p.locator('section:has(#mcp-enabled) input[type=checkbox]').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().right))); if (rows.length !== 3 || new Set(rows).size !== 1) throw new Error('admin settings out of line: ' + rows);
-  await p.goto(base + '/settings'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
-  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.locator('text=Copy this token now').scrollIntoViewIfNeeded(); await shot('29-assistant');
+  await p.goto(base + '/integrations'); await p.waitForSelector('text=Add custom connector'); await p.click('button[aria-pressed]:has-text("Claude Code")'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
+  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); const cmd = await p.inputValue('input[aria-label="Claude Code"]'); if (!cmd.startsWith('claude mcp add --transport http wokko ') || !cmd.includes('Bearer wokko_')) throw new Error('command without token: ' + cmd); await shot('29-assistant');
+  await p.click('button[aria-pressed]:has-text("Codex")'); if (!(await p.textContent('pre')).includes('<token>')) throw new Error('another app must not get the Claude Code token');
+  await p.click('button[aria-pressed]:has-text("Claude")'); const add = new URL(await p.getAttribute('a:has-text("Add to Claude")', 'href')); if (add.searchParams.get('connectorUrl') !== base + '/mcp' || add.searchParams.get('modal') !== 'add-custom-connector') throw new Error('Claude link: ' + add);
+  await p.click('button[aria-pressed]:has-text("Cursor")'); if (await p.locator('a:has-text("Add to Cursor")').count()) throw new Error('Cursor link before a token');
+  await p.fill('#token-name', 'Cursor test'); await p.click('button:has-text("Create access token")'); const cur = new URL(await p.getAttribute('a:has-text("Add to Cursor")', 'href'));
+  const cfg = JSON.parse(Buffer.from(cur.searchParams.get('config'), 'base64').toString()); if (cfg.url !== base + '/mcp' || !cfg.headers.Authorization.startsWith('Bearer wokko_')) throw new Error('Cursor link: ' + JSON.stringify(cfg));
+  await p.click('button[aria-pressed]:has-text("VS Code")'); await p.fill('#token-name', 'VS Code test'); await p.click('button:has-text("Create access token")'); const vs = await p.getAttribute('a:has-text("Add to VS Code")', 'href');
+  const vcfg = JSON.parse(decodeURIComponent(vs.slice('vscode:mcp/install?'.length))); if (vcfg.type !== 'http' || vcfg.url !== base + '/mcp' || !vcfg.headers.Authorization.startsWith('Bearer wokko_')) throw new Error('VS Code link: ' + vs);
   const reg = await p.evaluate(async () => (await (await fetch('/oauth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_name: 'Claude', redirect_uris: ['http://127.0.0.1:33333/callback'] }) })).json()));
   await p.route('http://127.0.0.1:33333/**', (r) => r.fulfill({ status: 200, contentType: 'text/html', body: 'ok' }));
   const q = new URLSearchParams({ client_id: reg.client_id, redirect_uri: 'http://127.0.0.1:33333/callback', response_type: 'code', code_challenge: 'abc', code_challenge_method: 'S256', scope: 'write', state: 'xyz' });
   await p.goto(base + '/oauth/authorize?' + q); await p.waitForSelector('h1:has-text("Allow access?")'); await p.waitForSelector('text=Claude wants to use Wokko'); await shot('30-consent');
-  await p.click('button.btn-primary:has-text("Allow")'); await p.waitForURL(/33333\/callback\?code=.+state=xyz|33333\/callback\?.*code=/);
+  if (!(await p.isChecked('input[name=scope][value=write]'))) throw new Error('consent should start at what the app asked for'); await p.check('input[name=scope][value=read]'); const approval = p.waitForRequest((r) => r.url().endsWith('/oauth/approve')); await p.click('button.btn-primary:has-text("Allow")'); if ((await approval).postDataJSON().scope !== 'read') throw new Error('chosen access level not sent'); await p.waitForURL(/33333\/callback\?code=.+state=xyz|33333\/callback\?.*code=/);
   await p.goto(base + '/oauth/authorize?' + q); await p.waitForSelector('button:has-text("Don\'t allow")'); await p.click('button:has-text("Don\'t allow")'); await p.waitForURL(/error=access_denied/);
 });
 await step('passkeys with a virtual authenticator', async () => {

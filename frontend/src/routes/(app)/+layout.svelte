@@ -30,7 +30,7 @@
 	]);
 	// A phone has room for the three things used most. The rest live behind "More".
 	const phoneItems = $derived([items[0], items[1], items[2], { href: '/more', icon: Menu, label: t('nav.more') }]);
-	const inMore = (path: string) => ['/more', '/import', '/books', '/ingredients', '/people', '/settings', '/trash', '/admin'].some((h) => path === h || path.startsWith(h + '/'));
+	const inMore = (path: string) => ['/more', '/integrations', '/import', '/books', '/ingredients', '/people', '/settings', '/trash', '/admin'].some((h) => path === h || path.startsWith(h + '/'));
 	const activeOnPhone = (href: string) => (href === '/more' ? inMore(page.url.pathname) : active(href));
 
 	const active = (href: string) => page.url.pathname === href || page.url.pathname.startsWith(href + '/');

@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { Download, LogOut, Monitor, Moon, Shield, Sun, Trash2 } from '@lucide/svelte';
+	import { Blocks, ChevronRight, LogOut, Monitor, Moon, Shield, Sun, Trash2 } from '@lucide/svelte';
 	import { api, errorText } from '#lib/api/client.ts';
 	import type { CollectionLink, User } from '#lib/api/types.gen.ts';
 	import { forget } from '#lib/cache.ts';
-	import AssistantsCard from '#lib/components/AssistantsCard.svelte';
 	import CopyField from '#lib/components/CopyField.svelte';
 	import PasskeysCard from '#lib/components/PasskeysCard.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
@@ -163,10 +162,9 @@
 	</section>
 
 	<PasskeysCard />
-	<AssistantsCard />
 
 	<section class="card divide-y divide-line overflow-hidden">
-		<a class="flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/api/v1/me/export" download data-sveltekit-reload><Download size={20} class="shrink-0 text-muted" /><span><span class="block">{t('settings.export')}</span><span class="block text-sm font-normal text-muted">{t('settings.export_hint')}</span></span></a>
+		<a class="flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/integrations"><Blocks size={20} class="shrink-0 text-muted" /><span class="min-w-0 flex-1"><span class="block">{t('nav.integrations')}</span><span class="block text-sm font-normal text-muted">{t('integrations.settings_hint')}</span></span><ChevronRight size={18} class="shrink-0 text-muted" /></a>
 		<a class="flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/trash"><Trash2 size={20} class="text-muted" />{t('trash.title')}</a>
 		{#if session.isAdmin}<a class="flex items-center gap-3 p-4 font-medium hover:bg-surface-2 md:hidden" href="/admin"><Shield size={20} class="text-muted" />{t('nav.admin')}</a>{/if}
 		<button class="flex w-full items-center gap-3 p-4 text-left font-medium hover:bg-surface-2" onclick={logout}><LogOut size={20} class="text-muted" />{t('auth.logout')}</button>

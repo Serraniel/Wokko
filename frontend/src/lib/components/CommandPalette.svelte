@@ -31,7 +31,7 @@
 	const actions = $derived<Item[]>([
 		{ id: 'new', label: t('palette.new'), icon: Plus, run: () => goto('/recipes/new') },
 		{ id: 'import', label: t('palette.import'), icon: Download, run: () => goto('/recipes/new').then(async () => { await tick(); document.getElementById('import-url')?.focus(); }) },
-		{ id: 'import-file', label: t('fileimport.title'), icon: Download, run: () => goto('/import') },
+		{ id: 'import-file', label: t('fileimport.title'), icon: Download, run: () => goto('/integrations') },
 		{ id: 'recipes', label: t('nav.recipes'), icon: BookOpen, run: () => goto('/recipes') },
 		{ id: 'plan', label: t('nav.plan'), icon: CalendarDays, run: () => goto('/plan') },
 		{ id: 'shopping', label: t('nav.shopping'), icon: ShoppingCart, run: () => goto('/shopping') },
