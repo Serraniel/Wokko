@@ -13,7 +13,7 @@ Your recipes, on your own server. A self-hosted recipe manager built to be simpl
 - **Cooking mode and printing:** one step at a time in big text, with timers and tick-off ingredients, also on shared links with no account. Any recipe prints cleanly
 - **Recipe books and nutrition:** group recipes, and see estimates per serving from public-domain USDA data
 - **kitshn:** use the kitshn mobile app, including creating and editing
-- **AI assistants, if you want them:** connect Claude or another MCP client. Wokko itself never calls an AI
+- **AI assistants, if you want them:** connect Claude, ChatGPT or another MCP app. Wokko itself never calls an AI
 - **Passkeys:** log in with a fingerprint or device PIN, on HTTPS or localhost
 - **Your data is safe:** automatic verified backups, trash, version history and all-or-nothing saves
 - **Any language:** English and German included, and adding another takes one file
@@ -104,11 +104,11 @@ With another reverse proxy, set `PUBLIC_URL`, pass the original `Host` header th
 
 **Offline:** the shopping list, this week's plan and recently used recipes stay available. Ticking, adding and removing shopping items wait and are sent when you're back. Logging out deletes what's stored on the device.
 
-**Sharing:** add Wokko to your home screen from the browser's menu, and it appears when you share a page from another app. Over plain HTTP, use the bookmark under **More > Bring in your recipes** instead.
+**Sharing:** add Wokko to your home screen from the browser's menu, and it appears when you share a page from another app. Over plain HTTP, use the bookmark under **Integrations** instead.
 
 ## Moving from another app
 
-Under **More > Bring in your recipes**, choose an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
+Under **Integrations** (in **More** on a phone, or **Settings**), choose an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
 
 ## Using kitshn
 
@@ -120,16 +120,17 @@ These Tandoor features aren't in Wokko: AI import, shopping lists split into sev
 
 ## Connecting an AI assistant
 
-Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Settings > AI assistants**.
+Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Integrations**.
 
-Create a token under **Settings > AI assistants**, then connect:
+Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Claude Code, Codex, Gemini CLI, Cursor, VS Code, OpenClaw or Hermes Agent, and Wokko shows its steps. For Claude, Cursor and VS Code, a button opens the app with everything filled in. Apps that connect by address need no token. For the others, create a token there, then connect:
 
 | Client | How |
 |---|---|
-| Claude Code, on the same network | `claude mcp add --transport http wokko http://your-server:8080/mcp --header "Authorization: Bearer <token>"` |
+| An app that takes an address and a header, on the same network | Address `http://your-server:8080/mcp` and header `Authorization: Bearer <token>` |
+| Claude Code | `claude mcp add --transport http wokko http://your-server:8080/mcp --header "Authorization: Bearer <token>"` |
 | Claude Desktop, or anything that starts a local MCP server, on the same computer as Wokko | Use `docker exec -i wokko /wokko mcp-stdio --token <token>` as its command |
 | The same, on another computer with Docker | Use `docker run -i --rm ghcr.io/serraniel/wokko:<version> mcp-stdio --url http://your-server:8080/mcp --token <token>` as its command |
-| Claude on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set |
+| Claude, ChatGPT or another app with custom connectors, on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks, choosing whether it may only read. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set. Tested with Claude |
 
 ## Adding a language
 

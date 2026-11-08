@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { ArrowLeft, Bookmark, Check, FileUp, Smartphone, TriangleAlert } from '@lucide/svelte';
+	import { Bookmark, Check, Download, FileUp, Smartphone, TriangleAlert } from '@lucide/svelte';
 	import { ApiError, errorText } from '#lib/api/client.ts';
 	import { api } from '#lib/api/client.ts';
 	import type { FileImportResult } from '#lib/api/types.gen.ts';
 	import { forget } from '#lib/cache.ts';
+	import AssistantsCard from '#lib/components/AssistantsCard.svelte';
 	import CopyField from '#lib/components/CopyField.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
@@ -77,16 +78,18 @@
 	}
 </script>
 
-<svelte:head><title>{t('fileimport.title')} · Wokko</title></svelte:head>
+<svelte:head><title>{t('nav.integrations')} · Wokko</title></svelte:head>
 
 <div class="mx-auto max-w-2xl space-y-3 p-4 md:px-6">
-	<header class="flex items-center gap-2">
-		<a class="btn btn-ghost btn-icon" href="/recipes/new" aria-label={t('common.back')}><ArrowLeft size={18} /></a>
-		<h1 class="text-xl font-semibold">{t('fileimport.title')}</h1>
+	<header>
+		<h1 class="text-xl font-semibold">{t('nav.integrations')}</h1>
+		<p class="hint !mt-1">{t('integrations.hint')}</p>
 	</header>
 
+	<h2 class="label !mt-5">{t('integrations.in_out')}</h2>
+
 	<section class="card space-y-3 p-4" aria-labelledby="file-title">
-		<h2 id="file-title" class="flex items-center gap-2 font-semibold"><FileUp size={17} class="text-muted" />{t('fileimport.from_file')}</h2>
+		<h3 id="file-title" class="flex items-center gap-2 font-semibold"><FileUp size={17} class="text-muted" />{t('fileimport.from_file')}</h3>
 		<p class="hint !mt-0">{t('fileimport.from_file_hint')}</p>
 		<ErrorNote text={error} />
 		<div>
@@ -123,13 +126,17 @@
 	</section>
 
 	<section class="card space-y-2 p-4" aria-labelledby="bookmark-title">
-		<h2 id="bookmark-title" class="flex items-center gap-2 font-semibold"><Bookmark size={17} class="text-muted" />{t('fileimport.bookmark')}</h2>
+		<h3 id="bookmark-title" class="flex items-center gap-2 font-semibold"><Bookmark size={17} class="text-muted" />{t('fileimport.bookmark')}</h3>
 		<p class="hint !mt-0">{t('fileimport.bookmark_hint')}</p>
 		<CopyField value={mark} label={t('fileimport.bookmark')} />
 	</section>
 
 	<section class="card space-y-2 p-4" aria-labelledby="phone-title">
-		<h2 id="phone-title" class="flex items-center gap-2 font-semibold"><Smartphone size={17} class="text-muted" />{t('fileimport.phone')}</h2>
+		<h3 id="phone-title" class="flex items-center gap-2 font-semibold"><Smartphone size={17} class="text-muted" />{t('fileimport.phone')}</h3>
 		<p class="hint !mt-0">{secure ? t('fileimport.phone_hint') : t('fileimport.phone_needs_https')}</p>
 	</section>
+
+	<a class="card flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/api/v1/me/export" download data-sveltekit-reload><Download size={18} class="shrink-0 text-muted" /><span><span class="block">{t('settings.export')}</span><span class="block text-sm font-normal text-muted">{t('settings.export_hint')}</span></span></a>
+
+	<div class="pt-3"><AssistantsCard /></div>
 </div>
