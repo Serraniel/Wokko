@@ -1,13 +1,16 @@
 <script lang="ts">
-	import { ChefHat, Clock, ExternalLink, Hourglass, Minus, Plus, Printer, Star, Users } from '@lucide/svelte';
+	import { ChefHat, Clock, Download, ExternalLink, Hourglass, Minus, Plus, Printer, Star, Users } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import type { Ingredient, Recipe, UnitRef } from '#lib/api/types.gen.ts';
 	import { asFraction, combineIngredients, roundAmount } from '#lib/format.ts';
 	import { formatDate, formatMinutes, formatNumber, t } from '#lib/i18n/index.svelte.ts';
 	import { renderMarkdown } from '#lib/markdown.ts';
 	import { prefs } from '#lib/prefs.svelte.ts';
+	import ExportSheet from './ExportSheet.svelte';
 
-	let { recipe, actions, footer, cookHref }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string } = $props();
+	// exportBase, on pages without an account, offers the recipe as a file to take elsewhere.
+	let { recipe, actions, footer, cookHref, exportBase }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string; exportBase?: string } = $props();
+	let exportOpen = $state(false);
 
 	let servings = $state(0);
 	$effect(() => {
@@ -61,7 +64,7 @@
 			{/if}
 			<div class="print-hide flex flex-wrap gap-2">
 				{#if cookHref && recipe.steps.length}<a class="btn btn-primary flex-1 sm:flex-none" href="{cookHref}?servings={servings}"><ChefHat size={17} />{t('recipe.cook')}</a>{/if}
-				{#if actions}{@render actions()}{:else}<button class="btn btn-soft" onclick={() => window.print()}><Printer size={17} />{t('recipe.print')}</button>{/if}
+				{#if actions}{@render actions()}{:else}<button class="btn btn-soft" onclick={() => window.print()}><Printer size={17} />{t('recipe.print')}</button>{#if exportBase}<button class="btn btn-soft" onclick={() => (exportOpen = true)}><Download size={17} />{t('export.action')}</button>{/if}{/if}
 			</div>
 		</header>
 	</div>
@@ -121,3 +124,5 @@
 		</div>
 	</div>
 </article>
+
+{#if exportBase}<ExportSheet bind:open={exportOpen} base={exportBase} title={t('export.title')} />{/if}
