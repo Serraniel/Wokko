@@ -574,4 +574,3 @@ func fromWokko(m map[string]any, fileAt func(string) []byte) *FileRecipe {
 	}
 	return r
 }
-

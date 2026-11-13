@@ -1165,37 +1165,26 @@ func (s *Service) ListCookLog(ctx context.Context, v Viewer, id int64) ([]CookLo
 	return out, nil
 }
 
-// ExportData is one user's data in an open format that needs no Wokko to read.
-type ExportData struct {
-	Format     string   `json:"format"`
-	ExportedAt string   `json:"exported_at"`
-	User       Person   `json:"user"`
-	Recipes    []Recipe `json:"recipes"`
-}
-
-// Export gathers everything a user owns and the photo files that go with it.
-func (s *Service) Export(ctx context.Context, v Viewer) (ExportData, []string, error) {
+// Export gathers everything a user owns, in Wokko's own format.
+func (s *Service) Export(ctx context.Context, v Viewer) (ExportData, error) {
 	q := s.Store.Queries
 	rows, err := q.ListRecipesByOwner(ctx, v.id())
 	if err != nil {
-		return ExportData{}, nil, err
+		return ExportData{}, err
 	}
-	out := ExportData{Format: "wokko-export-1", ExportedAt: s.stamp(s.Now()), User: toPerson(*v.User), Recipes: []Recipe{}}
-	var photos []string
+	var recipes []Recipe
 	for _, r := range rows {
 		if r.DeletedAt.Valid {
 			continue
 		}
 		doc, err := s.buildRecipe(ctx, q, v, r)
 		if err != nil {
-			return ExportData{}, nil, err
+			return ExportData{}, err
 		}
-		out.Recipes = append(out.Recipes, doc)
-		if r.Photo.Valid {
-			photos = append(photos, r.Photo.String)
-		}
+		recipes = append(recipes, doc)
 	}
-	return out, photos, nil
+	person := toPerson(*v.User)
+	return s.exportOf(&person, recipes), nil
 }
 
 // PurgeExpiredTrash removes recipes that stayed in the trash past the retention period.

@@ -79,6 +79,7 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST "+p+"/import", s.user(s.importRecipe))
 	m.HandleFunc("POST "+p+"/import/file", s.user(s.importFile))
 	m.HandleFunc("GET "+p+"/recipes/{id}", s.user(s.getRecipe))
+	m.HandleFunc("GET "+p+"/recipes/{id}/export", s.user(s.exportRecipe))
 	m.HandleFunc("PUT "+p+"/recipes/{id}", s.user(s.updateRecipe))
 	m.HandleFunc("DELETE "+p+"/recipes/{id}", s.user(s.deleteRecipe))
 	m.HandleFunc("POST "+p+"/recipes/{id}/restore", s.user(s.restoreRecipe))
@@ -161,7 +162,9 @@ func (s *Server) routes(m *http.ServeMux) {
 
 	m.HandleFunc("GET "+p+"/public/recipes", s.h(s.listPublic))
 	m.HandleFunc("GET "+p+"/public/recipes/{id}", s.h(s.getPublic))
+	m.HandleFunc("GET "+p+"/public/recipes/{id}/export", s.h(s.exportPublic))
 	m.HandleFunc("GET "+p+"/public/share/{token}", s.h(s.getShared))
+	m.HandleFunc("GET "+p+"/public/share/{token}/export", s.h(s.exportShared))
 	m.HandleFunc("GET "+p+"/public/collections/{token}", s.h(s.listCollection))
 	m.HandleFunc("GET "+p+"/public/collections/{token}/recipes/{id}", s.h(s.getCollectionRecipe))
 	m.HandleFunc("GET /media/{file}", s.h(s.serveMedia))
