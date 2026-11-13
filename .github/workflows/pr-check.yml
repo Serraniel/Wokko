@@ -5,8 +5,7 @@ on:
     branches: [main]
   push:
     branches: [main]
-  # The release workflow starts this for its own release PR. GitHub doesn't run checks for pull
-  # requests that a workflow opened, and main requires this check before merging.
+  # Lets the check be run by hand on any branch.
   workflow_dispatch:
 
 jobs:
