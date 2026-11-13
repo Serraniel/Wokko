@@ -214,6 +214,11 @@ await step('import another app\'s file, check first, undo', async () => {
   // The old address still works.
   await p.goto(base + '/import'); await p.waitForURL('**/integrations'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
+  await p.goto(base + '/integrations'); await p.click('label:has-text("All I can see")'); await p.waitForSelector('text=To move a whole server'); await p.locator('#export-title').scrollIntoViewIfNeeded(); await shot('36-export-all');
+  for (const label of ['For another Wokko', 'For other apps']) {
+    const href = await p.getAttribute(`#export-title ~ div a:has-text("${label}")`, 'href'); if (!href.includes('scope=all')) throw new Error('export scope: ' + href);
+    const res = await p.request.get(base + href); if (!res.ok() || res.headers()['content-type'] !== 'application/zip') throw new Error(`${label}: ${res.status()}`);
+  }
   await p.goto(base + '/integrations'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
 });
 await step('offline: saved recipes open, shopping queues and syncs', async () => {

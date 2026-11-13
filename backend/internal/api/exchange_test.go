@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"slices"
 	"strings"
 	"testing"
 
@@ -152,4 +153,46 @@ func keys(m map[string][]byte) []string {
 		out = append(out, k)
 	}
 	return out
+}
+
+// "All" means every recipe the person can see: theirs, their household's and those shared
+// with them. Other people's private recipes stay out, also for an admin.
+func TestExportAllRecipesICanSee(t *testing.T) {
+	e := newEnv(t)
+	admin, member, stranger := household(t, e)
+	admin.createRecipe(app.RecipeInput{Name: "Household soup", Servings: 2, Visibility: "household", Keywords: []string{}, Steps: []app.StepInput{{Instruction: "Cook."}}})
+	admin.createRecipe(app.RecipeInput{Name: "Admin's secret", Servings: 2, Visibility: "private", Keywords: []string{}, Steps: []app.StepInput{{Instruction: "Cook."}}})
+	member.createRecipe(app.RecipeInput{Name: "Member's own", Servings: 2, Visibility: "private", Keywords: []string{}, Steps: []app.StepInput{{Instruction: "Cook."}}})
+	shared := stranger.createRecipe(app.RecipeInput{Name: "Shared with member", Servings: 2, Visibility: "private", Keywords: []string{}, Steps: []app.StepInput{{Instruction: "Cook."}}})
+	stranger.createRecipe(app.RecipeInput{Name: "Stranger's secret", Servings: 2, Visibility: "private", Keywords: []string{}, Steps: []app.StepInput{{Instruction: "Cook."}}})
+	stranger.ok("POST", path("/recipes/%d/sharing/users", shared.ID), map[string]string{"handle": "member"}, 200)
+
+	names := func(c *client, query string) []string {
+		t.Helper()
+		var data app.ExportData
+		if err := json.Unmarshal(unzip(t, c.ok("GET", v1+"/me/export"+query, nil, 200).body)["recipes.json"], &data); err != nil {
+			t.Fatal(err)
+		}
+		var out []string
+		for _, r := range data.Recipes {
+			out = append(out, r.Name)
+		}
+		slices.Sort(out)
+		return out
+	}
+	if got := strings.Join(names(member, ""), ","); got != "Member's own" {
+		t.Fatalf("mine by default: %s", got)
+	}
+	if got := strings.Join(names(member, "?scope=all"), ","); got != "Household soup,Member's own,Shared with member" {
+		t.Fatalf("all for member: %s", got)
+	}
+	if got := strings.Join(names(admin, "?scope=all"), ","); got != "Admin's secret,Household soup" {
+		t.Fatalf("an admin gets no one else's private recipes: %s", got)
+	}
+	files := unzip(t, member.ok("GET", v1+"/me/export?scope=all&format=schema", nil, 200).body)
+	if files["Shared with member/recipe.json"] == nil || len(files) != 3 {
+		t.Fatalf("schema export of all: %v", keys(files))
+	}
+	member.wantCode("GET", v1+"/me/export?scope=everyone", nil, 400, "bad_request")
+	member.wantCode("GET", v1+"/me/export?format=pdf", nil, 400, "bad_request")
 }
