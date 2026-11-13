@@ -197,7 +197,7 @@
   "settings.current_password": "Aktuelles Passwort",
   "settings.password_changed": "Passwort geändert. Andere Geräte wurden abgemeldet.",
   "settings.export": "Meine Rezepte exportieren",
-  "settings.export_hint": "Eine ZIP-Datei mit all deinen Rezepten und Fotos, auch ohne Wokko lesbar.",
+  "settings.export_hint": "Eine ZIP-Datei mit Rezepten und Fotos, auch ohne Wokko lesbar.",
   "settings.changelog": "Änderungen",
   "settings.notices": "Hinweise zu Drittanbietern",
   "admin.data_safety": "Datensicherheit",
@@ -541,5 +541,11 @@
   "export.wokko": "Für ein anderes Wokko",
   "export.wokko_hint": "Behält alles, auch welche Zutaten zu welchem Schritt gehören.",
   "export.schema": "Für andere Apps",
-  "export.schema_hint": "schema.org-Dateien, die Tandoor, Mealie, Nextcloud Cookbook und andere importieren."
+  "export.schema_hint": "schema.org-Dateien, die Tandoor, Mealie, Nextcloud Cookbook und andere importieren.",
+  "export.all_title": "Rezepte exportieren",
+  "export.which": "Welche Rezepte",
+  "export.scope_mine": "Meine",
+  "export.scope_all": "Alle, die ich sehen kann",
+  "export.scope_all_hint": "Deine, die deines Haushalts und mit dir geteilte. Um einen ganzen Server umzuziehen, nimm stattdessen ein Backup.",
+  "export.formats_hint": "„Für ein anderes Wokko“ behält alles. „Für andere Apps“ liefert schema.org-Dateien, die Tandoor, Mealie, Nextcloud Cookbook und andere importieren."
 }

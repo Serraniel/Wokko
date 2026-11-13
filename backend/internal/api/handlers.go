@@ -177,7 +177,7 @@ func (s *Server) export(w http.ResponseWriter, r *http.Request, v app.Viewer) er
 	if err != nil {
 		return err
 	}
-	data, err := s.svc.Export(r.Context(), v)
+	data, err := s.svc.ExportScope(r.Context(), v, r.URL.Query().Get("scope"))
 	if err != nil {
 		return err
 	}

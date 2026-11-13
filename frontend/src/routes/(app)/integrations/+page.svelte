@@ -17,6 +17,7 @@
 	let busy = $state(false);
 	let error = $state('');
 	let undone = $state(false);
+	let exportScope = $state('mine');
 
 	const secure = typeof window !== 'undefined' && window.isSecureContext;
 	const mark = $derived(bookmarklet(location.origin));
@@ -136,7 +137,22 @@
 		<p class="hint !mt-0">{secure ? t('fileimport.phone_hint') : t('fileimport.phone_needs_https')}</p>
 	</section>
 
-	<a class="card flex items-center gap-3 p-4 font-medium hover:bg-surface-2" href="/api/v1/me/export" download data-sveltekit-reload><Download size={18} class="shrink-0 text-muted" /><span><span class="block">{t('settings.export')}</span><span class="block text-sm font-normal text-muted">{t('settings.export_hint')}</span></span></a>
+	<section class="card space-y-3 p-4" aria-labelledby="export-title">
+		<h3 id="export-title" class="flex items-center gap-2 font-semibold"><Download size={17} class="text-muted" />{t('export.all_title')}</h3>
+		<p class="hint !mt-0">{t('settings.export_hint')}</p>
+		<fieldset class="flex flex-wrap gap-2">
+			<legend class="label">{t('export.which')}</legend>
+			{#each ['mine', 'all'] as sc (sc)}
+				<label class="chip cursor-pointer {exportScope === sc ? 'chip-active' : 'hover:bg-surface-2'}"><input type="radio" class="sr-only" name="export-scope" value={sc} bind:group={exportScope} />{t(`export.scope_${sc}`)}</label>
+			{/each}
+		</fieldset>
+		{#if exportScope === 'all'}<p class="hint !mt-0">{t('export.scope_all_hint')}</p>{/if}
+		<div class="grid gap-2 sm:grid-cols-2">
+			<a class="btn btn-soft" href="/api/v1/me/export?scope={exportScope}&format=wokko" download data-sveltekit-reload>{t('export.wokko')}</a>
+			<a class="btn btn-soft" href="/api/v1/me/export?scope={exportScope}&format=schema" download data-sveltekit-reload>{t('export.schema')}</a>
+		</div>
+		<p class="hint !mt-0">{t('export.formats_hint')}</p>
+	</section>
 
 	<div class="pt-3"><AssistantsCard /></div>
 </div>

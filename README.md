@@ -92,7 +92,7 @@ docker compose run --rm wokko restore /backups/wokko-backup-2026-11-07T03-00-00Z
 docker compose start wokko
 ```
 
-A backup is a normal `tar.gz` with a SQLite database and your photos. Each user can also download their own recipes under **Settings** as a ZIP with JSON and photos, readable without Wokko.
+A backup is a normal `tar.gz` with a SQLite database and your photos.
 
 ## HTTPS, offline use and sharing from your phone
 
@@ -108,7 +108,14 @@ With another reverse proxy, set `PUBLIC_URL`, pass the original `Host` header th
 
 ## Moving recipes between apps
 
-Under **Integrations** (in **More** on a phone, or **Settings**), choose a file exported from another Wokko, an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
+**Export:** a single recipe from its **More** menu, or from a share link or the public gallery. Your own recipes, or all you can see, under **Integrations**. Each comes in two formats:
+
+- **For another Wokko:** keeps everything, including which ingredients belong to each step
+- **For other apps:** schema.org files in Nextcloud Cookbook's layout, which Tandoor, Mealie and others import
+
+"All you can see" means yours, your household's and recipes shared with you. It never includes other people's private recipes, not even for an admin. To move a whole server, restore a backup on the new one.
+
+**Import:** under **Integrations** (in **More** on a phone, or **Settings**), choose a file exported from another Wokko, an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
 
 ## Using kitshn
 

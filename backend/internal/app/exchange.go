@@ -9,9 +9,12 @@ import (
 	"io"
 	"os"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
 )
 
 // Export formats. Wokko's own keeps everything a recipe has. schema.org is what other apps
@@ -64,6 +67,43 @@ func photoFile(url string) string {
 		return ""
 	}
 	return path.Base(strings.SplitN(url, "?", 2)[0])
+}
+
+// ExportScope exports the viewer's own recipes ("mine"), or every recipe they can see ("all"):
+// theirs, their household's and those shared with them. Other people's private recipes never
+// leave through here, not even for an admin. A whole server moves with a backup instead.
+func (s *Service) ExportScope(ctx context.Context, v Viewer, scope string) (ExportData, error) {
+	switch scope {
+	case "", "mine":
+		return s.Export(ctx, v)
+	case "all":
+	default:
+		return ExportData{}, invalid("bad_request", "Unknown export scope")
+	}
+	q := s.Store.Queries
+	keys, err := q.ListVisibleRecipeKeys(ctx, sqlcgen.ListVisibleRecipeKeysParams{ViewerID: v.id(), HouseholdID: v.User.HouseholdID})
+	if err != nil {
+		return ExportData{}, err
+	}
+	ids := make([]int64, len(keys))
+	for i, k := range keys {
+		ids[i] = k.ID
+	}
+	rows, err := q.ListRecipesByIDs(ctx, ids)
+	if err != nil {
+		return ExportData{}, err
+	}
+	sort.Slice(rows, func(i, j int) bool { return rows[i].ID < rows[j].ID })
+	recipes := make([]Recipe, 0, len(rows))
+	for _, r := range rows {
+		doc, err := s.buildRecipe(ctx, q, v, r)
+		if err != nil {
+			return ExportData{}, err
+		}
+		recipes = append(recipes, doc)
+	}
+	person := toPerson(*v.User)
+	return s.exportOf(&person, recipes), nil
 }
 
 // ExportRecipe exports one recipe the viewer may see.
