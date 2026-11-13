@@ -169,13 +169,23 @@ await step('cooking mode, history and fractions', async () => {
   await a.goto(base + new URL(link, base).pathname); await a.waitForSelector('a.recipe-card:has-text("My version")'); await anon.close();
 });
 await step('live cooking and printing with only a share link', async () => {
-  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/); await p.click('button[aria-label="Share"]'); await p.waitForSelector('text=Who can see this');
+  await p.goto(base + '/recipes'); await p.click('text=My version'); await p.waitForURL(/recipes\/\d+$/);
+  await p.click('button[aria-label="More"]'); await p.click('button:has-text("Export")'); await p.waitForSelector('a:has-text("For another Wokko")');
+  if (!/\/api\/v1\/recipes\/\d+\/export\?format=wokko$/.test(await p.getAttribute('a:has-text("For another Wokko")', 'href'))) throw new Error('export link');
+  await p.click('dialog[open] button[aria-label="Close"]'); await p.click('button[aria-label="Share"]'); await p.waitForSelector('text=Who can see this');
   await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Share link"]'); const url = await p.inputValue('input[aria-label="Share link"]'); await p.click('dialog button[aria-label="Close"]');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const a = await anon.newPage();
   const path = new URL(url, base).pathname;
   await a.goto(base + path); await a.waitForSelector('button:has-text("Print")'); await a.click('button[aria-label="More servings"]'); await a.emulateMedia({ media: 'print' }); await a.waitForTimeout(100); await a.screenshot({ path: `${shots}/32-print.png`, fullPage: true });
   if (await a.locator('button:has-text("Print")').isVisible()) throw new Error('the print button should not print');
   await a.emulateMedia({ media: 'screen' });
+  // Someone with only the link can take the recipe to their own Wokko or another app.
+  await a.click('button:has-text("Export")'); await a.waitForSelector('text=For another Wokko'); await a.screenshot({ path: `${shots}/33-export-shared.png` });
+  for (const label of ['For another Wokko', 'For other apps']) {
+    const href = await a.getAttribute(`a:has-text("${label}")`, 'href'); const res = await a.request.get(base + href);
+    if (!res.ok() || res.headers()['content-type'] !== 'application/zip' || (await res.body()).length < 100) throw new Error(`${label}: ${res.status()}`);
+  }
+  await a.click('dialog button[aria-label="Close"]');
   await a.click('a:has-text("Cook")'); await a.waitForURL(/\/cook\?servings=5/); await a.waitForSelector('text=Step 1 of 2'); await a.waitForSelector('button:has-text("2.5")');
   await a.click('button:has-text("onion")'); await a.click('button[aria-label="All ingredients"]'); await a.waitForSelector('input[type=checkbox]');
   await a.click('button[aria-label="All ingredients"]'); await a.click('button:has-text("Next step")'); await a.waitForSelector('text=Step 2 of 2'); await a.screenshot({ path: `${shots}/33-cook-shared.png` });

@@ -1,8 +1,6 @@
 package api
 
 import (
-	"archive/zip"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -175,46 +173,67 @@ func (s *Server) changePassword(w http.ResponseWriter, r *http.Request, v app.Vi
 }
 
 func (s *Server) export(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
-	data, photos, err := s.svc.Export(r.Context(), v)
+	format, err := app.ExportFormat(r.URL.Query().Get("format"))
 	if err != nil {
 		return err
 	}
+	data, err := s.svc.Export(r.Context(), v)
+	if err != nil {
+		return err
+	}
+	return s.sendExport(w, format, data)
+}
+
+func (s *Server) exportRecipe(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	format, err := app.ExportFormat(r.URL.Query().Get("format"))
+	if err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	data, err := s.svc.ExportRecipe(r.Context(), v, id)
+	if err != nil {
+		return err
+	}
+	return s.sendExport(w, format, data)
+}
+
+func (s *Server) exportShared(w http.ResponseWriter, r *http.Request) error {
+	format, err := app.ExportFormat(r.URL.Query().Get("format"))
+	if err != nil {
+		return err
+	}
+	data, err := s.svc.ExportSharedRecipe(r.Context(), s.anonLocale(r), r.PathValue("token"))
+	if err != nil {
+		return err
+	}
+	return s.sendExport(w, format, data)
+}
+
+func (s *Server) exportPublic(w http.ResponseWriter, r *http.Request) error {
+	format, err := app.ExportFormat(r.URL.Query().Get("format"))
+	if err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	data, err := s.svc.ExportPublicRecipe(r.Context(), s.anonLocale(r), id)
+	if err != nil {
+		return err
+	}
+	return s.sendExport(w, format, data)
+}
+
+// sendExport streams the archive. Every check has passed by now, so the headers can go out.
+func (s *Server) sendExport(w http.ResponseWriter, format string, data app.ExportData) error {
 	w.Header().Set("Content-Type", "application/zip")
-	w.Header().Set("Content-Disposition", `attachment; filename="wokko-export.zip"`)
-	zw := zip.NewWriter(w)
-	f, err := zw.Create("recipes.json")
-	if err != nil {
-		return err
-	}
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "  ")
-	if err := enc.Encode(data); err != nil {
-		return err
-	}
-	for _, name := range photos {
-		path, valid := s.svc.Media.Path(name)
-		if !valid {
-			continue
-		}
-		src, err := os.Open(path)
-		if errors.Is(err, os.ErrNotExist) {
-			continue
-		}
-		if err != nil {
-			return err
-		}
-		dst, err := zw.Create("photos/" + name)
-		if err == nil {
-			_, err = io.Copy(dst, src)
-		}
-		if cerr := src.Close(); err == nil {
-			err = cerr
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return zw.Close()
+	w.Header().Set("Content-Disposition", `attachment; filename="`+app.FileName(data, format)+`"`)
+	w.Header().Set("Cache-Control", "no-store")
+	return s.svc.WriteExport(w, format, data)
 }
 
 // --- recipes ---

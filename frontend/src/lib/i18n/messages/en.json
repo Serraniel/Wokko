@@ -534,5 +534,12 @@
   "assistant.vscode_1": "Create a token, then choose “Add to VS Code”. Or add the setup below to .vscode/mcp.json in your project.",
   "oauth.choose": "What it may do",
   "assistant.openclaw_1": "Create a token, then add this to ~/.openclaw/openclaw.json, merging it with what's there. OpenClaw can also log in by itself: see its guide.",
-  "assistant.hermes_1": "Create a token, then add this to ~/.hermes/config.yaml, next to any servers already there."
+  "assistant.hermes_1": "Create a token, then add this to ~/.hermes/config.yaml, next to any servers already there.",
+  "export.action": "Export",
+  "export.title": "Export this recipe",
+  "export.hint": "Download it as a file, to bring into another Wokko or another recipe app.",
+  "export.wokko": "For another Wokko",
+  "export.wokko_hint": "Keeps everything, including which ingredients belong to each step.",
+  "export.schema": "For other apps",
+  "export.schema_hint": "schema.org files, which Tandoor, Mealie, Nextcloud Cookbook and others import."
 }

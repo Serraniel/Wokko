@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowLeft, BookMarked, CalendarPlus, CookingPot, History, MoreHorizontal, Pencil, Printer, Share2, ShoppingCart, Star, Trash2 } from '@lucide/svelte';
+	import { ArrowLeft, BookMarked, CalendarPlus, CookingPot, Download, History, MoreHorizontal, Pencil, Printer, Share2, ShoppingCart, Star, Trash2 } from '@lucide/svelte';
 	import { tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -10,6 +10,7 @@
 	import Mascot from '#lib/components/Mascot.svelte';
 	import RecipeView from '#lib/components/RecipeView.svelte';
 	import ShareSheet from '#lib/components/ShareSheet.svelte';
+	import ExportSheet from '#lib/components/ExportSheet.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
 	import { formatDate, formatNumber, t } from '#lib/i18n/index.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
@@ -24,6 +25,7 @@
 	let comment = $state('');
 	let logging = $state(false);
 	let moreOpen = $state(false);
+	let exportOpen = $state(false);
 	let historyOpen = $state(false);
 	let booksOpen = $state(false);
 	let versions = $state<RecipeVersion[]>([]);
@@ -207,10 +209,12 @@
 				<a class="flex min-h-12 items-center gap-3 font-medium" href={planLink}><CalendarPlus size={18} class="text-muted" />{t('recipe.add_to_plan')}</a>
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={addToShopping}><ShoppingCart size={18} class="text-muted" />{t('recipe.add_to_shopping')}</button>
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openBooks}><BookMarked size={18} class="text-muted" />{t('books.add_to')}</button>
+				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={async () => { moreOpen = false; await tick(); exportOpen = true; }}><Download size={18} class="text-muted" />{t('export.action')}</button>
 				{#if recipe.can_edit}<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={openHistory}><History size={18} class="text-muted" />{t('recipe.history')}</button>{/if}
 				{#if recipe.can_manage}<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium text-danger" onclick={() => { moreOpen = false; remove(); }}><Trash2 size={18} />{t('common.delete')}</button>{/if}
 			</div>
 		</Sheet>
+		<ExportSheet bind:open={exportOpen} base="/api/v1/recipes/{recipe.id}/export" title={t('export.title')} />
 		<Sheet bind:open={historyOpen} title={t('history.title')}>
 			{#if versions.length === 0}
 				<p class="py-4 text-sm text-muted">{t('history.empty')}</p>

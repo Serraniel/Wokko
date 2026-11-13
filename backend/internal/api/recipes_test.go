@@ -718,4 +718,3 @@ func TestWokkoExportImportsIntoAnotherWokko(t *testing.T) {
 		t.Fatalf("second import: %+v %v", result, err)
 	}
 }
-
