@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0](https://github.com/Serraniel/Wokko/compare/v0.3.0...v0.4.0) (2026-11-13)
+
+
+### Features
+
+* **recipes:** export a single recipe for another Wokko or other apps ([#97](https://github.com/Serraniel/Wokko/issues/97)) ([56a9130](https://github.com/Serraniel/Wokko/commit/56a9130723b3edc2236817d0bdf33c6dd1e740b5)), closes [#93](https://github.com/Serraniel/Wokko/issues/93)
+* **recipes:** export my recipes or all I can see, for Wokko or other apps ([#98](https://github.com/Serraniel/Wokko/issues/98)) ([53bc505](https://github.com/Serraniel/Wokko/commit/53bc5058ac975e5f1a3bef7d8db6b0a03787d22c)), closes [#94](https://github.com/Serraniel/Wokko/issues/94)
+* **recipes:** import files exported from another Wokko ([#95](https://github.com/Serraniel/Wokko/issues/95)) ([9ead0cd](https://github.com/Serraniel/Wokko/commit/9ead0cd70b641bfe5761536afa5564f6eef611bc)), closes [#92](https://github.com/Serraniel/Wokko/issues/92)
+
 ## [0.3.0](https://github.com/Serraniel/Wokko/compare/v0.2.0...v0.3.0) (2026-11-08)
 
 
