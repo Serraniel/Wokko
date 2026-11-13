@@ -669,3 +669,53 @@ func TestImportFromAnotherAppsFile(t *testing.T) {
 		}
 	}
 }
+
+// Two Wokko servers exchange recipes through the export file, and nothing gets lost.
+func TestWokkoExportImportsIntoAnotherWokko(t *testing.T) {
+	from, to := newEnv(t), newEnv(t)
+	alice := from.admin()
+	amount, grams := 2.0, 200.0
+	sent := alice.createRecipe(app.RecipeInput{
+		Name: "Linsensuppe", Description: "Warm", Servings: 3, ServingsText: "bowls", WorkMinutes: 15, WaitMinutes: 30,
+		SourceURL: "https://example.com/soup", Visibility: "household", Keywords: []string{"soup", "vegan"},
+		Steps: []app.StepInput{
+			{Name: "Prep", Instruction: "Chop.", Minutes: 5, Ingredients: []app.IngredientInput{{FoodName: "onion", Amount: &amount, Note: "red"}, {FoodName: "lentils", UnitName: "g", Amount: &grams}}},
+			{Instruction: "Cook.", Minutes: 25, Ingredients: []app.IngredientInput{{FoodName: "salt"}}},
+		},
+	})
+	if res := alice.upload(sent.ID, testPNG(t)); res.status != 200 {
+		t.Fatal(string(res.body))
+	}
+	file := alice.ok("GET", v1+"/me/export", nil, 200).body
+
+	bob := to.admin()
+	var preview app.FileImportResult
+	if err := json.Unmarshal(importUpload(t, bob, true, file).body, &preview); err != nil || len(preview.Items) != 1 || preview.Items[0].Format != "Wokko" || !preview.Items[0].HasPhoto {
+		t.Fatalf("preview: %+v %v", preview, err)
+	}
+	var result app.FileImportResult
+	if err := json.Unmarshal(importUpload(t, bob, false, file).body, &result); err != nil || result.Imported != 1 {
+		t.Fatalf("import: %+v %v", result, err)
+	}
+	var got app.Recipe
+	bob.ok("GET", path("/recipes/%d", result.Items[0].RecipeID), nil, 200).decode(t, &got)
+	if got.Name != "Linsensuppe" || got.Description != "Warm" || got.Servings != 3 || got.ServingsText != "bowls" || got.WorkMinutes != 15 || got.WaitMinutes != 30 || got.SourceURL != "https://example.com/soup" {
+		t.Fatalf("recipe: %+v", got)
+	}
+	if got.Visibility != "private" || got.PhotoURL == "" || len(got.Keywords) != 2 || len(got.Steps) != 2 {
+		t.Fatalf("visibility, photo, tags or steps: %+v", got)
+	}
+	prep, cook := got.Steps[0], got.Steps[1]
+	if prep.Name != "Prep" || prep.Minutes != 5 || len(prep.Ingredients) != 2 || cook.Minutes != 25 || len(cook.Ingredients) != 1 || cook.Ingredients[0].Food.Name != "salt" {
+		t.Fatalf("steps: %+v", got.Steps)
+	}
+	onion, lentils := prep.Ingredients[0], prep.Ingredients[1]
+	if onion.Food.Name != "onion" || *onion.Amount != 2 || onion.Note != "red" || onion.Unit != nil || lentils.Unit == nil || *lentils.Amount != 200 {
+		t.Fatalf("ingredients: %+v %+v", onion, lentils)
+	}
+	// Importing the same file again skips what's already there.
+	if err := json.Unmarshal(importUpload(t, bob, false, file).body, &result); err != nil || result.Imported != 0 || result.Skipped != 1 {
+		t.Fatalf("second import: %+v %v", result, err)
+	}
+}
+

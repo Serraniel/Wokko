@@ -190,3 +190,42 @@ func TestZipBombsStop(t *testing.T) {
 		t.Fatalf("nesting: %v", err)
 	}
 }
+
+func TestWokkoExportsKeepEverything(t *testing.T) {
+	doc := `{"format":"wokko-export-1","recipes":[
+	  {"name":"Linsensuppe","description":"Warm","servings":3,"servings_text":"bowls","work_minutes":15,"wait_minutes":30,
+	   "source_url":"https://example.com/soup","keywords":[{"name":"soup"},{"name":"vegan"}],"photo":"photos/a.jpg",
+	   "steps":[{"name":"Prep","instruction":"Chop.","minutes":5,"ingredients":[
+	      {"food":{"name":"onion"},"unit":null,"amount":2,"note":"red"},
+	      {"food":{"name":"lentils"},"unit":{"name":"gram"},"amount":200,"note":""}]},
+	     {"name":"","instruction":"Cook.","minutes":25,"ingredients":[{"food":{"name":"salt"},"unit":null,"amount":null,"note":""}]}]},
+	  {"name":"Old export","servings":2,"photo_url":"/media/b.jpg?share=x","steps":[]}]}`
+	recipes := read(t, makeZip(t, entry{"recipes.json", []byte(doc)}, entry{"photos/a.jpg", []byte("A")}, entry{"photos/b.jpg", []byte("B")}))
+	if len(recipes) != 2 {
+		t.Fatalf("recipes: %+v", recipes)
+	}
+	r := recipes[0]
+	if r.Format != "Wokko" || r.Servings != 3 || r.ServingsText != "bowls" || r.WorkMinutes != 15 || r.WaitMinutes != 30 || r.Source != "https://example.com/soup" || string(r.Photo) != "A" {
+		t.Fatalf("recipe: %+v", r)
+	}
+	if strings.Join(r.Keywords, ",") != "soup,vegan" || len(r.Steps) != 2 || r.Steps[0].Name != "Prep" || r.Steps[0].Minutes != 5 || r.Steps[1].Minutes != 25 {
+		t.Fatalf("keywords or steps: %+v", r)
+	}
+	onion, lentils, salt := r.Steps[0].Ingredients[0], r.Steps[0].Ingredients[1], r.Steps[1].Ingredients[0]
+	if onion.Food != "onion" || onion.Unit != "" || *onion.Amount != 2 || onion.Note != "red" || lentils.Unit != "gram" || *lentils.Amount != 200 || salt.Amount != nil {
+		t.Fatalf("ingredients: %+v %+v %+v", onion, lentils, salt)
+	}
+	// Exports from 0.2 and 0.3 only point at where the photo was served.
+	if old := recipes[1]; string(old.Photo) != "B" || len(old.Steps) != 1 {
+		t.Fatalf("old export: %+v", old)
+	}
+	// A photo path can't reach outside the archive's folder.
+	evil := `{"format":"wokko-export-1","recipes":[{"name":"x","photo":"../secret.jpg","steps":[]}]}`
+	if got := read(t, makeZip(t, entry{"in/recipes.json", []byte(evil)}, entry{"secret.jpg", []byte("S")})); got[0].Photo != nil {
+		t.Fatal("photo outside the folder was read")
+	}
+	// A recipe file on its own, without photos, works too.
+	if got := read(t, []byte(doc)); len(got) != 2 || got[0].Photo != nil {
+		t.Fatalf("plain JSON: %+v", got)
+	}
+}

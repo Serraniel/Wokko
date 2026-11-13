@@ -481,7 +481,7 @@
   "offline.waiting_other": "{count} shopping changes waiting to be sent",
   "fileimport.title": "Bring in your recipes",
   "fileimport.from_file": "From another app",
-  "fileimport.from_file_hint": "Exports from Tandoor, Mealie and Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You'll see what's inside before anything is saved.",
+  "fileimport.from_file_hint": "Files exported from another Wokko, exports from Tandoor, Mealie and Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You'll see what's inside before anything is saved.",
   "fileimport.choose": "Choose a file",
   "fileimport.found_one": "Found {count} recipe",
   "fileimport.found_other": "Found {count} recipes",
