@@ -4,7 +4,10 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main, rewrite]
+    branches: [main]
+  # The release workflow starts this for its own release PR. GitHub doesn't run checks for pull
+  # requests that a workflow opened, and main requires this check before merging.
+  workflow_dispatch:
 
 jobs:
   check:
