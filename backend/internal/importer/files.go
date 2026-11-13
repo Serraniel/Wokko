@@ -94,7 +94,7 @@ func ReadFile(data io.ReaderAt, size int64, name string) ([]FileRecipe, error) {
 	default:
 		var body []byte
 		if body, err = f.read(io.NewSectionReader(data, 0, size)); err == nil {
-			f.readJSON(body, nil)
+			f.readJSON(body, nil, nil)
 		}
 	}
 	if err != nil {
@@ -112,6 +112,15 @@ func (f *fileReader) readZip(archive *zip.Reader, depth int) error {
 	byName := map[string]*zip.File{}
 	for _, e := range archive.File {
 		byName[e.Name] = e
+	}
+	// Wokko's own export names each photo's path inside the archive.
+	fileAt := func(name string) []byte {
+		if e := byName[name]; e != nil && !e.FileInfo().IsDir() {
+			if data, err := f.open(e); err == nil {
+				return data
+			}
+		}
+		return nil
 	}
 	// A recipe's photo sits beside its JSON, or in an images folder below it.
 	photoFor := func(jsonPath string) []byte {
@@ -165,7 +174,8 @@ func (f *fileReader) readZip(archive *zip.Reader, depth int) error {
 			if err != nil {
 				return err
 			}
-			f.readJSON(data, func() []byte { return photoFor(e.Name) })
+			dir := path.Dir(e.Name)
+			f.readJSON(data, func() []byte { return photoFor(e.Name) }, func(name string) []byte { return fileAt(path.Join(dir, name)) })
 		}
 	}
 	return nil
@@ -200,15 +210,29 @@ func (f *fileReader) readGzip(data []byte, photo func() []byte) error {
 		}
 		return nil
 	}
-	f.readJSON(body, photo)
+	f.readJSON(body, photo, nil)
 	return nil
 }
 
 // readJSON works out what a file is from its fields. Anything else in a zip, such as a
-// settings file, is ignored.
-func (f *fileReader) readJSON(data []byte, photo func() []byte) {
+// settings file, is ignored. fileAt, when the JSON came from an archive, reads another file of
+// that archive by its path relative to the JSON.
+func (f *fileReader) readJSON(data []byte, photo func() []byte, fileAt func(string) []byte) {
 	var value any
 	if json.Unmarshal(bytes.TrimPrefix(data, []byte("\xef\xbb\xbf")), &value) != nil {
+		return
+	}
+	if m, ok := value.(map[string]any); ok && isWokko(m) {
+		for _, item := range asList(m["recipes"]) {
+			if len(f.out) >= maxFileRecipes {
+				return
+			}
+			if rm, ok := item.(map[string]any); ok {
+				if r := fromWokko(rm, fileAt); r != nil && strings.TrimSpace(r.Name) != "" {
+					f.out = append(f.out, *r)
+				}
+			}
+		}
 		return
 	}
 	for _, item := range asList(value) {
@@ -493,3 +517,61 @@ func joinText(a, b string) string {
 	}
 	return a + "\n\n" + b
 }
+
+// isWokko recognises Wokko's own export, for one recipe or many.
+func isWokko(m map[string]any) bool {
+	format, _ := m["format"].(string)
+	_, hasRecipes := m["recipes"]
+	return strings.HasPrefix(format, "wokko-export") && hasRecipes
+}
+
+// fromWokko reads one recipe of Wokko's own export, which keeps every step's ingredients.
+func fromWokko(m map[string]any, fileAt func(string) []byte) *FileRecipe {
+	r := &FileRecipe{
+		Format: "Wokko", Name: str(m, "name"), Description: str(m, "description"), ServingsText: str(m, "servings_text"), Source: str(m, "source_url"),
+		Servings: int64(number(m, "servings")), WorkMinutes: int64(number(m, "work_minutes")), WaitMinutes: int64(number(m, "wait_minutes")),
+	}
+	for _, k := range asList(m["keywords"]) {
+		if name := nameOf(k); name != "" {
+			r.Keywords = append(r.Keywords, name)
+		}
+	}
+	for _, raw := range asList(m["steps"]) {
+		sm, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		st := FileStep{Name: str(sm, "name"), Instruction: str(sm, "instruction"), Minutes: int64(number(sm, "minutes"))}
+		for _, rawIng := range asList(sm["ingredients"]) {
+			im, ok := rawIng.(map[string]any)
+			if !ok {
+				continue
+			}
+			ing := FileIngredient{Food: nameOf(im["food"]), Unit: nameOf(im["unit"]), Note: str(im, "note")}
+			if a, ok := im["amount"].(float64); ok {
+				ing.Amount = &a
+			}
+			if ing.Food != "" {
+				st.Ingredients = append(st.Ingredients, ing)
+			}
+		}
+		r.Steps = append(r.Steps, st)
+	}
+	if len(r.Steps) == 0 {
+		r.Steps = []FileStep{{}}
+	}
+	if fileAt != nil {
+		// Newer exports name the photo's path. Older ones only have the address it was served at.
+		name := str(m, "photo")
+		if name == "" {
+			if u := str(m, "photo_url"); u != "" {
+				name = "photos/" + path.Base(strings.SplitN(u, "?", 2)[0])
+			}
+		}
+		if name != "" && !strings.Contains(name, "..") {
+			r.Photo = fileAt(name)
+		}
+	}
+	return r
+}
+

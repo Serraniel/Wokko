@@ -7,7 +7,7 @@ Your recipes, on your own server. A self-hosted recipe manager built to be simpl
 ## Features
 
 - **Recipes:** steps with their own ingredients, photos, tags, serving scaling, search and cook log
-- **Import:** from a link to most recipe sites and blogs, from pasted text, or from Tandoor, Mealie and Paprika exports, with a chance to check before saving
+- **Import:** from a link to most recipe sites and blogs, from pasted text, from another Wokko, or from Tandoor, Mealie and Paprika exports, with a chance to check before saving
 - **Offline:** the shopping list, this week's plan and recent recipes keep working without a connection, on HTTPS
 - **Meal plans and shopping:** plan the week, add it to a shared shopping list, and sort that list by aisle for each shop
 - **Cooking mode and printing:** one step at a time in big text, with timers and tick-off ingredients, also on shared links with no account. Any recipe prints cleanly
@@ -106,9 +106,9 @@ With another reverse proxy, set `PUBLIC_URL`, pass the original `Host` header th
 
 **Sharing:** add Wokko to your home screen from the browser's menu, and it appears when you share a page from another app. Over plain HTTP, use the bookmark under **Integrations** instead.
 
-## Moving from another app
+## Moving recipes between apps
 
-Under **Integrations** (in **More** on a phone, or **Settings**), choose an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
+Under **Integrations** (in **More** on a phone, or **Settings**), choose a file exported from another Wokko, an export from Tandoor, Mealie or Paprika, or schema.org recipe files such as Nextcloud Cookbook's. You see what's inside first. Recipes arrive as "Only me", duplicates are skipped and the whole import can be undone.
 
 ## Using kitshn
 

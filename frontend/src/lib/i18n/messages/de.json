@@ -481,7 +481,7 @@
   "offline.waiting_other": "{count} Einkaufsänderungen warten aufs Senden",
   "fileimport.title": "Rezepte übernehmen",
   "fileimport.from_file": "Aus einer anderen App",
-  "fileimport.from_file_hint": "Exporte aus Tandoor, Mealie und Paprika oder schema.org-Rezeptdateien, etwa aus Nextcloud Cookbook. Du siehst den Inhalt, bevor etwas gespeichert wird.",
+  "fileimport.from_file_hint": "Dateien aus einem anderen Wokko, Exporte aus Tandoor, Mealie und Paprika oder schema.org-Rezeptdateien, etwa aus Nextcloud Cookbook. Du siehst den Inhalt, bevor etwas gespeichert wird.",
   "fileimport.choose": "Datei auswählen",
   "fileimport.found_one": "{count} Rezept gefunden",
   "fileimport.found_other": "{count} Rezepte gefunden",
