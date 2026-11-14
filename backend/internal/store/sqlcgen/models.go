@@ -39,6 +39,34 @@ type BackupRun struct {
 	Error      sql.NullString
 }
 
+type CatalogEntry struct {
+	Kind     string
+	Key      string
+	EntityID sql.NullInt64
+	Base     string
+}
+
+type CatalogSuggestion struct {
+	ID        int64
+	Kind      string
+	Key       string
+	EntityID  int64
+	Field     string
+	Ours      string
+	Theirs    string
+	CreatedAt string
+}
+
+type CatalogSync struct {
+	ID        int64
+	Pack      string
+	Version   string
+	Added     int64
+	Updated   int64
+	Suggested int64
+	CreatedAt string
+}
+
 type CollectionLink struct {
 	ID        int64
 	Token     string

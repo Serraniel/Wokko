@@ -570,5 +570,20 @@
   "export.scope_mine": "Meine",
   "export.scope_all": "Alle, die ich sehen kann",
   "export.scope_all_hint": "Deine, die deines Haushalts und mit dir geteilte. Um einen ganzen Server umzuziehen, nimm stattdessen ein Backup.",
-  "export.formats_hint": "„Für ein anderes Wokko“ behält alles. „Für andere Apps“ liefert schema.org-Dateien, die Tandoor, Mealie, Nextcloud Cookbook und andere importieren."
+  "export.formats_hint": "„Für ein anderes Wokko“ behält alles. „Für andere Apps“ liefert schema.org-Dateien, die Tandoor, Mealie, Nextcloud Cookbook und andere importieren.",
+  "catalog.title": "Updates des Startkatalogs",
+  "catalog.hint": "Neue Wokko-Versionen können weitere Lebensmittel, Übersetzungen und korrigierte Nährwerte mitbringen. Einträge, die niemand geändert hat, werden von selbst aktualisiert. Hat jemand einen Wert geändert, den auch das Update ändert, oder gehört ein Eintrag einer Person, entscheidest du hier. Gelöscht wird nie etwas.",
+  "catalog.last": "Letztes Update {date} mit Version {version}: {added} hinzugefügt, {updated} aktualisiert.",
+  "catalog.suggestions": "Zu entscheiden ({n})",
+  "catalog.ours": "Jetzt",
+  "catalog.theirs": "Update",
+  "catalog.none": "(nichts)",
+  "catalog.take": "Update übernehmen",
+  "catalog.keep": "Unseres behalten",
+  "catalog.nothing": "Nichts zu entscheiden.",
+  "catalog.field_name": "Name auf {language}",
+  "catalog.field_alias": "Weiterer Name",
+  "catalog.field_nutrient": "Nährwert",
+  "catalog.field_default_unit": "Standardeinheit",
+  "catalog.field_grams": "Gewicht in Gramm"
 }

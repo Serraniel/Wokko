@@ -1,0 +1,4032 @@
+{
+ "foods": [
+  {
+   "key": "food.onion",
+   "id": 1,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "onion",
+     "plural": "onions"
+    },
+    "de": {
+     "name": "Zwiebel",
+     "plural": "Zwiebeln"
+    }
+   },
+   "nutrients": {
+    "1": 40.0,
+    "2": 0.1,
+    "3": 0.042,
+    "4": 9.34,
+    "5": 4.24,
+    "6": 1.7,
+    "7": 1.1,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.garlic",
+   "id": 2,
+   "default_unit": "unit.clove",
+   "names": {
+    "en": {
+     "name": "garlic",
+     "plural": "garlic cloves"
+    },
+    "de": {
+     "name": "Knoblauch",
+     "plural": "Knoblauchzehen"
+    }
+   },
+   "nutrients": {
+    "1": 149.0,
+    "2": 0.5,
+    "3": 0.089,
+    "4": 33.06,
+    "5": 1.0,
+    "6": 2.1,
+    "7": 6.36,
+    "8": 0.043
+   }
+  },
+  {
+   "key": "food.carrot",
+   "id": 3,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "carrot",
+     "plural": "carrots"
+    },
+    "de": {
+     "name": "Karotte",
+     "plural": "Karotten"
+    }
+   },
+   "nutrients": {
+    "1": 41.0,
+    "2": 0.24,
+    "3": 0.032,
+    "4": 9.58,
+    "5": 4.74,
+    "6": 2.8,
+    "7": 0.93,
+    "8": 0.172
+   }
+  },
+  {
+   "key": "food.potato",
+   "id": 4,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "potato",
+     "plural": "potatoes"
+    },
+    "de": {
+     "name": "Kartoffel",
+     "plural": "Kartoffeln"
+    }
+   },
+   "nutrients": {
+    "1": 77.0,
+    "2": 0.09,
+    "3": 0.025,
+    "4": 17.49,
+    "5": 0.82,
+    "6": 2.1,
+    "7": 2.05,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.tomato",
+   "id": 5,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "tomato",
+     "plural": "tomatoes"
+    },
+    "de": {
+     "name": "Tomate",
+     "plural": "Tomaten"
+    }
+   },
+   "nutrients": {
+    "1": 18.0,
+    "2": 0.2,
+    "3": 0.028,
+    "4": 3.89,
+    "5": 2.63,
+    "6": 1.2,
+    "7": 0.88,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.cucumber",
+   "id": 6,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "cucumber",
+     "plural": "cucumbers"
+    },
+    "de": {
+     "name": "Gurke",
+     "plural": "Gurken"
+    }
+   },
+   "nutrients": {
+    "1": 15.0,
+    "2": 0.11,
+    "3": 0.037,
+    "4": 3.63,
+    "5": 1.67,
+    "6": 0.5,
+    "7": 0.65,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.bell_pepper",
+   "id": 7,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "bell pepper",
+     "plural": "bell peppers"
+    },
+    "de": {
+     "name": "Paprika",
+     "plural": "Paprikas"
+    }
+   },
+   "nutrients": {
+    "1": 26.0,
+    "2": 0.3,
+    "3": 0.059,
+    "4": 6.03,
+    "5": 4.2,
+    "6": 2.1,
+    "7": 0.99,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.broccoli",
+   "id": 8,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "broccoli",
+     "plural": "broccoli heads"
+    },
+    "de": {
+     "name": "Brokkoli",
+     "plural": "Brokkoliköpfe"
+    }
+   },
+   "nutrients": {
+    "1": 34.0,
+    "2": 0.37,
+    "3": 0.114,
+    "4": 6.64,
+    "5": 1.7,
+    "6": 2.6,
+    "7": 2.82,
+    "8": 0.083
+   }
+  },
+  {
+   "key": "food.spinach",
+   "id": 9,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "spinach",
+     "plural": "spinach"
+    },
+    "de": {
+     "name": "Spinat",
+     "plural": "Spinat"
+    }
+   },
+   "nutrients": {
+    "1": 23.0,
+    "2": 0.39,
+    "3": 0.063,
+    "4": 3.63,
+    "5": 0.42,
+    "6": 2.2,
+    "7": 2.86,
+    "8": 0.198
+   }
+  },
+  {
+   "key": "food.lettuce",
+   "id": 10,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "lettuce",
+     "plural": "lettuces"
+    },
+    "de": {
+     "name": "Salat",
+     "plural": "Salate"
+    }
+   },
+   "nutrients": {
+    "1": 15.0,
+    "2": 0.15,
+    "3": 0.02,
+    "4": 2.87,
+    "5": 0.78,
+    "6": 1.3,
+    "7": 1.36,
+    "8": 0.07
+   }
+  },
+  {
+   "key": "food.zucchini",
+   "id": 11,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "zucchini",
+     "plural": "zucchinis"
+    },
+    "de": {
+     "name": "Zucchini",
+     "plural": "Zucchinis"
+    }
+   },
+   "nutrients": {
+    "1": 17.0,
+    "2": 0.32,
+    "3": 0.084,
+    "4": 3.11,
+    "5": 2.5,
+    "6": 1.0,
+    "7": 1.21,
+    "8": 0.02
+   }
+  },
+  {
+   "key": "food.eggplant",
+   "id": 12,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "eggplant",
+     "plural": "eggplants"
+    },
+    "de": {
+     "name": "Aubergine",
+     "plural": "Auberginen"
+    }
+   },
+   "nutrients": {
+    "1": 25.0,
+    "2": 0.18,
+    "3": 0.034,
+    "4": 5.88,
+    "5": 3.53,
+    "6": 3.0,
+    "7": 0.98,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.cauliflower",
+   "id": 13,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "cauliflower",
+     "plural": "cauliflowers"
+    },
+    "de": {
+     "name": "Blumenkohl",
+     "plural": "Blumenkohlköpfe"
+    }
+   },
+   "nutrients": {
+    "1": 25.0,
+    "2": 0.28,
+    "3": 0.13,
+    "4": 4.97,
+    "5": 1.91,
+    "6": 2.0,
+    "7": 1.92,
+    "8": 0.075
+   }
+  },
+  {
+   "key": "food.cabbage",
+   "id": 14,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "cabbage",
+     "plural": "cabbages"
+    },
+    "de": {
+     "name": "Kohl",
+     "plural": "Kohlköpfe"
+    }
+   },
+   "nutrients": {
+    "1": 25.0,
+    "2": 0.1,
+    "3": 0.034,
+    "4": 5.8,
+    "5": 3.2,
+    "6": 2.5,
+    "7": 1.28,
+    "8": 0.045
+   }
+  },
+  {
+   "key": "food.leek",
+   "id": 15,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "leek",
+     "plural": "leeks"
+    },
+    "de": {
+     "name": "Lauch",
+     "plural": "Lauche"
+    }
+   },
+   "nutrients": {
+    "1": 61.0,
+    "2": 0.3,
+    "3": 0.04,
+    "4": 14.15,
+    "5": 3.9,
+    "6": 1.8,
+    "7": 1.5,
+    "8": 0.05
+   }
+  },
+  {
+   "key": "food.celery",
+   "id": 16,
+   "default_unit": "unit.stalk",
+   "names": {
+    "en": {
+     "name": "celery",
+     "plural": "celery stalks"
+    },
+    "de": {
+     "name": "Sellerie",
+     "plural": "Selleriesstangen"
+    }
+   },
+   "nutrients": {
+    "1": 14.0,
+    "2": 0.17,
+    "3": 0.042,
+    "4": 2.97,
+    "5": 1.34,
+    "6": 1.6,
+    "7": 0.69,
+    "8": 0.2
+   }
+  },
+  {
+   "key": "food.mushroom",
+   "id": 17,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "mushroom",
+     "plural": "mushrooms"
+    },
+    "de": {
+     "name": "Champignon",
+     "plural": "Champignons"
+    }
+   },
+   "nutrients": {
+    "1": 22.0,
+    "2": 0.34,
+    "3": 0.05,
+    "4": 3.26,
+    "5": 1.98,
+    "6": 1.0,
+    "7": 3.09,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.peas",
+   "id": 18,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "peas",
+     "plural": "peas"
+    },
+    "de": {
+     "name": "Erbsen",
+     "plural": "Erbsen"
+    }
+   },
+   "nutrients": {
+    "1": 81.0,
+    "2": 0.4,
+    "3": 0.071,
+    "4": 14.45,
+    "5": 5.67,
+    "6": 5.7,
+    "7": 5.42,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.corn",
+   "id": 19,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "corn",
+     "plural": "corn cobs"
+    },
+    "de": {
+     "name": "Mais",
+     "plural": "Maiskolben"
+    }
+   },
+   "nutrients": {
+    "1": 86.0,
+    "2": 1.35,
+    "3": 0.325,
+    "4": 18.7,
+    "5": 6.26,
+    "6": 2.0,
+    "7": 3.27,
+    "8": 0.037
+   }
+  },
+  {
+   "key": "food.asparagus",
+   "id": 20,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "asparagus",
+     "plural": "asparagus stalks"
+    },
+    "de": {
+     "name": "Spargel",
+     "plural": "Spargelstangen"
+    }
+   },
+   "nutrients": {
+    "1": 20.0,
+    "2": 0.12,
+    "3": 0.04,
+    "4": 3.88,
+    "5": 1.88,
+    "6": 2.1,
+    "7": 2.2,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.artichoke",
+   "id": 21,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "artichoke",
+     "plural": "artichokes"
+    },
+    "de": {
+     "name": "Artischocke",
+     "plural": "Artischocken"
+    }
+   },
+   "nutrients": {
+    "1": 47.0,
+    "2": 0.15,
+    "3": 0.036,
+    "4": 10.51,
+    "5": 0.99,
+    "6": 5.4,
+    "7": 3.27,
+    "8": 0.235
+   }
+  },
+  {
+   "key": "food.pumpkin",
+   "id": 22,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "pumpkin",
+     "plural": "pumpkins"
+    },
+    "de": {
+     "name": "Kürbis",
+     "plural": "Kürbisse"
+    }
+   },
+   "nutrients": {
+    "1": 26.0,
+    "2": 0.1,
+    "3": 0.052,
+    "4": 6.5,
+    "5": 2.76,
+    "6": 0.5,
+    "7": 1.0,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.sweet_potato",
+   "id": 23,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "sweet potato",
+     "plural": "sweet potatoes"
+    },
+    "de": {
+     "name": "Süßkartoffel",
+     "plural": "Süßkartoffeln"
+    }
+   },
+   "nutrients": {
+    "1": 86.0,
+    "2": 0.05,
+    "3": 0.018,
+    "4": 20.12,
+    "5": 4.18,
+    "6": 3.0,
+    "7": 1.57,
+    "8": 0.138
+   }
+  },
+  {
+   "key": "food.radish",
+   "id": 24,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "radish",
+     "plural": "radishes"
+    },
+    "de": {
+     "name": "Radieschen",
+     "plural": "Radieschen"
+    }
+   },
+   "nutrients": {
+    "1": 16.0,
+    "2": 0.1,
+    "3": 0.032,
+    "4": 3.4,
+    "5": 1.86,
+    "6": 1.6,
+    "7": 0.68,
+    "8": 0.098
+   }
+  },
+  {
+   "key": "food.beet",
+   "id": 25,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "beet",
+     "plural": "beets"
+    },
+    "de": {
+     "name": "Rote Bete",
+     "plural": "Rote Beten"
+    }
+   },
+   "nutrients": {
+    "1": 43.0,
+    "2": 0.17,
+    "3": 0.027,
+    "4": 9.56,
+    "5": 6.76,
+    "6": 2.8,
+    "7": 1.61,
+    "8": 0.195
+   }
+  },
+  {
+   "key": "food.green_beans",
+   "id": 26,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "green beans",
+     "plural": "green beans"
+    },
+    "de": {
+     "name": "grüne Bohnen",
+     "plural": "grüne Bohnen"
+    }
+   },
+   "nutrients": {
+    "1": 31.0,
+    "2": 0.22,
+    "3": 0.05,
+    "4": 6.97,
+    "5": 3.26,
+    "6": 2.7,
+    "7": 1.83,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.snow_peas",
+   "id": 27,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "snow peas",
+     "plural": "snow peas"
+    },
+    "de": {
+     "name": "Zuckerschoten",
+     "plural": "Zuckerschoten"
+    }
+   },
+   "nutrients": {
+    "1": 42.0,
+    "2": 0.2,
+    "3": 0.039,
+    "4": 7.55,
+    "5": 4.0,
+    "6": 2.6,
+    "7": 2.8,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.cherry_tomato",
+   "id": 28,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "cherry tomato",
+     "plural": "cherry tomatoes"
+    },
+    "de": {
+     "name": "Cherrytomaten",
+     "plural": "Cherrytomaten"
+    }
+   },
+   "nutrients": {
+    "1": 18.0,
+    "2": 0.2,
+    "3": 0.028,
+    "4": 3.89,
+    "5": 2.63,
+    "6": 1.2,
+    "7": 0.88,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.spring_onion",
+   "id": 29,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "spring onion",
+     "plural": "spring onions"
+    },
+    "de": {
+     "name": "Frühlingszwiebel",
+     "plural": "Frühlingszwiebeln"
+    }
+   },
+   "nutrients": {
+    "1": 32.0,
+    "2": 0.19,
+    "3": 0.032,
+    "4": 7.34,
+    "5": 2.33,
+    "6": 2.6,
+    "7": 1.83,
+    "8": 0.04
+   }
+  },
+  {
+   "key": "food.fennel",
+   "id": 30,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "fennel",
+     "plural": "fennels"
+    },
+    "de": {
+     "name": "Fenchel",
+     "plural": "Fenchel"
+    }
+   },
+   "nutrients": {
+    "1": 31.0,
+    "2": 0.2,
+    "3": 0.09,
+    "4": 7.3,
+    "5": 3.93,
+    "6": 3.1,
+    "7": 1.24,
+    "8": 0.13
+   }
+  },
+  {
+   "key": "food.apple",
+   "id": 31,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "apple",
+     "plural": "apples"
+    },
+    "de": {
+     "name": "Apfel",
+     "plural": "Äpfel"
+    }
+   },
+   "nutrients": {
+    "1": 52.0,
+    "2": 0.17,
+    "3": 0.028,
+    "4": 13.81,
+    "5": 10.39,
+    "6": 2.4,
+    "7": 0.26,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.banana",
+   "id": 32,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "banana",
+     "plural": "bananas"
+    },
+    "de": {
+     "name": "Banane",
+     "plural": "Bananen"
+    }
+   },
+   "nutrients": {
+    "1": 89.0,
+    "2": 0.33,
+    "3": 0.112,
+    "4": 22.84,
+    "5": 12.23,
+    "6": 2.6,
+    "7": 1.09,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.orange",
+   "id": 33,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "orange",
+     "plural": "oranges"
+    },
+    "de": {
+     "name": "Orange",
+     "plural": "Orangen"
+    }
+   },
+   "nutrients": {
+    "1": 47.0,
+    "2": 0.12,
+    "3": 0.015,
+    "4": 11.75,
+    "5": 9.35,
+    "6": 2.4,
+    "7": 0.94,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.lemon",
+   "id": 34,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "lemon",
+     "plural": "lemons"
+    },
+    "de": {
+     "name": "Zitrone",
+     "plural": "Zitronen"
+    }
+   },
+   "nutrients": {
+    "1": 29.0,
+    "2": 0.3,
+    "3": 0.039,
+    "4": 9.32,
+    "5": 2.5,
+    "6": 2.8,
+    "7": 1.1,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.lime",
+   "id": 35,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "lime",
+     "plural": "limes"
+    },
+    "de": {
+     "name": "Limette",
+     "plural": "Limetten"
+    }
+   },
+   "nutrients": {
+    "1": 30.0,
+    "2": 0.2,
+    "3": 0.022,
+    "4": 10.54,
+    "5": 1.69,
+    "6": 2.8,
+    "7": 0.7,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.strawberry",
+   "id": 36,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "strawberry",
+     "plural": "strawberries"
+    },
+    "de": {
+     "name": "Erdbeere",
+     "plural": "Erdbeeren"
+    }
+   },
+   "nutrients": {
+    "1": 32.0,
+    "2": 0.3,
+    "3": 0.015,
+    "4": 7.68,
+    "5": 4.89,
+    "6": 2.0,
+    "7": 0.67,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.blueberry",
+   "id": 37,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "blueberry",
+     "plural": "blueberries"
+    },
+    "de": {
+     "name": "Heidelbeere",
+     "plural": "Heidelbeeren"
+    }
+   },
+   "nutrients": {
+    "1": 57.0,
+    "2": 0.33,
+    "3": 0.028,
+    "4": 14.49,
+    "5": 9.96,
+    "6": 2.4,
+    "7": 0.74,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.raspberry",
+   "id": 38,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "raspberry",
+     "plural": "raspberries"
+    },
+    "de": {
+     "name": "Himbeere",
+     "plural": "Himbeeren"
+    }
+   },
+   "nutrients": {
+    "1": 52.0,
+    "2": 0.65,
+    "3": 0.019,
+    "4": 11.94,
+    "5": 4.42,
+    "6": 6.5,
+    "7": 1.2,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.grape",
+   "id": 39,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "grape",
+     "plural": "grapes"
+    },
+    "de": {
+     "name": "Weintraube",
+     "plural": "Weintrauben"
+    }
+   },
+   "nutrients": {
+    "1": 69.0,
+    "2": 0.16,
+    "3": 0.054,
+    "4": 18.1,
+    "5": 15.48,
+    "6": 0.9,
+    "7": 0.72,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.mango",
+   "id": 40,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "mango",
+     "plural": "mangoes"
+    },
+    "de": {
+     "name": "Mango",
+     "plural": "Mangos"
+    }
+   },
+   "nutrients": {
+    "1": 60.0,
+    "2": 0.38,
+    "3": 0.092,
+    "4": 14.98,
+    "5": 13.66,
+    "6": 1.6,
+    "7": 0.82,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.pineapple",
+   "id": 41,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "pineapple",
+     "plural": "pineapples"
+    },
+    "de": {
+     "name": "Ananas",
+     "plural": "Ananas"
+    }
+   },
+   "nutrients": {
+    "1": 50.0,
+    "2": 0.12,
+    "3": 0.009,
+    "4": 13.12,
+    "5": 9.85,
+    "6": 1.4,
+    "7": 0.54,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.watermelon",
+   "id": 42,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "watermelon",
+     "plural": "watermelons"
+    },
+    "de": {
+     "name": "Wassermelone",
+     "plural": "Wassermelonen"
+    }
+   },
+   "nutrients": {
+    "1": 30.0,
+    "2": 0.15,
+    "3": 0.016,
+    "4": 7.55,
+    "5": 6.2,
+    "6": 0.4,
+    "7": 0.61,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.peach",
+   "id": 43,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "peach",
+     "plural": "peaches"
+    },
+    "de": {
+     "name": "Pfirsich",
+     "plural": "Pfirsiche"
+    }
+   },
+   "nutrients": {
+    "1": 39.0,
+    "2": 0.25,
+    "3": 0.019,
+    "4": 9.54,
+    "5": 8.39,
+    "6": 1.5,
+    "7": 0.91,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.pear",
+   "id": 44,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "pear",
+     "plural": "pears"
+    },
+    "de": {
+     "name": "Birne",
+     "plural": "Birnen"
+    }
+   },
+   "nutrients": {
+    "1": 57.0,
+    "2": 0.14,
+    "3": 0.022,
+    "4": 15.23,
+    "5": 9.75,
+    "6": 3.1,
+    "7": 0.36,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.cherry",
+   "id": 45,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "cherry",
+     "plural": "cherries"
+    },
+    "de": {
+     "name": "Kirsche",
+     "plural": "Kirschen"
+    }
+   },
+   "nutrients": {
+    "1": 63.0,
+    "2": 0.2,
+    "3": 0.038,
+    "4": 16.01,
+    "5": 12.82,
+    "6": 2.1,
+    "7": 1.06,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.plum",
+   "id": 46,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "plum",
+     "plural": "plums"
+    },
+    "de": {
+     "name": "Pflaume",
+     "plural": "Pflaumen"
+    }
+   },
+   "nutrients": {
+    "1": 46.0,
+    "2": 0.28,
+    "3": 0.017,
+    "4": 11.42,
+    "5": 9.92,
+    "6": 1.4,
+    "7": 0.7,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.apricot",
+   "id": 47,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "apricot",
+     "plural": "apricots"
+    },
+    "de": {
+     "name": "Aprikose",
+     "plural": "Aprikosen"
+    }
+   },
+   "nutrients": {
+    "1": 48.0,
+    "2": 0.39,
+    "3": 0.027,
+    "4": 11.12,
+    "5": 9.24,
+    "6": 2.0,
+    "7": 1.4,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.kiwi",
+   "id": 48,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "kiwi",
+     "plural": "kiwis"
+    },
+    "de": {
+     "name": "Kiwi",
+     "plural": "Kiwis"
+    }
+   },
+   "nutrients": {
+    "1": 61.0,
+    "2": 0.52,
+    "3": 0.029,
+    "4": 14.66,
+    "5": 8.99,
+    "6": 3.0,
+    "7": 1.14,
+    "8": 0.007
+   }
+  },
+  {
+   "key": "food.avocado",
+   "id": 49,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "avocado",
+     "plural": "avocados"
+    },
+    "de": {
+     "name": "Avocado",
+     "plural": "Avocados"
+    }
+   },
+   "nutrients": {
+    "1": 160.0,
+    "2": 14.66,
+    "3": 2.126,
+    "4": 8.53,
+    "5": 0.66,
+    "6": 6.7,
+    "7": 2.0,
+    "8": 0.018
+   }
+  },
+  {
+   "key": "food.coconut",
+   "id": 50,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "coconut",
+     "plural": "coconuts"
+    },
+    "de": {
+     "name": "Kokosnuss",
+     "plural": "Kokosnüsse"
+    }
+   },
+   "nutrients": {
+    "1": 354.0,
+    "2": 33.49,
+    "3": 29.698,
+    "4": 15.23,
+    "5": 6.23,
+    "6": 9.0,
+    "7": 3.33,
+    "8": 0.05
+   }
+  },
+  {
+   "key": "food.pomegranate",
+   "id": 51,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "pomegranate",
+     "plural": "pomegranates"
+    },
+    "de": {
+     "name": "Granatapfel",
+     "plural": "Granatäpfel"
+    }
+   },
+   "nutrients": {
+    "1": 83.0,
+    "2": 1.17,
+    "3": 0.12,
+    "4": 18.7,
+    "5": 13.67,
+    "6": 4.0,
+    "7": 1.67,
+    "8": 0.007
+   }
+  },
+  {
+   "key": "food.chicken_breast",
+   "id": 52,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "chicken breast",
+     "plural": "chicken breasts"
+    },
+    "de": {
+     "name": "Hähnchenbrust",
+     "plural": "Hähnchenbrüste"
+    }
+   },
+   "nutrients": {
+    "1": 120.0,
+    "2": 2.62,
+    "3": 0.563,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 22.5,
+    "8": 0.113
+   }
+  },
+  {
+   "key": "food.chicken_thigh",
+   "id": 53,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "chicken thigh",
+     "plural": "chicken thighs"
+    },
+    "de": {
+     "name": "Hähnchenschenkel",
+     "plural": "Hähnchenschenkel"
+    }
+   },
+   "nutrients": {
+    "1": 121.0,
+    "2": 4.12,
+    "3": 1.097,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 19.66,
+    "8": 0.237
+   }
+  },
+  {
+   "key": "food.ground_beef",
+   "id": 54,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "ground beef",
+     "plural": "ground beef"
+    },
+    "de": {
+     "name": "Hackfleisch",
+     "plural": "Hackfleisch"
+    }
+   },
+   "nutrients": {
+    "1": 254.0,
+    "2": 20.0,
+    "3": 7.581,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 17.17,
+    "8": 0.165
+   }
+  },
+  {
+   "key": "food.beef_steak",
+   "id": 55,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "beef steak",
+     "plural": "beef steaks"
+    },
+    "de": {
+     "name": "Rindersteak",
+     "plural": "Rindersteaks"
+    }
+   },
+   "nutrients": {
+    "1": 214.0,
+    "2": 14.28,
+    "3": 5.763,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 19.92,
+    "8": 0.128
+   }
+  },
+  {
+   "key": "food.pork_chop",
+   "id": 56,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "pork chop",
+     "plural": "pork chops"
+    },
+    "de": {
+     "name": "Schweinekotelett",
+     "plural": "Schweinekoteletts"
+    }
+   },
+   "nutrients": {
+    "1": 170.0,
+    "2": 9.03,
+    "3": 2.993,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 20.71,
+    "8": 0.138
+   }
+  },
+  {
+   "key": "food.pork_belly",
+   "id": 57,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "pork belly",
+     "plural": "pork bellies"
+    },
+    "de": {
+     "name": "Schweinebauch",
+     "plural": "Schweinebauch"
+    }
+   },
+   "nutrients": {
+    "1": 518.0,
+    "2": 53.01,
+    "3": 19.33,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 9.34,
+    "8": 0.08
+   }
+  },
+  {
+   "key": "food.lamb_chop",
+   "id": 58,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "lamb chop",
+     "plural": "lamb chops"
+    },
+    "de": {
+     "name": "Lammkotelett",
+     "plural": "Lammkoteletts"
+    }
+   },
+   "nutrients": {
+    "1": 279.0,
+    "2": 22.75,
+    "3": 9.95,
+    "4": 0.0,
+    "6": 0.0,
+    "7": 17.18,
+    "8": 0.147
+   }
+  },
+  {
+   "key": "food.turkey_breast",
+   "id": 59,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "turkey breast",
+     "plural": "turkey breasts"
+    },
+    "de": {
+     "name": "Putenbrust",
+     "plural": "Putenbrüste"
+    }
+   },
+   "nutrients": {
+    "1": 114.0,
+    "2": 1.48,
+    "3": 0.289,
+    "4": 0.14,
+    "5": 0.05,
+    "6": 0.0,
+    "7": 23.66,
+    "8": 0.282
+   }
+  },
+  {
+   "key": "food.salmon_fillet",
+   "id": 60,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "salmon fillet",
+     "plural": "salmon fillets"
+    },
+    "de": {
+     "name": "Lachsfilet",
+     "plural": "Lachsfilets"
+    }
+   },
+   "nutrients": {
+    "1": 208.0,
+    "2": 13.42,
+    "3": 3.05,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 20.42,
+    "8": 0.147
+   }
+  },
+  {
+   "key": "food.tuna",
+   "id": 61,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "tuna",
+     "plural": "tuna"
+    },
+    "de": {
+     "name": "Thunfisch",
+     "plural": "Thunfisch"
+    }
+   },
+   "nutrients": {
+    "1": 109.0,
+    "2": 0.49,
+    "3": 0.172,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 24.4,
+    "8": 0.113
+   }
+  },
+  {
+   "key": "food.cod_fillet",
+   "id": 62,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "cod fillet",
+     "plural": "cod fillets"
+    },
+    "de": {
+     "name": "Kabeljaufilet",
+     "plural": "Kabeljaufilets"
+    }
+   },
+   "nutrients": {
+    "1": 82.0,
+    "2": 0.67,
+    "3": 0.131,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 17.81,
+    "8": 0.135
+   }
+  },
+  {
+   "key": "food.shrimp",
+   "id": 63,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "shrimp",
+     "plural": "shrimps"
+    },
+    "de": {
+     "name": "Garnele",
+     "plural": "Garnelen"
+    }
+   },
+   "nutrients": {
+    "1": 85.0,
+    "2": 0.51,
+    "3": 0.101,
+    "4": 0.0,
+    "7": 20.1,
+    "8": 0.297
+   }
+  },
+  {
+   "key": "food.egg",
+   "id": 64,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "egg",
+     "plural": "eggs"
+    },
+    "de": {
+     "name": "Ei",
+     "plural": "Eier"
+    }
+   },
+   "nutrients": {
+    "1": 143.0,
+    "2": 9.51,
+    "3": 3.126,
+    "4": 0.72,
+    "5": 0.37,
+    "6": 0.0,
+    "7": 12.56,
+    "8": 0.355
+   }
+  },
+  {
+   "key": "food.tofu",
+   "id": 65,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "tofu",
+     "plural": "tofu"
+    },
+    "de": {
+     "name": "Tofu",
+     "plural": "Tofu"
+    }
+   },
+   "nutrients": {
+    "1": 144.0,
+    "2": 8.72,
+    "3": 1.261,
+    "4": 2.78,
+    "6": 2.3,
+    "7": 17.27,
+    "8": 0.035
+   }
+  },
+  {
+   "key": "food.lentils",
+   "id": 66,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "lentils",
+     "plural": "lentils"
+    },
+    "de": {
+     "name": "Linsen",
+     "plural": "Linsen"
+    }
+   },
+   "nutrients": {
+    "1": 352.0,
+    "2": 1.06,
+    "3": 0.154,
+    "4": 63.35,
+    "5": 2.03,
+    "6": 10.7,
+    "7": 24.63,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.chickpeas",
+   "id": 67,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "chickpeas",
+     "plural": "chickpeas"
+    },
+    "de": {
+     "name": "Kichererbsen",
+     "plural": "Kichererbsen"
+    }
+   },
+   "nutrients": {
+    "1": 378.0,
+    "2": 6.04,
+    "3": 0.603,
+    "4": 62.95,
+    "5": 10.7,
+    "6": 12.2,
+    "7": 20.47,
+    "8": 0.06
+   }
+  },
+  {
+   "key": "food.black_beans",
+   "id": 68,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "black beans",
+     "plural": "black beans"
+    },
+    "de": {
+     "name": "Schwarze Bohnen",
+     "plural": "Schwarze Bohnen"
+    }
+   },
+   "nutrients": {
+    "1": 341.0,
+    "2": 1.42,
+    "3": 0.366,
+    "4": 62.36,
+    "5": 2.12,
+    "6": 15.5,
+    "7": 21.6,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.kidney_beans",
+   "id": 69,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "kidney beans",
+     "plural": "kidney beans"
+    },
+    "de": {
+     "name": "Kidneybohnen",
+     "plural": "Kidneybohnen"
+    }
+   },
+   "nutrients": {
+    "1": 333.0,
+    "2": 0.83,
+    "3": 0.12,
+    "4": 60.01,
+    "5": 2.23,
+    "6": 24.9,
+    "7": 23.58,
+    "8": 0.06
+   }
+  },
+  {
+   "key": "food.white_beans",
+   "id": 70,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "white beans",
+     "plural": "white beans"
+    },
+    "de": {
+     "name": "Weiße Bohnen",
+     "plural": "Weiße Bohnen"
+    }
+   },
+   "nutrients": {
+    "1": 333.0,
+    "2": 0.85,
+    "3": 0.219,
+    "4": 60.27,
+    "5": 2.11,
+    "6": 15.2,
+    "7": 23.36,
+    "8": 0.04
+   }
+  },
+  {
+   "key": "food.tempeh",
+   "id": 71,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "tempeh",
+     "plural": "tempeh"
+    },
+    "de": {
+     "name": "Tempeh",
+     "plural": "Tempeh"
+    }
+   },
+   "nutrients": {
+    "1": 192.0,
+    "2": 10.8,
+    "3": 2.539,
+    "4": 7.64,
+    "7": 20.29,
+    "8": 0.022
+   }
+  },
+  {
+   "key": "food.milk",
+   "id": 72,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "milk",
+     "plural": "milk"
+    },
+    "de": {
+     "name": "Milch",
+     "plural": "Milch"
+    }
+   },
+   "nutrients": {
+    "1": 61.0,
+    "2": 3.25,
+    "3": 1.865,
+    "4": 4.8,
+    "5": 5.05,
+    "6": 0.0,
+    "7": 3.15,
+    "8": 0.107
+   }
+  },
+  {
+   "key": "food.butter",
+   "id": 73,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "butter",
+     "plural": "butter"
+    },
+    "de": {
+     "name": "Butter",
+     "plural": "Butter"
+    }
+   },
+   "nutrients": {
+    "1": 717.0,
+    "2": 81.11,
+    "3": 51.368,
+    "4": 0.06,
+    "5": 0.06,
+    "6": 0.0,
+    "7": 0.85,
+    "8": 1.607
+   }
+  },
+  {
+   "key": "food.heavy_cream",
+   "id": 74,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "heavy cream",
+     "plural": "heavy cream"
+    },
+    "de": {
+     "name": "Schlagsahne",
+     "plural": "Schlagsahne"
+    }
+   },
+   "nutrients": {
+    "1": 340.0,
+    "2": 36.08,
+    "3": 23.032,
+    "4": 2.84,
+    "5": 2.92,
+    "6": 0.0,
+    "7": 2.84,
+    "8": 0.068
+   }
+  },
+  {
+   "key": "food.sour_cream",
+   "id": 75,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "sour cream",
+     "plural": "sour cream"
+    },
+    "de": {
+     "name": "Saure Sahne",
+     "plural": "Saure Sahne"
+    }
+   },
+   "nutrients": {
+    "1": 198.0,
+    "2": 19.35,
+    "3": 10.14,
+    "4": 4.63,
+    "5": 3.41,
+    "6": 0.0,
+    "7": 2.44,
+    "8": 0.077
+   }
+  },
+  {
+   "key": "food.cream_cheese",
+   "id": 76,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "cream cheese",
+     "plural": "cream cheese"
+    },
+    "de": {
+     "name": "Frischkäse",
+     "plural": "Frischkäse"
+    }
+   },
+   "nutrients": {
+    "1": 350.0,
+    "2": 34.44,
+    "3": 20.213,
+    "4": 5.52,
+    "5": 3.76,
+    "6": 0.0,
+    "7": 6.15,
+    "8": 0.785
+   }
+  },
+  {
+   "key": "food.yogurt",
+   "id": 77,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "yogurt",
+     "plural": "yogurts"
+    },
+    "de": {
+     "name": "Joghurt",
+     "plural": "Joghurts"
+    }
+   },
+   "nutrients": {
+    "1": 61.0,
+    "2": 3.25,
+    "3": 2.096,
+    "4": 4.66,
+    "5": 4.66,
+    "6": 0.0,
+    "7": 3.47,
+    "8": 0.115
+   }
+  },
+  {
+   "key": "food.mozzarella",
+   "id": 78,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "mozzarella",
+     "plural": "mozzarellas"
+    },
+    "de": {
+     "name": "Mozzarella",
+     "plural": "Mozzarella"
+    }
+   },
+   "nutrients": {
+    "1": 299.0,
+    "2": 22.14,
+    "3": 13.9,
+    "4": 2.4,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 22.17,
+    "8": 1.215
+   }
+  },
+  {
+   "key": "food.parmesan",
+   "id": 79,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "parmesan",
+     "plural": "parmesan"
+    },
+    "de": {
+     "name": "Parmesan",
+     "plural": "Parmesan"
+    }
+   },
+   "nutrients": {
+    "1": 392.0,
+    "2": 25.0,
+    "3": 14.85,
+    "4": 3.22,
+    "5": 0.11,
+    "6": 0.0,
+    "7": 35.75,
+    "8": 2.938
+   }
+  },
+  {
+   "key": "food.cheddar",
+   "id": 80,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "cheddar",
+     "plural": "cheddar"
+    },
+    "de": {
+     "name": "Cheddar",
+     "plural": "Cheddar"
+    }
+   },
+   "nutrients": {
+    "1": 403.0,
+    "2": 33.31,
+    "3": 18.867,
+    "4": 3.37,
+    "5": 0.48,
+    "6": 0.0,
+    "7": 22.87,
+    "8": 1.633
+   }
+  },
+  {
+   "key": "food.feta",
+   "id": 81,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "feta",
+     "plural": "feta"
+    },
+    "de": {
+     "name": "Feta",
+     "plural": "Feta"
+    }
+   },
+   "nutrients": {
+    "1": 265.0,
+    "2": 21.49,
+    "3": 13.3,
+    "4": 3.88,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 14.21,
+    "8": 2.848
+   }
+  },
+  {
+   "key": "food.gouda",
+   "id": 82,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "gouda",
+     "plural": "gouda"
+    },
+    "de": {
+     "name": "Gouda",
+     "plural": "Gouda"
+    }
+   },
+   "nutrients": {
+    "1": 356.0,
+    "2": 27.44,
+    "3": 17.614,
+    "4": 2.22,
+    "5": 2.22,
+    "6": 0.0,
+    "7": 24.94,
+    "8": 2.047
+   }
+  },
+  {
+   "key": "food.ricotta",
+   "id": 83,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "ricotta",
+     "plural": "ricotta"
+    },
+    "de": {
+     "name": "Ricotta",
+     "plural": "Ricotta"
+    }
+   },
+   "nutrients": {
+    "1": 150.0,
+    "2": 10.18,
+    "3": 6.42,
+    "4": 7.27,
+    "5": 0.27,
+    "6": 0.0,
+    "7": 7.54,
+    "8": 0.275
+   }
+  },
+  {
+   "key": "food.all_purpose_flour",
+   "id": 84,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "all-purpose flour",
+     "plural": "flour"
+    },
+    "de": {
+     "name": "Mehl",
+     "plural": "Mehl"
+    }
+   },
+   "nutrients": {
+    "1": 364.0,
+    "2": 0.98,
+    "3": 0.155,
+    "4": 76.31,
+    "5": 0.27,
+    "6": 2.7,
+    "7": 10.33,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.whole_wheat_flour",
+   "id": 85,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "whole wheat flour",
+     "plural": "flour"
+    },
+    "de": {
+     "name": "Vollkornmehl",
+     "plural": "Vollkornmehl"
+    }
+   },
+   "nutrients": {
+    "1": 340.0,
+    "2": 2.5,
+    "3": 0.43,
+    "4": 71.97,
+    "5": 0.41,
+    "6": 10.7,
+    "7": 13.21,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.bread_crumbs",
+   "id": 86,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "bread crumbs",
+     "plural": "bread crumbs"
+    },
+    "de": {
+     "name": "Paniermehl",
+     "plural": "Paniermehl"
+    }
+   }
+  },
+  {
+   "key": "food.rice",
+   "id": 87,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "rice",
+     "plural": "rice"
+    },
+    "de": {
+     "name": "Reis",
+     "plural": "Reis"
+    }
+   },
+   "nutrients": {
+    "1": 365.0,
+    "2": 0.66,
+    "3": 0.18,
+    "4": 79.95,
+    "5": 0.12,
+    "6": 1.3,
+    "7": 7.13,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.pasta",
+   "id": 88,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "pasta",
+     "plural": "pasta"
+    },
+    "de": {
+     "name": "Pasta",
+     "plural": "Pasta"
+    }
+   },
+   "nutrients": {
+    "1": 371.0,
+    "2": 1.51,
+    "3": 0.277,
+    "4": 74.67,
+    "5": 2.67,
+    "6": 3.2,
+    "7": 13.04,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.spaghetti",
+   "id": 89,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "spaghetti",
+     "plural": "spaghetti"
+    },
+    "de": {
+     "name": "Spaghetti",
+     "plural": "Spaghetti"
+    }
+   },
+   "nutrients": {
+    "1": 371.0,
+    "2": 1.51,
+    "3": 0.277,
+    "4": 74.67,
+    "5": 2.67,
+    "6": 3.2,
+    "7": 13.04,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.penne",
+   "id": 90,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "penne",
+     "plural": "penne"
+    },
+    "de": {
+     "name": "Penne",
+     "plural": "Penne"
+    }
+   },
+   "nutrients": {
+    "1": 371.0,
+    "2": 1.51,
+    "3": 0.277,
+    "4": 74.67,
+    "5": 2.67,
+    "6": 3.2,
+    "7": 13.04,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.fettuccine",
+   "id": 91,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "fettuccine",
+     "plural": "fettuccine"
+    },
+    "de": {
+     "name": "Fettuccine",
+     "plural": "Fettuccine"
+    }
+   },
+   "nutrients": {
+    "1": 371.0,
+    "2": 1.51,
+    "3": 0.277,
+    "4": 74.67,
+    "5": 2.67,
+    "6": 3.2,
+    "7": 13.04,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.lasagna_sheets",
+   "id": 92,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "lasagna sheets",
+     "plural": "lasagna sheets"
+    },
+    "de": {
+     "name": "Lasagneblätter",
+     "plural": "Lasagneblätter"
+    }
+   },
+   "nutrients": {
+    "1": 371.0,
+    "2": 1.51,
+    "3": 0.277,
+    "4": 74.67,
+    "5": 2.67,
+    "6": 3.2,
+    "7": 13.04,
+    "8": 0.015
+   }
+  },
+  {
+   "key": "food.bread",
+   "id": 93,
+   "default_unit": "unit.slice",
+   "names": {
+    "en": {
+     "name": "bread",
+     "plural": "breads"
+    },
+    "de": {
+     "name": "Brot",
+     "plural": "Brote"
+    }
+   },
+   "nutrients": {
+    "1": 266.0,
+    "2": 3.33,
+    "3": 0.698,
+    "4": 49.42,
+    "5": 5.67,
+    "6": 2.7,
+    "7": 8.85,
+    "8": 1.225
+   }
+  },
+  {
+   "key": "food.oats",
+   "id": 94,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "oats",
+     "plural": "oats"
+    },
+    "de": {
+     "name": "Haferflocken",
+     "plural": "Haferflocken"
+    }
+   },
+   "nutrients": {
+    "1": 389.0,
+    "2": 6.9,
+    "3": 1.217,
+    "4": 66.27,
+    "6": 10.6,
+    "7": 16.89,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.quinoa",
+   "id": 95,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "quinoa",
+     "plural": "quinoa"
+    },
+    "de": {
+     "name": "Quinoa",
+     "plural": "Quinoa"
+    }
+   },
+   "nutrients": {
+    "1": 368.0,
+    "2": 6.07,
+    "3": 0.706,
+    "4": 64.16,
+    "6": 7.0,
+    "7": 14.12,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.couscous",
+   "id": 96,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "couscous",
+     "plural": "couscous"
+    },
+    "de": {
+     "name": "Couscous",
+     "plural": "Couscous"
+    }
+   },
+   "nutrients": {
+    "1": 376.0,
+    "2": 0.64,
+    "3": 0.117,
+    "4": 77.43,
+    "6": 5.0,
+    "7": 12.76,
+    "8": 0.025
+   }
+  },
+  {
+   "key": "food.cornstarch",
+   "id": 97,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "cornstarch",
+     "plural": "cornstarch"
+    },
+    "de": {
+     "name": "Speisestärke",
+     "plural": "Speisestärke"
+    }
+   },
+   "nutrients": {
+    "1": 381.0,
+    "2": 0.05,
+    "3": 0.009,
+    "4": 91.27,
+    "5": 0.0,
+    "6": 0.9,
+    "7": 0.26,
+    "8": 0.022
+   }
+  },
+  {
+   "key": "food.semolina",
+   "id": 98,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "semolina",
+     "plural": "semolina"
+    },
+    "de": {
+     "name": "Grieß",
+     "plural": "Grieß"
+    }
+   },
+   "nutrients": {
+    "1": 360.0,
+    "2": 1.05,
+    "3": 0.15,
+    "4": 72.83,
+    "6": 3.9,
+    "7": 12.68,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.breadcrumbs",
+   "id": 99,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "breadcrumbs",
+     "plural": "breadcrumbs"
+    },
+    "de": {
+     "name": "Semmelbrösel",
+     "plural": "Semmelbrösel"
+    }
+   }
+  },
+  {
+   "key": "food.salt",
+   "id": 100,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "salt",
+     "plural": "salt"
+    },
+    "de": {
+     "name": "Salz",
+     "plural": "Salz"
+    }
+   },
+   "nutrients": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 96.895
+   }
+  },
+  {
+   "key": "food.black_pepper",
+   "id": 101,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "black pepper",
+     "plural": "black pepper"
+    },
+    "de": {
+     "name": "Schwarzer Pfeffer",
+     "plural": "Schwarzer Pfeffer"
+    }
+   },
+   "nutrients": {
+    "1": 251.0,
+    "2": 3.26,
+    "3": 1.392,
+    "4": 63.95,
+    "5": 0.64,
+    "6": 25.3,
+    "7": 10.39,
+    "8": 0.05
+   }
+  },
+  {
+   "key": "food.paprika_powder",
+   "id": 102,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "paprika powder",
+     "plural": "paprika powder"
+    },
+    "de": {
+     "name": "Paprikapulver",
+     "plural": "Paprikapulver"
+    }
+   },
+   "nutrients": {
+    "1": 282.0,
+    "2": 12.89,
+    "3": 2.14,
+    "4": 53.99,
+    "5": 10.34,
+    "6": 34.9,
+    "7": 14.14,
+    "8": 0.17
+   }
+  },
+  {
+   "key": "food.cumin",
+   "id": 103,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "cumin",
+     "plural": "cumin"
+    },
+    "de": {
+     "name": "Kreuzkümmel",
+     "plural": "Kreuzkümmel"
+    }
+   },
+   "nutrients": {
+    "1": 375.0,
+    "2": 22.27,
+    "3": 1.535,
+    "4": 44.24,
+    "5": 2.25,
+    "6": 10.5,
+    "7": 17.81,
+    "8": 0.42
+   }
+  },
+  {
+   "key": "food.coriander",
+   "id": 104,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "coriander",
+     "plural": "coriander"
+    },
+    "de": {
+     "name": "Koriander",
+     "plural": "Koriander"
+    }
+   },
+   "nutrients": {
+    "1": 298.0,
+    "2": 17.77,
+    "3": 0.99,
+    "4": 54.99,
+    "6": 41.9,
+    "7": 12.37,
+    "8": 0.087
+   }
+  },
+  {
+   "key": "food.turmeric",
+   "id": 105,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "turmeric",
+     "plural": "turmeric"
+    },
+    "de": {
+     "name": "Kurkuma",
+     "plural": "Kurkuma"
+    }
+   },
+   "nutrients": {
+    "1": 312.0,
+    "2": 3.25,
+    "3": 1.838,
+    "4": 67.14,
+    "5": 3.21,
+    "6": 22.7,
+    "7": 9.68,
+    "8": 0.068
+   }
+  },
+  {
+   "key": "food.cinnamon",
+   "id": 106,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "cinnamon",
+     "plural": "cinnamon"
+    },
+    "de": {
+     "name": "Zimt",
+     "plural": "Zimt"
+    }
+   },
+   "nutrients": {
+    "1": 247.0,
+    "2": 1.24,
+    "3": 0.345,
+    "4": 80.59,
+    "5": 2.17,
+    "6": 53.1,
+    "7": 3.99,
+    "8": 0.025
+   }
+  },
+  {
+   "key": "food.oregano",
+   "id": 107,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "oregano",
+     "plural": "oregano"
+    },
+    "de": {
+     "name": "Oregano",
+     "plural": "Oregano"
+    }
+   },
+   "nutrients": {
+    "1": 265.0,
+    "2": 4.28,
+    "3": 1.551,
+    "4": 68.92,
+    "5": 4.09,
+    "6": 42.5,
+    "7": 9.0,
+    "8": 0.062
+   }
+  },
+  {
+   "key": "food.basil",
+   "id": 108,
+   "default_unit": "unit.bunch",
+   "names": {
+    "en": {
+     "name": "basil",
+     "plural": "basil"
+    },
+    "de": {
+     "name": "Basilikum",
+     "plural": "Basilikum"
+    }
+   },
+   "nutrients": {
+    "1": 233.0,
+    "2": 4.07,
+    "3": 2.157,
+    "4": 47.75,
+    "5": 1.71,
+    "6": 37.7,
+    "7": 22.98,
+    "8": 0.19
+   }
+  },
+  {
+   "key": "food.thyme",
+   "id": 109,
+   "default_unit": "unit.sprig",
+   "names": {
+    "en": {
+     "name": "thyme",
+     "plural": "thyme"
+    },
+    "de": {
+     "name": "Thymian",
+     "plural": "Thymian"
+    }
+   },
+   "nutrients": {
+    "1": 276.0,
+    "2": 7.43,
+    "3": 2.73,
+    "4": 63.94,
+    "5": 1.71,
+    "6": 37.0,
+    "7": 9.11,
+    "8": 0.138
+   }
+  },
+  {
+   "key": "food.rosemary",
+   "id": 110,
+   "default_unit": "unit.sprig",
+   "names": {
+    "en": {
+     "name": "rosemary",
+     "plural": "rosemary"
+    },
+    "de": {
+     "name": "Rosmarin",
+     "plural": "Rosmarin"
+    }
+   },
+   "nutrients": {
+    "1": 331.0,
+    "2": 15.22,
+    "3": 7.371,
+    "4": 64.06,
+    "6": 42.6,
+    "7": 4.88,
+    "8": 0.125
+   }
+  },
+  {
+   "key": "food.bay_leaf",
+   "id": 111,
+   "default_unit": "unit.piece",
+   "names": {
+    "en": {
+     "name": "bay leaf",
+     "plural": "bay leaves"
+    },
+    "de": {
+     "name": "Lorbeerblatt",
+     "plural": "Lorbeerblätter"
+    }
+   },
+   "nutrients": {
+    "1": 313.0,
+    "2": 8.36,
+    "3": 2.28,
+    "4": 74.97,
+    "6": 26.3,
+    "7": 7.61,
+    "8": 0.058
+   }
+  },
+  {
+   "key": "food.parsley",
+   "id": 112,
+   "default_unit": "unit.bunch",
+   "names": {
+    "en": {
+     "name": "parsley",
+     "plural": "parsley"
+    },
+    "de": {
+     "name": "Petersilie",
+     "plural": "Petersilie"
+    }
+   },
+   "nutrients": {
+    "1": 36.0,
+    "2": 0.79,
+    "3": 0.132,
+    "4": 6.33,
+    "5": 0.85,
+    "6": 3.3,
+    "7": 2.97,
+    "8": 0.14
+   }
+  },
+  {
+   "key": "food.chili_flakes",
+   "id": 113,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "chili flakes",
+     "plural": "chili flakes"
+    },
+    "de": {
+     "name": "Chiliflocken",
+     "plural": "Chiliflocken"
+    }
+   },
+   "nutrients": {
+    "1": 318.0,
+    "2": 17.27,
+    "3": 3.26,
+    "4": 56.63,
+    "5": 10.34,
+    "6": 27.2,
+    "7": 12.01,
+    "8": 0.075
+   }
+  },
+  {
+   "key": "food.garlic_powder",
+   "id": 114,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "garlic powder",
+     "plural": "garlic powder"
+    },
+    "de": {
+     "name": "Knoblauchpulver",
+     "plural": "Knoblauchpulver"
+    }
+   },
+   "nutrients": {
+    "1": 331.0,
+    "2": 0.73,
+    "3": 0.249,
+    "4": 72.73,
+    "5": 2.43,
+    "6": 9.0,
+    "7": 16.55,
+    "8": 0.15
+   }
+  },
+  {
+   "key": "food.onion_powder",
+   "id": 115,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "onion powder",
+     "plural": "onion powder"
+    },
+    "de": {
+     "name": "Zwiebelpulver",
+     "plural": "Zwiebelpulver"
+    }
+   },
+   "nutrients": {
+    "1": 341.0,
+    "2": 1.04,
+    "3": 0.219,
+    "4": 79.12,
+    "5": 6.63,
+    "6": 15.2,
+    "7": 10.41,
+    "8": 0.182
+   }
+  },
+  {
+   "key": "food.ginger",
+   "id": 116,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "ginger",
+     "plural": "ginger"
+    },
+    "de": {
+     "name": "Ingwer",
+     "plural": "Ingwer"
+    }
+   },
+   "nutrients": {
+    "1": 80.0,
+    "2": 0.75,
+    "3": 0.203,
+    "4": 17.77,
+    "5": 1.7,
+    "6": 2.0,
+    "7": 1.82,
+    "8": 0.033
+   }
+  },
+  {
+   "key": "food.nutmeg",
+   "id": 117,
+   "default_unit": "unit.pinch",
+   "names": {
+    "en": {
+     "name": "nutmeg",
+     "plural": "nutmeg"
+    },
+    "de": {
+     "name": "Muskatnuss",
+     "plural": "Muskatnuss"
+    }
+   },
+   "nutrients": {
+    "1": 525.0,
+    "2": 36.31,
+    "3": 25.94,
+    "4": 49.29,
+    "5": 2.99,
+    "6": 20.8,
+    "7": 5.84,
+    "8": 0.04
+   }
+  },
+  {
+   "key": "food.cardamom",
+   "id": 118,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "cardamom",
+     "plural": "cardamom"
+    },
+    "de": {
+     "name": "Kardamom",
+     "plural": "Kardamom"
+    }
+   },
+   "nutrients": {
+    "1": 311.0,
+    "2": 6.7,
+    "3": 0.68,
+    "4": 68.47,
+    "6": 28.0,
+    "7": 10.76,
+    "8": 0.045
+   }
+  },
+  {
+   "key": "food.chili_powder",
+   "id": 119,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "chili powder",
+     "plural": "chili powder"
+    },
+    "de": {
+     "name": "Chilipulver",
+     "plural": "Chilipulver"
+    }
+   },
+   "nutrients": {
+    "1": 282.0,
+    "2": 14.28,
+    "3": 2.462,
+    "4": 49.7,
+    "5": 7.19,
+    "6": 34.8,
+    "7": 13.46,
+    "8": 7.168
+   }
+  },
+  {
+   "key": "food.curry_powder",
+   "id": 120,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "curry powder",
+     "plural": "curry powder"
+    },
+    "de": {
+     "name": "Currypulver",
+     "plural": "Currypulver"
+    }
+   },
+   "nutrients": {
+    "1": 325.0,
+    "2": 14.01,
+    "3": 1.648,
+    "4": 55.83,
+    "5": 2.76,
+    "6": 53.2,
+    "7": 14.29,
+    "8": 0.13
+   }
+  },
+  {
+   "key": "food.smoked_paprika",
+   "id": 121,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "smoked paprika",
+     "plural": "smoked paprika"
+    },
+    "de": {
+     "name": "Geräuchertes Paprika",
+     "plural": "Geräuchertes Paprika"
+    }
+   },
+   "nutrients": {
+    "1": 282.0,
+    "2": 12.89,
+    "3": 2.14,
+    "4": 53.99,
+    "5": 10.34,
+    "6": 34.9,
+    "7": 14.14,
+    "8": 0.17
+   }
+  },
+  {
+   "key": "food.dill",
+   "id": 122,
+   "default_unit": "unit.bunch",
+   "names": {
+    "en": {
+     "name": "dill",
+     "plural": "dill"
+    },
+    "de": {
+     "name": "Dill",
+     "plural": "Dill"
+    }
+   },
+   "nutrients": {
+    "1": 43.0,
+    "2": 1.12,
+    "3": 0.06,
+    "4": 7.02,
+    "6": 2.1,
+    "7": 3.46,
+    "8": 0.152
+   }
+  },
+  {
+   "key": "food.mint",
+   "id": 123,
+   "default_unit": "unit.bunch",
+   "names": {
+    "en": {
+     "name": "mint",
+     "plural": "mint"
+    },
+    "de": {
+     "name": "Minze",
+     "plural": "Minze"
+    }
+   },
+   "nutrients": {
+    "1": 44.0,
+    "2": 0.73,
+    "3": 0.191,
+    "4": 8.41,
+    "6": 6.8,
+    "7": 3.29,
+    "8": 0.075
+   }
+  },
+  {
+   "key": "food.sage",
+   "id": 124,
+   "default_unit": "unit.sprig",
+   "names": {
+    "en": {
+     "name": "sage",
+     "plural": "sage"
+    },
+    "de": {
+     "name": "Salbei",
+     "plural": "Salbei"
+    }
+   },
+   "nutrients": {
+    "1": 315.0,
+    "2": 12.75,
+    "3": 7.03,
+    "4": 60.73,
+    "5": 1.71,
+    "6": 40.3,
+    "7": 10.63,
+    "8": 0.028
+   }
+  },
+  {
+   "key": "food.chives",
+   "id": 125,
+   "default_unit": "unit.bunch",
+   "names": {
+    "en": {
+     "name": "chives",
+     "plural": "chives"
+    },
+    "de": {
+     "name": "Schnittlauch",
+     "plural": "Schnittlauch"
+    }
+   },
+   "nutrients": {
+    "1": 30.0,
+    "2": 0.73,
+    "3": 0.146,
+    "4": 4.35,
+    "5": 1.85,
+    "6": 2.5,
+    "7": 3.27,
+    "8": 0.007
+   }
+  },
+  {
+   "key": "food.olive_oil",
+   "id": 126,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "olive oil",
+     "plural": "olive oil"
+    },
+    "de": {
+     "name": "Olivenöl",
+     "plural": "Olivenöl"
+    }
+   },
+   "nutrients": {
+    "1": 884.0,
+    "2": 100.0,
+    "3": 13.808,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.vegetable_oil",
+   "id": 127,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "vegetable oil",
+     "plural": "vegetable oil"
+    },
+    "de": {
+     "name": "Pflanzenöl",
+     "plural": "Pflanzenöl"
+    }
+   },
+   "nutrients": {
+    "1": 884.0,
+    "2": 100.0,
+    "3": 7.365,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.sesame_oil",
+   "id": 128,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "sesame oil",
+     "plural": "sesame oil"
+    },
+    "de": {
+     "name": "Sesamöl",
+     "plural": "Sesamöl"
+    }
+   },
+   "nutrients": {
+    "1": 884.0,
+    "2": 100.0,
+    "3": 14.2,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.0
+   }
+  },
+  {
+   "key": "food.soy_sauce",
+   "id": 129,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "soy sauce",
+     "plural": "soy sauce"
+    },
+    "de": {
+     "name": "Sojasoße",
+     "plural": "Sojasoße"
+    }
+   },
+   "nutrients": {
+    "1": 53.0,
+    "2": 0.57,
+    "3": 0.073,
+    "4": 4.93,
+    "5": 0.4,
+    "6": 0.8,
+    "7": 8.14,
+    "8": 13.732
+   }
+  },
+  {
+   "key": "food.fish_sauce",
+   "id": 130,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "fish sauce",
+     "plural": "fish sauce"
+    },
+    "de": {
+     "name": "Fischsoße",
+     "plural": "Fischsoße"
+    }
+   },
+   "nutrients": {
+    "1": 35.0,
+    "2": 0.01,
+    "3": 0.003,
+    "4": 3.64,
+    "5": 3.64,
+    "6": 0.0,
+    "7": 5.06,
+    "8": 19.628
+   }
+  },
+  {
+   "key": "food.worcestershire_sauce",
+   "id": 131,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "Worcestershire sauce",
+     "plural": "Worcestershire sauce"
+    },
+    "de": {
+     "name": "Worcestershiresoße",
+     "plural": "Worcestershiresoße"
+    }
+   },
+   "nutrients": {
+    "1": 77.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 19.17,
+    "5": 10.03,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 3.25
+   }
+  },
+  {
+   "key": "food.hot_sauce",
+   "id": 132,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "hot sauce",
+     "plural": "hot sauce"
+    },
+    "de": {
+     "name": "Soße",
+     "plural": "scharfe Soße"
+    }
+   },
+   "nutrients": {
+    "1": 11.0,
+    "2": 0.37,
+    "3": 0.052,
+    "4": 1.75,
+    "5": 1.26,
+    "6": 0.3,
+    "7": 0.51,
+    "8": 6.607
+   }
+  },
+  {
+   "key": "food.white_wine_vinegar",
+   "id": 133,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "white wine vinegar",
+     "plural": "white wine vinegar"
+    },
+    "de": {
+     "name": "Weißweinessig",
+     "plural": "Weißweinessig"
+    }
+   },
+   "nutrients": {
+    "1": 18.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.04,
+    "5": 0.04,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.apple_cider_vinegar",
+   "id": 134,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "apple cider vinegar",
+     "plural": "apple cider vinegar"
+    },
+    "de": {
+     "name": "Apfelessig",
+     "plural": "Apfelessig"
+    }
+   },
+   "nutrients": {
+    "1": 21.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.93,
+    "5": 0.4,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.balsamic_vinegar",
+   "id": 135,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "balsamic vinegar",
+     "plural": "balsamic vinegar"
+    },
+    "de": {
+     "name": "Balsamicoessig",
+     "plural": "Balsamicoessig"
+    }
+   },
+   "nutrients": {
+    "1": 88.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 17.03,
+    "5": 14.95,
+    "7": 0.49,
+    "8": 0.058
+   }
+  },
+  {
+   "key": "food.honey",
+   "id": 136,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "honey",
+     "plural": "honey"
+    },
+    "de": {
+     "name": "Honig",
+     "plural": "Honig"
+    }
+   },
+   "nutrients": {
+    "1": 304.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 82.4,
+    "5": 82.12,
+    "6": 0.2,
+    "7": 0.3,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.maple_syrup",
+   "id": 137,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "maple syrup",
+     "plural": "maple syrup"
+    },
+    "de": {
+     "name": "Ahornsirup",
+     "plural": "Ahornsirup"
+    }
+   },
+   "nutrients": {
+    "1": 260.0,
+    "2": 0.06,
+    "3": 0.007,
+    "4": 67.04,
+    "5": 60.46,
+    "6": 0.0,
+    "7": 0.04,
+    "8": 0.03
+   }
+  },
+  {
+   "key": "food.tomato_paste",
+   "id": 138,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "tomato paste",
+     "plural": "tomato paste"
+    },
+    "de": {
+     "name": "Tomatenmark",
+     "plural": "Tomatenmark"
+    }
+   },
+   "nutrients": {
+    "1": 82.0,
+    "2": 0.47,
+    "3": 0.1,
+    "4": 18.91,
+    "5": 12.18,
+    "6": 4.1,
+    "7": 4.32,
+    "8": 0.147
+   }
+  },
+  {
+   "key": "food.coconut_milk",
+   "id": 139,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "coconut milk",
+     "plural": "coconut milk"
+    },
+    "de": {
+     "name": "Kokosmilch",
+     "plural": "Kokosmilch"
+    }
+   },
+   "nutrients": {
+    "1": 230.0,
+    "2": 23.84,
+    "3": 21.14,
+    "4": 5.54,
+    "5": 3.34,
+    "6": 2.2,
+    "7": 2.29,
+    "8": 0.037
+   }
+  },
+  {
+   "key": "food.vegetable_broth",
+   "id": 140,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "vegetable broth",
+     "plural": "vegetable broth"
+    },
+    "de": {
+     "name": "Gemüsebrühe",
+     "plural": "Gemüsebrühe"
+    }
+   },
+   "nutrients": {
+    "1": 5.0,
+    "2": 0.07,
+    "3": 0.028,
+    "4": 0.93,
+    "5": 0.55,
+    "6": 0.0,
+    "7": 0.24,
+    "8": 0.74
+   }
+  },
+  {
+   "key": "food.chicken_broth",
+   "id": 141,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "chicken broth",
+     "plural": "chicken broth"
+    },
+    "de": {
+     "name": "Hühnerbrühe",
+     "plural": "Hühnerbrühe"
+    }
+   },
+   "nutrients": {
+    "1": 6.0,
+    "2": 0.21,
+    "3": 0.013,
+    "4": 0.44,
+    "5": 0.43,
+    "6": 0.0,
+    "7": 0.64,
+    "8": 0.927
+   }
+  },
+  {
+   "key": "food.beef_broth",
+   "id": 142,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "beef broth",
+     "plural": "beef broth"
+    },
+    "de": {
+     "name": "Rinderbrühe",
+     "plural": "Rinderbrühe"
+    }
+   },
+   "nutrients": {
+    "1": 3.0,
+    "2": 0.08,
+    "3": 0.04,
+    "4": 0.25,
+    "5": 0.2,
+    "6": 0.0,
+    "7": 0.21,
+    "8": 0.65
+   }
+  },
+  {
+   "key": "food.white_wine",
+   "id": 143,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "white wine",
+     "plural": "white wine"
+    },
+    "de": {
+     "name": "Weißwein",
+     "plural": "Weißwein"
+    }
+   },
+   "nutrients": {
+    "1": 82.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 2.6,
+    "5": 0.96,
+    "6": 0.0,
+    "7": 0.07,
+    "8": 0.013
+   }
+  },
+  {
+   "key": "food.red_wine",
+   "id": 144,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "red wine",
+     "plural": "red wine"
+    },
+    "de": {
+     "name": "Rotwein",
+     "plural": "Rotwein"
+    }
+   },
+   "nutrients": {
+    "1": 85.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 2.61,
+    "5": 0.62,
+    "6": 0.0,
+    "7": 0.07,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.lemon_juice",
+   "id": 145,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "lemon juice",
+     "plural": "lemon juice"
+    },
+    "de": {
+     "name": "Zitronensaft",
+     "plural": "Zitronensaft"
+    }
+   },
+   "nutrients": {
+    "1": 22.0,
+    "2": 0.24,
+    "3": 0.04,
+    "4": 6.9,
+    "5": 2.52,
+    "6": 0.3,
+    "7": 0.35,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.lime_juice",
+   "id": 146,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "lime juice",
+     "plural": "lime juice"
+    },
+    "de": {
+     "name": "Limettensaft",
+     "plural": "Limettensaft"
+    }
+   },
+   "nutrients": {
+    "1": 25.0,
+    "2": 0.07,
+    "3": 0.008,
+    "4": 8.42,
+    "5": 1.69,
+    "6": 0.4,
+    "7": 0.42,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.water",
+   "id": 147,
+   "default_unit": "unit.milliliter",
+   "names": {
+    "en": {
+     "name": "water",
+     "plural": "water"
+    },
+    "de": {
+     "name": "Wasser",
+     "plural": "Wasser"
+    }
+   },
+   "nutrients": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.01
+   }
+  },
+  {
+   "key": "food.sugar",
+   "id": 148,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "sugar",
+     "plural": "sugar"
+    },
+    "de": {
+     "name": "Zucker",
+     "plural": "Zucker"
+    }
+   },
+   "nutrients": {
+    "1": 387.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 99.98,
+    "5": 99.8,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.003
+   }
+  },
+  {
+   "key": "food.brown_sugar",
+   "id": 149,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "brown sugar",
+     "plural": "brown sugar"
+    },
+    "de": {
+     "name": "Brauner Zucker",
+     "plural": "Brauner Zucker"
+    }
+   },
+   "nutrients": {
+    "1": 380.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 98.09,
+    "5": 97.02,
+    "6": 0.0,
+    "7": 0.12,
+    "8": 0.07
+   }
+  },
+  {
+   "key": "food.powdered_sugar",
+   "id": 150,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "powdered sugar",
+     "plural": "powdered sugar"
+    },
+    "de": {
+     "name": "Puderzucker",
+     "plural": "Puderzucker"
+    }
+   },
+   "nutrients": {
+    "1": 389.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 99.77,
+    "5": 97.81,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 0.005
+   }
+  },
+  {
+   "key": "food.baking_powder",
+   "id": 151,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "baking powder",
+     "plural": "baking powder"
+    },
+    "de": {
+     "name": "Backpulver",
+     "plural": "Backpulver"
+    }
+   },
+   "nutrients": {
+    "1": 53.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 27.7,
+    "5": 0.0,
+    "6": 0.2,
+    "7": 0.0,
+    "8": 26.5
+   }
+  },
+  {
+   "key": "food.baking_soda",
+   "id": 152,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "baking soda",
+     "plural": "baking soda"
+    },
+    "de": {
+     "name": "Natron",
+     "plural": "Natron"
+    }
+   },
+   "nutrients": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0,
+    "8": 68.4
+   }
+  },
+  {
+   "key": "food.cocoa_powder",
+   "id": 153,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "cocoa powder",
+     "plural": "cocoa powder"
+    },
+    "de": {
+     "name": "Kakaopulver",
+     "plural": "Kakaopulver"
+    }
+   },
+   "nutrients": {
+    "1": 228.0,
+    "2": 13.7,
+    "3": 8.07,
+    "4": 57.9,
+    "5": 1.75,
+    "6": 37.0,
+    "7": 19.6,
+    "8": 0.052
+   }
+  },
+  {
+   "key": "food.dark_chocolate",
+   "id": 154,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "dark chocolate",
+     "plural": "dark chocolate"
+    },
+    "de": {
+     "name": "Zartbitterschokolade",
+     "plural": "Zartbitterschokolade"
+    }
+   },
+   "nutrients": {
+    "1": 598.0,
+    "2": 42.63,
+    "3": 24.489,
+    "4": 45.9,
+    "5": 23.99,
+    "6": 10.9,
+    "7": 7.79,
+    "8": 0.05
+   }
+  },
+  {
+   "key": "food.milk_chocolate",
+   "id": 155,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "milk chocolate",
+     "plural": "milk chocolate"
+    },
+    "de": {
+     "name": "Vollmilchschokolade",
+     "plural": "Vollmilchschokolade"
+    }
+   },
+   "nutrients": {
+    "1": 535.0,
+    "2": 29.66,
+    "3": 18.509,
+    "4": 59.4,
+    "5": 51.5,
+    "6": 3.4,
+    "7": 7.65,
+    "8": 0.198
+   }
+  },
+  {
+   "key": "food.vanilla_extract",
+   "id": 156,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "vanilla extract",
+     "plural": "vanilla extract"
+    },
+    "de": {
+     "name": "Vanilleextrakt",
+     "plural": "Vanilleextrakt"
+    }
+   },
+   "nutrients": {
+    "1": 288.0,
+    "2": 0.06,
+    "3": 0.01,
+    "4": 12.65,
+    "5": 12.65,
+    "6": 0.0,
+    "7": 0.06,
+    "8": 0.022
+   }
+  },
+  {
+   "key": "food.dry_yeast",
+   "id": 157,
+   "default_unit": "unit.teaspoon",
+   "names": {
+    "en": {
+     "name": "dry yeast",
+     "plural": "dry yeast"
+    },
+    "de": {
+     "name": "Trockenhefe",
+     "plural": "Trockenhefe"
+    }
+   },
+   "nutrients": {
+    "1": 325.0,
+    "2": 7.61,
+    "3": 1.001,
+    "4": 41.22,
+    "5": 0.0,
+    "6": 26.9,
+    "7": 40.44,
+    "8": 0.128
+   }
+  },
+  {
+   "key": "food.almond_flour",
+   "id": 158,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "almond flour",
+     "plural": "almond flour"
+    },
+    "de": {
+     "name": "Mandelmehl",
+     "plural": "Mandelmehl"
+    }
+   },
+   "nutrients": {
+    "1": 590.0,
+    "2": 52.52,
+    "3": 3.953,
+    "4": 18.67,
+    "5": 4.63,
+    "6": 9.9,
+    "7": 21.4,
+    "8": 0.048
+   }
+  },
+  {
+   "key": "food.peanut_butter",
+   "id": 159,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "peanut butter",
+     "plural": "peanut butter"
+    },
+    "de": {
+     "name": "Erdnussbutter",
+     "plural": "Erdnussbutter"
+    }
+   },
+   "nutrients": {
+    "1": 598.0,
+    "2": 51.36,
+    "3": 10.325,
+    "4": 22.31,
+    "5": 10.49,
+    "6": 5.0,
+    "7": 22.21,
+    "8": 0.043
+   }
+  },
+  {
+   "key": "food.almond_butter",
+   "id": 160,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "almond butter",
+     "plural": "almond butter"
+    },
+    "de": {
+     "name": "Mandelbutter",
+     "plural": "Mandelbutter"
+    }
+   },
+   "nutrients": {
+    "1": 614.0,
+    "2": 55.5,
+    "3": 4.152,
+    "4": 18.82,
+    "5": 4.43,
+    "6": 10.3,
+    "7": 20.96,
+    "8": 0.018
+   }
+  },
+  {
+   "key": "food.tahini",
+   "id": 161,
+   "default_unit": "unit.tablespoon",
+   "names": {
+    "en": {
+     "name": "tahini",
+     "plural": "tahini"
+    },
+    "de": {
+     "name": "Tahini",
+     "plural": "Tahini"
+    }
+   },
+   "nutrients": {
+    "1": 595.0,
+    "2": 53.76,
+    "3": 7.529,
+    "4": 21.19,
+    "5": 0.49,
+    "6": 9.3,
+    "7": 17.0,
+    "8": 0.287
+   }
+  },
+  {
+   "key": "food.gelatin",
+   "id": 162,
+   "default_unit": "unit.sheet",
+   "names": {
+    "en": {
+     "name": "gelatin",
+     "plural": "gelatin"
+    },
+    "de": {
+     "name": "Gelatine",
+     "plural": "Gelatine"
+    }
+   },
+   "nutrients": {
+    "1": 335.0,
+    "2": 0.1,
+    "3": 0.07,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 85.6,
+    "8": 0.49
+   }
+  },
+  {
+   "key": "food.panko",
+   "id": 163,
+   "default_unit": "unit.gram",
+   "names": {
+    "en": {
+     "name": "panko",
+     "plural": "panko"
+    },
+    "de": {
+     "name": "Panko",
+     "plural": "Panko"
+    }
+   }
+  }
+ ]
+}

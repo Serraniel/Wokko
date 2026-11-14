@@ -1,0 +1,304 @@
+{
+ "tags": [
+  {
+   "key": "tag.vegetarian",
+   "id": 1,
+   "names": {
+    "en": {
+     "name": "Vegetarian"
+    },
+    "de": {
+     "name": "Vegetarisch"
+    }
+   }
+  },
+  {
+   "key": "tag.vegan",
+   "id": 2,
+   "names": {
+    "en": {
+     "name": "Vegan"
+    },
+    "de": {
+     "name": "Vegan"
+    }
+   }
+  },
+  {
+   "key": "tag.gluten_free",
+   "id": 3,
+   "names": {
+    "en": {
+     "name": "Gluten-Free"
+    },
+    "de": {
+     "name": "Glutenfrei"
+    }
+   }
+  },
+  {
+   "key": "tag.dairy_free",
+   "id": 4,
+   "names": {
+    "en": {
+     "name": "Dairy-Free"
+    },
+    "de": {
+     "name": "Laktosefrei"
+    }
+   }
+  },
+  {
+   "key": "tag.low_carb",
+   "id": 5,
+   "names": {
+    "en": {
+     "name": "Low-Carb"
+    },
+    "de": {
+     "name": "Low Carb"
+    }
+   }
+  },
+  {
+   "key": "tag.quick",
+   "id": 6,
+   "names": {
+    "en": {
+     "name": "Quick"
+    },
+    "de": {
+     "name": "Schnell"
+    }
+   }
+  },
+  {
+   "key": "tag.comfort_food",
+   "id": 7,
+   "names": {
+    "en": {
+     "name": "Comfort Food"
+    },
+    "de": {
+     "name": "Soulfood"
+    }
+   }
+  },
+  {
+   "key": "tag.breakfast",
+   "id": 8,
+   "names": {
+    "en": {
+     "name": "Breakfast"
+    },
+    "de": {
+     "name": "Frühstück"
+    }
+   }
+  },
+  {
+   "key": "tag.lunch",
+   "id": 9,
+   "names": {
+    "en": {
+     "name": "Lunch"
+    },
+    "de": {
+     "name": "Mittagessen"
+    }
+   }
+  },
+  {
+   "key": "tag.dinner",
+   "id": 10,
+   "names": {
+    "en": {
+     "name": "Dinner"
+    },
+    "de": {
+     "name": "Abendessen"
+    }
+   }
+  },
+  {
+   "key": "tag.dessert",
+   "id": 11,
+   "names": {
+    "en": {
+     "name": "Dessert"
+    },
+    "de": {
+     "name": "Dessert"
+    }
+   }
+  },
+  {
+   "key": "tag.snack",
+   "id": 12,
+   "names": {
+    "en": {
+     "name": "Snack"
+    },
+    "de": {
+     "name": "Snack"
+    }
+   }
+  },
+  {
+   "key": "tag.soup",
+   "id": 13,
+   "names": {
+    "en": {
+     "name": "Soup"
+    },
+    "de": {
+     "name": "Suppe"
+    }
+   }
+  },
+  {
+   "key": "tag.salad",
+   "id": 14,
+   "names": {
+    "en": {
+     "name": "Salad"
+    },
+    "de": {
+     "name": "Salat"
+    }
+   }
+  },
+  {
+   "key": "tag.pasta",
+   "id": 15,
+   "names": {
+    "en": {
+     "name": "Pasta"
+    },
+    "de": {
+     "name": "Pasta"
+    }
+   }
+  },
+  {
+   "key": "tag.asian",
+   "id": 16,
+   "names": {
+    "en": {
+     "name": "Asian"
+    },
+    "de": {
+     "name": "Asiatisch"
+    }
+   }
+  },
+  {
+   "key": "tag.italian",
+   "id": 17,
+   "names": {
+    "en": {
+     "name": "Italian"
+    },
+    "de": {
+     "name": "Italienisch"
+    }
+   }
+  },
+  {
+   "key": "tag.german",
+   "id": 18,
+   "names": {
+    "en": {
+     "name": "German"
+    },
+    "de": {
+     "name": "Deutsch"
+    }
+   }
+  },
+  {
+   "key": "tag.mexican",
+   "id": 19,
+   "names": {
+    "en": {
+     "name": "Mexican"
+    },
+    "de": {
+     "name": "Mexikanisch"
+    }
+   }
+  },
+  {
+   "key": "tag.indian",
+   "id": 20,
+   "names": {
+    "en": {
+     "name": "Indian"
+    },
+    "de": {
+     "name": "Indisch"
+    }
+   }
+  },
+  {
+   "key": "tag.bbq",
+   "id": 21,
+   "names": {
+    "en": {
+     "name": "BBQ"
+    },
+    "de": {
+     "name": "Grillen"
+    }
+   }
+  },
+  {
+   "key": "tag.one_pot",
+   "id": 22,
+   "names": {
+    "en": {
+     "name": "One-Pot"
+    },
+    "de": {
+     "name": "One-Pot"
+    }
+   }
+  },
+  {
+   "key": "tag.baking",
+   "id": 23,
+   "names": {
+    "en": {
+     "name": "Baking"
+    },
+    "de": {
+     "name": "Backen"
+    }
+   }
+  },
+  {
+   "key": "tag.healthy",
+   "id": 24,
+   "names": {
+    "en": {
+     "name": "Healthy"
+    },
+    "de": {
+     "name": "Gesund"
+    }
+   }
+  },
+  {
+   "key": "tag.budget_friendly",
+   "id": 25,
+   "names": {
+    "en": {
+     "name": "Budget-Friendly"
+    },
+    "de": {
+     "name": "Günstig"
+    }
+   }
+  }
+ ]
+}

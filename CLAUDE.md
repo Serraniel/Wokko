@@ -12,6 +12,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/importer` — recipe import from links and pasted text. Its downloads refuse private addresses at connection time
 - `backend/internal/store` — SQLite, migrations, sqlc queries
 - `backend/internal/assistant` — MCP server and OAuth endpoints for AI assistants
+- `backend/internal/catalog` — the starter catalog of foods, units and tags as keyed JSON in `data/`, and the three-way merge that brings a newer one into existing databases. `data/original/` is the seed as first shipped and is never edited
 - `backend/internal/knowledge` — built-in kitchen knowledge: food classes, allergens, sauces, techniques and problem rules as JSON in `data/`, each entry tested against the example recipes in `data/examples/`
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text, and `src/service-worker/` keeps it usable offline
@@ -72,6 +73,7 @@ Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, Knowl
 - One binary serves the API and the embedded frontend (`adapter-static`, no SSR)
 - Opaque session tokens, stored hashed, in an httpOnly `sessionid` cookie. kitshn needs that exact name
 - Passwords use argon2id. No required email: admins issue reset links
+- The starter catalog is data in `backend/internal/catalog/data/`, not migrations. At start-up a changed catalog updates entries nobody edited and turns the rest into admin suggestions. It never deletes and never brings back what was deleted or merged
 - Names of foods, units and keywords live in per-locale rows, so a new language needs no schema change
 - API types are defined in `app/types.go`. Frontend types are generated from them
 - Photos are re-encoded on upload and stored under `DATA_DIR/uploads`, and served only to people who may see the recipe

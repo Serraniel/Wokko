@@ -570,5 +570,20 @@
   "export.scope_mine": "Mine",
   "export.scope_all": "All I can see",
   "export.scope_all_hint": "Yours, your household's and recipes shared with you. To move a whole server, use a backup instead.",
-  "export.formats_hint": "“For another Wokko” keeps everything. “For other apps” gives schema.org files, which Tandoor, Mealie, Nextcloud Cookbook and others import."
+  "export.formats_hint": "“For another Wokko” keeps everything. “For other apps” gives schema.org files, which Tandoor, Mealie, Nextcloud Cookbook and others import.",
+  "catalog.title": "Starter catalog updates",
+  "catalog.hint": "New Wokko versions can bring more foods, translations and corrected nutrition values. Entries nobody changed are updated on their own. Where someone changed a value that the update changes too, or where an entry belongs to a person, you decide here. Nothing is ever deleted.",
+  "catalog.last": "Last update {date} with version {version}: {added} added, {updated} updated.",
+  "catalog.suggestions": "To decide ({n})",
+  "catalog.ours": "Now",
+  "catalog.theirs": "Update",
+  "catalog.none": "(nothing)",
+  "catalog.take": "Take the update",
+  "catalog.keep": "Keep ours",
+  "catalog.nothing": "Nothing to decide.",
+  "catalog.field_name": "Name in {language}",
+  "catalog.field_alias": "Other name",
+  "catalog.field_nutrient": "Nutrient",
+  "catalog.field_default_unit": "Default unit",
+  "catalog.field_grams": "Weight in grams"
 }

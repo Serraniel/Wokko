@@ -1,0 +1,512 @@
+{
+ "units": [
+  {
+   "key": "unit.gram",
+   "id": 1,
+   "grams": 1.0,
+   "names": {
+    "en": {
+     "name": "gram",
+     "plural": "grams",
+     "abbreviation": "g"
+    },
+    "de": {
+     "name": "Gramm",
+     "plural": "Gramm",
+     "abbreviation": "g"
+    }
+   }
+  },
+  {
+   "key": "unit.kilogram",
+   "id": 2,
+   "grams": 1000.0,
+   "names": {
+    "en": {
+     "name": "kilogram",
+     "plural": "kilograms",
+     "abbreviation": "kg"
+    },
+    "de": {
+     "name": "Kilogramm",
+     "plural": "Kilogramm",
+     "abbreviation": "kg"
+    }
+   }
+  },
+  {
+   "key": "unit.milligram",
+   "id": 3,
+   "grams": 0.001,
+   "names": {
+    "en": {
+     "name": "milligram",
+     "plural": "milligrams",
+     "abbreviation": "mg"
+    },
+    "de": {
+     "name": "Milligramm",
+     "plural": "Milligramm",
+     "abbreviation": "mg"
+    }
+   }
+  },
+  {
+   "key": "unit.milliliter",
+   "id": 4,
+   "grams": 1.0,
+   "names": {
+    "en": {
+     "name": "milliliter",
+     "plural": "milliliters",
+     "abbreviation": "ml"
+    },
+    "de": {
+     "name": "Milliliter",
+     "plural": "Milliliter",
+     "abbreviation": "ml"
+    }
+   }
+  },
+  {
+   "key": "unit.liter",
+   "id": 5,
+   "grams": 1000.0,
+   "names": {
+    "en": {
+     "name": "liter",
+     "plural": "liters",
+     "abbreviation": "l"
+    },
+    "de": {
+     "name": "Liter",
+     "plural": "Liter",
+     "abbreviation": "l"
+    }
+   }
+  },
+  {
+   "key": "unit.centiliter",
+   "id": 6,
+   "grams": 10.0,
+   "names": {
+    "en": {
+     "name": "centiliter",
+     "plural": "centiliters",
+     "abbreviation": "cl"
+    },
+    "de": {
+     "name": "Zentiliter",
+     "plural": "Zentiliter",
+     "abbreviation": "cl"
+    }
+   }
+  },
+  {
+   "key": "unit.teaspoon",
+   "id": 7,
+   "grams": 5.0,
+   "names": {
+    "en": {
+     "name": "teaspoon",
+     "plural": "teaspoons",
+     "abbreviation": "tsp"
+    },
+    "de": {
+     "name": "Teelöffel",
+     "plural": "Teelöffel",
+     "abbreviation": "TL"
+    }
+   }
+  },
+  {
+   "key": "unit.tablespoon",
+   "id": 8,
+   "grams": 15.0,
+   "names": {
+    "en": {
+     "name": "tablespoon",
+     "plural": "tablespoons",
+     "abbreviation": "tbsp"
+    },
+    "de": {
+     "name": "Esslöffel",
+     "plural": "Esslöffel",
+     "abbreviation": "EL"
+    }
+   }
+  },
+  {
+   "key": "unit.cup",
+   "id": 9,
+   "grams": 240.0,
+   "names": {
+    "en": {
+     "name": "cup",
+     "plural": "cups",
+     "abbreviation": "cup"
+    },
+    "de": {
+     "name": "Tasse",
+     "plural": "Tassen",
+     "abbreviation": "Tasse"
+    }
+   }
+  },
+  {
+   "key": "unit.fluid_ounce",
+   "id": 10,
+   "grams": 30.0,
+   "names": {
+    "en": {
+     "name": "fluid ounce",
+     "plural": "fluid ounces",
+     "abbreviation": "fl oz"
+    },
+    "de": {
+     "name": "Flüssigkeitsunze",
+     "plural": "Flüssigkeitsunzen",
+     "abbreviation": "fl oz"
+    }
+   }
+  },
+  {
+   "key": "unit.ounce",
+   "id": 11,
+   "grams": 28.35,
+   "names": {
+    "en": {
+     "name": "ounce",
+     "plural": "ounces",
+     "abbreviation": "oz"
+    },
+    "de": {
+     "name": "Unze",
+     "plural": "Unzen",
+     "abbreviation": "oz"
+    }
+   }
+  },
+  {
+   "key": "unit.pound",
+   "id": 12,
+   "grams": 453.6,
+   "names": {
+    "en": {
+     "name": "pound",
+     "plural": "pounds",
+     "abbreviation": "lb"
+    },
+    "de": {
+     "name": "Pfund",
+     "plural": "Pfund",
+     "abbreviation": "Pfd"
+    }
+   }
+  },
+  {
+   "key": "unit.piece",
+   "id": 13,
+   "names": {
+    "en": {
+     "name": "piece",
+     "plural": "pieces",
+     "abbreviation": "pcs"
+    },
+    "de": {
+     "name": "Stück",
+     "plural": "Stücke",
+     "abbreviation": "Stk"
+    }
+   }
+  },
+  {
+   "key": "unit.pinch",
+   "id": 14,
+   "names": {
+    "en": {
+     "name": "pinch",
+     "plural": "pinches",
+     "abbreviation": "pinch"
+    },
+    "de": {
+     "name": "Prise",
+     "plural": "Prisen",
+     "abbreviation": "Prise"
+    }
+   }
+  },
+  {
+   "key": "unit.bunch",
+   "id": 15,
+   "names": {
+    "en": {
+     "name": "bunch",
+     "plural": "bunches",
+     "abbreviation": "bunch"
+    },
+    "de": {
+     "name": "Bund",
+     "plural": "Bunde",
+     "abbreviation": "Bund"
+    }
+   }
+  },
+  {
+   "key": "unit.clove",
+   "id": 16,
+   "names": {
+    "en": {
+     "name": "clove",
+     "plural": "cloves",
+     "abbreviation": "clove"
+    },
+    "de": {
+     "name": "Zehe",
+     "plural": "Zehen",
+     "abbreviation": "Zehe"
+    }
+   }
+  },
+  {
+   "key": "unit.can",
+   "id": 17,
+   "names": {
+    "en": {
+     "name": "can",
+     "plural": "cans",
+     "abbreviation": "can"
+    },
+    "de": {
+     "name": "Dose",
+     "plural": "Dosen",
+     "abbreviation": "Dose"
+    }
+   }
+  },
+  {
+   "key": "unit.package",
+   "id": 18,
+   "names": {
+    "en": {
+     "name": "package",
+     "plural": "packages",
+     "abbreviation": "pkg"
+    },
+    "de": {
+     "name": "Packung",
+     "plural": "Packungen",
+     "abbreviation": "Pkg"
+    }
+   }
+  },
+  {
+   "key": "unit.slice",
+   "id": 19,
+   "names": {
+    "en": {
+     "name": "slice",
+     "plural": "slices",
+     "abbreviation": "slice"
+    },
+    "de": {
+     "name": "Scheibe",
+     "plural": "Scheiben",
+     "abbreviation": "Scheibe"
+    }
+   }
+  },
+  {
+   "key": "unit.drop",
+   "id": 20,
+   "names": {
+    "en": {
+     "name": "drop",
+     "plural": "drops",
+     "abbreviation": "drop"
+    },
+    "de": {
+     "name": "Tropfen",
+     "plural": "Tropfen",
+     "abbreviation": "Tropfen"
+    }
+   }
+  },
+  {
+   "key": "unit.handful",
+   "id": 21,
+   "names": {
+    "en": {
+     "name": "handful",
+     "plural": "handfuls",
+     "abbreviation": "handful"
+    },
+    "de": {
+     "name": "Handvoll",
+     "plural": "Handvoll",
+     "abbreviation": "Handvoll"
+    }
+   }
+  },
+  {
+   "key": "unit.dash",
+   "id": 22,
+   "names": {
+    "en": {
+     "name": "dash",
+     "plural": "dashes",
+     "abbreviation": "dash"
+    },
+    "de": {
+     "name": "Schuss",
+     "plural": "Schüsse",
+     "abbreviation": "Schuss"
+    }
+   }
+  },
+  {
+   "key": "unit.stalk",
+   "id": 23,
+   "names": {
+    "en": {
+     "name": "stalk",
+     "plural": "stalks",
+     "abbreviation": "stalk"
+    },
+    "de": {
+     "name": "Stange",
+     "plural": "Stangen",
+     "abbreviation": "Stange"
+    }
+   }
+  },
+  {
+   "key": "unit.head",
+   "id": 24,
+   "names": {
+    "en": {
+     "name": "head",
+     "plural": "heads",
+     "abbreviation": "head"
+    },
+    "de": {
+     "name": "Kopf",
+     "plural": "Köpfe",
+     "abbreviation": "Kopf"
+    }
+   }
+  },
+  {
+   "key": "unit.sheet",
+   "id": 25,
+   "names": {
+    "en": {
+     "name": "sheet",
+     "plural": "sheets",
+     "abbreviation": "sheet"
+    },
+    "de": {
+     "name": "Blatt",
+     "plural": "Blätter",
+     "abbreviation": "Blatt"
+    }
+   }
+  },
+  {
+   "key": "unit.jar",
+   "id": 26,
+   "names": {
+    "en": {
+     "name": "jar",
+     "plural": "jars",
+     "abbreviation": "jar"
+    },
+    "de": {
+     "name": "Glas",
+     "plural": "Gläser",
+     "abbreviation": "Glas"
+    }
+   }
+  },
+  {
+   "key": "unit.bottle",
+   "id": 27,
+   "names": {
+    "en": {
+     "name": "bottle",
+     "plural": "bottles",
+     "abbreviation": "bottle"
+    },
+    "de": {
+     "name": "Flasche",
+     "plural": "Flaschen",
+     "abbreviation": "Flasche"
+    }
+   }
+  },
+  {
+   "key": "unit.bag",
+   "id": 28,
+   "names": {
+    "en": {
+     "name": "bag",
+     "plural": "bags",
+     "abbreviation": "bag"
+    },
+    "de": {
+     "name": "Beutel",
+     "plural": "Beutel",
+     "abbreviation": "Beutel"
+    }
+   }
+  },
+  {
+   "key": "unit.cube",
+   "id": 29,
+   "names": {
+    "en": {
+     "name": "cube",
+     "plural": "cubes",
+     "abbreviation": "cube"
+    },
+    "de": {
+     "name": "Würfel",
+     "plural": "Würfel",
+     "abbreviation": "Würfel"
+    }
+   }
+  },
+  {
+   "key": "unit.sprig",
+   "id": 30,
+   "names": {
+    "en": {
+     "name": "sprig",
+     "plural": "sprigs",
+     "abbreviation": "sprig"
+    },
+    "de": {
+     "name": "Zweig",
+     "plural": "Zweige",
+     "abbreviation": "Zweig"
+    }
+   }
+  },
+  {
+   "key": "unit.strip",
+   "id": 31,
+   "names": {
+    "en": {
+     "name": "strip",
+     "plural": "strips",
+     "abbreviation": "strip"
+    },
+    "de": {
+     "name": "Streifen",
+     "plural": "Streifen",
+     "abbreviation": "Streifen"
+    }
+   }
+  }
+ ]
+}

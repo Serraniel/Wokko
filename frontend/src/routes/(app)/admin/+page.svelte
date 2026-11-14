@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { api, ApiError, errorText } from '#lib/api/client.ts';
 	import type { Health, Invite, Settings, User } from '#lib/api/types.gen.ts';
+	import CatalogUpdatesCard from '#lib/components/CatalogUpdatesCard.svelte';
 	import CopyField from '#lib/components/CopyField.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
@@ -156,6 +157,8 @@
 			<p class="hint">{t('admin.link_once')}</p>
 		</section>
 	{/if}
+
+	<CatalogUpdatesCard />
 
 	<section class="card space-y-2 p-4">
 		<h2 class="text-lg font-semibold">{t('admin.users')}</h2>

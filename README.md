@@ -61,6 +61,8 @@ docker compose up -d
 
 From source, run `git pull` and `docker compose up -d --build`. Wokko makes a backup before changing an existing database and stops if that fails, so updates are safe to automate. Going back to an older version after a database change isn't possible by itself, because a database from a newer version is refused rather than risked. Restore the backup made before the update instead.
 
+Updates can also improve the starter catalog of foods, units and tags, for example with new foods, translations or corrected nutrition values. Entries nobody changed are updated by themselves. Where someone edited a value the update also changes, or an entry belongs to a person, the admin decides under **Admin → Starter catalog updates**. Nothing is ever deleted, and entries deleted or merged on your server don't come back.
+
 ## Configuration
 
 Everything is optional.
