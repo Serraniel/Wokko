@@ -45,10 +45,10 @@ Open `http://localhost:8080`, or `http://<server address>:8080` from another dev
 ```bash
 git clone https://github.com/Serraniel/Wokko.git
 cd Wokko
-docker compose up -d --build
+docker compose -f docker-compose.dev.yml up -d --build
 ```
 
-The first build takes several minutes. To change a setting, copy `.env.example` to `.env`.
+This is meant for development and trying unreleased changes. The first build takes several minutes. To change a setting, copy `.env.example` to `.env`.
 
 ### Updating
 
@@ -59,7 +59,7 @@ docker compose pull
 docker compose up -d
 ```
 
-From source, run `git pull` and `docker compose up -d --build`. Wokko makes a backup before changing an existing database and stops if that fails, so updates are safe to automate. Going back to an older version after a database change isn't possible by itself, because a database from a newer version is refused rather than risked. Restore the backup made before the update instead.
+From source, run `git pull` and `docker compose -f docker-compose.dev.yml up -d --build`. Wokko makes a backup before changing an existing database and stops if that fails, so updates are safe to automate. Going back to an older version after a database change isn't possible by itself, because a database from a newer version is refused rather than risked. Restore the backup made before the update instead.
 
 Updates can also improve the starter catalog of foods, units and tags, for example with new foods, translations or corrected nutrition values. Entries nobody changed are updated by themselves. Where someone edited a value the update also changes, or an entry belongs to a person, the admin decides under **Admin → Starter catalog updates**. Nothing is ever deleted, and entries deleted or merged on your server don't come back.
 

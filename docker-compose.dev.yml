@@ -1,5 +1,8 @@
-# Builds Wokko from this source code. To run a ready-made image without the source, use
-# docker-compose.example.yml instead.
+# For development: builds Wokko from this source code.
+#
+#   docker compose -f docker-compose.dev.yml up -d --build
+#
+# To run Wokko for real, use docker-compose.example.yml and its ready-made image instead.
 name: wokko
 
 services:

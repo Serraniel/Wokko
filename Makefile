@@ -30,4 +30,4 @@ e2e: build ## Runs the browser flows against a fresh instance.
 	(cd frontend && npm run e2e); status=$$?; kill $$pid; exit $$status
 
 docker:
-	docker compose build
+	docker compose -f docker-compose.dev.yml build

@@ -16,7 +16,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/knowledge` — built-in kitchen knowledge: food classes, allergens, sauces, techniques and problem rules as JSON in `data/`, each entry tested against the example recipes in `data/examples/`
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text, and `src/service-worker/` keeps it usable offline
-- `docker-compose.yml` builds from source. `docker-compose.example.yml` is what the README tells people to run
+- `docker-compose.dev.yml` builds from source, for development. `docker-compose.example.yml` is what the README tells people to run
 - `docs/` — Design docs and plans
 - `.github/` — CI/CD workflows and Dependabot config
 
