@@ -893,6 +893,23 @@ func (s *Service) addRecipeToShopping(ctx context.Context, q *sqlcgen.Queries, v
 	if err != nil {
 		return ShoppingRecipe{}, err
 	}
+	cook := map[int64]CookChoice{}
+	for _, c := range in.Cook {
+		cook[c.IngredientID] = c
+	}
+	var foodIDs []int64
+	for _, i := range ings {
+		foodIDs = append(foodIDs, i.FoodID)
+	}
+	links, err := s.recipeLinks(ctx, q, v, foodIDs)
+	if err != nil {
+		return ShoppingRecipe{}, err
+	}
+	add := func(food int64, unit sql.NullInt64, amount sql.NullFloat64, note string) error {
+		_, err := q.CreateShoppingItem(ctx, sqlcgen.CreateShoppingItemParams{HouseholdID: v.User.HouseholdID, ShoppingRecipeID: sql64(group.ID), FoodID: food, UnitID: unit, Amount: amount, Note: note, Position: pos, CreatedBy: nullID(v.id())})
+		pos++
+		return err
+	}
 	for _, i := range ings {
 		if len(wanted) > 0 && !wanted[i.ID] {
 			continue
@@ -901,10 +918,40 @@ func (s *Service) addRecipeToShopping(ctx context.Context, q *sqlcgen.Queries, v
 		if amount.Valid {
 			amount.Float64 *= factor
 		}
-		if _, err := q.CreateShoppingItem(ctx, sqlcgen.CreateShoppingItemParams{HouseholdID: v.User.HouseholdID, ShoppingRecipeID: sql64(group.ID), FoodID: i.FoodID, UnitID: i.UnitID, Amount: amount, Note: i.Note, Position: pos, CreatedBy: nullID(v.id())}); err != nil {
+		choice, cooked := cook[i.ID]
+		link := links[i.FoodID]
+		if !cooked || link == nil || link.ID == r.ID {
+			if err := add(i.FoodID, i.UnitID, amount, i.Note); err != nil {
+				return ShoppingRecipe{}, err
+			}
+			continue
+		}
+		// Cooked instead of bought: the linked recipe's ingredients, scaled to what's needed.
+		sub, err := q.GetRecipe(ctx, link.ID)
+		if err != nil {
 			return ShoppingRecipe{}, err
 		}
-		pos++
+		scale, err := s.cookScale(ctx, q, sub, i.UnitID, amount, choice.Servings)
+		if err != nil {
+			return ShoppingRecipe{}, err
+		}
+		subIngs, err := q.ListIngredientsForRecipe(ctx, sub.ID)
+		if err != nil {
+			return ShoppingRecipe{}, err
+		}
+		for _, si := range subIngs {
+			a := si.Amount
+			if a.Valid {
+				a.Float64 *= scale
+			}
+			note := "→ " + sub.Name
+			if si.Note != "" {
+				note += ": " + si.Note
+			}
+			if err := add(si.FoodID, si.UnitID, a, note); err != nil {
+				return ShoppingRecipe{}, err
+			}
+		}
 	}
 	return ShoppingRecipe{ID: group.ID, Name: group.Name, Servings: group.Servings, RecipeID: r.ID, MealPlanID: plan.Int64}, nil
 }

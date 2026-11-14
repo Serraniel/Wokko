@@ -130,6 +130,9 @@ type Ingredient struct {
 type RecipeLink struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
+	// Servings and HasYield tell whether shopping can scale it by itself or asks for servings.
+	Servings int64 `json:"servings"`
+	HasYield bool  `json:"has_yield"`
 }
 
 type Step struct {
@@ -161,9 +164,24 @@ type RecipeSummary struct {
 	DeletedAt    string    `json:"deleted_at"`
 }
 
+// RecipeYield is how much a recipe makes, such as 1.5 l.
+type RecipeYield struct {
+	Amount float64  `json:"amount"`
+	Unit   *UnitRef `json:"unit"`
+}
+
+// RecipeYieldInput sets how much a recipe makes. An amount of 0 removes it.
+type RecipeYieldInput struct {
+	Amount   float64 `json:"amount"`
+	UnitID   int64   `json:"unit_id"`
+	UnitName string  `json:"unit_name"`
+}
+
 type Recipe struct {
 	RecipeSummary `json:",inline" tstype:",extends"`
-	SourceURL     string `json:"source_url"`
+	// Yield is how much the recipe makes, when known.
+	Yield     *RecipeYield `json:"yield"`
+	SourceURL string       `json:"source_url"`
 	Version       int64  `json:"version"`
 	CanEdit       bool   `json:"can_edit"`
 	CanManage     bool   `json:"can_manage"`
@@ -200,6 +218,9 @@ type RecipeInput struct {
 	Steps        []StepInput `json:"steps"`
 	// BaseVersion is the version this edit started from, used to detect conflicting edits.
 	BaseVersion int64 `json:"base_version"`
+	// Yield sets how much the recipe makes. Leaving it out keeps it, so apps that don't know
+	// about it don't erase it.
+	Yield *RecipeYieldInput `json:"yield"`
 }
 
 type RecipeVersion struct {
@@ -460,6 +481,16 @@ type ShoppingAddRecipe struct {
 	Servings      float64 `json:"servings"`
 	MealPlanID    int64   `json:"meal_plan_id"`
 	IngredientIDs []int64 `json:"ingredient_ids"`
+	// Cook lists ingredients that link to a recipe and are cooked rather than bought: that
+	// recipe's ingredients go on the list instead, scaled to the amount needed.
+	Cook []CookChoice `json:"cook"`
+}
+
+// CookChoice cooks one ingredient from its linked recipe. Servings is used when that recipe's
+// yield doesn't say how much of it is needed; without either, the whole recipe is added.
+type CookChoice struct {
+	IngredientID int64   `json:"ingredient_id"`
+	Servings     float64 `json:"servings"`
 }
 
 type ShoppingCheckInput struct {

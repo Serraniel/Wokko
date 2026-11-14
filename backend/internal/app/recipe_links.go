@@ -2,6 +2,8 @@ package app
 
 import (
 	"context"
+	"database/sql"
+	"strings"
 
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
 )
@@ -38,7 +40,7 @@ func (s *Service) recipeLinks(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 				return nil, err
 			}
 			if ok && !r.DeletedAt.Valid {
-				link = &RecipeLink{ID: r.ID, Name: r.Name}
+				link = &RecipeLink{ID: r.ID, Name: r.Name, Servings: r.Servings, HasYield: r.YieldAmount.Valid && r.YieldAmount.Float64 > 0}
 			}
 			seen[id] = link
 		}
@@ -128,4 +130,67 @@ func (s *Service) LinkFoodRecipe(ctx context.Context, v Viewer, food, recipe int
 		return Food{}, err
 	}
 	return s.GetFood(ctx, v, food)
+}
+
+// writeYield stores how much a recipe makes. nil keeps what's there.
+func (s *Service) writeYield(ctx context.Context, q *sqlcgen.Queries, v Viewer, recipe int64, in *RecipeYieldInput) error {
+	if in == nil {
+		return nil
+	}
+	if in.Amount <= 0 {
+		return q.SetRecipeYield(ctx, sqlcgen.SetRecipeYieldParams{ID: recipe})
+	}
+	unit, err := s.resolveUnit(ctx, q, v, IngredientInput{UnitID: in.UnitID, UnitName: strings.TrimSpace(in.UnitName)})
+	if err != nil {
+		return err
+	}
+	return q.SetRecipeYield(ctx, sqlcgen.SetRecipeYieldParams{YieldAmount: sql.NullFloat64{Float64: in.Amount, Valid: true}, YieldUnitID: unit, ID: recipe})
+}
+
+// recipeYield reads how much a recipe makes.
+func recipeYield(ctx context.Context, q *sqlcgen.Queries, r sqlcgen.Recipe, locale string) (*RecipeYield, error) {
+	if !r.YieldAmount.Valid || r.YieldAmount.Float64 <= 0 {
+		return nil, nil
+	}
+	y := &RecipeYield{Amount: r.YieldAmount.Float64}
+	if r.YieldUnitID.Valid {
+		units, err := unitRefs(ctx, q, []int64{r.YieldUnitID.Int64}, locale)
+		if err != nil {
+			return nil, err
+		}
+		if u, ok := units[r.YieldUnitID.Int64]; ok {
+			y.Unit = &u
+		}
+	}
+	return y, nil
+}
+
+// cookScale is how much of a linked recipe a dish needs. Its yield decides when the amount
+// can be compared with it, directly or by weight (450 ml of a stock that makes 1.5 l is 0.3);
+// otherwise the servings asked for; otherwise the whole recipe.
+func (s *Service) cookScale(ctx context.Context, q *sqlcgen.Queries, sub sqlcgen.Recipe, unit sql.NullInt64, amount sql.NullFloat64, servings float64) (float64, error) {
+	if sub.YieldAmount.Valid && sub.YieldAmount.Float64 > 0 && amount.Valid && amount.Float64 > 0 {
+		if unit.Valid && sub.YieldUnitID.Valid && unit.Int64 == sub.YieldUnitID.Int64 {
+			return amount.Float64 / sub.YieldAmount.Float64, nil
+		}
+		if unit.Valid && sub.YieldUnitID.Valid {
+			rows, err := q.ListUnitGrams(ctx, []int64{unit.Int64, sub.YieldUnitID.Int64})
+			if err != nil {
+				return 0, err
+			}
+			grams := map[int64]float64{}
+			for _, r := range rows {
+				if r.Grams.Valid {
+					grams[r.ID] = r.Grams.Float64
+				}
+			}
+			if g, y := grams[unit.Int64], grams[sub.YieldUnitID.Int64]; g > 0 && y > 0 {
+				return amount.Float64 * g / (sub.YieldAmount.Float64 * y), nil
+			}
+		}
+	}
+	if servings > 0 && sub.Servings > 0 {
+		return servings / float64(sub.Servings), nil
+	}
+	return 1, nil
 }

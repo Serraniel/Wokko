@@ -321,7 +321,7 @@ func (q *Queries) ListCollectionLinks(ctx context.Context, ownerID int64) ([]Col
 }
 
 const listCollectionRecipes = `-- name: ListCollectionRecipes :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes
 WHERE owner_id = ?1 AND deleted_at IS NULL AND visibility <> 'private'
   AND (CAST(?2 AS TEXT) = '' OR search_text LIKE '%' || CAST(?2 AS TEXT) || '%')
 ORDER BY name COLLATE NOCASE, id LIMIT ?4 OFFSET ?3
@@ -365,6 +365,8 @@ func (q *Queries) ListCollectionRecipes(ctx context.Context, arg ListCollectionR
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
