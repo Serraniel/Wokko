@@ -96,7 +96,12 @@ type Pack struct {
 type classWord struct {
 	word  string
 	class string
+	// compound is true for languages that join words, where "Hühnerbrühe" ends in "brühe".
+	compound bool
 }
+
+// compounding lists languages that write compound nouns as one word.
+var compounding = map[string]bool{"de": true, "nl": true, "da": true, "sv": true, "nb": true, "no": true, "fi": true, "is": true}
 
 type file struct {
 	Classes   []Class    `json:"classes"`
@@ -148,9 +153,9 @@ func Load() (*Pack, error) {
 			return nil, fmt.Errorf("class %s appears twice", c.ID)
 		}
 		p.classes[c.ID] = c
-		for _, list := range c.Words {
+		for locale, list := range c.Words {
 			for _, w := range list {
-				p.words = append(p.words, classWord{text.Normalize(w), c.ID})
+				p.words = append(p.words, classWord{text.Normalize(w), c.ID, compounding[locale]})
 			}
 		}
 	}
@@ -186,13 +191,13 @@ func (p *Pack) ClassesOf(names []string) []string {
 			continue
 		}
 		for _, cw := range p.words {
-			if matchesWord(n, cw.word) {
+			if matchesWord(n, cw.word, cw.compound) {
 				hits = append(hits, hit{cw.word, cw.class})
 			}
 		}
 	}
 	seen := map[string]bool{}
-	var out []string
+	out := []string{}
 	for _, h := range hits {
 		covered := false
 		for _, o := range hits {
@@ -210,9 +215,10 @@ func (p *Pack) ClassesOf(names []string) []string {
 	return out
 }
 
-// matchesWord accepts the whole name, a whole word or phrase in it, or the end of a compound
-// word, as German builds them: "Hühnerbrühe" ends with "brühe".
-func matchesWord(name, word string) bool {
+// matchesWord accepts the whole name, a whole word or phrase in it, or, for languages that
+// build compounds, the end of a word: "Hühnerbrühe" ends with "brühe". English "unicorn" doesn't
+// end in corn.
+func matchesWord(name, word string, compound bool) bool {
 	if name == word {
 		return true
 	}
@@ -220,7 +226,7 @@ func matchesWord(name, word string) bool {
 	if strings.Contains(padded, " "+word+" ") {
 		return true
 	}
-	if len([]rune(word)) >= 4 && !strings.Contains(word, " ") {
+	if compound && len([]rune(word)) >= 4 && !strings.Contains(word, " ") {
 		for _, token := range strings.Fields(name) {
 			if strings.HasSuffix(token, word) {
 				return true
@@ -274,4 +280,34 @@ func normalizeWords(c *Cond) {
 	if c.Not != nil {
 		normalizeWords(c.Not)
 	}
+}
+
+// HasClass tells whether a class exists.
+func (p *Pack) HasClass(id string) bool { return p.classes[id] != nil }
+
+// ClassList lists every class with what it implies, in the viewer's language.
+func (p *Pack) ClassList(locale string) []ClassInfo {
+	out := make([]ClassInfo, 0, len(p.Classes))
+	for _, c := range p.Classes {
+		info := ClassInfo{ID: c.ID, Name: c.Names.pick(locale), Allergens: []string{}}
+		if i := strings.LastIndex(c.ID, "."); i > 0 {
+			if parent := p.classes[c.ID[:i]]; parent != nil {
+				info.Parent = parent.Names.pick(locale)
+			}
+		}
+		seen := map[string]bool{}
+		for _, k := range p.lineage(c.ID) {
+			for _, a := range k.Allergens {
+				if !seen[a] {
+					seen[a] = true
+					info.Allergens = append(info.Allergens, a)
+				}
+			}
+			info.NotVegetarian = info.NotVegetarian || k.NotVegetarian
+			info.NotVegan = info.NotVegan || k.NotVegan || k.NotVegetarian
+		}
+		out = append(out, info)
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
+	return out
 }

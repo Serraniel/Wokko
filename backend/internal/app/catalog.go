@@ -148,6 +148,19 @@ func (s *Service) foodDetail(ctx context.Context, q *sqlcgen.Queries, v Viewer, 
 	for _, a := range aliases {
 		f.Aliases = append(f.Aliases, a.Alias)
 	}
+	set, err := q.ListFoodKnowledgeClasses(ctx, []int64{id})
+	if err != nil {
+		return Food{}, err
+	}
+	f.KnowledgeClasses = []string{}
+	for _, c := range set {
+		f.KnowledgeClasses = append(f.KnowledgeClasses, c.Class)
+	}
+	all := append([]string{}, f.Aliases...)
+	for _, n := range names {
+		all = append(all, n.Name, n.Plural.String)
+	}
+	f.RecognizedClasses = s.Knowledge.ClassesOf(all)
 	// Suggest the unit this food is most often used with, then its catalog default.
 	unitID := row.DefaultUnitID.Int64
 	if used, err := q.MostUsedUnitForFood(ctx, id); err == nil && used.Valid {
@@ -215,6 +228,9 @@ func (s *Service) CreateFood(ctx context.Context, v Viewer, in FoodInput) (Food,
 		if err := writeFoodNames(ctx, q, id, names, in.Aliases); err != nil {
 			return err
 		}
+		if err := s.writeKnowledgeClasses(ctx, q, id, in.KnowledgeClasses); err != nil {
+			return err
+		}
 		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})
 	if err != nil {
@@ -271,12 +287,39 @@ func (s *Service) UpdateFood(ctx context.Context, v Viewer, id int64, in FoodInp
 		if err := writeFoodNames(ctx, q, id, names, in.Aliases); err != nil {
 			return err
 		}
+		if err := s.writeKnowledgeClasses(ctx, q, id, in.KnowledgeClasses); err != nil {
+			return err
+		}
 		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})
 	if err != nil {
 		return Food{}, err
 	}
 	return s.GetFood(ctx, v, id)
+}
+
+// writeKnowledgeClasses replaces the classes set for a food. nil leaves them as they are.
+func (s *Service) writeKnowledgeClasses(ctx context.Context, q *sqlcgen.Queries, id int64, classes *[]string) error {
+	if classes == nil {
+		return nil
+	}
+	if len(*classes) > 10 {
+		return invalid("too_many_classes", "Choose at most 10 kinds")
+	}
+	for _, c := range *classes {
+		if !s.Knowledge.HasClass(c) {
+			return invalid("unknown_class", "This kind of food doesn't exist")
+		}
+	}
+	if err := q.ClearFoodKnowledgeClasses(ctx, id); err != nil {
+		return err
+	}
+	for _, c := range *classes {
+		if err := q.AddFoodKnowledgeClass(ctx, sqlcgen.AddFoodKnowledgeClassParams{FoodID: id, Class: c}); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func inUse(uses int64) error {
@@ -347,6 +390,9 @@ func (s *Service) MergeFoods(ctx context.Context, v Viewer, in MergeInput) error
 			return err
 		}
 		if err := q.MoveFoodNutrients(ctx, sqlcgen.MoveFoodNutrientsParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
+			return err
+		}
+		if err := q.MoveFoodKnowledgeClasses(ctx, sqlcgen.MoveFoodKnowledgeClassesParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
 			return err
 		}
 		// A starter entry that was deleted or merged here stays gone, even when a newer catalog has it.

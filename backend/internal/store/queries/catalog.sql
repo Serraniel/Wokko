@@ -156,3 +156,15 @@ SELECT name, plural, abbreviation FROM unit_names;
 
 -- name: ListAllFoodSearchNames :many
 SELECT food_id, search_name FROM food_names WHERE food_id IN (sqlc.slice(ids));
+
+-- name: ListFoodKnowledgeClasses :many
+SELECT * FROM food_knowledge_classes WHERE food_id IN (sqlc.slice(ids)) ORDER BY class;
+
+-- name: ClearFoodKnowledgeClasses :exec
+DELETE FROM food_knowledge_classes WHERE food_id = ?;
+
+-- name: AddFoodKnowledgeClass :exec
+INSERT INTO food_knowledge_classes (food_id, class) VALUES (?, ?) ON CONFLICT DO NOTHING;
+
+-- name: MoveFoodKnowledgeClasses :exec
+UPDATE OR IGNORE food_knowledge_classes SET food_id = sqlc.arg(target) WHERE food_id = sqlc.arg(source);

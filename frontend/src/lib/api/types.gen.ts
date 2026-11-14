@@ -55,6 +55,12 @@ export interface Food extends FoodRef {
   default_unit: UnitRef | null;
   translations: Translation[];
   aliases: string[];
+  /**
+   * KnowledgeClasses were set by someone and replace RecognizedClasses, which Wokko's kitchen
+   * knowledge finds from the food's names.
+   */
+  knowledge_classes: string[];
+  recognized_classes: string[];
   uses: number /* int64 */;
   can_edit: boolean;
 }
@@ -68,6 +74,10 @@ export interface FoodInput {
   translations: Translation[];
   default_unit_id: number /* int64 */ | null;
   aliases: string[];
+  /**
+   * KnowledgeClasses replaces the set classes. Leaving it out keeps them.
+   */
+  knowledge_classes: string[] | null;
 }
 export interface UnitInput {
   translations: Translation[];

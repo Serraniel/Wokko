@@ -272,6 +272,13 @@ await step('passkeys with a virtual authenticator', async () => {
   await k.goto(local + '/settings'); await k.fill('input[aria-label="Name for this passkey"]', 'Test key'); await k.click('button:has-text("Add a passkey")'); await k.waitForSelector('li:has-text("Test key")'); await k.locator('li:has-text("Test key")').scrollIntoViewIfNeeded(); await k.screenshot({ path: `${shots}/31-passkey.png` });
   await c3.clearCookies(); await k.goto(local + '/login'); await k.click('button:has-text("Log in with a passkey")'); await k.waitForURL('**/recipes'); await c3.close();
 });
+await step('a kind of food can be set for one Wokko doesn\'t recognise', async () => {
+  await p.goto(base + '/ingredients'); await p.fill('input[type=search]', 'unicorn'); await p.click('text=Smoked unicorn dust');
+  await p.waitForSelector('text=Wokko doesn\'t recognise it by its names'); await p.selectOption('#food-class', 'spice');
+  await p.waitForSelector('li.chip:has-text("Spice")'); await p.click('form button:has-text("Save")'); await p.waitForTimeout(300);
+  await p.click('text=Smoked unicorn dust'); await p.waitForSelector('li.chip:has-text("Spice")'); await shot('38-kind-of-food');
+  await p.keyboard.press('Escape');
+});
 await step('kitchen knowledge explains a recipe', async () => {
   const ing = (food_name, amount, unit_name = '') => ({ food_name, unit_name, amount, note: '', food_id: 0, unit_id: 0 });
   const res = await p.request.post(base + '/api/v1/recipes', { data: { name: 'Asparagus with hollandaise', description: '', work_minutes: 20, wait_minutes: 0, servings: 2, servings_text: '', source_url: '', visibility: 'private', keywords: [], base_version: 0, steps: [

@@ -106,6 +106,11 @@ type FoodCategory struct {
 	CategoryID  int64
 }
 
+type FoodKnowledgeClass struct {
+	FoodID int64
+	Class  string
+}
+
 type FoodName struct {
 	FoodID     int64
 	Locale     string

@@ -178,12 +178,16 @@ func TestFoodClasses(t *testing.T) {
 		"Muskatnuss":          "spice",
 		"Selleriesalz":        "veg.celery",
 		"Glasnudeln":          "grain.free",
+		"popcorn":             "grain.free",
 	}
 	for name, want := range cases {
 		got := p.ClassesOf([]string{name})
 		if !slices.Contains(got, want) || len(got) != 1 {
 			t.Errorf("%s: got %v, want only %s", name, got, want)
 		}
+	}
+	if got := p.ClassesOf([]string{"Smoked unicorn dust"}); len(got) != 0 {
+		t.Errorf("unicorn isn't corn: %v", got)
 	}
 	if got := p.ClassesOf([]string{"Dingsbums"}); len(got) != 0 {
 		t.Errorf("unknown food: %v", got)

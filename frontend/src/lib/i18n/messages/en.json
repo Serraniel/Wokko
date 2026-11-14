@@ -585,5 +585,13 @@
   "catalog.field_alias": "Other name",
   "catalog.field_nutrient": "Nutrient",
   "catalog.field_default_unit": "Default unit",
-  "catalog.field_grams": "Weight in grams"
+  "catalog.field_grams": "Weight in grams",
+  "catalog.kinds": "Kind of food",
+  "catalog.kinds_add": "Add a kind…",
+  "catalog.kinds_remove": "Remove {kind}",
+  "catalog.kinds_recognized": "Wokko recognises it by its names as: {kinds}.",
+  "catalog.kinds_unknown": "Wokko doesn't recognise it by its names.",
+  "catalog.kinds_hint": "Kinds set here replace that, and decide its allergens, diets and kitchen knowledge.",
+  "err.unknown_class": "This kind of food doesn't exist.",
+  "err.too_many_classes": "Choose at most 10 kinds."
 }

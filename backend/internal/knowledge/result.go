@@ -46,3 +46,13 @@ type Result struct {
 	Diet         Diet            `json:"diet"`
 	Unclassified []string        `json:"unclassified"` // foods Wokko knows nothing about
 }
+
+// ClassInfo describes a food class for people choosing one.
+type ClassInfo struct {
+	ID            string   `json:"id"`
+	Name          string   `json:"name"`
+	Parent        string   `json:"parent,omitempty"` // the parent class's name, for telling similar ones apart
+	Allergens     []string `json:"allergens"`
+	NotVegetarian bool     `json:"not_vegetarian"`
+	NotVegan      bool     `json:"not_vegan"`
+}
