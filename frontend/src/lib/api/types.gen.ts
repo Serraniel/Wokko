@@ -612,3 +612,16 @@ export interface PhotoUploadLink {
 export interface PhotoUpload {
   recipe_name: string;
 }
+/**
+ * LinkPreviewSettings is how link previews of Wokko pages look, in Discord, messengers and
+ * elsewhere. Empty fields use Wokko's defaults.
+ */
+export interface LinkPreviewSettings {
+  site_name: string;
+  description: string;
+  /**
+   * ShowRecipes lets links that work without login preview their recipe's name and photo.
+   */
+  show_recipes: boolean;
+  has_image: boolean;
+}

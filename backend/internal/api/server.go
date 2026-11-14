@@ -55,7 +55,7 @@ func (s *Server) Handler() http.Handler {
 	s.routes(mux)
 	kitshn.New(s.svc, s.log, s.loginLimit, s.secureCookie).Routes(mux)
 	assistant.New(s.svc, s.log).Routes(mux)
-	mux.Handle("/", web.Handler())
+	mux.Handle("/", web.Handler(s.pageMeta))
 	return s.recoverer(s.securityHeaders(s.originCheck(mux)))
 }
 
@@ -170,6 +170,11 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET "+p+"/public/recipes/{id}/export", s.h(s.exportPublic))
 	m.HandleFunc("GET "+p+"/public/recipes/{id}/insights", s.h(s.publicInsights))
 	m.HandleFunc("GET "+p+"/public/share/{token}", s.h(s.getShared))
+	m.HandleFunc("GET "+p+"/public/link-preview-image", s.h(s.linkPreviewImage))
+	m.HandleFunc("GET "+p+"/admin/link-preview", s.user(s.getLinkPreview))
+	m.HandleFunc("PUT "+p+"/admin/link-preview", s.user(s.updateLinkPreview))
+	m.HandleFunc("POST "+p+"/admin/link-preview/image", s.user(s.uploadLinkPreviewImage))
+	m.HandleFunc("DELETE "+p+"/admin/link-preview/image", s.user(s.deleteLinkPreviewImage))
 	m.HandleFunc("GET "+p+"/public/photo-upload/{token}", s.h(s.photoUploadInfo))
 	m.HandleFunc("POST "+p+"/public/photo-upload/{token}", s.h(s.usePhotoUpload))
 	m.HandleFunc("GET "+p+"/public/share/{token}/export", s.h(s.exportShared))

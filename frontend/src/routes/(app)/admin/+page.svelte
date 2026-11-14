@@ -10,6 +10,7 @@
 	import { formatBytes, formatDate, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
+	import LinkPreviewCard from '#lib/components/LinkPreviewCard.svelte';
 
 	let health = $state<Health | null>(null);
 	let users = $state<User[]>([]);
@@ -211,6 +212,7 @@
 				<input id="mcp-enabled" type="checkbox" class="h-5 w-5 shrink-0 accent-[var(--brand)]" bind:checked={settings.mcp_enabled} onchange={saveSettings} />
 			</label>
 		</section>
+		<LinkPreviewCard />
 	{/if}
 </div>
 

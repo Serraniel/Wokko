@@ -5,10 +5,12 @@ import (
 	"bytes"
 	"compress/gzip"
 	"embed"
+	"html"
 	"io/fs"
 	"mime"
 	"net/http"
 	"path"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -16,13 +18,61 @@ import (
 //go:embed all:dist
 var dist embed.FS
 
-// Handler serves static files and falls back to the app shell for client-side routes.
-func Handler() http.Handler {
+// Meta is what a link preview, such as Discord's or a messenger's, shows for a page. The app
+// renders in the browser, and preview bots don't run it, so the server puts these into the page.
+type Meta struct {
+	Title       string
+	Description string
+	Image       string // an absolute address, or empty
+	URL         string
+	Type        string // website or article
+	SiteName    string
+	NoIndex     bool
+}
+
+// Handler serves static files and falls back to the app shell for client-side routes. meta
+// decides the link preview of each page the shell answers for.
+func Handler(meta func(*http.Request) Meta) http.Handler {
 	root, err := fs.Sub(dist, "dist")
 	if err != nil {
 		panic(err) // the embed path is fixed at compile time
 	}
-	return handler(root)
+	return handler(meta, root)
+}
+
+// withMeta puts a page's title and preview tags into the shell. Every value is escaped.
+func withMeta(shell []byte, m Meta) []byte {
+	e := html.EscapeString
+	var b strings.Builder
+	b.WriteString("<title>" + e(m.Title) + "</title>")
+	tag := func(attr, key, value string) {
+		if value != "" {
+			b.WriteString(`<meta ` + attr + `="` + key + `" content="` + e(value) + `" />`)
+		}
+	}
+	tag("name", "description", m.Description)
+	tag("property", "og:site_name", m.SiteName)
+	tag("property", "og:title", m.Title)
+	tag("property", "og:description", m.Description)
+	tag("property", "og:type", m.Type)
+	tag("property", "og:url", m.URL)
+	tag("property", "og:image", m.Image)
+	card := "summary"
+	if m.Image != "" {
+		card = "summary_large_image"
+	}
+	tag("name", "twitter:card", card)
+	if m.NoIndex {
+		tag("name", "robots", "noindex")
+	}
+	head := []byte(b.String())
+	if i := bytes.Index(shell, []byte("<title>Wokko</title>")); i >= 0 {
+		return slices.Concat(shell[:i], head, shell[i+len("<title>Wokko</title>"):])
+	}
+	if i := bytes.Index(shell, []byte("</head>")); i >= 0 {
+		return slices.Concat(shell[:i], head, shell[i:])
+	}
+	return shell
 }
 
 // worthCompressing lists text formats. Images and fonts are compressed already.
@@ -42,7 +92,7 @@ func init() {
 	}
 }
 
-func handler(root fs.FS) http.Handler {
+func handler(meta func(*http.Request) Meta, root fs.FS) http.Handler {
 	files := http.FileServerFS(root)
 	// The files never change while the program runs, so each is compressed once.
 	var compressed sync.Map
@@ -112,7 +162,7 @@ func handler(root fs.FS) http.Handler {
 			}
 		}
 		w.Header().Set("Cache-Control", "no-cache")
-		if serve(w, r, "index.html", "text/html; charset=utf-8") {
+		if meta == nil && serve(w, r, "index.html", "text/html; charset=utf-8") {
 			return
 		}
 		shell, err := fs.ReadFile(root, "index.html")
@@ -120,7 +170,21 @@ func handler(root fs.FS) http.Handler {
 			http.Error(w, "The frontend was not included in this build.", http.StatusServiceUnavailable)
 			return
 		}
+		if meta != nil {
+			shell = withMeta(shell, meta(r))
+		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_, _ = w.Write(shell)
+		if acceptsGzip(r) {
+			var buf bytes.Buffer
+			zw := gzip.NewWriter(&buf)
+			if _, err := zw.Write(shell); err == nil && zw.Close() == nil {
+				w.Header().Set("Content-Encoding", "gzip")
+				w.Header().Add("Vary", "Accept-Encoding")
+				shell = buf.Bytes()
+			}
+		}
+		if r.Method != http.MethodHead {
+			_, _ = w.Write(shell)
+		}
 	})
 }
