@@ -12,7 +12,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/importer` — recipe import from links and pasted text. Its downloads refuse private addresses at connection time
 - `backend/internal/store` — SQLite, migrations, sqlc queries
 - `backend/internal/assistant` — MCP server and OAuth endpoints for AI assistants
-- `backend/internal/catalog` — the starter catalog of foods, units and tags as keyed JSON in `data/`, and the three-way merge that brings a newer one into existing databases. `data/original/` is the seed as first shipped and is never edited
+- `backend/internal/catalog` — the starter catalog of foods, units and tags as keyed JSON in `data/`, and the three-way merge that brings a newer one into existing databases. `data/original/` is the seed as first shipped and is never edited. `backend/cmd/catalog-refresh` adds names and aliases from Wikidata (only adds, never changes) and runs monthly from `.github/workflows/catalog-refresh.yml`
 - `backend/internal/knowledge` — built-in kitchen knowledge: food classes, allergens, sauces, techniques and problem rules as JSON in `data/`, each entry tested against the example recipes in `data/examples/`
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text, and `src/service-worker/` keeps it usable offline

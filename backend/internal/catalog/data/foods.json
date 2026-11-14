@@ -5,17 +5,17 @@
    "id": 1,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "onion",
-     "plural": "onions"
-    },
     "de": {
      "name": "Zwiebel",
      "plural": "Zwiebeln"
+    },
+    "en": {
+     "name": "onion",
+     "plural": "onions"
     }
    },
    "nutrients": {
-    "1": 40.0,
+    "1": 40,
     "2": 0.1,
     "3": 0.042,
     "4": 9.34,
@@ -30,21 +30,21 @@
    "id": 2,
    "default_unit": "unit.clove",
    "names": {
-    "en": {
-     "name": "garlic",
-     "plural": "garlic cloves"
-    },
     "de": {
      "name": "Knoblauch",
      "plural": "Knoblauchzehen"
+    },
+    "en": {
+     "name": "garlic",
+     "plural": "garlic cloves"
     }
    },
    "nutrients": {
-    "1": 149.0,
+    "1": 149,
     "2": 0.5,
     "3": 0.089,
     "4": 33.06,
-    "5": 1.0,
+    "5": 1,
     "6": 2.1,
     "7": 6.36,
     "8": 0.043
@@ -55,17 +55,17 @@
    "id": 3,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "carrot",
-     "plural": "carrots"
-    },
     "de": {
      "name": "Karotte",
      "plural": "Karotten"
+    },
+    "en": {
+     "name": "carrot",
+     "plural": "carrots"
     }
    },
    "nutrients": {
-    "1": 41.0,
+    "1": 41,
     "2": 0.24,
     "3": 0.032,
     "4": 9.58,
@@ -80,17 +80,17 @@
    "id": 4,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "potato",
-     "plural": "potatoes"
-    },
     "de": {
      "name": "Kartoffel",
      "plural": "Kartoffeln"
+    },
+    "en": {
+     "name": "potato",
+     "plural": "potatoes"
     }
    },
    "nutrients": {
-    "1": 77.0,
+    "1": 77,
     "2": 0.09,
     "3": 0.025,
     "4": 17.49,
@@ -105,17 +105,17 @@
    "id": 5,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "tomato",
-     "plural": "tomatoes"
-    },
     "de": {
      "name": "Tomate",
      "plural": "Tomaten"
+    },
+    "en": {
+     "name": "tomato",
+     "plural": "tomatoes"
     }
    },
    "nutrients": {
-    "1": 18.0,
+    "1": 18,
     "2": 0.2,
     "3": 0.028,
     "4": 3.89,
@@ -130,17 +130,17 @@
    "id": 6,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "cucumber",
-     "plural": "cucumbers"
-    },
     "de": {
      "name": "Gurke",
      "plural": "Gurken"
+    },
+    "en": {
+     "name": "cucumber",
+     "plural": "cucumbers"
     }
    },
    "nutrients": {
-    "1": 15.0,
+    "1": 15,
     "2": 0.11,
     "3": 0.037,
     "4": 3.63,
@@ -155,17 +155,17 @@
    "id": 7,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "bell pepper",
-     "plural": "bell peppers"
-    },
     "de": {
      "name": "Paprika",
      "plural": "Paprikas"
+    },
+    "en": {
+     "name": "bell pepper",
+     "plural": "bell peppers"
     }
    },
    "nutrients": {
-    "1": 26.0,
+    "1": 26,
     "2": 0.3,
     "3": 0.059,
     "4": 6.03,
@@ -180,17 +180,17 @@
    "id": 8,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "broccoli",
-     "plural": "broccoli heads"
-    },
     "de": {
      "name": "Brokkoli",
      "plural": "Brokkoliköpfe"
+    },
+    "en": {
+     "name": "broccoli",
+     "plural": "broccoli heads"
     }
    },
    "nutrients": {
-    "1": 34.0,
+    "1": 34,
     "2": 0.37,
     "3": 0.114,
     "4": 6.64,
@@ -205,17 +205,17 @@
    "id": 9,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "spinach",
-     "plural": "spinach"
-    },
     "de": {
      "name": "Spinat",
      "plural": "Spinat"
+    },
+    "en": {
+     "name": "spinach",
+     "plural": "spinach"
     }
    },
    "nutrients": {
-    "1": 23.0,
+    "1": 23,
     "2": 0.39,
     "3": 0.063,
     "4": 3.63,
@@ -230,17 +230,17 @@
    "id": 10,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "lettuce",
-     "plural": "lettuces"
-    },
     "de": {
      "name": "Salat",
      "plural": "Salate"
+    },
+    "en": {
+     "name": "lettuce",
+     "plural": "lettuces"
     }
    },
    "nutrients": {
-    "1": 15.0,
+    "1": 15,
     "2": 0.15,
     "3": 0.02,
     "4": 2.87,
@@ -255,22 +255,22 @@
    "id": 11,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "zucchini",
-     "plural": "zucchinis"
-    },
     "de": {
      "name": "Zucchini",
      "plural": "Zucchinis"
+    },
+    "en": {
+     "name": "zucchini",
+     "plural": "zucchinis"
     }
    },
    "nutrients": {
-    "1": 17.0,
+    "1": 17,
     "2": 0.32,
     "3": 0.084,
     "4": 3.11,
     "5": 2.5,
-    "6": 1.0,
+    "6": 1,
     "7": 1.21,
     "8": 0.02
    }
@@ -280,22 +280,22 @@
    "id": 12,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "eggplant",
-     "plural": "eggplants"
-    },
     "de": {
      "name": "Aubergine",
      "plural": "Auberginen"
+    },
+    "en": {
+     "name": "eggplant",
+     "plural": "eggplants"
     }
    },
    "nutrients": {
-    "1": 25.0,
+    "1": 25,
     "2": 0.18,
     "3": 0.034,
     "4": 5.88,
     "5": 3.53,
-    "6": 3.0,
+    "6": 3,
     "7": 0.98,
     "8": 0.005
    }
@@ -305,22 +305,22 @@
    "id": 13,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "cauliflower",
-     "plural": "cauliflowers"
-    },
     "de": {
      "name": "Blumenkohl",
      "plural": "Blumenkohlköpfe"
+    },
+    "en": {
+     "name": "cauliflower",
+     "plural": "cauliflowers"
     }
    },
    "nutrients": {
-    "1": 25.0,
+    "1": 25,
     "2": 0.28,
     "3": 0.13,
     "4": 4.97,
     "5": 1.91,
-    "6": 2.0,
+    "6": 2,
     "7": 1.92,
     "8": 0.075
    }
@@ -330,17 +330,17 @@
    "id": 14,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "cabbage",
-     "plural": "cabbages"
-    },
     "de": {
      "name": "Kohl",
      "plural": "Kohlköpfe"
+    },
+    "en": {
+     "name": "cabbage",
+     "plural": "cabbages"
     }
    },
    "nutrients": {
-    "1": 25.0,
+    "1": 25,
     "2": 0.1,
     "3": 0.034,
     "4": 5.8,
@@ -355,17 +355,17 @@
    "id": 15,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "leek",
-     "plural": "leeks"
-    },
     "de": {
      "name": "Lauch",
      "plural": "Lauche"
+    },
+    "en": {
+     "name": "leek",
+     "plural": "leeks"
     }
    },
    "nutrients": {
-    "1": 61.0,
+    "1": 61,
     "2": 0.3,
     "3": 0.04,
     "4": 14.15,
@@ -380,17 +380,17 @@
    "id": 16,
    "default_unit": "unit.stalk",
    "names": {
-    "en": {
-     "name": "celery",
-     "plural": "celery stalks"
-    },
     "de": {
      "name": "Sellerie",
      "plural": "Selleriesstangen"
+    },
+    "en": {
+     "name": "celery",
+     "plural": "celery stalks"
     }
    },
    "nutrients": {
-    "1": 14.0,
+    "1": 14,
     "2": 0.17,
     "3": 0.042,
     "4": 2.97,
@@ -405,22 +405,22 @@
    "id": 17,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "mushroom",
-     "plural": "mushrooms"
-    },
     "de": {
      "name": "Champignon",
      "plural": "Champignons"
+    },
+    "en": {
+     "name": "mushroom",
+     "plural": "mushrooms"
     }
    },
    "nutrients": {
-    "1": 22.0,
+    "1": 22,
     "2": 0.34,
     "3": 0.05,
     "4": 3.26,
     "5": 1.98,
-    "6": 1.0,
+    "6": 1,
     "7": 3.09,
     "8": 0.013
    }
@@ -430,17 +430,17 @@
    "id": 18,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "peas",
-     "plural": "peas"
-    },
     "de": {
      "name": "Erbsen",
      "plural": "Erbsen"
+    },
+    "en": {
+     "name": "peas",
+     "plural": "peas"
     }
    },
    "nutrients": {
-    "1": 81.0,
+    "1": 81,
     "2": 0.4,
     "3": 0.071,
     "4": 14.45,
@@ -455,22 +455,22 @@
    "id": 19,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "corn",
-     "plural": "corn cobs"
-    },
     "de": {
      "name": "Mais",
      "plural": "Maiskolben"
+    },
+    "en": {
+     "name": "corn",
+     "plural": "corn cobs"
     }
    },
    "nutrients": {
-    "1": 86.0,
+    "1": 86,
     "2": 1.35,
     "3": 0.325,
     "4": 18.7,
     "5": 6.26,
-    "6": 2.0,
+    "6": 2,
     "7": 3.27,
     "8": 0.037
    }
@@ -480,17 +480,17 @@
    "id": 20,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "asparagus",
-     "plural": "asparagus stalks"
-    },
     "de": {
      "name": "Spargel",
      "plural": "Spargelstangen"
+    },
+    "en": {
+     "name": "asparagus",
+     "plural": "asparagus stalks"
     }
    },
    "nutrients": {
-    "1": 20.0,
+    "1": 20,
     "2": 0.12,
     "3": 0.04,
     "4": 3.88,
@@ -505,17 +505,17 @@
    "id": 21,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "artichoke",
-     "plural": "artichokes"
-    },
     "de": {
      "name": "Artischocke",
      "plural": "Artischocken"
+    },
+    "en": {
+     "name": "artichoke",
+     "plural": "artichokes"
     }
    },
    "nutrients": {
-    "1": 47.0,
+    "1": 47,
     "2": 0.15,
     "3": 0.036,
     "4": 10.51,
@@ -530,23 +530,23 @@
    "id": 22,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "pumpkin",
-     "plural": "pumpkins"
-    },
     "de": {
      "name": "Kürbis",
      "plural": "Kürbisse"
+    },
+    "en": {
+     "name": "pumpkin",
+     "plural": "pumpkins"
     }
    },
    "nutrients": {
-    "1": 26.0,
+    "1": 26,
     "2": 0.1,
     "3": 0.052,
     "4": 6.5,
     "5": 2.76,
     "6": 0.5,
-    "7": 1.0,
+    "7": 1,
     "8": 0.003
    }
   },
@@ -555,22 +555,22 @@
    "id": 23,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "sweet potato",
-     "plural": "sweet potatoes"
-    },
     "de": {
      "name": "Süßkartoffel",
      "plural": "Süßkartoffeln"
+    },
+    "en": {
+     "name": "sweet potato",
+     "plural": "sweet potatoes"
     }
    },
    "nutrients": {
-    "1": 86.0,
+    "1": 86,
     "2": 0.05,
     "3": 0.018,
     "4": 20.12,
     "5": 4.18,
-    "6": 3.0,
+    "6": 3,
     "7": 1.57,
     "8": 0.138
    }
@@ -580,17 +580,17 @@
    "id": 24,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "radish",
-     "plural": "radishes"
-    },
     "de": {
      "name": "Radieschen",
      "plural": "Radieschen"
+    },
+    "en": {
+     "name": "radish",
+     "plural": "radishes"
     }
    },
    "nutrients": {
-    "1": 16.0,
+    "1": 16,
     "2": 0.1,
     "3": 0.032,
     "4": 3.4,
@@ -605,17 +605,17 @@
    "id": 25,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "beet",
-     "plural": "beets"
-    },
     "de": {
      "name": "Rote Bete",
      "plural": "Rote Beten"
+    },
+    "en": {
+     "name": "beet",
+     "plural": "beets"
     }
    },
    "nutrients": {
-    "1": 43.0,
+    "1": 43,
     "2": 0.17,
     "3": 0.027,
     "4": 9.56,
@@ -630,17 +630,17 @@
    "id": 26,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "green beans",
-     "plural": "green beans"
-    },
     "de": {
      "name": "grüne Bohnen",
      "plural": "grüne Bohnen"
+    },
+    "en": {
+     "name": "green beans",
+     "plural": "green beans"
     }
    },
    "nutrients": {
-    "1": 31.0,
+    "1": 31,
     "2": 0.22,
     "3": 0.05,
     "4": 6.97,
@@ -655,21 +655,21 @@
    "id": 27,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "snow peas",
-     "plural": "snow peas"
-    },
     "de": {
      "name": "Zuckerschoten",
      "plural": "Zuckerschoten"
+    },
+    "en": {
+     "name": "snow peas",
+     "plural": "snow peas"
     }
    },
    "nutrients": {
-    "1": 42.0,
+    "1": 42,
     "2": 0.2,
     "3": 0.039,
     "4": 7.55,
-    "5": 4.0,
+    "5": 4,
     "6": 2.6,
     "7": 2.8,
     "8": 0.01
@@ -680,17 +680,17 @@
    "id": 28,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "cherry tomato",
-     "plural": "cherry tomatoes"
-    },
     "de": {
      "name": "Cherrytomaten",
      "plural": "Cherrytomaten"
+    },
+    "en": {
+     "name": "cherry tomato",
+     "plural": "cherry tomatoes"
     }
    },
    "nutrients": {
-    "1": 18.0,
+    "1": 18,
     "2": 0.2,
     "3": 0.028,
     "4": 3.89,
@@ -705,17 +705,17 @@
    "id": 29,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "spring onion",
-     "plural": "spring onions"
-    },
     "de": {
      "name": "Frühlingszwiebel",
      "plural": "Frühlingszwiebeln"
+    },
+    "en": {
+     "name": "spring onion",
+     "plural": "spring onions"
     }
    },
    "nutrients": {
-    "1": 32.0,
+    "1": 32,
     "2": 0.19,
     "3": 0.032,
     "4": 7.34,
@@ -730,17 +730,17 @@
    "id": 30,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "fennel",
-     "plural": "fennels"
-    },
     "de": {
      "name": "Fenchel",
      "plural": "Fenchel"
+    },
+    "en": {
+     "name": "fennel",
+     "plural": "fennels"
     }
    },
    "nutrients": {
-    "1": 31.0,
+    "1": 31,
     "2": 0.2,
     "3": 0.09,
     "4": 7.3,
@@ -755,17 +755,17 @@
    "id": 31,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "apple",
-     "plural": "apples"
-    },
     "de": {
      "name": "Apfel",
      "plural": "Äpfel"
+    },
+    "en": {
+     "name": "apple",
+     "plural": "apples"
     }
    },
    "nutrients": {
-    "1": 52.0,
+    "1": 52,
     "2": 0.17,
     "3": 0.028,
     "4": 13.81,
@@ -780,17 +780,17 @@
    "id": 32,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "banana",
-     "plural": "bananas"
-    },
     "de": {
      "name": "Banane",
      "plural": "Bananen"
+    },
+    "en": {
+     "name": "banana",
+     "plural": "bananas"
     }
    },
    "nutrients": {
-    "1": 89.0,
+    "1": 89,
     "2": 0.33,
     "3": 0.112,
     "4": 22.84,
@@ -805,24 +805,24 @@
    "id": 33,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "orange",
-     "plural": "oranges"
-    },
     "de": {
      "name": "Orange",
      "plural": "Orangen"
+    },
+    "en": {
+     "name": "orange",
+     "plural": "oranges"
     }
    },
    "nutrients": {
-    "1": 47.0,
+    "1": 47,
     "2": 0.12,
     "3": 0.015,
     "4": 11.75,
     "5": 9.35,
     "6": 2.4,
     "7": 0.94,
-    "8": 0.0
+    "8": 0
    }
   },
   {
@@ -830,17 +830,17 @@
    "id": 34,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "lemon",
-     "plural": "lemons"
-    },
     "de": {
      "name": "Zitrone",
      "plural": "Zitronen"
+    },
+    "en": {
+     "name": "lemon",
+     "plural": "lemons"
     }
    },
    "nutrients": {
-    "1": 29.0,
+    "1": 29,
     "2": 0.3,
     "3": 0.039,
     "4": 9.32,
@@ -855,17 +855,17 @@
    "id": 35,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "lime",
-     "plural": "limes"
-    },
     "de": {
      "name": "Limette",
      "plural": "Limetten"
+    },
+    "en": {
+     "name": "lime",
+     "plural": "limes"
     }
    },
    "nutrients": {
-    "1": 30.0,
+    "1": 30,
     "2": 0.2,
     "3": 0.022,
     "4": 10.54,
@@ -880,22 +880,22 @@
    "id": 36,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "strawberry",
-     "plural": "strawberries"
-    },
     "de": {
      "name": "Erdbeere",
      "plural": "Erdbeeren"
+    },
+    "en": {
+     "name": "strawberry",
+     "plural": "strawberries"
     }
    },
    "nutrients": {
-    "1": 32.0,
+    "1": 32,
     "2": 0.3,
     "3": 0.015,
     "4": 7.68,
     "5": 4.89,
-    "6": 2.0,
+    "6": 2,
     "7": 0.67,
     "8": 0.003
    }
@@ -905,17 +905,17 @@
    "id": 37,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "blueberry",
-     "plural": "blueberries"
-    },
     "de": {
      "name": "Heidelbeere",
      "plural": "Heidelbeeren"
+    },
+    "en": {
+     "name": "blueberry",
+     "plural": "blueberries"
     }
    },
    "nutrients": {
-    "1": 57.0,
+    "1": 57,
     "2": 0.33,
     "3": 0.028,
     "4": 14.49,
@@ -930,17 +930,17 @@
    "id": 38,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "raspberry",
-     "plural": "raspberries"
-    },
     "de": {
      "name": "Himbeere",
      "plural": "Himbeeren"
+    },
+    "en": {
+     "name": "raspberry",
+     "plural": "raspberries"
     }
    },
    "nutrients": {
-    "1": 52.0,
+    "1": 52,
     "2": 0.65,
     "3": 0.019,
     "4": 11.94,
@@ -955,17 +955,17 @@
    "id": 39,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "grape",
-     "plural": "grapes"
-    },
     "de": {
      "name": "Weintraube",
      "plural": "Weintrauben"
+    },
+    "en": {
+     "name": "grape",
+     "plural": "grapes"
     }
    },
    "nutrients": {
-    "1": 69.0,
+    "1": 69,
     "2": 0.16,
     "3": 0.054,
     "4": 18.1,
@@ -980,17 +980,17 @@
    "id": 40,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "mango",
-     "plural": "mangoes"
-    },
     "de": {
      "name": "Mango",
      "plural": "Mangos"
+    },
+    "en": {
+     "name": "mango",
+     "plural": "mangoes"
     }
    },
    "nutrients": {
-    "1": 60.0,
+    "1": 60,
     "2": 0.38,
     "3": 0.092,
     "4": 14.98,
@@ -1005,17 +1005,17 @@
    "id": 41,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "pineapple",
-     "plural": "pineapples"
-    },
     "de": {
      "name": "Ananas",
      "plural": "Ananas"
+    },
+    "en": {
+     "name": "pineapple",
+     "plural": "pineapples"
     }
    },
    "nutrients": {
-    "1": 50.0,
+    "1": 50,
     "2": 0.12,
     "3": 0.009,
     "4": 13.12,
@@ -1030,17 +1030,17 @@
    "id": 42,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "watermelon",
-     "plural": "watermelons"
-    },
     "de": {
      "name": "Wassermelone",
      "plural": "Wassermelonen"
+    },
+    "en": {
+     "name": "watermelon",
+     "plural": "watermelons"
     }
    },
    "nutrients": {
-    "1": 30.0,
+    "1": 30,
     "2": 0.15,
     "3": 0.016,
     "4": 7.55,
@@ -1055,24 +1055,24 @@
    "id": 43,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "peach",
-     "plural": "peaches"
-    },
     "de": {
      "name": "Pfirsich",
      "plural": "Pfirsiche"
+    },
+    "en": {
+     "name": "peach",
+     "plural": "peaches"
     }
    },
    "nutrients": {
-    "1": 39.0,
+    "1": 39,
     "2": 0.25,
     "3": 0.019,
     "4": 9.54,
     "5": 8.39,
     "6": 1.5,
     "7": 0.91,
-    "8": 0.0
+    "8": 0
    }
   },
   {
@@ -1080,17 +1080,17 @@
    "id": 44,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "pear",
-     "plural": "pears"
-    },
     "de": {
      "name": "Birne",
      "plural": "Birnen"
+    },
+    "en": {
+     "name": "pear",
+     "plural": "pears"
     }
    },
    "nutrients": {
-    "1": 57.0,
+    "1": 57,
     "2": 0.14,
     "3": 0.022,
     "4": 15.23,
@@ -1105,24 +1105,24 @@
    "id": 45,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "cherry",
-     "plural": "cherries"
-    },
     "de": {
      "name": "Kirsche",
      "plural": "Kirschen"
+    },
+    "en": {
+     "name": "cherry",
+     "plural": "cherries"
     }
    },
    "nutrients": {
-    "1": 63.0,
+    "1": 63,
     "2": 0.2,
     "3": 0.038,
     "4": 16.01,
     "5": 12.82,
     "6": 2.1,
     "7": 1.06,
-    "8": 0.0
+    "8": 0
    }
   },
   {
@@ -1130,24 +1130,24 @@
    "id": 46,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "plum",
-     "plural": "plums"
-    },
     "de": {
      "name": "Pflaume",
      "plural": "Pflaumen"
+    },
+    "en": {
+     "name": "plum",
+     "plural": "plums"
     }
    },
    "nutrients": {
-    "1": 46.0,
+    "1": 46,
     "2": 0.28,
     "3": 0.017,
     "4": 11.42,
     "5": 9.92,
     "6": 1.4,
     "7": 0.7,
-    "8": 0.0
+    "8": 0
    }
   },
   {
@@ -1155,22 +1155,22 @@
    "id": 47,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "apricot",
-     "plural": "apricots"
-    },
     "de": {
      "name": "Aprikose",
      "plural": "Aprikosen"
+    },
+    "en": {
+     "name": "apricot",
+     "plural": "apricots"
     }
    },
    "nutrients": {
-    "1": 48.0,
+    "1": 48,
     "2": 0.39,
     "3": 0.027,
     "4": 11.12,
     "5": 9.24,
-    "6": 2.0,
+    "6": 2,
     "7": 1.4,
     "8": 0.003
    }
@@ -1180,22 +1180,22 @@
    "id": 48,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "kiwi",
-     "plural": "kiwis"
-    },
     "de": {
      "name": "Kiwi",
      "plural": "Kiwis"
+    },
+    "en": {
+     "name": "kiwi",
+     "plural": "kiwis"
     }
    },
    "nutrients": {
-    "1": 61.0,
+    "1": 61,
     "2": 0.52,
     "3": 0.029,
     "4": 14.66,
     "5": 8.99,
-    "6": 3.0,
+    "6": 3,
     "7": 1.14,
     "8": 0.007
    }
@@ -1205,23 +1205,23 @@
    "id": 49,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "avocado",
-     "plural": "avocados"
-    },
     "de": {
      "name": "Avocado",
      "plural": "Avocados"
+    },
+    "en": {
+     "name": "avocado",
+     "plural": "avocados"
     }
    },
    "nutrients": {
-    "1": 160.0,
+    "1": 160,
     "2": 14.66,
     "3": 2.126,
     "4": 8.53,
     "5": 0.66,
     "6": 6.7,
-    "7": 2.0,
+    "7": 2,
     "8": 0.018
    }
   },
@@ -1230,22 +1230,22 @@
    "id": 50,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "coconut",
-     "plural": "coconuts"
-    },
     "de": {
      "name": "Kokosnuss",
      "plural": "Kokosnüsse"
+    },
+    "en": {
+     "name": "coconut",
+     "plural": "coconuts"
     }
    },
    "nutrients": {
-    "1": 354.0,
+    "1": 354,
     "2": 33.49,
     "3": 29.698,
     "4": 15.23,
     "5": 6.23,
-    "6": 9.0,
+    "6": 9,
     "7": 3.33,
     "8": 0.05
    }
@@ -1255,22 +1255,22 @@
    "id": 51,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "pomegranate",
-     "plural": "pomegranates"
-    },
     "de": {
      "name": "Granatapfel",
      "plural": "Granatäpfel"
+    },
+    "en": {
+     "name": "pomegranate",
+     "plural": "pomegranates"
     }
    },
    "nutrients": {
-    "1": 83.0,
+    "1": 83,
     "2": 1.17,
     "3": 0.12,
     "4": 18.7,
     "5": 13.67,
-    "6": 4.0,
+    "6": 4,
     "7": 1.67,
     "8": 0.007
    }
@@ -1280,22 +1280,22 @@
    "id": 52,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "chicken breast",
-     "plural": "chicken breasts"
-    },
     "de": {
      "name": "Hähnchenbrust",
      "plural": "Hähnchenbrüste"
+    },
+    "en": {
+     "name": "chicken breast",
+     "plural": "chicken breasts"
     }
    },
    "nutrients": {
-    "1": 120.0,
+    "1": 120,
     "2": 2.62,
     "3": 0.563,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 22.5,
     "8": 0.113
    }
@@ -1305,22 +1305,22 @@
    "id": 53,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "chicken thigh",
-     "plural": "chicken thighs"
-    },
     "de": {
      "name": "Hähnchenschenkel",
      "plural": "Hähnchenschenkel"
+    },
+    "en": {
+     "name": "chicken thigh",
+     "plural": "chicken thighs"
     }
    },
    "nutrients": {
-    "1": 121.0,
+    "1": 121,
     "2": 4.12,
     "3": 1.097,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 19.66,
     "8": 0.237
    }
@@ -1330,22 +1330,22 @@
    "id": 54,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "ground beef",
-     "plural": "ground beef"
-    },
     "de": {
      "name": "Hackfleisch",
      "plural": "Hackfleisch"
+    },
+    "en": {
+     "name": "ground beef",
+     "plural": "ground beef"
     }
    },
    "nutrients": {
-    "1": 254.0,
-    "2": 20.0,
+    "1": 254,
+    "2": 20,
     "3": 7.581,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 17.17,
     "8": 0.165
    }
@@ -1355,22 +1355,22 @@
    "id": 55,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "beef steak",
-     "plural": "beef steaks"
-    },
     "de": {
      "name": "Rindersteak",
      "plural": "Rindersteaks"
+    },
+    "en": {
+     "name": "beef steak",
+     "plural": "beef steaks"
     }
    },
    "nutrients": {
-    "1": 214.0,
+    "1": 214,
     "2": 14.28,
     "3": 5.763,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 19.92,
     "8": 0.128
    }
@@ -1380,22 +1380,22 @@
    "id": 56,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "pork chop",
-     "plural": "pork chops"
-    },
     "de": {
      "name": "Schweinekotelett",
      "plural": "Schweinekoteletts"
+    },
+    "en": {
+     "name": "pork chop",
+     "plural": "pork chops"
     }
    },
    "nutrients": {
-    "1": 170.0,
+    "1": 170,
     "2": 9.03,
     "3": 2.993,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 20.71,
     "8": 0.138
    }
@@ -1405,22 +1405,22 @@
    "id": 57,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "pork belly",
-     "plural": "pork bellies"
-    },
     "de": {
      "name": "Schweinebauch",
      "plural": "Schweinebauch"
+    },
+    "en": {
+     "name": "pork belly",
+     "plural": "pork bellies"
     }
    },
    "nutrients": {
-    "1": 518.0,
+    "1": 518,
     "2": 53.01,
     "3": 19.33,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 9.34,
     "8": 0.08
    }
@@ -1430,21 +1430,21 @@
    "id": 58,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "lamb chop",
-     "plural": "lamb chops"
-    },
     "de": {
      "name": "Lammkotelett",
      "plural": "Lammkoteletts"
+    },
+    "en": {
+     "name": "lamb chop",
+     "plural": "lamb chops"
     }
    },
    "nutrients": {
-    "1": 279.0,
+    "1": 279,
     "2": 22.75,
     "3": 9.95,
-    "4": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "6": 0,
     "7": 17.18,
     "8": 0.147
    }
@@ -1454,22 +1454,22 @@
    "id": 59,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "turkey breast",
-     "plural": "turkey breasts"
-    },
     "de": {
      "name": "Putenbrust",
      "plural": "Putenbrüste"
+    },
+    "en": {
+     "name": "turkey breast",
+     "plural": "turkey breasts"
     }
    },
    "nutrients": {
-    "1": 114.0,
+    "1": 114,
     "2": 1.48,
     "3": 0.289,
     "4": 0.14,
     "5": 0.05,
-    "6": 0.0,
+    "6": 0,
     "7": 23.66,
     "8": 0.282
    }
@@ -1479,22 +1479,22 @@
    "id": 60,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "salmon fillet",
-     "plural": "salmon fillets"
-    },
     "de": {
      "name": "Lachsfilet",
      "plural": "Lachsfilets"
+    },
+    "en": {
+     "name": "salmon fillet",
+     "plural": "salmon fillets"
     }
    },
    "nutrients": {
-    "1": 208.0,
+    "1": 208,
     "2": 13.42,
     "3": 3.05,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 20.42,
     "8": 0.147
    }
@@ -1504,22 +1504,22 @@
    "id": 61,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "tuna",
-     "plural": "tuna"
-    },
     "de": {
      "name": "Thunfisch",
      "plural": "Thunfisch"
+    },
+    "en": {
+     "name": "tuna",
+     "plural": "tuna"
     }
    },
    "nutrients": {
-    "1": 109.0,
+    "1": 109,
     "2": 0.49,
     "3": 0.172,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 24.4,
     "8": 0.113
    }
@@ -1529,22 +1529,22 @@
    "id": 62,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "cod fillet",
-     "plural": "cod fillets"
-    },
     "de": {
      "name": "Kabeljaufilet",
      "plural": "Kabeljaufilets"
+    },
+    "en": {
+     "name": "cod fillet",
+     "plural": "cod fillets"
     }
    },
    "nutrients": {
-    "1": 82.0,
+    "1": 82,
     "2": 0.67,
     "3": 0.131,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 17.81,
     "8": 0.135
    }
@@ -1554,20 +1554,20 @@
    "id": 63,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "shrimp",
-     "plural": "shrimps"
-    },
     "de": {
      "name": "Garnele",
      "plural": "Garnelen"
+    },
+    "en": {
+     "name": "shrimp",
+     "plural": "shrimps"
     }
    },
    "nutrients": {
-    "1": 85.0,
+    "1": 85,
     "2": 0.51,
     "3": 0.101,
-    "4": 0.0,
+    "4": 0,
     "7": 20.1,
     "8": 0.297
    }
@@ -1577,22 +1577,22 @@
    "id": 64,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "egg",
-     "plural": "eggs"
-    },
     "de": {
      "name": "Ei",
      "plural": "Eier"
+    },
+    "en": {
+     "name": "egg",
+     "plural": "eggs"
     }
    },
    "nutrients": {
-    "1": 143.0,
+    "1": 143,
     "2": 9.51,
     "3": 3.126,
     "4": 0.72,
     "5": 0.37,
-    "6": 0.0,
+    "6": 0,
     "7": 12.56,
     "8": 0.355
    }
@@ -1602,17 +1602,17 @@
    "id": 65,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "tofu",
-     "plural": "tofu"
-    },
     "de": {
      "name": "Tofu",
      "plural": "Tofu"
+    },
+    "en": {
+     "name": "tofu",
+     "plural": "tofu"
     }
    },
    "nutrients": {
-    "1": 144.0,
+    "1": 144,
     "2": 8.72,
     "3": 1.261,
     "4": 2.78,
@@ -1626,17 +1626,17 @@
    "id": 66,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "lentils",
-     "plural": "lentils"
-    },
     "de": {
      "name": "Linsen",
      "plural": "Linsen"
+    },
+    "en": {
+     "name": "lentils",
+     "plural": "lentils"
     }
    },
    "nutrients": {
-    "1": 352.0,
+    "1": 352,
     "2": 1.06,
     "3": 0.154,
     "4": 63.35,
@@ -1651,17 +1651,17 @@
    "id": 67,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "chickpeas",
-     "plural": "chickpeas"
-    },
     "de": {
      "name": "Kichererbsen",
      "plural": "Kichererbsen"
+    },
+    "en": {
+     "name": "chickpeas",
+     "plural": "chickpeas"
     }
    },
    "nutrients": {
-    "1": 378.0,
+    "1": 378,
     "2": 6.04,
     "3": 0.603,
     "4": 62.95,
@@ -1676,17 +1676,17 @@
    "id": 68,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "black beans",
-     "plural": "black beans"
-    },
     "de": {
      "name": "Schwarze Bohnen",
      "plural": "Schwarze Bohnen"
+    },
+    "en": {
+     "name": "black beans",
+     "plural": "black beans"
     }
    },
    "nutrients": {
-    "1": 341.0,
+    "1": 341,
     "2": 1.42,
     "3": 0.366,
     "4": 62.36,
@@ -1701,17 +1701,17 @@
    "id": 69,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "kidney beans",
-     "plural": "kidney beans"
-    },
     "de": {
      "name": "Kidneybohnen",
      "plural": "Kidneybohnen"
+    },
+    "en": {
+     "name": "kidney beans",
+     "plural": "kidney beans"
     }
    },
    "nutrients": {
-    "1": 333.0,
+    "1": 333,
     "2": 0.83,
     "3": 0.12,
     "4": 60.01,
@@ -1726,17 +1726,17 @@
    "id": 70,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "white beans",
-     "plural": "white beans"
-    },
     "de": {
      "name": "Weiße Bohnen",
      "plural": "Weiße Bohnen"
+    },
+    "en": {
+     "name": "white beans",
+     "plural": "white beans"
     }
    },
    "nutrients": {
-    "1": 333.0,
+    "1": 333,
     "2": 0.85,
     "3": 0.219,
     "4": 60.27,
@@ -1751,17 +1751,17 @@
    "id": 71,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "tempeh",
-     "plural": "tempeh"
-    },
     "de": {
      "name": "Tempeh",
      "plural": "Tempeh"
+    },
+    "en": {
+     "name": "tempeh",
+     "plural": "tempeh"
     }
    },
    "nutrients": {
-    "1": 192.0,
+    "1": 192,
     "2": 10.8,
     "3": 2.539,
     "4": 7.64,
@@ -1774,22 +1774,22 @@
    "id": 72,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "milk",
-     "plural": "milk"
-    },
     "de": {
      "name": "Milch",
      "plural": "Milch"
+    },
+    "en": {
+     "name": "milk",
+     "plural": "milk"
     }
    },
    "nutrients": {
-    "1": 61.0,
+    "1": 61,
     "2": 3.25,
     "3": 1.865,
     "4": 4.8,
     "5": 5.05,
-    "6": 0.0,
+    "6": 0,
     "7": 3.15,
     "8": 0.107
    }
@@ -1799,22 +1799,22 @@
    "id": 73,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "butter",
-     "plural": "butter"
-    },
     "de": {
      "name": "Butter",
      "plural": "Butter"
+    },
+    "en": {
+     "name": "butter",
+     "plural": "butter"
     }
    },
    "nutrients": {
-    "1": 717.0,
+    "1": 717,
     "2": 81.11,
     "3": 51.368,
     "4": 0.06,
     "5": 0.06,
-    "6": 0.0,
+    "6": 0,
     "7": 0.85,
     "8": 1.607
    }
@@ -1824,22 +1824,22 @@
    "id": 74,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "heavy cream",
-     "plural": "heavy cream"
-    },
     "de": {
      "name": "Schlagsahne",
      "plural": "Schlagsahne"
+    },
+    "en": {
+     "name": "heavy cream",
+     "plural": "heavy cream"
     }
    },
    "nutrients": {
-    "1": 340.0,
+    "1": 340,
     "2": 36.08,
     "3": 23.032,
     "4": 2.84,
     "5": 2.92,
-    "6": 0.0,
+    "6": 0,
     "7": 2.84,
     "8": 0.068
    }
@@ -1849,22 +1849,22 @@
    "id": 75,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "sour cream",
-     "plural": "sour cream"
-    },
     "de": {
      "name": "Saure Sahne",
      "plural": "Saure Sahne"
+    },
+    "en": {
+     "name": "sour cream",
+     "plural": "sour cream"
     }
    },
    "nutrients": {
-    "1": 198.0,
+    "1": 198,
     "2": 19.35,
     "3": 10.14,
     "4": 4.63,
     "5": 3.41,
-    "6": 0.0,
+    "6": 0,
     "7": 2.44,
     "8": 0.077
    }
@@ -1874,22 +1874,22 @@
    "id": 76,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "cream cheese",
-     "plural": "cream cheese"
-    },
     "de": {
      "name": "Frischkäse",
      "plural": "Frischkäse"
+    },
+    "en": {
+     "name": "cream cheese",
+     "plural": "cream cheese"
     }
    },
    "nutrients": {
-    "1": 350.0,
+    "1": 350,
     "2": 34.44,
     "3": 20.213,
     "4": 5.52,
     "5": 3.76,
-    "6": 0.0,
+    "6": 0,
     "7": 6.15,
     "8": 0.785
    }
@@ -1899,22 +1899,22 @@
    "id": 77,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "yogurt",
-     "plural": "yogurts"
-    },
     "de": {
      "name": "Joghurt",
      "plural": "Joghurts"
+    },
+    "en": {
+     "name": "yogurt",
+     "plural": "yogurts"
     }
    },
    "nutrients": {
-    "1": 61.0,
+    "1": 61,
     "2": 3.25,
     "3": 2.096,
     "4": 4.66,
     "5": 4.66,
-    "6": 0.0,
+    "6": 0,
     "7": 3.47,
     "8": 0.115
    }
@@ -1924,22 +1924,22 @@
    "id": 78,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "mozzarella",
-     "plural": "mozzarellas"
-    },
     "de": {
      "name": "Mozzarella",
      "plural": "Mozzarella"
+    },
+    "en": {
+     "name": "mozzarella",
+     "plural": "mozzarellas"
     }
    },
    "nutrients": {
-    "1": 299.0,
+    "1": 299,
     "2": 22.14,
     "3": 13.9,
     "4": 2.4,
-    "5": 0.0,
-    "6": 0.0,
+    "5": 0,
+    "6": 0,
     "7": 22.17,
     "8": 1.215
    }
@@ -1949,22 +1949,22 @@
    "id": 79,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "parmesan",
-     "plural": "parmesan"
-    },
     "de": {
      "name": "Parmesan",
      "plural": "Parmesan"
+    },
+    "en": {
+     "name": "parmesan",
+     "plural": "parmesan"
     }
    },
    "nutrients": {
-    "1": 392.0,
-    "2": 25.0,
+    "1": 392,
+    "2": 25,
     "3": 14.85,
     "4": 3.22,
     "5": 0.11,
-    "6": 0.0,
+    "6": 0,
     "7": 35.75,
     "8": 2.938
    }
@@ -1974,22 +1974,22 @@
    "id": 80,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "cheddar",
-     "plural": "cheddar"
-    },
     "de": {
      "name": "Cheddar",
      "plural": "Cheddar"
+    },
+    "en": {
+     "name": "cheddar",
+     "plural": "cheddar"
     }
    },
    "nutrients": {
-    "1": 403.0,
+    "1": 403,
     "2": 33.31,
     "3": 18.867,
     "4": 3.37,
     "5": 0.48,
-    "6": 0.0,
+    "6": 0,
     "7": 22.87,
     "8": 1.633
    }
@@ -1999,22 +1999,22 @@
    "id": 81,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "feta",
-     "plural": "feta"
-    },
     "de": {
      "name": "Feta",
      "plural": "Feta"
+    },
+    "en": {
+     "name": "feta",
+     "plural": "feta"
     }
    },
    "nutrients": {
-    "1": 265.0,
+    "1": 265,
     "2": 21.49,
     "3": 13.3,
     "4": 3.88,
-    "5": 0.0,
-    "6": 0.0,
+    "5": 0,
+    "6": 0,
     "7": 14.21,
     "8": 2.848
    }
@@ -2024,22 +2024,22 @@
    "id": 82,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "gouda",
-     "plural": "gouda"
-    },
     "de": {
      "name": "Gouda",
      "plural": "Gouda"
+    },
+    "en": {
+     "name": "gouda",
+     "plural": "gouda"
     }
    },
    "nutrients": {
-    "1": 356.0,
+    "1": 356,
     "2": 27.44,
     "3": 17.614,
     "4": 2.22,
     "5": 2.22,
-    "6": 0.0,
+    "6": 0,
     "7": 24.94,
     "8": 2.047
    }
@@ -2049,22 +2049,22 @@
    "id": 83,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "ricotta",
-     "plural": "ricotta"
-    },
     "de": {
      "name": "Ricotta",
      "plural": "Ricotta"
+    },
+    "en": {
+     "name": "ricotta",
+     "plural": "ricotta"
     }
    },
    "nutrients": {
-    "1": 150.0,
+    "1": 150,
     "2": 10.18,
     "3": 6.42,
     "4": 7.27,
     "5": 0.27,
-    "6": 0.0,
+    "6": 0,
     "7": 7.54,
     "8": 0.275
    }
@@ -2074,17 +2074,17 @@
    "id": 84,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "all-purpose flour",
-     "plural": "flour"
-    },
     "de": {
      "name": "Mehl",
      "plural": "Mehl"
+    },
+    "en": {
+     "name": "all-purpose flour",
+     "plural": "flour"
     }
    },
    "nutrients": {
-    "1": 364.0,
+    "1": 364,
     "2": 0.98,
     "3": 0.155,
     "4": 76.31,
@@ -2099,17 +2099,17 @@
    "id": 85,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "whole wheat flour",
-     "plural": "flour"
-    },
     "de": {
      "name": "Vollkornmehl",
      "plural": "Vollkornmehl"
+    },
+    "en": {
+     "name": "whole wheat flour",
+     "plural": "flour"
     }
    },
    "nutrients": {
-    "1": 340.0,
+    "1": 340,
     "2": 2.5,
     "3": 0.43,
     "4": 71.97,
@@ -2124,13 +2124,13 @@
    "id": 86,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "bread crumbs",
-     "plural": "bread crumbs"
-    },
     "de": {
      "name": "Paniermehl",
      "plural": "Paniermehl"
+    },
+    "en": {
+     "name": "bread crumbs",
+     "plural": "bread crumbs"
     }
    }
   },
@@ -2139,17 +2139,17 @@
    "id": 87,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "rice",
-     "plural": "rice"
-    },
     "de": {
      "name": "Reis",
      "plural": "Reis"
+    },
+    "en": {
+     "name": "rice",
+     "plural": "rice"
     }
    },
    "nutrients": {
-    "1": 365.0,
+    "1": 365,
     "2": 0.66,
     "3": 0.18,
     "4": 79.95,
@@ -2164,17 +2164,17 @@
    "id": 88,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "pasta",
-     "plural": "pasta"
-    },
     "de": {
      "name": "Pasta",
      "plural": "Pasta"
+    },
+    "en": {
+     "name": "pasta",
+     "plural": "pasta"
     }
    },
    "nutrients": {
-    "1": 371.0,
+    "1": 371,
     "2": 1.51,
     "3": 0.277,
     "4": 74.67,
@@ -2189,17 +2189,17 @@
    "id": 89,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "spaghetti",
-     "plural": "spaghetti"
-    },
     "de": {
      "name": "Spaghetti",
      "plural": "Spaghetti"
+    },
+    "en": {
+     "name": "spaghetti",
+     "plural": "spaghetti"
     }
    },
    "nutrients": {
-    "1": 371.0,
+    "1": 371,
     "2": 1.51,
     "3": 0.277,
     "4": 74.67,
@@ -2214,17 +2214,17 @@
    "id": 90,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "penne",
-     "plural": "penne"
-    },
     "de": {
      "name": "Penne",
      "plural": "Penne"
+    },
+    "en": {
+     "name": "penne",
+     "plural": "penne"
     }
    },
    "nutrients": {
-    "1": 371.0,
+    "1": 371,
     "2": 1.51,
     "3": 0.277,
     "4": 74.67,
@@ -2239,17 +2239,17 @@
    "id": 91,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "fettuccine",
-     "plural": "fettuccine"
-    },
     "de": {
      "name": "Fettuccine",
      "plural": "Fettuccine"
+    },
+    "en": {
+     "name": "fettuccine",
+     "plural": "fettuccine"
     }
    },
    "nutrients": {
-    "1": 371.0,
+    "1": 371,
     "2": 1.51,
     "3": 0.277,
     "4": 74.67,
@@ -2264,17 +2264,17 @@
    "id": 92,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "lasagna sheets",
-     "plural": "lasagna sheets"
-    },
     "de": {
      "name": "Lasagneblätter",
      "plural": "Lasagneblätter"
+    },
+    "en": {
+     "name": "lasagna sheets",
+     "plural": "lasagna sheets"
     }
    },
    "nutrients": {
-    "1": 371.0,
+    "1": 371,
     "2": 1.51,
     "3": 0.277,
     "4": 74.67,
@@ -2289,17 +2289,17 @@
    "id": 93,
    "default_unit": "unit.slice",
    "names": {
-    "en": {
-     "name": "bread",
-     "plural": "breads"
-    },
     "de": {
      "name": "Brot",
      "plural": "Brote"
+    },
+    "en": {
+     "name": "bread",
+     "plural": "breads"
     }
    },
    "nutrients": {
-    "1": 266.0,
+    "1": 266,
     "2": 3.33,
     "3": 0.698,
     "4": 49.42,
@@ -2314,17 +2314,17 @@
    "id": 94,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "oats",
-     "plural": "oats"
-    },
     "de": {
      "name": "Haferflocken",
      "plural": "Haferflocken"
+    },
+    "en": {
+     "name": "oats",
+     "plural": "oats"
     }
    },
    "nutrients": {
-    "1": 389.0,
+    "1": 389,
     "2": 6.9,
     "3": 1.217,
     "4": 66.27,
@@ -2338,21 +2338,21 @@
    "id": 95,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "quinoa",
-     "plural": "quinoa"
-    },
     "de": {
      "name": "Quinoa",
      "plural": "Quinoa"
+    },
+    "en": {
+     "name": "quinoa",
+     "plural": "quinoa"
     }
    },
    "nutrients": {
-    "1": 368.0,
+    "1": 368,
     "2": 6.07,
     "3": 0.706,
     "4": 64.16,
-    "6": 7.0,
+    "6": 7,
     "7": 14.12,
     "8": 0.013
    }
@@ -2362,21 +2362,21 @@
    "id": 96,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "couscous",
-     "plural": "couscous"
-    },
     "de": {
      "name": "Couscous",
      "plural": "Couscous"
+    },
+    "en": {
+     "name": "couscous",
+     "plural": "couscous"
     }
    },
    "nutrients": {
-    "1": 376.0,
+    "1": 376,
     "2": 0.64,
     "3": 0.117,
     "4": 77.43,
-    "6": 5.0,
+    "6": 5,
     "7": 12.76,
     "8": 0.025
    }
@@ -2386,21 +2386,21 @@
    "id": 97,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "cornstarch",
-     "plural": "cornstarch"
-    },
     "de": {
      "name": "Speisestärke",
      "plural": "Speisestärke"
+    },
+    "en": {
+     "name": "cornstarch",
+     "plural": "cornstarch"
     }
    },
    "nutrients": {
-    "1": 381.0,
+    "1": 381,
     "2": 0.05,
     "3": 0.009,
     "4": 91.27,
-    "5": 0.0,
+    "5": 0,
     "6": 0.9,
     "7": 0.26,
     "8": 0.022
@@ -2411,17 +2411,17 @@
    "id": 98,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "semolina",
-     "plural": "semolina"
-    },
     "de": {
      "name": "Grieß",
      "plural": "Grieß"
+    },
+    "en": {
+     "name": "semolina",
+     "plural": "semolina"
     }
    },
    "nutrients": {
-    "1": 360.0,
+    "1": 360,
     "2": 1.05,
     "3": 0.15,
     "4": 72.83,
@@ -2435,13 +2435,13 @@
    "id": 99,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "breadcrumbs",
-     "plural": "breadcrumbs"
-    },
     "de": {
      "name": "Semmelbrösel",
      "plural": "Semmelbrösel"
+    },
+    "en": {
+     "name": "breadcrumbs",
+     "plural": "breadcrumbs"
     }
    }
   },
@@ -2450,23 +2450,23 @@
    "id": 100,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "salt",
-     "plural": "salt"
-    },
     "de": {
      "name": "Salz",
      "plural": "Salz"
+    },
+    "en": {
+     "name": "salt",
+     "plural": "salt"
     }
    },
    "nutrients": {
-    "1": 0.0,
-    "2": 0.0,
-    "3": 0.0,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8": 96.895
    }
   },
@@ -2475,17 +2475,17 @@
    "id": 101,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "black pepper",
-     "plural": "black pepper"
-    },
     "de": {
      "name": "Schwarzer Pfeffer",
      "plural": "Schwarzer Pfeffer"
+    },
+    "en": {
+     "name": "black pepper",
+     "plural": "black pepper"
     }
    },
    "nutrients": {
-    "1": 251.0,
+    "1": 251,
     "2": 3.26,
     "3": 1.392,
     "4": 63.95,
@@ -2500,17 +2500,17 @@
    "id": 102,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "paprika powder",
-     "plural": "paprika powder"
-    },
     "de": {
      "name": "Paprikapulver",
      "plural": "Paprikapulver"
+    },
+    "en": {
+     "name": "paprika powder",
+     "plural": "paprika powder"
     }
    },
    "nutrients": {
-    "1": 282.0,
+    "1": 282,
     "2": 12.89,
     "3": 2.14,
     "4": 53.99,
@@ -2525,17 +2525,17 @@
    "id": 103,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "cumin",
-     "plural": "cumin"
-    },
     "de": {
      "name": "Kreuzkümmel",
      "plural": "Kreuzkümmel"
+    },
+    "en": {
+     "name": "cumin",
+     "plural": "cumin"
     }
    },
    "nutrients": {
-    "1": 375.0,
+    "1": 375,
     "2": 22.27,
     "3": 1.535,
     "4": 44.24,
@@ -2550,17 +2550,17 @@
    "id": 104,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "coriander",
-     "plural": "coriander"
-    },
     "de": {
      "name": "Koriander",
      "plural": "Koriander"
+    },
+    "en": {
+     "name": "coriander",
+     "plural": "coriander"
     }
    },
    "nutrients": {
-    "1": 298.0,
+    "1": 298,
     "2": 17.77,
     "3": 0.99,
     "4": 54.99,
@@ -2574,17 +2574,17 @@
    "id": 105,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "turmeric",
-     "plural": "turmeric"
-    },
     "de": {
      "name": "Kurkuma",
      "plural": "Kurkuma"
+    },
+    "en": {
+     "name": "turmeric",
+     "plural": "turmeric"
     }
    },
    "nutrients": {
-    "1": 312.0,
+    "1": 312,
     "2": 3.25,
     "3": 1.838,
     "4": 67.14,
@@ -2599,17 +2599,17 @@
    "id": 106,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "cinnamon",
-     "plural": "cinnamon"
-    },
     "de": {
      "name": "Zimt",
      "plural": "Zimt"
+    },
+    "en": {
+     "name": "cinnamon",
+     "plural": "cinnamon"
     }
    },
    "nutrients": {
-    "1": 247.0,
+    "1": 247,
     "2": 1.24,
     "3": 0.345,
     "4": 80.59,
@@ -2624,23 +2624,23 @@
    "id": 107,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "oregano",
-     "plural": "oregano"
-    },
     "de": {
      "name": "Oregano",
      "plural": "Oregano"
+    },
+    "en": {
+     "name": "oregano",
+     "plural": "oregano"
     }
    },
    "nutrients": {
-    "1": 265.0,
+    "1": 265,
     "2": 4.28,
     "3": 1.551,
     "4": 68.92,
     "5": 4.09,
     "6": 42.5,
-    "7": 9.0,
+    "7": 9,
     "8": 0.062
    }
   },
@@ -2649,17 +2649,17 @@
    "id": 108,
    "default_unit": "unit.bunch",
    "names": {
-    "en": {
-     "name": "basil",
-     "plural": "basil"
-    },
     "de": {
      "name": "Basilikum",
      "plural": "Basilikum"
+    },
+    "en": {
+     "name": "basil",
+     "plural": "basil"
     }
    },
    "nutrients": {
-    "1": 233.0,
+    "1": 233,
     "2": 4.07,
     "3": 2.157,
     "4": 47.75,
@@ -2674,22 +2674,22 @@
    "id": 109,
    "default_unit": "unit.sprig",
    "names": {
-    "en": {
-     "name": "thyme",
-     "plural": "thyme"
-    },
     "de": {
      "name": "Thymian",
      "plural": "Thymian"
+    },
+    "en": {
+     "name": "thyme",
+     "plural": "thyme"
     }
    },
    "nutrients": {
-    "1": 276.0,
+    "1": 276,
     "2": 7.43,
     "3": 2.73,
     "4": 63.94,
     "5": 1.71,
-    "6": 37.0,
+    "6": 37,
     "7": 9.11,
     "8": 0.138
    }
@@ -2699,17 +2699,17 @@
    "id": 110,
    "default_unit": "unit.sprig",
    "names": {
-    "en": {
-     "name": "rosemary",
-     "plural": "rosemary"
-    },
     "de": {
      "name": "Rosmarin",
      "plural": "Rosmarin"
+    },
+    "en": {
+     "name": "rosemary",
+     "plural": "rosemary"
     }
    },
    "nutrients": {
-    "1": 331.0,
+    "1": 331,
     "2": 15.22,
     "3": 7.371,
     "4": 64.06,
@@ -2723,17 +2723,17 @@
    "id": 111,
    "default_unit": "unit.piece",
    "names": {
-    "en": {
-     "name": "bay leaf",
-     "plural": "bay leaves"
-    },
     "de": {
      "name": "Lorbeerblatt",
      "plural": "Lorbeerblätter"
+    },
+    "en": {
+     "name": "bay leaf",
+     "plural": "bay leaves"
     }
    },
    "nutrients": {
-    "1": 313.0,
+    "1": 313,
     "2": 8.36,
     "3": 2.28,
     "4": 74.97,
@@ -2747,17 +2747,17 @@
    "id": 112,
    "default_unit": "unit.bunch",
    "names": {
-    "en": {
-     "name": "parsley",
-     "plural": "parsley"
-    },
     "de": {
      "name": "Petersilie",
      "plural": "Petersilie"
+    },
+    "en": {
+     "name": "parsley",
+     "plural": "parsley"
     }
    },
    "nutrients": {
-    "1": 36.0,
+    "1": 36,
     "2": 0.79,
     "3": 0.132,
     "4": 6.33,
@@ -2772,17 +2772,17 @@
    "id": 113,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "chili flakes",
-     "plural": "chili flakes"
-    },
     "de": {
      "name": "Chiliflocken",
      "plural": "Chiliflocken"
+    },
+    "en": {
+     "name": "chili flakes",
+     "plural": "chili flakes"
     }
    },
    "nutrients": {
-    "1": 318.0,
+    "1": 318,
     "2": 17.27,
     "3": 3.26,
     "4": 56.63,
@@ -2797,22 +2797,22 @@
    "id": 114,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "garlic powder",
-     "plural": "garlic powder"
-    },
     "de": {
      "name": "Knoblauchpulver",
      "plural": "Knoblauchpulver"
+    },
+    "en": {
+     "name": "garlic powder",
+     "plural": "garlic powder"
     }
    },
    "nutrients": {
-    "1": 331.0,
+    "1": 331,
     "2": 0.73,
     "3": 0.249,
     "4": 72.73,
     "5": 2.43,
-    "6": 9.0,
+    "6": 9,
     "7": 16.55,
     "8": 0.15
    }
@@ -2822,17 +2822,17 @@
    "id": 115,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "onion powder",
-     "plural": "onion powder"
-    },
     "de": {
      "name": "Zwiebelpulver",
      "plural": "Zwiebelpulver"
+    },
+    "en": {
+     "name": "onion powder",
+     "plural": "onion powder"
     }
    },
    "nutrients": {
-    "1": 341.0,
+    "1": 341,
     "2": 1.04,
     "3": 0.219,
     "4": 79.12,
@@ -2847,22 +2847,22 @@
    "id": 116,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "ginger",
-     "plural": "ginger"
-    },
     "de": {
      "name": "Ingwer",
      "plural": "Ingwer"
+    },
+    "en": {
+     "name": "ginger",
+     "plural": "ginger"
     }
    },
    "nutrients": {
-    "1": 80.0,
+    "1": 80,
     "2": 0.75,
     "3": 0.203,
     "4": 17.77,
     "5": 1.7,
-    "6": 2.0,
+    "6": 2,
     "7": 1.82,
     "8": 0.033
    }
@@ -2872,17 +2872,17 @@
    "id": 117,
    "default_unit": "unit.pinch",
    "names": {
-    "en": {
-     "name": "nutmeg",
-     "plural": "nutmeg"
-    },
     "de": {
      "name": "Muskatnuss",
      "plural": "Muskatnuss"
+    },
+    "en": {
+     "name": "nutmeg",
+     "plural": "nutmeg"
     }
    },
    "nutrients": {
-    "1": 525.0,
+    "1": 525,
     "2": 36.31,
     "3": 25.94,
     "4": 49.29,
@@ -2897,21 +2897,21 @@
    "id": 118,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "cardamom",
-     "plural": "cardamom"
-    },
     "de": {
      "name": "Kardamom",
      "plural": "Kardamom"
+    },
+    "en": {
+     "name": "cardamom",
+     "plural": "cardamom"
     }
    },
    "nutrients": {
-    "1": 311.0,
+    "1": 311,
     "2": 6.7,
     "3": 0.68,
     "4": 68.47,
-    "6": 28.0,
+    "6": 28,
     "7": 10.76,
     "8": 0.045
    }
@@ -2921,17 +2921,17 @@
    "id": 119,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "chili powder",
-     "plural": "chili powder"
-    },
     "de": {
      "name": "Chilipulver",
      "plural": "Chilipulver"
+    },
+    "en": {
+     "name": "chili powder",
+     "plural": "chili powder"
     }
    },
    "nutrients": {
-    "1": 282.0,
+    "1": 282,
     "2": 14.28,
     "3": 2.462,
     "4": 49.7,
@@ -2946,17 +2946,17 @@
    "id": 120,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "curry powder",
-     "plural": "curry powder"
-    },
     "de": {
      "name": "Currypulver",
      "plural": "Currypulver"
+    },
+    "en": {
+     "name": "curry powder",
+     "plural": "curry powder"
     }
    },
    "nutrients": {
-    "1": 325.0,
+    "1": 325,
     "2": 14.01,
     "3": 1.648,
     "4": 55.83,
@@ -2971,17 +2971,17 @@
    "id": 121,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "smoked paprika",
-     "plural": "smoked paprika"
-    },
     "de": {
      "name": "Geräuchertes Paprika",
      "plural": "Geräuchertes Paprika"
+    },
+    "en": {
+     "name": "smoked paprika",
+     "plural": "smoked paprika"
     }
    },
    "nutrients": {
-    "1": 282.0,
+    "1": 282,
     "2": 12.89,
     "3": 2.14,
     "4": 53.99,
@@ -2996,17 +2996,17 @@
    "id": 122,
    "default_unit": "unit.bunch",
    "names": {
-    "en": {
-     "name": "dill",
-     "plural": "dill"
-    },
     "de": {
      "name": "Dill",
      "plural": "Dill"
+    },
+    "en": {
+     "name": "dill",
+     "plural": "dill"
     }
    },
    "nutrients": {
-    "1": 43.0,
+    "1": 43,
     "2": 1.12,
     "3": 0.06,
     "4": 7.02,
@@ -3020,17 +3020,17 @@
    "id": 123,
    "default_unit": "unit.bunch",
    "names": {
-    "en": {
-     "name": "mint",
-     "plural": "mint"
-    },
     "de": {
      "name": "Minze",
      "plural": "Minze"
+    },
+    "en": {
+     "name": "mint",
+     "plural": "mint"
     }
    },
    "nutrients": {
-    "1": 44.0,
+    "1": 44,
     "2": 0.73,
     "3": 0.191,
     "4": 8.41,
@@ -3044,17 +3044,17 @@
    "id": 124,
    "default_unit": "unit.sprig",
    "names": {
-    "en": {
-     "name": "sage",
-     "plural": "sage"
-    },
     "de": {
      "name": "Salbei",
      "plural": "Salbei"
+    },
+    "en": {
+     "name": "sage",
+     "plural": "sage"
     }
    },
    "nutrients": {
-    "1": 315.0,
+    "1": 315,
     "2": 12.75,
     "3": 7.03,
     "4": 60.73,
@@ -3069,17 +3069,17 @@
    "id": 125,
    "default_unit": "unit.bunch",
    "names": {
-    "en": {
-     "name": "chives",
-     "plural": "chives"
-    },
     "de": {
      "name": "Schnittlauch",
      "plural": "Schnittlauch"
+    },
+    "en": {
+     "name": "chives",
+     "plural": "chives"
     }
    },
    "nutrients": {
-    "1": 30.0,
+    "1": 30,
     "2": 0.73,
     "3": 0.146,
     "4": 4.35,
@@ -3094,23 +3094,23 @@
    "id": 126,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "olive oil",
-     "plural": "olive oil"
-    },
     "de": {
      "name": "Olivenöl",
      "plural": "Olivenöl"
+    },
+    "en": {
+     "name": "olive oil",
+     "plural": "olive oil"
     }
    },
    "nutrients": {
-    "1": 884.0,
-    "2": 100.0,
+    "1": 884,
+    "2": 100,
     "3": 13.808,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8": 0.005
    }
   },
@@ -3119,24 +3119,24 @@
    "id": 127,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "vegetable oil",
-     "plural": "vegetable oil"
-    },
     "de": {
      "name": "Pflanzenöl",
      "plural": "Pflanzenöl"
+    },
+    "en": {
+     "name": "vegetable oil",
+     "plural": "vegetable oil"
     }
    },
    "nutrients": {
-    "1": 884.0,
-    "2": 100.0,
+    "1": 884,
+    "2": 100,
     "3": 7.365,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
-    "8": 0.0
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0
    }
   },
   {
@@ -3144,24 +3144,24 @@
    "id": 128,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "sesame oil",
-     "plural": "sesame oil"
-    },
     "de": {
      "name": "Sesamöl",
      "plural": "Sesamöl"
+    },
+    "en": {
+     "name": "sesame oil",
+     "plural": "sesame oil"
     }
    },
    "nutrients": {
-    "1": 884.0,
-    "2": 100.0,
+    "1": 884,
+    "2": 100,
     "3": 14.2,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
-    "8": 0.0
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0
    }
   },
   {
@@ -3169,17 +3169,17 @@
    "id": 129,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "soy sauce",
-     "plural": "soy sauce"
-    },
     "de": {
      "name": "Sojasoße",
      "plural": "Sojasoße"
+    },
+    "en": {
+     "name": "soy sauce",
+     "plural": "soy sauce"
     }
    },
    "nutrients": {
-    "1": 53.0,
+    "1": 53,
     "2": 0.57,
     "3": 0.073,
     "4": 4.93,
@@ -3194,22 +3194,22 @@
    "id": 130,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "fish sauce",
-     "plural": "fish sauce"
-    },
     "de": {
      "name": "Fischsoße",
      "plural": "Fischsoße"
+    },
+    "en": {
+     "name": "fish sauce",
+     "plural": "fish sauce"
     }
    },
    "nutrients": {
-    "1": 35.0,
+    "1": 35,
     "2": 0.01,
     "3": 0.003,
     "4": 3.64,
     "5": 3.64,
-    "6": 0.0,
+    "6": 0,
     "7": 5.06,
     "8": 19.628
    }
@@ -3219,23 +3219,23 @@
    "id": 131,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "Worcestershire sauce",
-     "plural": "Worcestershire sauce"
-    },
     "de": {
      "name": "Worcestershiresoße",
      "plural": "Worcestershiresoße"
+    },
+    "en": {
+     "name": "Worcestershire sauce",
+     "plural": "Worcestershire sauce"
     }
    },
    "nutrients": {
-    "1": 77.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 77,
+    "2": 0,
+    "3": 0,
     "4": 19.17,
     "5": 10.03,
-    "6": 0.0,
-    "7": 0.0,
+    "6": 0,
+    "7": 0,
     "8": 3.25
    }
   },
@@ -3244,17 +3244,17 @@
    "id": 132,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "hot sauce",
-     "plural": "hot sauce"
-    },
     "de": {
      "name": "Soße",
      "plural": "scharfe Soße"
+    },
+    "en": {
+     "name": "hot sauce",
+     "plural": "hot sauce"
     }
    },
    "nutrients": {
-    "1": 11.0,
+    "1": 11,
     "2": 0.37,
     "3": 0.052,
     "4": 1.75,
@@ -3269,23 +3269,23 @@
    "id": 133,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "white wine vinegar",
-     "plural": "white wine vinegar"
-    },
     "de": {
      "name": "Weißweinessig",
      "plural": "Weißweinessig"
+    },
+    "en": {
+     "name": "white wine vinegar",
+     "plural": "white wine vinegar"
     }
    },
    "nutrients": {
-    "1": 18.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 18,
+    "2": 0,
+    "3": 0,
     "4": 0.04,
     "5": 0.04,
-    "6": 0.0,
-    "7": 0.0,
+    "6": 0,
+    "7": 0,
     "8": 0.005
    }
   },
@@ -3294,23 +3294,23 @@
    "id": 134,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "apple cider vinegar",
-     "plural": "apple cider vinegar"
-    },
     "de": {
      "name": "Apfelessig",
      "plural": "Apfelessig"
+    },
+    "en": {
+     "name": "apple cider vinegar",
+     "plural": "apple cider vinegar"
     }
    },
    "nutrients": {
-    "1": 21.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 21,
+    "2": 0,
+    "3": 0,
     "4": 0.93,
     "5": 0.4,
-    "6": 0.0,
-    "7": 0.0,
+    "6": 0,
+    "7": 0,
     "8": 0.013
    }
   },
@@ -3319,19 +3319,19 @@
    "id": 135,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "balsamic vinegar",
-     "plural": "balsamic vinegar"
-    },
     "de": {
      "name": "Balsamicoessig",
      "plural": "Balsamicoessig"
+    },
+    "en": {
+     "name": "balsamic vinegar",
+     "plural": "balsamic vinegar"
     }
    },
    "nutrients": {
-    "1": 88.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 88,
+    "2": 0,
+    "3": 0,
     "4": 17.03,
     "5": 14.95,
     "7": 0.49,
@@ -3343,19 +3343,19 @@
    "id": 136,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "honey",
-     "plural": "honey"
-    },
     "de": {
      "name": "Honig",
      "plural": "Honig"
+    },
+    "en": {
+     "name": "honey",
+     "plural": "honey"
     }
    },
    "nutrients": {
-    "1": 304.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 304,
+    "2": 0,
+    "3": 0,
     "4": 82.4,
     "5": 82.12,
     "6": 0.2,
@@ -3368,22 +3368,22 @@
    "id": 137,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "maple syrup",
-     "plural": "maple syrup"
-    },
     "de": {
      "name": "Ahornsirup",
      "plural": "Ahornsirup"
+    },
+    "en": {
+     "name": "maple syrup",
+     "plural": "maple syrup"
     }
    },
    "nutrients": {
-    "1": 260.0,
+    "1": 260,
     "2": 0.06,
     "3": 0.007,
     "4": 67.04,
     "5": 60.46,
-    "6": 0.0,
+    "6": 0,
     "7": 0.04,
     "8": 0.03
    }
@@ -3393,17 +3393,17 @@
    "id": 138,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "tomato paste",
-     "plural": "tomato paste"
-    },
     "de": {
      "name": "Tomatenmark",
      "plural": "Tomatenmark"
+    },
+    "en": {
+     "name": "tomato paste",
+     "plural": "tomato paste"
     }
    },
    "nutrients": {
-    "1": 82.0,
+    "1": 82,
     "2": 0.47,
     "3": 0.1,
     "4": 18.91,
@@ -3418,17 +3418,17 @@
    "id": 139,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "coconut milk",
-     "plural": "coconut milk"
-    },
     "de": {
      "name": "Kokosmilch",
      "plural": "Kokosmilch"
+    },
+    "en": {
+     "name": "coconut milk",
+     "plural": "coconut milk"
     }
    },
    "nutrients": {
-    "1": 230.0,
+    "1": 230,
     "2": 23.84,
     "3": 21.14,
     "4": 5.54,
@@ -3443,22 +3443,22 @@
    "id": 140,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "vegetable broth",
-     "plural": "vegetable broth"
-    },
     "de": {
      "name": "Gemüsebrühe",
      "plural": "Gemüsebrühe"
+    },
+    "en": {
+     "name": "vegetable broth",
+     "plural": "vegetable broth"
     }
    },
    "nutrients": {
-    "1": 5.0,
+    "1": 5,
     "2": 0.07,
     "3": 0.028,
     "4": 0.93,
     "5": 0.55,
-    "6": 0.0,
+    "6": 0,
     "7": 0.24,
     "8": 0.74
    }
@@ -3468,22 +3468,22 @@
    "id": 141,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "chicken broth",
-     "plural": "chicken broth"
-    },
     "de": {
      "name": "Hühnerbrühe",
      "plural": "Hühnerbrühe"
+    },
+    "en": {
+     "name": "chicken broth",
+     "plural": "chicken broth"
     }
    },
    "nutrients": {
-    "1": 6.0,
+    "1": 6,
     "2": 0.21,
     "3": 0.013,
     "4": 0.44,
     "5": 0.43,
-    "6": 0.0,
+    "6": 0,
     "7": 0.64,
     "8": 0.927
    }
@@ -3493,22 +3493,22 @@
    "id": 142,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "beef broth",
-     "plural": "beef broth"
-    },
     "de": {
      "name": "Rinderbrühe",
      "plural": "Rinderbrühe"
+    },
+    "en": {
+     "name": "beef broth",
+     "plural": "beef broth"
     }
    },
    "nutrients": {
-    "1": 3.0,
+    "1": 3,
     "2": 0.08,
     "3": 0.04,
     "4": 0.25,
     "5": 0.2,
-    "6": 0.0,
+    "6": 0,
     "7": 0.21,
     "8": 0.65
    }
@@ -3518,22 +3518,22 @@
    "id": 143,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "white wine",
-     "plural": "white wine"
-    },
     "de": {
      "name": "Weißwein",
      "plural": "Weißwein"
+    },
+    "en": {
+     "name": "white wine",
+     "plural": "white wine"
     }
    },
    "nutrients": {
-    "1": 82.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 82,
+    "2": 0,
+    "3": 0,
     "4": 2.6,
     "5": 0.96,
-    "6": 0.0,
+    "6": 0,
     "7": 0.07,
     "8": 0.013
    }
@@ -3543,22 +3543,22 @@
    "id": 144,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "red wine",
-     "plural": "red wine"
-    },
     "de": {
      "name": "Rotwein",
      "plural": "Rotwein"
+    },
+    "en": {
+     "name": "red wine",
+     "plural": "red wine"
     }
    },
    "nutrients": {
-    "1": 85.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 85,
+    "2": 0,
+    "3": 0,
     "4": 2.61,
     "5": 0.62,
-    "6": 0.0,
+    "6": 0,
     "7": 0.07,
     "8": 0.01
    }
@@ -3568,17 +3568,17 @@
    "id": 145,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "lemon juice",
-     "plural": "lemon juice"
-    },
     "de": {
      "name": "Zitronensaft",
      "plural": "Zitronensaft"
+    },
+    "en": {
+     "name": "lemon juice",
+     "plural": "lemon juice"
     }
    },
    "nutrients": {
-    "1": 22.0,
+    "1": 22,
     "2": 0.24,
     "3": 0.04,
     "4": 6.9,
@@ -3593,17 +3593,17 @@
    "id": 146,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "lime juice",
-     "plural": "lime juice"
-    },
     "de": {
      "name": "Limettensaft",
      "plural": "Limettensaft"
+    },
+    "en": {
+     "name": "lime juice",
+     "plural": "lime juice"
     }
    },
    "nutrients": {
-    "1": 25.0,
+    "1": 25,
     "2": 0.07,
     "3": 0.008,
     "4": 8.42,
@@ -3618,23 +3618,23 @@
    "id": 147,
    "default_unit": "unit.milliliter",
    "names": {
-    "en": {
-     "name": "water",
-     "plural": "water"
-    },
     "de": {
      "name": "Wasser",
      "plural": "Wasser"
+    },
+    "en": {
+     "name": "water",
+     "plural": "water"
     }
    },
    "nutrients": {
-    "1": 0.0,
-    "2": 0.0,
-    "3": 0.0,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8": 0.01
    }
   },
@@ -3643,23 +3643,23 @@
    "id": 148,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "sugar",
-     "plural": "sugar"
-    },
     "de": {
      "name": "Zucker",
      "plural": "Zucker"
+    },
+    "en": {
+     "name": "sugar",
+     "plural": "sugar"
     }
    },
    "nutrients": {
-    "1": 387.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 387,
+    "2": 0,
+    "3": 0,
     "4": 99.98,
     "5": 99.8,
-    "6": 0.0,
-    "7": 0.0,
+    "6": 0,
+    "7": 0,
     "8": 0.003
    }
   },
@@ -3668,22 +3668,22 @@
    "id": 149,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "brown sugar",
-     "plural": "brown sugar"
-    },
     "de": {
      "name": "Brauner Zucker",
      "plural": "Brauner Zucker"
+    },
+    "en": {
+     "name": "brown sugar",
+     "plural": "brown sugar"
     }
    },
    "nutrients": {
-    "1": 380.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 380,
+    "2": 0,
+    "3": 0,
     "4": 98.09,
     "5": 97.02,
-    "6": 0.0,
+    "6": 0,
     "7": 0.12,
     "8": 0.07
    }
@@ -3693,23 +3693,23 @@
    "id": 150,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "powdered sugar",
-     "plural": "powdered sugar"
-    },
     "de": {
      "name": "Puderzucker",
      "plural": "Puderzucker"
+    },
+    "en": {
+     "name": "powdered sugar",
+     "plural": "powdered sugar"
     }
    },
    "nutrients": {
-    "1": 389.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 389,
+    "2": 0,
+    "3": 0,
     "4": 99.77,
     "5": 97.81,
-    "6": 0.0,
-    "7": 0.0,
+    "6": 0,
+    "7": 0,
     "8": 0.005
    }
   },
@@ -3718,23 +3718,23 @@
    "id": 151,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "baking powder",
-     "plural": "baking powder"
-    },
     "de": {
      "name": "Backpulver",
      "plural": "Backpulver"
+    },
+    "en": {
+     "name": "baking powder",
+     "plural": "baking powder"
     }
    },
    "nutrients": {
-    "1": 53.0,
-    "2": 0.0,
-    "3": 0.0,
+    "1": 53,
+    "2": 0,
+    "3": 0,
     "4": 27.7,
-    "5": 0.0,
+    "5": 0,
     "6": 0.2,
-    "7": 0.0,
+    "7": 0,
     "8": 26.5
    }
   },
@@ -3743,23 +3743,23 @@
    "id": 152,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "baking soda",
-     "plural": "baking soda"
-    },
     "de": {
      "name": "Natron",
      "plural": "Natron"
+    },
+    "en": {
+     "name": "baking soda",
+     "plural": "baking soda"
     }
    },
    "nutrients": {
-    "1": 0.0,
-    "2": 0.0,
-    "3": 0.0,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
-    "7": 0.0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8": 68.4
    }
   },
@@ -3768,22 +3768,22 @@
    "id": 153,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "cocoa powder",
-     "plural": "cocoa powder"
-    },
     "de": {
      "name": "Kakaopulver",
      "plural": "Kakaopulver"
+    },
+    "en": {
+     "name": "cocoa powder",
+     "plural": "cocoa powder"
     }
    },
    "nutrients": {
-    "1": 228.0,
+    "1": 228,
     "2": 13.7,
     "3": 8.07,
     "4": 57.9,
     "5": 1.75,
-    "6": 37.0,
+    "6": 37,
     "7": 19.6,
     "8": 0.052
    }
@@ -3793,17 +3793,17 @@
    "id": 154,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "dark chocolate",
-     "plural": "dark chocolate"
-    },
     "de": {
      "name": "Zartbitterschokolade",
      "plural": "Zartbitterschokolade"
+    },
+    "en": {
+     "name": "dark chocolate",
+     "plural": "dark chocolate"
     }
    },
    "nutrients": {
-    "1": 598.0,
+    "1": 598,
     "2": 42.63,
     "3": 24.489,
     "4": 45.9,
@@ -3818,17 +3818,17 @@
    "id": 155,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "milk chocolate",
-     "plural": "milk chocolate"
-    },
     "de": {
      "name": "Vollmilchschokolade",
      "plural": "Vollmilchschokolade"
+    },
+    "en": {
+     "name": "milk chocolate",
+     "plural": "milk chocolate"
     }
    },
    "nutrients": {
-    "1": 535.0,
+    "1": 535,
     "2": 29.66,
     "3": 18.509,
     "4": 59.4,
@@ -3843,22 +3843,22 @@
    "id": 156,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "vanilla extract",
-     "plural": "vanilla extract"
-    },
     "de": {
      "name": "Vanilleextrakt",
      "plural": "Vanilleextrakt"
+    },
+    "en": {
+     "name": "vanilla extract",
+     "plural": "vanilla extract"
     }
    },
    "nutrients": {
-    "1": 288.0,
+    "1": 288,
     "2": 0.06,
     "3": 0.01,
     "4": 12.65,
     "5": 12.65,
-    "6": 0.0,
+    "6": 0,
     "7": 0.06,
     "8": 0.022
    }
@@ -3868,21 +3868,21 @@
    "id": 157,
    "default_unit": "unit.teaspoon",
    "names": {
-    "en": {
-     "name": "dry yeast",
-     "plural": "dry yeast"
-    },
     "de": {
      "name": "Trockenhefe",
      "plural": "Trockenhefe"
+    },
+    "en": {
+     "name": "dry yeast",
+     "plural": "dry yeast"
     }
    },
    "nutrients": {
-    "1": 325.0,
+    "1": 325,
     "2": 7.61,
     "3": 1.001,
     "4": 41.22,
-    "5": 0.0,
+    "5": 0,
     "6": 26.9,
     "7": 40.44,
     "8": 0.128
@@ -3893,17 +3893,17 @@
    "id": 158,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "almond flour",
-     "plural": "almond flour"
-    },
     "de": {
      "name": "Mandelmehl",
      "plural": "Mandelmehl"
+    },
+    "en": {
+     "name": "almond flour",
+     "plural": "almond flour"
     }
    },
    "nutrients": {
-    "1": 590.0,
+    "1": 590,
     "2": 52.52,
     "3": 3.953,
     "4": 18.67,
@@ -3918,22 +3918,22 @@
    "id": 159,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "peanut butter",
-     "plural": "peanut butter"
-    },
     "de": {
      "name": "Erdnussbutter",
      "plural": "Erdnussbutter"
+    },
+    "en": {
+     "name": "peanut butter",
+     "plural": "peanut butter"
     }
    },
    "nutrients": {
-    "1": 598.0,
+    "1": 598,
     "2": 51.36,
     "3": 10.325,
     "4": 22.31,
     "5": 10.49,
-    "6": 5.0,
+    "6": 5,
     "7": 22.21,
     "8": 0.043
    }
@@ -3943,17 +3943,17 @@
    "id": 160,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "almond butter",
-     "plural": "almond butter"
-    },
     "de": {
      "name": "Mandelbutter",
      "plural": "Mandelbutter"
+    },
+    "en": {
+     "name": "almond butter",
+     "plural": "almond butter"
     }
    },
    "nutrients": {
-    "1": 614.0,
+    "1": 614,
     "2": 55.5,
     "3": 4.152,
     "4": 18.82,
@@ -3968,23 +3968,23 @@
    "id": 161,
    "default_unit": "unit.tablespoon",
    "names": {
-    "en": {
-     "name": "tahini",
-     "plural": "tahini"
-    },
     "de": {
      "name": "Tahini",
      "plural": "Tahini"
+    },
+    "en": {
+     "name": "tahini",
+     "plural": "tahini"
     }
    },
    "nutrients": {
-    "1": 595.0,
+    "1": 595,
     "2": 53.76,
     "3": 7.529,
     "4": 21.19,
     "5": 0.49,
     "6": 9.3,
-    "7": 17.0,
+    "7": 17,
     "8": 0.287
    }
   },
@@ -3993,22 +3993,22 @@
    "id": 162,
    "default_unit": "unit.sheet",
    "names": {
-    "en": {
-     "name": "gelatin",
-     "plural": "gelatin"
-    },
     "de": {
      "name": "Gelatine",
      "plural": "Gelatine"
+    },
+    "en": {
+     "name": "gelatin",
+     "plural": "gelatin"
     }
    },
    "nutrients": {
-    "1": 335.0,
+    "1": 335,
     "2": 0.1,
     "3": 0.07,
-    "4": 0.0,
-    "5": 0.0,
-    "6": 0.0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
     "7": 85.6,
     "8": 0.49
    }
@@ -4018,13 +4018,13 @@
    "id": 163,
    "default_unit": "unit.gram",
    "names": {
-    "en": {
-     "name": "panko",
-     "plural": "panko"
-    },
     "de": {
      "name": "Panko",
      "plural": "Panko"
+    },
+    "en": {
+     "name": "panko",
+     "plural": "panko"
     }
    }
   }

@@ -4,11 +4,11 @@
    "key": "tag.vegetarian",
    "id": 1,
    "names": {
-    "en": {
-     "name": "Vegetarian"
-    },
     "de": {
      "name": "Vegetarisch"
+    },
+    "en": {
+     "name": "Vegetarian"
     }
    }
   },
@@ -16,10 +16,10 @@
    "key": "tag.vegan",
    "id": 2,
    "names": {
-    "en": {
+    "de": {
      "name": "Vegan"
     },
-    "de": {
+    "en": {
      "name": "Vegan"
     }
    }
@@ -28,11 +28,11 @@
    "key": "tag.gluten_free",
    "id": 3,
    "names": {
-    "en": {
-     "name": "Gluten-Free"
-    },
     "de": {
      "name": "Glutenfrei"
+    },
+    "en": {
+     "name": "Gluten-Free"
     }
    }
   },
@@ -40,11 +40,11 @@
    "key": "tag.dairy_free",
    "id": 4,
    "names": {
-    "en": {
-     "name": "Dairy-Free"
-    },
     "de": {
      "name": "Laktosefrei"
+    },
+    "en": {
+     "name": "Dairy-Free"
     }
    }
   },
@@ -52,11 +52,11 @@
    "key": "tag.low_carb",
    "id": 5,
    "names": {
-    "en": {
-     "name": "Low-Carb"
-    },
     "de": {
      "name": "Low Carb"
+    },
+    "en": {
+     "name": "Low-Carb"
     }
    }
   },
@@ -64,11 +64,11 @@
    "key": "tag.quick",
    "id": 6,
    "names": {
-    "en": {
-     "name": "Quick"
-    },
     "de": {
      "name": "Schnell"
+    },
+    "en": {
+     "name": "Quick"
     }
    }
   },
@@ -76,11 +76,11 @@
    "key": "tag.comfort_food",
    "id": 7,
    "names": {
-    "en": {
-     "name": "Comfort Food"
-    },
     "de": {
      "name": "Soulfood"
+    },
+    "en": {
+     "name": "Comfort Food"
     }
    }
   },
@@ -88,11 +88,11 @@
    "key": "tag.breakfast",
    "id": 8,
    "names": {
-    "en": {
-     "name": "Breakfast"
-    },
     "de": {
      "name": "Frühstück"
+    },
+    "en": {
+     "name": "Breakfast"
     }
    }
   },
@@ -100,11 +100,11 @@
    "key": "tag.lunch",
    "id": 9,
    "names": {
-    "en": {
-     "name": "Lunch"
-    },
     "de": {
      "name": "Mittagessen"
+    },
+    "en": {
+     "name": "Lunch"
     }
    }
   },
@@ -112,11 +112,11 @@
    "key": "tag.dinner",
    "id": 10,
    "names": {
-    "en": {
-     "name": "Dinner"
-    },
     "de": {
      "name": "Abendessen"
+    },
+    "en": {
+     "name": "Dinner"
     }
    }
   },
@@ -124,10 +124,10 @@
    "key": "tag.dessert",
    "id": 11,
    "names": {
-    "en": {
+    "de": {
      "name": "Dessert"
     },
-    "de": {
+    "en": {
      "name": "Dessert"
     }
    }
@@ -136,10 +136,10 @@
    "key": "tag.snack",
    "id": 12,
    "names": {
-    "en": {
+    "de": {
      "name": "Snack"
     },
-    "de": {
+    "en": {
      "name": "Snack"
     }
    }
@@ -148,11 +148,11 @@
    "key": "tag.soup",
    "id": 13,
    "names": {
-    "en": {
-     "name": "Soup"
-    },
     "de": {
      "name": "Suppe"
+    },
+    "en": {
+     "name": "Soup"
     }
    }
   },
@@ -160,11 +160,11 @@
    "key": "tag.salad",
    "id": 14,
    "names": {
-    "en": {
-     "name": "Salad"
-    },
     "de": {
      "name": "Salat"
+    },
+    "en": {
+     "name": "Salad"
     }
    }
   },
@@ -172,10 +172,10 @@
    "key": "tag.pasta",
    "id": 15,
    "names": {
-    "en": {
+    "de": {
      "name": "Pasta"
     },
-    "de": {
+    "en": {
      "name": "Pasta"
     }
    }
@@ -184,11 +184,11 @@
    "key": "tag.asian",
    "id": 16,
    "names": {
-    "en": {
-     "name": "Asian"
-    },
     "de": {
      "name": "Asiatisch"
+    },
+    "en": {
+     "name": "Asian"
     }
    }
   },
@@ -196,11 +196,11 @@
    "key": "tag.italian",
    "id": 17,
    "names": {
-    "en": {
-     "name": "Italian"
-    },
     "de": {
      "name": "Italienisch"
+    },
+    "en": {
+     "name": "Italian"
     }
    }
   },
@@ -208,11 +208,11 @@
    "key": "tag.german",
    "id": 18,
    "names": {
-    "en": {
-     "name": "German"
-    },
     "de": {
      "name": "Deutsch"
+    },
+    "en": {
+     "name": "German"
     }
    }
   },
@@ -220,11 +220,11 @@
    "key": "tag.mexican",
    "id": 19,
    "names": {
-    "en": {
-     "name": "Mexican"
-    },
     "de": {
      "name": "Mexikanisch"
+    },
+    "en": {
+     "name": "Mexican"
     }
    }
   },
@@ -232,11 +232,11 @@
    "key": "tag.indian",
    "id": 20,
    "names": {
-    "en": {
-     "name": "Indian"
-    },
     "de": {
      "name": "Indisch"
+    },
+    "en": {
+     "name": "Indian"
     }
    }
   },
@@ -244,11 +244,11 @@
    "key": "tag.bbq",
    "id": 21,
    "names": {
-    "en": {
-     "name": "BBQ"
-    },
     "de": {
      "name": "Grillen"
+    },
+    "en": {
+     "name": "BBQ"
     }
    }
   },
@@ -256,10 +256,10 @@
    "key": "tag.one_pot",
    "id": 22,
    "names": {
-    "en": {
+    "de": {
      "name": "One-Pot"
     },
-    "de": {
+    "en": {
      "name": "One-Pot"
     }
    }
@@ -268,11 +268,11 @@
    "key": "tag.baking",
    "id": 23,
    "names": {
-    "en": {
-     "name": "Baking"
-    },
     "de": {
      "name": "Backen"
+    },
+    "en": {
+     "name": "Baking"
     }
    }
   },
@@ -280,11 +280,11 @@
    "key": "tag.healthy",
    "id": 24,
    "names": {
-    "en": {
-     "name": "Healthy"
-    },
     "de": {
      "name": "Gesund"
+    },
+    "en": {
+     "name": "Healthy"
     }
    }
   },
@@ -292,11 +292,11 @@
    "key": "tag.budget_friendly",
    "id": 25,
    "names": {
-    "en": {
-     "name": "Budget-Friendly"
-    },
     "de": {
      "name": "Günstig"
+    },
+    "en": {
+     "name": "Budget-Friendly"
     }
    }
   }

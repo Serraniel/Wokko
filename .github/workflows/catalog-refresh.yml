@@ -1,0 +1,50 @@
+name: Catalog refresh
+
+# Once a month, adds names and aliases from Wikidata (CC0) to the starter catalog and opens one
+# pull request for a person to review. It never changes or removes values; see
+# backend/cmd/catalog-refresh. Merged changes reach existing databases with the next release.
+#
+# Pull requests opened with the default token don't start CI, so the required check never
+# runs. Store a fine-grained token with Contents and Pull requests write access to this
+# repository as the secret WOKKO_BOT_TOKEN to fix that. Without it, the pull request still
+# opens, and closing and reopening it starts CI.
+on:
+  schedule:
+    - cron: '23 4 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: catalog-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - name: Refresh from Wikidata
+        working-directory: backend
+        run: go run ./cmd/catalog-refresh -dir internal/catalog/data -summary "$RUNNER_TEMP/summary.md"
+      - name: Check the result
+        working-directory: backend
+        run: go test ./internal/catalog/... ./internal/knowledge/... ./cmd/catalog-refresh/...
+      - name: Open or update the pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.WOKKO_BOT_TOKEN || github.token }}
+          branch: chore/catalog-refresh
+          delete-branch: true
+          add-paths: backend/internal/catalog/data/foods.json
+          commit-message: |
+            feat(ingredients): more names for starter foods from Wikidata
+          title: 'feat(ingredients): more names for starter foods from Wikidata'
+          body-path: ${{ runner.temp }}/summary.md
+          labels: catalog
