@@ -68,6 +68,33 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST "+p+"/auth/register", s.h(s.register))
 	m.HandleFunc("POST "+p+"/auth/logout", s.h(s.logout))
 	m.HandleFunc("POST "+p+"/auth/reset", s.h(s.resetPassword))
+	m.HandleFunc("POST "+p+"/auth/confirm-email", s.h(func(w http.ResponseWriter, r *http.Request) error {
+		var in struct {
+			Token string `json:"token"`
+		}
+		if err := readJSON(r, &in); err != nil {
+			return err
+		}
+		if !s.loginLimit.Allow(clientKey(r, "confirm")) {
+			return errTooMany
+		}
+		return done(w, s.svc.ConfirmEmail(r.Context(), in.Token))
+	}))
+	// Forgot password answers the same whether or not the account exists, and is limited per
+	// address and per account, so it can't be used to find accounts or to flood someone's inbox.
+	m.HandleFunc("POST "+p+"/auth/forgot", s.h(func(w http.ResponseWriter, r *http.Request) error {
+		var in struct {
+			Login string `json:"login"`
+		}
+		if err := readJSON(r, &in); err != nil {
+			return err
+		}
+		login := strings.TrimSpace(in.Login)
+		if !s.loginLimit.Allow(clientKey(r, "forgot")) || !s.handleLimit.Allow("forgot|"+strings.ToLower(login)) {
+			return errTooMany
+		}
+		return done(w, s.svc.ForgotPassword(r.Context(), login))
+	}))
 
 	m.HandleFunc("GET "+p+"/me", s.user(s.me))
 	m.HandleFunc("PATCH "+p+"/me", s.user(s.updateMe))
@@ -150,6 +177,26 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST "+p+"/household/leave", s.user(s.leaveHousehold))
 
 	m.HandleFunc("GET "+p+"/admin/users", s.user(s.adminListUsers))
+	m.HandleFunc("GET "+p+"/admin/mail", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+		out, err := s.svc.AdminMailStatus(v)
+		return reply(w, out, err)
+	}))
+	m.HandleFunc("POST "+p+"/admin/mail/test", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+		return done(w, s.svc.SendTestMail(r.Context(), v))
+	}))
+	m.HandleFunc("PUT "+p+"/me/email", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+		var in struct {
+			Email string `json:"email"`
+		}
+		if err := readJSON(r, &in); err != nil {
+			return err
+		}
+		if !s.handleLimit.Allow("email|" + strconv.FormatInt(v.User.ID, 10)) {
+			return errTooMany
+		}
+		out, err := s.svc.SetEmail(r.Context(), v, in.Email)
+		return reply(w, out, err)
+	}))
 	m.HandleFunc("POST "+p+"/admin/users", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
 		return decodeAnd(w, r, 201, func(in app.NewAccountInput) (app.NewAccount, error) {
 			return s.svc.CreateAccount(r.Context(), v, in)

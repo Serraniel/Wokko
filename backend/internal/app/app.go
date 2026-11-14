@@ -19,6 +19,7 @@ import (
 	"github.com/serraniel/wokko/backend/internal/config"
 	"github.com/serraniel/wokko/backend/internal/importer"
 	"github.com/serraniel/wokko/backend/internal/knowledge"
+	"github.com/serraniel/wokko/backend/internal/mail"
 	"github.com/serraniel/wokko/backend/internal/media"
 	"github.com/serraniel/wokko/backend/internal/store"
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
@@ -60,6 +61,8 @@ type Service struct {
 	Knowledge *knowledge.Pack
 	// Catalog is the starter catalog this build ships.
 	Catalog *catalog.Pack
+	// Mail sends mail, or is nil when no SMTP server is configured.
+	Mail mail.Sender
 	Now     func() time.Time
 
 	backupMu sync.Mutex
@@ -100,7 +103,7 @@ func (v Viewer) locale() string {
 func isNoRows(err error) bool { return errors.Is(err, sql.ErrNoRows) }
 
 func toUser(u sqlcgen.User) User {
-	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid, AssistantNewEntries: u.AssistantNewEntries, NeedsSetup: u.NeedsSetup != 0}
+	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid, AssistantNewEntries: u.AssistantNewEntries, NeedsSetup: u.NeedsSetup != 0, Email: u.Email, EmailVerified: u.EmailVerified != 0}
 }
 
 func toPerson(u sqlcgen.User) Person {
@@ -155,7 +158,7 @@ func (s *Service) Status(ctx context.Context) (Status, error) {
 	if err != nil {
 		return Status{}, err
 	}
-	return Status{SetupComplete: n > 0, OpenRegistration: st.OpenRegistration, AllowPublic: st.AllowPublic, MCPEnabled: st.MCPEnabled, Version: s.Cfg.Version}, nil
+	return Status{SetupComplete: n > 0, OpenRegistration: st.OpenRegistration, AllowPublic: st.AllowPublic, MCPEnabled: st.MCPEnabled, MailEnabled: s.MailReady(), Version: s.Cfg.Version}, nil
 }
 
 func (s *Service) GetSettings(ctx context.Context) (Settings, error) {
@@ -449,13 +452,18 @@ func (s *Service) newResetLink(ctx context.Context, q *sqlcgen.Queries, userID i
 	if err != nil {
 		return "", err
 	}
-	token, err := auth.NewToken()
-	if err != nil {
-		return "", err
-	}
 	life := 72 * time.Hour
 	if u.NeedsSetup != 0 {
 		life = 7 * 24 * time.Hour
+	}
+	return s.resetLinkFor(ctx, q, userID, life)
+}
+
+// resetLinkFor replaces a person's reset links with one that lasts this long.
+func (s *Service) resetLinkFor(ctx context.Context, q *sqlcgen.Queries, userID int64, life time.Duration) (string, error) {
+	token, err := auth.NewToken()
+	if err != nil {
+		return "", err
 	}
 	if err := q.DeletePasswordResets(ctx, userID); err != nil {
 		return "", err
@@ -479,6 +487,14 @@ func (s *Service) CreateAccount(ctx context.Context, v Viewer, in NewAccountInpu
 	if in.Role != "admin" {
 		in.Role = "user"
 	}
+	var email string
+	if in.Email != "" {
+		addr, err := mail.Address(in.Email)
+		if err != nil {
+			return NewAccount{}, invalid("bad_email", "This isn't an email address")
+		}
+		email = addr
+	}
 	unknown, err := auth.NewToken()
 	if err != nil {
 		return NewAccount{}, err
@@ -497,10 +513,24 @@ func (s *Service) CreateAccount(ctx context.Context, v Viewer, in NewAccountInpu
 			return err
 		}
 		u.NeedsSetup = 1
+		if email != "" {
+			if other, err := q.GetUserByVerifiedEmail(ctx, email); err == nil && other.ID != u.ID {
+				return fail(http.StatusConflict, "email_taken", "Another account already uses this address")
+			} else if err != nil && !isNoRows(err) {
+				return err
+			}
+			if err := q.SetUserEmail(ctx, sqlcgen.SetUserEmailParams{Email: email, EmailVerified: 1, ID: u.ID}); err != nil {
+				return err
+			}
+			u.Email, u.EmailVerified = email, 1
+		}
 		out.User = toUser(u)
 		out.Token, err = s.newResetLink(ctx, q, u.ID)
 		return err
 	})
+	if err == nil && email != "" {
+		out.Mailed = s.MailResetLink(ctx, v, out.User.ID, out.Token)
+	}
 	return out, err
 }
 
@@ -714,7 +744,17 @@ func (s *Service) CreateRegistrationInvite(ctx context.Context, v Viewer, in Inv
 	if !v.isAdmin() {
 		return Invite{}, ErrForbidden
 	}
-	return s.createInvite(ctx, v, 0, in)
+	if in.Email != "" {
+		if _, err := mail.Address(in.Email); err != nil {
+			return Invite{}, invalid("bad_email", "This isn't an email address")
+		}
+	}
+	inv, err := s.createInvite(ctx, v, 0, in)
+	if err != nil {
+		return inv, err
+	}
+	inv.Mailed = s.mailInvite(ctx, v, inv, in)
+	return inv, nil
 }
 
 func (s *Service) ListRegistrationInvites(ctx context.Context, v Viewer) ([]Invite, error) {

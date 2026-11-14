@@ -703,7 +703,14 @@ func (s *Server) adminResetLink(w http.ResponseWriter, r *http.Request, v app.Vi
 	if err != nil {
 		return err
 	}
-	writeJSON(w, http.StatusCreated, map[string]string{"token": token})
+	out := struct {
+		Token string `json:"token"`
+		app.Mailed
+	}{Token: token}
+	if r.URL.Query().Get("send") == "1" {
+		out.Mailed = s.svc.MailResetLink(r.Context(), v, id, token)
+	}
+	writeJSON(w, http.StatusCreated, out)
 	return nil
 }
 

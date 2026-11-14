@@ -73,8 +73,27 @@ Everything is optional.
 | `BACKUP_INTERVAL_HOURS` | `24` | How often to back up |
 | `BACKUP_RETENTION_DAYS` | `30` | How long to keep backups. The newest 3 are always kept |
 | `TRASH_RETENTION_DAYS` | `30` | How long deleted recipes stay in the trash |
+| `SMTP_HOST` | (empty) | Mail server for invites and password links. Without it, mail is off and links are copied by hand |
+| `SMTP_PORT` | `587` (`465` with `tls`) | Its port |
+| `SMTP_TLS` | `starttls` | `starttls`, `tls`, or `none` for a relay on a private network |
+| `SMTP_USERNAME`, `SMTP_PASSWORD` | (empty) | Login for the mail server. `SMTP_PASSWORD_FILE` reads the password from a file, such as a Docker secret |
+| `SMTP_FROM` | (empty) | Sender, such as `Wokko <wokko@example.com>`. Needed with `SMTP_HOST` |
 
 With the ready-made image, set these under `environment:` in `docker-compose.yml`. From source, `.env` also takes `WOKKO_PORT` (default `8080`).
+
+### Mail
+
+Mail is optional. With it, admins can send invites and setup links by mail, and people with a confirmed address can reset a forgotten password themselves. It also needs `PUBLIC_URL`, because links in mail need the address people use.
+
+Wokko hands mail to an SMTP server; it doesn't deliver mail itself. Three ways work:
+
+- **Your mail provider.** Most offer SMTP with an app password: use their host, port 587 and your login.
+- **A sending service**, such as Brevo, Mailgun, Postmark or Amazon SES. Several have free tiers that are plenty for a household.
+- **A relay container** next to Wokko, such as `boky/postfix`. It queues and retries, and passes mail on to a provider. `docker-compose.example.yml` has one ready to uncomment.
+
+Sending straight from a home connection to other people's mail servers usually fails: many internet providers block port 25, and without SPF, DKIM and a matching reverse DNS entry, big mail services reject the mail or file it as spam. A relay is useful as a queue, but it still needs a provider to deliver through.
+
+Admin → Mail shows whether mail is ready and sends a test mail to your own confirmed address.
 
 ## Keeping your data safe
 

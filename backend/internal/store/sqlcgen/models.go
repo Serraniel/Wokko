@@ -86,6 +86,13 @@ type CookLog struct {
 	CreatedAt string
 }
 
+type EmailConfirmation struct {
+	TokenHash string
+	UserID    int64
+	Email     string
+	ExpiresAt string
+}
+
 type Food struct {
 	ID                 int64
 	DefaultUnitID      sql.NullInt64
@@ -443,4 +450,6 @@ type User struct {
 	UpdatedAt           string
 	AssistantNewEntries string
 	NeedsSetup          int64
+	Email               string
+	EmailVerified       int64
 }

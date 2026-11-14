@@ -11,6 +11,7 @@
 	import { session } from '#lib/session.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 	import LinkPreviewCard from '#lib/components/LinkPreviewCard.svelte';
+	import MailCard from '#lib/components/MailCard.svelte';
 
 	let health = $state<Health | null>(null);
 	let users = $state<User[]>([]);
@@ -80,18 +81,28 @@
 	}
 
 	let inviteNote = $state('');
+	let inviteEmail = $state('');
+	const mailOn = $derived(!!session.status?.mail_enabled);
+
+	/** Says whether a link also went out by mail. */
+	function mailedToast(m: { mailed: boolean; mail_error?: string | null }, to: string) {
+		if (m.mailed) toasts.show(t('mail.sent_to', { to }));
+		else if (m.mail_error && m.mail_error !== 'mail_off') toasts.error(t('mail.not_sent'));
+	}
 
 	async function createInvite() {
 		await run(async () => {
-			const inv = await api.post<Invite>('/admin/invites', { max_uses: 1, expires_in_days: 14, note: inviteNote.trim() });
+			const inv = await api.post<Invite>('/admin/invites', { max_uses: 1, expires_in_days: 14, note: inviteNote.trim(), email: inviteEmail.trim(), locale: currentLocale() });
 			link = `${location.origin}/register?invite=${inv.token}`;
 			linkLabel = inv.note ? `${t('admin.invite_link')}: ${inv.note}` : t('admin.invite_link');
+			if (inviteEmail.trim()) mailedToast(inv, inviteEmail.trim());
 			inviteNote = '';
+			inviteEmail = '';
 		});
 	}
 
 	// An account an admin creates. The person sets their password through the setup link.
-	let account = $state({ handle: '', display_name: '', locale: currentLocale(), role: 'user', join_my_household: true });
+	let account = $state({ handle: '', display_name: '', email: '', locale: currentLocale(), role: 'user', join_my_household: true });
 
 	async function createAccount(e: SubmitEvent) {
 		e.preventDefault();
@@ -99,13 +110,16 @@
 			const made = await api.post<NewAccount>('/admin/users', account);
 			link = `${location.origin}/reset?token=${made.token}&setup=1`;
 			linkLabel = t('admin.setup_link', { handle: made.user.handle });
-			account = { handle: '', display_name: '', locale: currentLocale(), role: 'user', join_my_household: true };
+			if (account.email.trim()) mailedToast(made, account.email.trim());
+			account = { handle: '', display_name: '', email: '', locale: currentLocale(), role: 'user', join_my_household: true };
 		});
 	}
 
 	async function resetLink(u: User) {
 		await run(async () => {
-			const res = await api.post<{ token: string }>(`/admin/users/${u.id}/reset`);
+			const send = mailOn && u.email_verified;
+			const res = await api.post<{ token: string; mailed: boolean; mail_error?: string | null }>(`/admin/users/${u.id}/reset${send ? '?send=1' : ''}`);
+			if (send) mailedToast(res, u.email);
 			link = `${location.origin}/reset?token=${res.token}${u.needs_setup ? '&setup=1' : ''}`;
 			linkLabel = u.needs_setup ? t('admin.setup_link', { handle: u.handle }) : t('admin.reset_link', { handle: u.handle });
 		});
@@ -209,6 +223,12 @@
 						<label class="label" for="new-name">{t('auth.display_name')}</label>
 						<input id="new-name" class="input" bind:value={account.display_name} autocomplete="off" />
 					</div>
+					{#if mailOn}
+						<div class="sm:col-span-2">
+							<label class="label" for="new-email">{t('admin.account_email')}</label>
+							<input id="new-email" class="input" type="email" bind:value={account.email} autocomplete="off" />
+						</div>
+					{/if}
 					<div>
 						<label class="label" for="new-locale">{t('settings.language')}</label>
 						<select id="new-locale" class="input" bind:value={account.locale}>{#each languages as l (l.code)}<option value={l.code}>{l.name}</option>{/each}</select>
@@ -237,6 +257,7 @@
 			</ul>
 		{/if}
 		<input class="input" bind:value={inviteNote} maxlength="100" placeholder={t('admin.invite_note')} aria-label={t('admin.invite_note')} />
+		{#if mailOn}<input class="input" type="email" bind:value={inviteEmail} placeholder={t('admin.invite_email')} aria-label={t('admin.invite_email')} autocomplete="off" />{/if}
 		<button class="btn btn-soft w-full" onclick={createInvite}><Link2 size={18} />{t('admin.create_invite')}</button>
 	</section>
 
@@ -256,6 +277,7 @@
 			</label>
 		</section>
 		<LinkPreviewCard />
+		<MailCard />
 	{/if}
 </div>
 
