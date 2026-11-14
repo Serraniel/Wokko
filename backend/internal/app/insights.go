@@ -36,6 +36,52 @@ func (s *Service) PublicRecipeInsights(ctx context.Context, locale string, id in
 	return s.insights(ctx, r, locale)
 }
 
+// DraftInsights reads a recipe that isn't saved, such as one being edited, so the editor can
+// point out problems before saving. It saves nothing and creates no foods.
+func (s *Service) DraftInsights(ctx context.Context, v Viewer, in RecipeInput) (knowledge.Result, error) {
+	if len(in.Steps) > 200 {
+		return knowledge.Result{}, invalid("too_many_steps", "A recipe can have at most 200 steps")
+	}
+	q := s.Store.Queries
+	r := Recipe{RecipeSummary: RecipeSummary{Name: in.Name, WorkMinutes: in.WorkMinutes, WaitMinutes: in.WaitMinutes}}
+	for _, st := range in.Steps {
+		if len(st.Ingredients) > 200 {
+			return knowledge.Result{}, invalid("too_many_ingredients", "A step can have at most 200 ingredients")
+		}
+		out := Step{Name: st.Name, Instruction: st.Instruction, Minutes: st.Minutes}
+		for _, ing := range st.Ingredients {
+			// A food that already exists counts with all its names and set kinds; a new name
+			// counts by itself.
+			ref := FoodRef{Name: strings.TrimSpace(ing.FoodName)}
+			id := ing.FoodID
+			if id <= 0 && ref.Name != "" {
+				found, ok, err := lookupFood(ctx, q, ref.Name)
+				if err != nil {
+					return knowledge.Result{}, err
+				}
+				if ok {
+					id = found
+				}
+			}
+			if id > 0 {
+				refs, err := foodRefs(ctx, q, []int64{id}, v.locale())
+				if err != nil {
+					return knowledge.Result{}, err
+				}
+				if known, ok := refs[id]; ok {
+					ref = known
+				}
+			}
+			if ref.Name == "" {
+				continue
+			}
+			out.Ingredients = append(out.Ingredients, Ingredient{Food: ref, Amount: ing.Amount, Note: ing.Note})
+		}
+		r.Steps = append(r.Steps, out)
+	}
+	return s.insights(ctx, r, v.locale())
+}
+
 func (s *Service) insights(ctx context.Context, r Recipe, locale string) (knowledge.Result, error) {
 	names, set, err := s.allFoodNames(ctx, s.Store.Queries, r)
 	if err != nil {
@@ -68,7 +114,7 @@ func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe
 	seen := map[int64]bool{}
 	for _, st := range r.Steps {
 		for _, ing := range st.Ingredients {
-			if !seen[ing.Food.ID] {
+			if ing.Food.ID > 0 && !seen[ing.Food.ID] {
 				seen[ing.Food.ID] = true
 				ids = append(ids, ing.Food.ID)
 			}
