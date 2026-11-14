@@ -448,8 +448,17 @@ func TestOAuthFlowForAssistants(t *testing.T) {
 	if len(listed) != 1 || !listed[0].IsApp || listed[0].Name != "Claude" {
 		t.Fatalf("listed: %+v", listed)
 	}
+	// An app that hasn't renewed its hour-long token for a while is still connected, and still
+	// listed so it can be disconnected.
+	real := e.svc.Now
+	e.svc.Now = func() time.Time { return real().Add(3 * time.Hour) }
+	admin.ok("GET", v1+"/me/tokens", nil, 200).decode(t, &listed)
+	if len(listed) != 1 || listed[0].Name != "Claude" {
+		t.Fatalf("idle app: %+v", listed)
+	}
 	// Revoking ends the app's access for good.
 	admin.ok("DELETE", path("/me/tokens/%d", listed[0].ID), nil, 200)
+	e.svc.Now = real
 	if status, _ := oauthForm(t, e, url.Values{"grant_type": {"refresh_token"}, "client_id": {id}, "refresh_token": {again["refresh_token"].(string)}}); status != 400 {
 		t.Fatalf("refresh after revoke: %d", status)
 	}

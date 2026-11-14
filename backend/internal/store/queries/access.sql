@@ -29,7 +29,14 @@ DELETE FROM api_tokens WHERE user_id = ? AND client_id = ?;
 UPDATE api_tokens SET last_used_at = ? WHERE id = ?;
 
 -- name: DeleteExpiredAPITokens :exec
-DELETE FROM api_tokens WHERE expires_at IS NOT NULL AND expires_at <= ?;
+-- An app's access token lasts an hour and is renewed through its refresh token. Its row stays
+-- while the app can still renew, so the person sees the app and can disconnect it.
+DELETE FROM api_tokens WHERE api_tokens.expires_at IS NOT NULL AND api_tokens.expires_at <= CAST(sqlc.arg(now) AS TEXT)
+  AND NOT (api_tokens.client_id != '' AND EXISTS (SELECT 1 FROM oauth_refresh_tokens r
+    WHERE r.client_id = api_tokens.client_id AND r.user_id = api_tokens.user_id AND r.expires_at > CAST(sqlc.arg(now) AS TEXT)));
+
+-- name: ListConnectedOAuthClients :many
+SELECT DISTINCT client_id FROM oauth_refresh_tokens WHERE user_id = ? AND expires_at > ?;
 
 -- name: CreateOAuthClient :exec
 INSERT INTO oauth_clients (client_id, name, redirect_uris) VALUES (?, ?, ?);
