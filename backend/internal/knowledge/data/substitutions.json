@@ -1,0 +1,547 @@
+{
+ "entries": [
+  {
+   "id": "substitution.buttermilk",
+   "kind": "substitution",
+   "for": "dairy.buttermilk",
+   "names": {
+    "en": "Instead of buttermilk",
+    "de": "Statt Buttermilch"
+   },
+   "explain": {
+    "en": "Stir 1 tablespoon of lemon juice or white vinegar into 250 ml milk and let it stand for 5 to 10 minutes. Yogurt thinned with milk (2 to 1) works too. Both still activate baking soda.",
+    "de": "1 Esslöffel Zitronensaft oder hellen Essig in 250 ml Milch rühren und 5 bis 10 Minuten stehen lassen. Mit Milch verdünnter Joghurt (2 zu 1) geht auch. Beides aktiviert Natron weiterhin."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "soda-buttermilk"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "substitution.egg_baking",
+   "kind": "substitution",
+   "for": "egg",
+   "names": {
+    "en": "Instead of egg in baking",
+    "de": "Statt Ei beim Backen"
+   },
+   "explain": {
+    "en": "For binding, 1 tablespoon of ground flaxseed with 3 tablespoons of water, left for 10 minutes, replaces one egg. For moisture, about 60 g of mashed banana or apple purée. Neither works in sponge cakes, soufflés or custards, where the egg is the structure.",
+    "de": "Zum Binden ersetzt 1 Esslöffel geschroteter Leinsamen mit 3 Esslöffeln Wasser, 10 Minuten gequollen, ein Ei. Für Saftigkeit etwa 60 g zerdrückte Banane oder Apfelmus. Beides taugt nicht für Biskuit, Soufflé oder Creme, wo das Ei die Struktur ist."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "grain.gluten.flour"
+     },
+     {
+      "any": [
+       {
+        "class": "leavening"
+       },
+       {
+        "words": [
+         "backen",
+         "gebacken",
+         "backofen",
+         "bake",
+         "baking",
+         "baked"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "ruehrkuchen"
+    ],
+    "no_match": [
+     "mayonnaise",
+     "poached-eggs"
+    ]
+   }
+  },
+  {
+   "id": "substitution.egg_white",
+   "kind": "substitution",
+   "for": "egg.white",
+   "names": {
+    "en": "Instead of egg white",
+    "de": "Statt Eiweiß"
+   },
+   "explain": {
+    "en": "Aquafaba, the liquid from a can of chickpeas: about 2 tablespoons per egg white. It whips to a meringue, though it takes longer; a pinch of cream of tartar helps.",
+    "de": "Aquafaba, die Flüssigkeit aus einer Dose Kichererbsen: etwa 2 Esslöffel je Eiweiß. Sie lässt sich zu Baiser schlagen, braucht aber länger; eine Prise Weinstein hilft."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "meringue"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.fresh_herbs",
+   "kind": "substitution",
+   "for": "herb",
+   "names": {
+    "en": "Fresh or dried herbs",
+    "de": "Frische oder getrocknete Kräuter"
+   },
+   "explain": {
+    "en": "Use about a third as much dried herb as fresh: 1 teaspoon dried for 1 tablespoon fresh. Dried herbs go in early, fresh ones late. Delicate herbs such as basil, parsley or chives lose most of their flavour dried; frozen is better.",
+    "de": "Getrocknet etwa ein Drittel der frischen Menge nehmen: 1 Teelöffel getrocknet für 1 Esslöffel frisch. Getrocknete Kräuter früh zugeben, frische spät. Zarte Kräuter wie Basilikum, Petersilie oder Schnittlauch verlieren getrocknet viel Aroma; tiefgekühlt ist besser."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "herbs-early"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.yeast",
+   "kind": "substitution",
+   "for": "leavening.yeast",
+   "names": {
+    "en": "Fresh or dry yeast",
+    "de": "Frisch- oder Trockenhefe"
+   },
+   "explain": {
+    "en": "One cube of fresh yeast (42 g) equals about two sachets of dry yeast (14 g), roughly 3 to 1 by weight. Instant dry yeast can go straight into the flour.",
+    "de": "Ein Würfel Frischhefe (42 g) entspricht etwa zwei Päckchen Trockenhefe (14 g), nach Gewicht ungefähr 3 zu 1. Trockenhefe kann direkt ins Mehl."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "yeast-dough"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.baking_powder",
+   "kind": "substitution",
+   "for": "leavening.baking_powder",
+   "names": {
+    "en": "Instead of baking powder",
+    "de": "Statt Backpulver"
+   },
+   "explain": {
+    "en": "For 1 teaspoon of baking powder, use ¼ teaspoon of baking soda and ½ teaspoon of cream of tartar, and bake straight away.",
+    "de": "Für 1 Teelöffel Backpulver ¼ Teelöffel Natron und ½ Teelöffel Weinstein nehmen und gleich backen."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "ruehrkuchen"
+    ],
+    "no_match": [
+     "yeast-dough"
+    ]
+   }
+  },
+  {
+   "id": "substitution.cornstarch",
+   "kind": "substitution",
+   "for": "starch",
+   "names": {
+    "en": "Other starches",
+    "de": "Andere Stärken"
+   },
+   "explain": {
+    "en": "Cornstarch thickens about twice as much as flour by weight, and stays clearer. Potato starch can replace it one to one, but thickens at a lower temperature and thins sooner when boiled, so add it at the end.",
+    "de": "Speisestärke bindet nach Gewicht etwa doppelt so stark wie Mehl und bleibt klarer. Kartoffelstärke ersetzt sie eins zu eins, bindet aber schon bei niedrigerer Temperatur und lässt beim Kochen früher nach, darum zum Schluss zugeben."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "America's Test Kitchen, thickening with cornstarch",
+     "added": "2026-11-14",
+     "url": "https://www.americastestkitchen.com/articles/7359-how-to-thicken-sauces-with-cornstarch"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cornstarch-long"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "substitution.gelatine",
+   "kind": "substitution",
+   "for": "gelling.gelatine",
+   "names": {
+    "en": "Instead of gelatine",
+    "de": "Statt Gelatine"
+   },
+   "explain": {
+    "en": "Agar sets vegetarian and vegan dishes. There's no fixed conversion: start at about 0.8 to 1 g per 100 ml for a firm gel, boil it for a minute or two, and test a spoonful on a cold plate. It sets firmer and more brittle than gelatine.",
+    "de": "Agar-Agar bindet vegetarisch und vegan. Eine feste Umrechnung gibt es nicht: mit etwa 0,8 bis 1 g je 100 ml für ein festes Gel beginnen, ein bis zwei Minuten kochen und einen Löffel auf einem kalten Teller testen. Es wird fester und brüchiger als Gelatine."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "FAO, agar properties",
+     "added": "2026-11-14",
+     "url": "https://www.fao.org/4/ag156e/AG156E03.htm"
+    }
+   ],
+   "examples": {
+    "match": [
+     "panna-cotta"
+    ],
+    "no_match": [
+     "agar-jelly"
+    ]
+   }
+  },
+  {
+   "id": "substitution.sour_cream",
+   "kind": "substitution",
+   "for": "dairy.sour",
+   "names": {
+    "en": "Sour cream, yogurt or crème fraîche",
+    "de": "Saure Sahne, Joghurt oder Crème fraîche"
+   },
+   "explain": {
+    "en": "Sour cream, Greek yogurt, Schmand and crème fraîche replace each other one to one in cold dishes. For hot sauces use crème fraîche or cream, because yogurt and sour cream curdle when boiled.",
+    "de": "Saure Sahne, griechischer Joghurt, Schmand und Crème fraîche ersetzen sich in kalten Gerichten eins zu eins. Für heiße Soßen Crème fraîche oder Sahne nehmen, denn Joghurt und saure Sahne gerinnen beim Kochen."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sour-cream-dip"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "substitution.cream",
+   "kind": "substitution",
+   "for": "dairy.cream",
+   "names": {
+    "en": "Instead of cream for cooking",
+    "de": "Statt Sahne zum Kochen"
+   },
+   "explain": {
+    "en": "About 3 parts milk with 1 part melted butter stands in for cream in cooking. It won't whip and copes less well with acid. Plant-based cooking creams work for a vegan dish.",
+    "de": "Etwa 3 Teile Milch mit 1 Teil geschmolzener Butter ersetzen Sahne beim Kochen. Sie lässt sich nicht schlagen und verträgt Säure schlechter. Für ein veganes Gericht passen pflanzliche Kochcremes."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.wine",
+   "kind": "substitution",
+   "for": "alcohol.wine",
+   "names": {
+    "en": "Instead of wine",
+    "de": "Statt Wein"
+   },
+   "explain": {
+    "en": "Use the same amount of stock with a splash of vinegar or lemon juice, about 1 tablespoon per 250 ml, or unsweetened grape juice with a little vinegar.",
+    "de": "Die gleiche Menge Brühe mit einem Schuss Essig oder Zitronensaft nehmen, etwa 1 Esslöffel je 250 ml, oder ungesüßten Traubensaft mit etwas Essig."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "substitution.brown_sugar",
+   "kind": "substitution",
+   "for": "sweet.sugar.brown",
+   "names": {
+    "en": "Instead of brown sugar",
+    "de": "Statt braunem Zucker"
+   },
+   "explain": {
+    "en": "Mix 200 g white sugar with 1 tablespoon of molasses for light brown sugar, or 2 tablespoons for dark.",
+    "de": "200 g weißen Zucker mit 1 Esslöffel Melasse mischen für hellen braunen Zucker, mit 2 Esslöffeln für dunklen."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cookie-dough"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.butter_baking",
+   "kind": "substitution",
+   "for": "fat.butter",
+   "names": {
+    "en": "Oil instead of butter in baking",
+    "de": "Öl statt Butter beim Backen"
+   },
+   "explain": {
+    "en": "Butter is about 80 % fat, so use about 80 % of its weight as oil. This doesn't work for batters where butter is creamed with sugar, or for laminated doughs, where solid fat is the structure.",
+    "de": "Butter besteht zu etwa 80 % aus Fett, darum etwa 80 % ihres Gewichts als Öl nehmen. Das geht nicht bei Teigen, in denen Butter mit Zucker schaumig geschlagen wird, und nicht bei Blätterteig, wo festes Fett die Struktur ist."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "class": "grain.gluten.flour"
+       },
+       {
+        "any": [
+         {
+          "class": "leavening"
+         },
+         {
+          "words": [
+           "backen",
+           "gebacken",
+           "backofen",
+           "bake",
+           "baking",
+           "baked"
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "not": {
+       "entry": "technique.creaming"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "melted-butter-cake"
+    ],
+    "no_match": [
+     "ruehrkuchen",
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "substitution.fish_sauce",
+   "kind": "substitution",
+   "for": "fish.sauce",
+   "names": {
+    "en": "Vegetarian fish sauce",
+    "de": "Vegetarische Fischsauce"
+   },
+   "explain": {
+    "en": "Soy sauce with a little seaweed, such as kombu or nori, or a spoon of miso. It brings soy and usually wheat instead of fish.",
+    "de": "Sojasauce mit etwas Algen wie Kombu oder Nori, oder ein Löffel Miso. Das bringt Soja und meist Weizen statt Fisch."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "thai-curry"
+    ],
+    "no_match": [
+     "ceviche"
+    ]
+   }
+  },
+  {
+   "id": "substitution.worcestershire",
+   "kind": "substitution",
+   "for": "fish.worcestershire",
+   "names": {
+    "en": "Vegetarian Worcestershire sauce",
+    "de": "Vegetarische Worcestershiresauce"
+   },
+   "explain": {
+    "en": "Soy sauce with a little vinegar and a pinch of sugar, or a vegan Worcestershire sauce. Soy sauce brings soy and usually wheat.",
+    "de": "Sojasauce mit etwas Essig und einer Prise Zucker, oder eine vegane Worcestershiresauce. Sojasauce bringt Soja und meist Weizen."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "thai-curry"
+    ]
+   }
+  },
+  {
+   "id": "substitution.honey",
+   "kind": "substitution",
+   "for": "sweet.honey",
+   "names": {
+    "en": "Instead of honey",
+    "de": "Statt Honig"
+   },
+   "explain": {
+    "en": "Maple syrup, agave or rice syrup replace honey one to one in most dishes and keep them vegan. In baking with baking soda, honey's acidity matters; maple syrup is slightly acidic too.",
+    "de": "Ahornsirup, Agaven- oder Reissirup ersetzen Honig in den meisten Gerichten eins zu eins und halten sie vegan. Beim Backen mit Natron zählt die Säure des Honigs; Ahornsirup ist ebenfalls leicht sauer."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "honey-glaze"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   }
+  },
+  {
+   "id": "substitution.milk",
+   "kind": "substitution",
+   "for": "dairy.milk",
+   "names": {
+    "en": "Instead of milk",
+    "de": "Statt Milch"
+   },
+   "explain": {
+    "en": "Unsweetened oat or soy drinks replace milk one to one in most cooking and baking. Soy behaves most like milk in sauces; oat drinks can contain gluten unless labelled gluten-free.",
+    "de": "Ungesüßte Hafer- oder Sojadrinks ersetzen Milch beim Kochen und Backen meist eins zu eins. Soja verhält sich in Soßen am ehesten wie Milch; Haferdrinks können Gluten enthalten, wenn sie nicht glutenfrei gekennzeichnet sind."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common kitchen practice, collected in docs/knowledge/2026-11-14-research.md",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  }
+ ]
+}

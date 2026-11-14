@@ -55,6 +55,16 @@ func TestRecipeInsights(t *testing.T) {
 	if len(res.Unclassified) != 0 {
 		t.Errorf("unclassified: %v", res.Unclassified)
 	}
+	// Substitutes name the recipe's own ingredient they apply to.
+	var sub *knowledge.Finding
+	for i := range res.Substitutes {
+		if res.Substitutes[i].ID == "substitution.cream" {
+			sub = &res.Substitutes[i]
+		}
+	}
+	if sub == nil || !slices.Equal(sub.Foods, []string{"Wokkorahm"}) {
+		t.Errorf("substitutes: %+v", res.Substitutes)
+	}
 	// The viewer's language decides the text.
 	admin.ok("GET", path("/recipes/%d/insights?lang=de", r.ID), nil, 200).decode(t, &res)
 	for _, s := range res.Sauces {

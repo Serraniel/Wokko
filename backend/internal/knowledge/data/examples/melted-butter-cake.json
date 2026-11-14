@@ -1,0 +1,44 @@
+{
+ "steps": [
+  {
+   "text": "Geschmolzene Butter mit Zucker, Eiern, Mehl und Backpulver verrühren und 30 Minuten backen.",
+   "minutes": 35,
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Eier"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Backpulver"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    }
+   ]
+  }
+ ]
+}

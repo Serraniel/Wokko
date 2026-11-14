@@ -533,6 +533,9 @@
           "brauner zucker",
           "brown sugar"
          ]
+        },
+        {
+         "class": "sweet.sugar.brown"
         }
        ]
       }

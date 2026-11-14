@@ -65,8 +65,10 @@ type Cond struct {
 
 // Entry is one piece of knowledge: a sauce, a technique or a problem rule.
 type Entry struct {
-	ID       string   `json:"id"`
-	Kind     string   `json:"kind"` // sauce, technique or problem
+	ID   string `json:"id"`
+	Kind string `json:"kind"` // sauce, technique, problem, safety or substitution
+	// For names the class a substitution replaces. Detect, if set, must also hold.
+	For      string   `json:"for,omitempty"`
 	Parent   string   `json:"parent,omitempty"`
 	Severity string   `json:"severity,omitempty"` // problems: info or warning
 	Names    Text     `json:"names"`
