@@ -1,6 +1,9 @@
 package text
 
-import "testing"
+import (
+	"sync"
+	"testing"
+)
 
 func TestNormalize(t *testing.T) {
 	for in, want := range map[string]string{"Käse": "kase", "Tomatensoße": "tomatensosse", "  CRÈME  fraîche ": "creme fraiche", "Огурец": "огурец", "ÄPFEL": "apfel"} {
@@ -30,5 +33,38 @@ func TestPickLocale(t *testing.T) {
 		if got := PickLocale(in, "en"); got != want {
 			t.Errorf("PickLocale(%q) = %q, want %q", in, got, want)
 		}
+	}
+}
+
+// TestNormalizeIsSafeForConcurrentUse: requests normalize text at the same time. A shared
+// transformer used to corrupt itself and panic with "slice bounds out of range".
+func TestNormalizeIsSafeForConcurrentUse(t *testing.T) {
+	words := []string{"Käse", "Hühnerbrühe", "Crème fraîche", "Weißwein-Essig", "onion", "Paprikapulver edelsüß"}
+	want := map[string]string{}
+	for _, w := range words {
+		want[w] = Normalize(w)
+	}
+	var wg sync.WaitGroup
+	errs := make(chan string, 100)
+	for g := 0; g < 16; g++ {
+		wg.Add(1)
+		go func(g int) {
+			defer wg.Done()
+			for i := 0; i < 2000; i++ {
+				w := words[(g+i)%len(words)]
+				if got := Normalize(w); got != want[w] {
+					select {
+					case errs <- w + " → " + got:
+					default:
+					}
+					return
+				}
+			}
+		}(g)
+	}
+	wg.Wait()
+	close(errs)
+	for e := range errs {
+		t.Error(e)
 	}
 }

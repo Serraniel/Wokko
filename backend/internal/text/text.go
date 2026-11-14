@@ -4,6 +4,7 @@ package text
 import (
 	"regexp"
 	"strings"
+	"sync"
 	"unicode"
 
 	"golang.org/x/text/runes"
@@ -11,13 +12,19 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
-var folder = transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+// folders hands each call its own transformer. A chain keeps state while it works, so one
+// shared between requests corrupts itself and panics under concurrent use.
+var folders = sync.Pool{New: func() any {
+	return transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+}}
 
 // Normalize folds text for searching: lowercase, without diacritics, so "kase" finds "Käse".
 // It works for any language; scripts without diacritics are only lowercased.
 func Normalize(s string) string {
 	s = strings.ToLower(strings.TrimSpace(s))
 	s = strings.ReplaceAll(s, "ß", "ss")
+	folder := folders.Get().(transform.Transformer)
+	defer folders.Put(folder)
 	out, _, err := transform.String(folder, s)
 	if err != nil {
 		return s
