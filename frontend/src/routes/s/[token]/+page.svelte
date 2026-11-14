@@ -6,13 +6,15 @@
 	import Mascot from '#lib/components/Mascot.svelte';
 	import PublicShell from '#lib/components/PublicShell.svelte';
 	import RecipeView from '#lib/components/RecipeView.svelte';
-	import { t } from '#lib/i18n/index.svelte.ts';
+	import { currentLocale, t } from '#lib/i18n/index.svelte.ts';
 
 	let recipe = $state<Recipe | null>(null);
 	let missing = $state(false);
 	let error = $state('');
 
+	// Loads again when the language changes, so ingredient names follow it.
 	$effect(() => {
+		currentLocale();
 		api.get<Recipe>(`/public/share/${page.params.token}`)
 			.then((r) => (recipe = r))
 			.catch((e) => {

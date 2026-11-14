@@ -92,7 +92,13 @@ await step('share sheet and link', async () => {
   const path = new URL(url, base).pathname; await p.click('dialog button[aria-label="Close"]');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'de-DE' }); const a = await anon.newPage();
   await a.goto(base + path); await a.waitForSelector('h1:has-text("My version")');
-  if (await a.locator('text=anna').count()) throw new Error('author visible'); await anon.close();
+  if (await a.locator('text=anna').count()) throw new Error('author visible');
+  // Without an account, language and theme can still be switched, and stay after a reload.
+  if (await a.getAttribute('html', 'lang') !== 'de') throw new Error('browser language not used');
+  await a.click('summary[aria-label="Sprache und Darstellung"]'); await a.selectOption('#public-language', 'en'); await a.waitForSelector('a:has-text("Log in")');
+  await a.click('button:has-text("Dark")'); await a.reload(); await a.waitForSelector('h1:has-text("My version")');
+  if (await a.getAttribute('html', 'lang') !== 'en' || await a.getAttribute('html', 'data-theme') !== 'dark') throw new Error('language or theme not kept');
+  await anon.close();
 });
 await step('delete and undo', async () => {
   await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Delete")'); await p.waitForSelector('text=Moved to trash'); await p.waitForURL('**/recipes'); await p.click('button:has-text("Undo")'); await p.waitForSelector('h1:has-text("My version")');

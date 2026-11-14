@@ -1,6 +1,6 @@
 import { api, ApiError } from '#lib/api/client.ts';
 import type { Status, User } from '#lib/api/types.gen.ts';
-import { bestLocale, setLocale } from '#lib/i18n/index.svelte.ts';
+import { bestLocale, savedLocale, setLocale } from '#lib/i18n/index.svelte.ts';
 import { clearOfflineData } from '#lib/offline.ts';
 
 // One place knows who is logged in. It loads before any page shows, so pages never
@@ -22,7 +22,9 @@ class Session {
 			if (!(e instanceof ApiError) || e.status !== 401) throw e;
 			this.user = null;
 		}
-		await setLocale(bestLocale(this.user?.locale));
+		// A logged-in person's account decides. Otherwise the language picked in this browser,
+		// then the browser's own.
+		await setLocale(bestLocale(this.user?.locale ?? savedLocale()));
 		this.ready = true;
 	}
 

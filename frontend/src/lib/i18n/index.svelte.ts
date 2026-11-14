@@ -33,6 +33,27 @@ export function bestLocale(wanted: string | undefined | null): string {
 	return 'en';
 }
 
+const saved = 'wokko-language';
+
+/** The language picked in this browser, used while nobody is logged in. */
+export function savedLocale(): string | null {
+	try {
+		return localStorage.getItem(saved);
+	} catch {
+		return null; // Storage can be blocked. The browser's language still works.
+	}
+}
+
+/** Switches the language and remembers it for this browser. */
+export async function chooseLocale(code: string) {
+	await setLocale(code);
+	try {
+		localStorage.setItem(saved, code);
+	} catch {
+		// It still applies until the page reloads.
+	}
+}
+
 export async function setLocale(code: string) {
 	const file = files[`./messages/${code}.json`];
 	if (!file) return;
