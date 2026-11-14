@@ -1167,6 +1167,20 @@ func (q *Queries) SetFoodNutritionSource(ctx context.Context, arg SetFoodNutriti
 	return err
 }
 
+const setFoodNutritionUnchecked = `-- name: SetFoodNutritionUnchecked :exec
+UPDATE foods SET nutrition_unchecked = ? WHERE id = ?
+`
+
+type SetFoodNutritionUncheckedParams struct {
+	NutritionUnchecked int64
+	ID                 int64
+}
+
+func (q *Queries) SetFoodNutritionUnchecked(ctx context.Context, arg SetFoodNutritionUncheckedParams) error {
+	_, err := q.db.ExecContext(ctx, setFoodNutritionUnchecked, arg.NutritionUnchecked, arg.ID)
+	return err
+}
+
 const setFoodPieceGrams = `-- name: SetFoodPieceGrams :exec
 UPDATE foods SET piece_grams = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
 `

@@ -117,6 +117,36 @@ func search[T any](in catalogArgs, fn func(query string, limit int64) (app.Page[
 	return out, nil
 }
 
+type suggestNutritionArgs struct {
+	FoodID int64  `json:"food_id"`
+	Query  string `json:"query,omitempty" jsonschema:"an English search, such as cooked ham. Leave out to search with all of the food's names"`
+}
+
+type fillNutritionArgs struct {
+	FoodID        int64    `json:"food_id"`
+	EnergyKcal    *float64 `json:"energy_kcal,omitempty" jsonschema:"per 100 g"`
+	Fat           *float64 `json:"fat,omitempty" jsonschema:"grams per 100 g"`
+	SaturatedFat  *float64 `json:"saturated_fat,omitempty" jsonschema:"grams per 100 g"`
+	Carbohydrates *float64 `json:"carbohydrates,omitempty" jsonschema:"grams per 100 g"`
+	Sugar         *float64 `json:"sugar,omitempty" jsonschema:"grams per 100 g"`
+	Fiber         *float64 `json:"fiber,omitempty" jsonschema:"grams per 100 g"`
+	Protein       *float64 `json:"protein,omitempty" jsonschema:"grams per 100 g"`
+	Salt          *float64 `json:"salt,omitempty" jsonschema:"grams per 100 g"`
+	PieceGrams    *float64 `json:"piece_grams,omitempty" jsonschema:"weight of one piece in grams, for foods counted in pieces"`
+	Source        string   `json:"source" jsonschema:"where the values come from: the dataset entry from suggest_food_nutrition, a package label, or the word estimate if guessed"`
+	Confirmed     bool     `json:"confirmed,omitempty" jsonschema:"true only after the person agreed to these values, when a save asked for confirmation"`
+}
+
+func (a fillNutritionArgs) values() map[int64]float64 {
+	out := map[int64]float64{}
+	for id, v := range map[int64]*float64{1: a.EnergyKcal, 2: a.Fat, 3: a.SaturatedFat, 4: a.Carbohydrates, 5: a.Sugar, 6: a.Fiber, 7: a.Protein, 8: a.Salt} {
+		if v != nil {
+			out[id] = *v
+		}
+	}
+	return out
+}
+
 type photoArgs struct {
 	ID       int64  `json:"id" jsonschema:"the recipe"`
 	ImageURL string `json:"image_url" jsonschema:"public address of a photo, such as the image of the page the recipe came from"`
@@ -247,6 +277,9 @@ func (l *Layer) server(a app.TokenAccess, base string) *mcp.Server {
 	read(l, s, "get_recipe_insights", "Read what Wokko's built-in kitchen knowledge finds in a recipe: its sauces and techniques with tips, allergens (maybe means: depends on the product), whether it's vegetarian or vegan, food safety notes and likely problems. Use it to explain a recipe or, with the person's agreement, to fix problems with update_recipe.", func(ctx context.Context, in idArgs) (any, error) {
 		return svc.RecipeInsights(ctx, v, in.ID)
 	})
+	read(l, s, "suggest_food_nutrition", "Look a food up in the nutrition dataset that comes with Wokko (USDA FoodData Central SR Legacy, in English). Returns the closest entries with values per 100 g, keyed by nutrient id: 1 energy kcal, 2 fat, 3 saturated fat, 4 carbohydrates, 5 sugar, 6 fiber, 7 protein, 8 salt. Use it before set_food_nutrition.", func(ctx context.Context, in suggestNutritionArgs) (any, error) {
+		return svc.NutritionSuggestions(ctx, v, in.FoodID, in.Query)
+	})
 	read(l, s, "get_recipe_nutrition", "Estimate a recipe's nutrition. 'missing' lists ingredients that couldn't be counted.", func(ctx context.Context, in idArgs) (any, error) {
 		return svc.GetRecipeNutrition(ctx, v, in.ID)
 	})
@@ -302,6 +335,10 @@ func (l *Layer) server(a app.TokenAccess, base string) *mcp.Server {
 			}
 			r, err := svc.UpdateRecipe(ctx, v, in.ID, draft)
 			return r, r.Name, err
+		})
+		write(l, s, a, "set_food_nutrition", "Fill in a food's missing nutrition values per 100 g, for example for a food that was just added. Existing values are never changed. Look the food up with suggest_food_nutrition first and name that entry as source. Only estimate when nothing fits, and then say estimate in source. Implausible values are refused.", func(ctx context.Context, in fillNutritionArgs) (any, string, error) {
+			out, err := svc.FillFoodNutrition(ctx, v, in.FoodID, in.values(), in.PieceGrams, in.Source, in.Confirmed)
+			return out, fmt.Sprintf("food %d", in.FoodID), err
 		})
 		write(l, s, a, "set_recipe_photo", "Give a recipe a photo from a public image address. It replaces the current photo.", func(ctx context.Context, in photoArgs) (any, string, error) {
 			r, err := svc.SetPhotoFromURL(ctx, v, in.ID, in.ImageURL)

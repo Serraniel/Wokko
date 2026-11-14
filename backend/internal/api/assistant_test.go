@@ -592,3 +592,63 @@ func TestMCPServerShowsItsIcon(t *testing.T) {
 		t.Fatalf("server info: %+v", info)
 	}
 }
+
+// TestMCPFillsMissingNutritionOnly: an assistant looks values up, fills only what's missing with
+// a named source, asks first by default, and the values stay marked unchecked until a person
+// saves them.
+func TestMCPFillsMissingNutritionOnly(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	enableMCP(t, admin)
+	var ham app.Food
+	admin.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "de", Name: "Kochschinken"}}, Aliases: []string{"cooked ham"}}, 201).decode(t, &ham)
+	s := connect(t, e, newToken(t, admin, "write"))
+
+	var found []app.NutritionSuggestion
+	call(t, s, "suggest_food_nutrition", map[string]any{"food_id": ham.ID}, &found)
+	if len(found) == 0 || !strings.HasPrefix(found[0].Description, "Ham") {
+		t.Fatalf("suggestions: %+v", found)
+	}
+	fill := map[string]any{"food_id": ham.ID, "energy_kcal": 145, "fat": 6, "carbohydrates": 1.5, "protein": 21, "salt": 2.5, "source": "USDA FoodData Central SR Legacy, FDC 1"}
+
+	// Asked first by default.
+	if msg := callFails(t, s, "set_food_nutrition", fill); !strings.Contains(msg, "assistant_nutrition_needs_confirmation") {
+		t.Fatalf("ask: %s", msg)
+	}
+	fill["confirmed"] = true
+	if msg := callFails(t, s, "set_food_nutrition", map[string]any{"food_id": ham.ID, "fat": 120, "source": "estimate", "confirmed": true}); !strings.Contains(msg, "implausible_nutrition") {
+		t.Fatalf("implausible: %s", msg)
+	}
+	if msg := callFails(t, s, "set_food_nutrition", map[string]any{"food_id": ham.ID, "energy_kcal": 600, "fat": 6, "carbohydrates": 1.5, "protein": 21, "source": "estimate", "confirmed": true}); !strings.Contains(msg, "implausible_nutrition") {
+		t.Fatalf("energy that doesn't add up: %s", msg)
+	}
+	if msg := callFails(t, s, "set_food_nutrition", map[string]any{"food_id": ham.ID, "fat": 6, "source": " ", "confirmed": true}); !strings.Contains(msg, "source_required") {
+		t.Fatalf("no source: %s", msg)
+	}
+
+	// A person already entered protein; the assistant can't change it.
+	admin.ok("PUT", path("/foods/%d/nutrition", ham.ID), app.FoodNutrition{Values: map[int64]float64{7: 19}, Source: "package label"}, 200)
+	var got app.AssistantNutrition
+	call(t, s, "set_food_nutrition", fill, &got)
+	if got.Values[7] != 19 || got.Values[1] != 145 || !slices.Equal(got.Skipped, []int64{7}) || !got.Unchecked || !strings.Contains(got.Source, "package label") || !strings.Contains(got.Source, "FDC 1") {
+		t.Fatalf("fill: %+v", got)
+	}
+	if msg := callFails(t, s, "set_food_nutrition", fill); !strings.Contains(msg, "nothing_to_fill") {
+		t.Fatalf("a second fill changes nothing: %s", msg)
+	}
+
+	// A person saving the values checks them.
+	var saved app.FoodNutrition
+	admin.ok("PUT", path("/foods/%d/nutrition", ham.ID), app.FoodNutrition{Values: got.Values, Source: got.Source}, 200).decode(t, &saved)
+	if saved.Unchecked {
+		t.Fatal("saved by a person, still unchecked")
+	}
+
+	// "never" keeps assistants out of the catalog entirely.
+	admin.ok("PATCH", v1+"/me", map[string]any{"assistant_new_entries": "never"}, 200)
+	var bread app.Food
+	admin.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "en", Name: "Wokkobread"}}}, 201).decode(t, &bread)
+	if msg := callFails(t, s, "set_food_nutrition", map[string]any{"food_id": bread.ID, "fat": 3, "source": "estimate", "confirmed": true}); !strings.Contains(msg, "assistant_catalog_not_allowed") {
+		t.Fatalf("never: %s", msg)
+	}
+}
