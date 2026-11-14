@@ -1,6 +1,6 @@
 # Starter catalog updates
 
-Status: plan, not started. Tracking issue: #107.
+Status: steps 1 to 3 built (pack, provenance, start-up sync, admin suggestions). Step 4, the generator and the monthly workflow, is still open and needs bot credentials. Tracking issue: #107.
 
 ## Problem
 

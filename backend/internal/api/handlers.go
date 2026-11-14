@@ -828,3 +828,22 @@ func (s *Server) publicInsights(w http.ResponseWriter, r *http.Request) error {
 	res, err := s.svc.PublicRecipeInsights(r.Context(), s.anonLocale(r), id)
 	return reply(w, res, err)
 }
+
+func (s *Server) catalogStatus(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	st, err := s.svc.CatalogStatus(r.Context(), v)
+	return reply(w, st, err)
+}
+
+func (s *Server) resolveCatalogSuggestion(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	var in struct {
+		Take bool `json:"take"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	return reply(w, map[string]bool{"ok": true}, s.svc.ResolveCatalogSuggestion(r.Context(), v, id, in.Take))
+}

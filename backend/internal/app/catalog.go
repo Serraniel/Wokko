@@ -302,6 +302,10 @@ func (s *Service) DeleteFood(ctx context.Context, v Viewer, id int64) error {
 		if err := inUse(uses + listed); err != nil {
 			return err
 		}
+		// A starter entry that was deleted or merged here stays gone, even when a newer catalog has it.
+		if err := q.ForgetCatalogEntity(ctx, sqlcgen.ForgetCatalogEntityParams{Kind: "food", EntityID: sql64(id)}); err != nil {
+			return err
+		}
 		return q.DeleteFood(ctx, id)
 	})
 }
@@ -343,6 +347,10 @@ func (s *Service) MergeFoods(ctx context.Context, v Viewer, in MergeInput) error
 			return err
 		}
 		if err := q.MoveFoodNutrients(ctx, sqlcgen.MoveFoodNutrientsParams{Target: in.TargetID, Source: in.SourceID}); err != nil {
+			return err
+		}
+		// A starter entry that was deleted or merged here stays gone, even when a newer catalog has it.
+		if err := q.ForgetCatalogEntity(ctx, sqlcgen.ForgetCatalogEntityParams{Kind: "food", EntityID: sql64(in.SourceID)}); err != nil {
 			return err
 		}
 		if err := q.DeleteFood(ctx, in.SourceID); err != nil {
@@ -494,6 +502,10 @@ func (s *Service) DeleteUnit(ctx context.Context, v Viewer, id int64) error {
 		if err := inUse(uses); err != nil {
 			return err
 		}
+		// A starter entry that was deleted or merged here stays gone, even when a newer catalog has it.
+		if err := q.ForgetCatalogEntity(ctx, sqlcgen.ForgetCatalogEntityParams{Kind: "unit", EntityID: sql64(id)}); err != nil {
+			return err
+		}
 		return q.DeleteUnit(ctx, id)
 	})
 }
@@ -530,6 +542,10 @@ func (s *Service) MergeUnits(ctx context.Context, v Viewer, in MergeInput) error
 			return err
 		}
 		if err := q.MoveFoodDefaultsToUnit(ctx, sqlcgen.MoveFoodDefaultsToUnitParams{Target: nullID(in.TargetID), Source: nullID(in.SourceID)}); err != nil {
+			return err
+		}
+		// A starter entry that was deleted or merged here stays gone, even when a newer catalog has it.
+		if err := q.ForgetCatalogEntity(ctx, sqlcgen.ForgetCatalogEntityParams{Kind: "unit", EntityID: sql64(in.SourceID)}); err != nil {
 			return err
 		}
 		return q.DeleteUnit(ctx, in.SourceID)

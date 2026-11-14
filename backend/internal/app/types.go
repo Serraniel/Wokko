@@ -548,3 +548,32 @@ type FileImportResult struct {
 	Skipped  int64            `json:"skipped"`
 	Failed   int64            `json:"failed"`
 }
+
+// CatalogSync describes one time a shipped starter catalog was brought in.
+type CatalogSync struct {
+	Pack      string `json:"pack"`
+	Version   string `json:"version"`
+	Added     int64  `json:"added"`
+	Updated   int64  `json:"updated"`
+	Suggested int64  `json:"suggested"`
+	At        string `json:"at"`
+}
+
+// CatalogSuggestion is a value where the newer starter catalog and this database disagree.
+type CatalogSuggestion struct {
+	ID           int64  `json:"id"`
+	Kind         string `json:"kind"` // food, unit or tag
+	Key          string `json:"key"`
+	EntityID     int64  `json:"entity_id"`
+	Name         string `json:"name"`
+	Field        string `json:"field"` // name/<locale>, alias/<alias>, default_unit, grams or nutrient/<id>
+	Nutrient     string `json:"nutrient,omitempty"`
+	NutrientUnit string `json:"nutrient_unit,omitempty"`
+	Ours         string `json:"ours"`
+	Theirs       string `json:"theirs"`
+}
+
+type CatalogStatus struct {
+	Last        *CatalogSync        `json:"last"`
+	Suggestions []CatalogSuggestion `json:"suggestions"`
+}

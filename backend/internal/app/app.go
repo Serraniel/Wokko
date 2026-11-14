@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/serraniel/wokko/backend/internal/auth"
+	"github.com/serraniel/wokko/backend/internal/catalog"
 	"github.com/serraniel/wokko/backend/internal/config"
 	"github.com/serraniel/wokko/backend/internal/importer"
 	"github.com/serraniel/wokko/backend/internal/knowledge"
@@ -57,7 +58,9 @@ type Service struct {
 	Fetcher *importer.Fetcher
 	// Knowledge is the built-in kitchen knowledge, shipped in the binary.
 	Knowledge *knowledge.Pack
-	Now       func() time.Time
+	// Catalog is the starter catalog this build ships.
+	Catalog *catalog.Pack
+	Now     func() time.Time
 
 	backupMu sync.Mutex
 	healthMu sync.RWMutex
@@ -65,7 +68,7 @@ type Service struct {
 }
 
 func New(s *store.Store, cfg config.Config, log *slog.Logger) *Service {
-	return &Service{Store: s, Media: media.Store{Dir: cfg.UploadsDir()}, Cfg: cfg, Log: log, Now: time.Now, Fetcher: importer.NewFetcher(cfg.Version, false), Knowledge: knowledge.MustLoad()}
+	return &Service{Store: s, Media: media.Store{Dir: cfg.UploadsDir()}, Cfg: cfg, Log: log, Now: time.Now, Fetcher: importer.NewFetcher(cfg.Version, false), Knowledge: knowledge.MustLoad(), Catalog: catalog.MustLoad()}
 }
 
 const timeFormat = "2006-01-02T15:04:05Z"

@@ -110,6 +110,7 @@ await step('dark mode', async () => {
 });
 await step('admin health and backup', async () => {
   await p.goto(base + '/admin'); await p.waitForSelector('text=Data safety'); await p.click('button:has-text("Back up now")'); await p.waitForSelector('text=Everything looks good', { timeout: 20000 }); await shot('13-admin');
+  await p.waitForSelector('h2:has-text("Starter catalog updates")'); await p.waitForSelector('text=Nothing to decide.'); await p.waitForSelector('text=Last update');
 });
 await step('invite, register second user, no discovery', async () => {
   await p.click('button:has-text("Create invite link")'); await p.waitForSelector('input[aria-label="Invite link"]');

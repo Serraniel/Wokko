@@ -154,6 +154,8 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET "+p+"/admin/invites", s.user(s.adminListInvites))
 	m.HandleFunc("POST "+p+"/admin/invites", s.user(s.adminCreateInvite))
 	m.HandleFunc("DELETE "+p+"/admin/invites/{id}", s.user(s.deleteInvite))
+	m.HandleFunc("GET "+p+"/admin/catalog", s.user(s.catalogStatus))
+	m.HandleFunc("POST "+p+"/admin/catalog/suggestions/{id}", s.user(s.resolveCatalogSuggestion))
 	m.HandleFunc("GET "+p+"/admin/settings", s.user(s.adminGetSettings))
 	m.HandleFunc("PUT "+p+"/admin/settings", s.user(s.adminUpdateSettings))
 	m.HandleFunc("GET "+p+"/admin/health", s.user(s.adminHealth))

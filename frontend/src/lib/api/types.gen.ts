@@ -527,3 +527,33 @@ export interface FileImportResult {
   skipped: number /* int64 */;
   failed: number /* int64 */;
 }
+/**
+ * CatalogSync describes one time a shipped starter catalog was brought in.
+ */
+export interface CatalogSync {
+  pack: string;
+  version: string;
+  added: number /* int64 */;
+  updated: number /* int64 */;
+  suggested: number /* int64 */;
+  at: string;
+}
+/**
+ * CatalogSuggestion is a value where the newer starter catalog and this database disagree.
+ */
+export interface CatalogSuggestion {
+  id: number /* int64 */;
+  kind: string; // food, unit or tag
+  key: string;
+  entity_id: number /* int64 */;
+  name: string;
+  field: string; // name/<locale>, alias/<alias>, default_unit, grams or nutrient/<id>
+  nutrient: string | null;
+  nutrient_unit: string | null;
+  ours: string;
+  theirs: string;
+}
+export interface CatalogStatus {
+  last: CatalogSync | null;
+  suggestions: CatalogSuggestion[];
+}

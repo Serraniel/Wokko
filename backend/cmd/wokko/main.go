@@ -162,6 +162,11 @@ func serve(cfg config.Config, log *slog.Logger) error {
 	}
 
 	svc := app.New(st, cfg, log)
+	// A newer starter catalog reaches this database here. It runs in one transaction and never
+	// deletes, so a failure only means the update waits for the next start.
+	if _, err := svc.SyncCatalog(ctx); err != nil {
+		log.Error("starter catalog update failed, it will be tried again on the next start", "error", err)
+	}
 	go svc.RunBackground(ctx)
 
 	srv := &http.Server{
