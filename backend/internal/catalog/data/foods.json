@@ -15,9 +15,6 @@
     }
    },
    "aliases": [
-    "Luftzwiebel",
-    "Sommerzwiebel",
-    "Etagenzwiebel",
     "Speisezwiebel"
    ],
    "nutrients": {
@@ -30,7 +27,8 @@
     "7": 1.1,
     "8": 0.01
    },
-   "wikidata": "Q23485"
+   "wikidata": "Q23485",
+   "curated": true
   },
   {
    "key": "food.garlic",
@@ -77,12 +75,9 @@
     }
    },
    "aliases": [
-    "Karottenwurzel",
     "Mohrrübe",
     "Möhre",
-    "Gelbrübe",
-    "carrot taproot",
-    "domesticated carrot"
+    "Gelbrübe"
    ],
    "nutrients": {
     "1": 41,
@@ -94,7 +89,8 @@
     "7": 0.93,
     "8": 0.172
    },
-   "wikidata": "Q81"
+   "wikidata": "Q81",
+   "curated": true
   },
   {
    "key": "food.potato",
@@ -113,7 +109,6 @@
    "aliases": [
     "Potaten",
     "Potacke",
-    "Erdknolle",
     "tater",
     "tattie",
     "spud"
@@ -128,7 +123,8 @@
     "7": 2.05,
     "8": 0.015
    },
-   "wikidata": "Q10998"
+   "wikidata": "Q10998",
+   "curated": true
   },
   {
    "key": "food.tomato",
@@ -146,8 +142,6 @@
    },
    "aliases": [
     "Fleischtomate",
-    "Cherrytomate",
-    "Kirschtomate",
     "Pomidore",
     "garden tomato"
    ],
@@ -161,7 +155,8 @@
     "7": 0.88,
     "8": 0.013
    },
-   "wikidata": "Q23501"
+   "wikidata": "Q23501",
+   "curated": true
   },
   {
    "key": "food.cucumber",
@@ -236,9 +231,6 @@
      "plural": "broccoli heads"
     }
    },
-   "aliases": [
-    "Winterblumenkohl"
-   ],
    "nutrients": {
     "1": 34,
     "2": 0.37,
@@ -249,7 +241,8 @@
     "7": 2.82,
     "8": 0.083
    },
-   "wikidata": "Q47722"
+   "wikidata": "Q47722",
+   "curated": true
   },
   {
    "key": "food.spinach",
@@ -400,10 +393,6 @@
      "plural": "cabbages"
     }
    },
-   "aliases": [
-    "cabage",
-    "cabagge"
-   ],
    "nutrients": {
     "1": 25,
     "2": 0.1,
@@ -414,7 +403,8 @@
     "7": 1.28,
     "8": 0.045
    },
-   "wikidata": "Q14328596"
+   "wikidata": "Q14328596",
+   "curated": true
   },
   {
    "key": "food.leek",
@@ -464,8 +454,7 @@
    },
    "aliases": [
     "Stangensellerie",
-    "Staudensellerie",
-    "leaf celery"
+    "Staudensellerie"
    ],
    "nutrients": {
     "1": 14,
@@ -477,7 +466,8 @@
     "7": 0.69,
     "8": 0.2
    },
-   "wikidata": "Q23012379"
+   "wikidata": "Q23012379",
+   "curated": true
   },
   {
    "key": "food.mushroom",
@@ -795,8 +785,7 @@
     }
    },
    "aliases": [
-    "Cocktailtomate",
-    "Kischtomate"
+    "Cocktailtomate"
    ],
    "nutrients": {
     "1": 18,
@@ -808,7 +797,8 @@
     "7": 0.88,
     "8": 0.013
    },
-   "wikidata": "Q6540634"
+   "wikidata": "Q6540634",
+   "curated": true
   },
   {
    "key": "food.spring_onion",
@@ -951,9 +941,6 @@
      "plural": "lemons"
     }
    },
-   "aliases": [
-    "Limone"
-   ],
    "nutrients": {
     "1": 29,
     "2": 0.3,
@@ -964,7 +951,8 @@
     "7": 1.1,
     "8": 0.005
    },
-   "wikidata": "Q1093742"
+   "wikidata": "Q1093742",
+   "curated": true
   },
   {
    "key": "food.lime",
@@ -1006,8 +994,6 @@
     }
    },
    "aliases": [
-    "Ananas-Erdbeere",
-    "Kulturerdbeere",
     "garden strawberry"
    ],
    "nutrients": {
@@ -1020,7 +1006,8 @@
     "7": 0.67,
     "8": 0.003
    },
-   "wikidata": "Q13158"
+   "wikidata": "Q13158",
+   "curated": true
   },
   {
    "key": "food.blueberry",
@@ -2623,8 +2610,7 @@
     "6": 3.9,
     "7": 12.68,
     "8": 0.003
-   },
-   "wikidata": "Q7449743"
+   }
   },
   {
    "key": "food.breadcrumbs",
@@ -3150,8 +3136,7 @@
    "aliases": [
     "cardamom seeds",
     "cardamon",
-    "cardamum",
-    "ground cadamom"
+    "cardamum"
    ],
    "nutrients": {
     "1": 311,
@@ -3162,7 +3147,8 @@
     "7": 10.76,
     "8": 0.045
    },
-   "wikidata": "Q14625808"
+   "wikidata": "Q14625808",
+   "curated": true
   },
   {
    "key": "food.chili_powder",
@@ -3179,7 +3165,6 @@
     }
    },
    "aliases": [
-    "Chilipfeffer",
     "Chili-Pulver",
     "chile powder",
     "chili powder blend"
@@ -3194,7 +3179,8 @@
     "7": 13.46,
     "8": 7.168
    },
-   "wikidata": "Q1072946"
+   "wikidata": "Q1072946",
+   "curated": true
   },
   {
    "key": "food.curry_powder",
@@ -3577,7 +3563,6 @@
     }
    },
    "aliases": [
-    "Obstessig",
     "cider vinegar"
    ],
    "nutrients": {
@@ -3590,7 +3575,8 @@
     "7": 0,
     "8": 0.013
    },
-   "wikidata": "Q618322"
+   "wikidata": "Q618322",
+   "curated": true
   },
   {
    "key": "food.balsamic_vinegar",
@@ -4063,8 +4049,7 @@
    "aliases": [
     "Kakao",
     "cocoa",
-    "cacao",
-    "cocoa solids"
+    "cacao"
    ],
    "nutrients": {
     "1": 228,
@@ -4076,7 +4061,8 @@
     "7": 19.6,
     "8": 0.052
    },
-   "wikidata": "Q1062396"
+   "wikidata": "Q1062396",
+   "curated": true
   },
   {
    "key": "food.dark_chocolate",
