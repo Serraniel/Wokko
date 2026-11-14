@@ -170,6 +170,8 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET "+p+"/public/recipes/{id}/export", s.h(s.exportPublic))
 	m.HandleFunc("GET "+p+"/public/recipes/{id}/insights", s.h(s.publicInsights))
 	m.HandleFunc("GET "+p+"/public/share/{token}", s.h(s.getShared))
+	m.HandleFunc("GET "+p+"/public/photo-upload/{token}", s.h(s.photoUploadInfo))
+	m.HandleFunc("POST "+p+"/public/photo-upload/{token}", s.h(s.usePhotoUpload))
 	m.HandleFunc("GET "+p+"/public/share/{token}/export", s.h(s.exportShared))
 	m.HandleFunc("GET "+p+"/public/share/{token}/insights", s.h(s.sharedInsights))
 	m.HandleFunc("GET "+p+"/public/collections/{token}", s.h(s.listCollection))

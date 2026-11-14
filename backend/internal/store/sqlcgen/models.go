@@ -255,6 +255,16 @@ type PasswordReset struct {
 	ExpiresAt string
 }
 
+type PhotoUploadLink struct {
+	ID        int64
+	TokenHash string
+	RecipeID  int64
+	UserID    int64
+	ExpiresAt string
+	UsedAt    sql.NullString
+	CreatedAt string
+}
+
 type Recipe struct {
 	ID           int64
 	OwnerID      int64

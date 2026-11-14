@@ -776,6 +776,27 @@ func (s *Server) getShared(w http.ResponseWriter, r *http.Request) error {
 	return reply(w, rec, err)
 }
 
+// photoUploadInfo and usePhotoUpload serve the one-time links an assistant hands out for adding
+// a recipe photo. The link itself is the permission, so they need no login.
+func (s *Server) photoUploadInfo(w http.ResponseWriter, r *http.Request) error {
+	out, err := s.svc.PhotoUploadInfo(r.Context(), r.PathValue("token"))
+	return reply(w, out, err)
+}
+
+func (s *Server) usePhotoUpload(w http.ResponseWriter, r *http.Request) error {
+	r.Body = http.MaxBytesReader(w, r.Body, media.MaxUploadBytes+1<<20)
+	file, _, err := r.FormFile("photo")
+	if err != nil {
+		return &app.Error{Status: http.StatusBadRequest, Code: "invalid_image", Message: "Please choose a photo no larger than 20 MB"}
+	}
+	defer file.Close()
+	if err := s.svc.UsePhotoUploadLink(r.Context(), r.PathValue("token"), file); err != nil {
+		return err
+	}
+	writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
+	return nil
+}
+
 // serveMedia only sends a photo to someone who may see its recipe.
 func (s *Server) serveMedia(w http.ResponseWriter, r *http.Request) error {
 	file := r.PathValue("file")
