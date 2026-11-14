@@ -883,7 +883,11 @@ func (s *Service) CanSeePhoto(ctx context.Context, v Viewer, file, shareToken st
 	if err != nil {
 		return false, err
 	}
-	if shareToken != "" {
+	links, err := s.linksAllowed(ctx)
+	if err != nil {
+		return false, err
+	}
+	if shareToken != "" && links {
 		n, err := q.CountValidShareLink(ctx, sqlcgen.CountValidShareLinkParams{Token: shareToken, RecipeID: r.ID, ExpiresAt: nullStr(s.stamp(s.Now()))})
 		if err != nil {
 			return false, err
@@ -1006,7 +1010,28 @@ func (s *Service) UnshareWithUser(ctx context.Context, v Viewer, id, userID int6
 	})
 }
 
+// linksAllowed tells whether links that open recipes without an account work. The admin's
+// switch for public recipes covers them too: turning it off pauses every such link, and
+// turning it on again brings them back, since nothing is deleted.
+func (s *Service) linksAllowed(ctx context.Context) (bool, error) {
+	return s.settingBool(ctx, "allow_public_recipes")
+}
+
+func (s *Service) requireLinks(ctx context.Context) error {
+	ok, err := s.linksAllowed(ctx)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return fail(http.StatusForbidden, "links_disabled", "Links without login are turned off on this server")
+	}
+	return nil
+}
+
 func (s *Service) CreateShareLink(ctx context.Context, v Viewer, id, expiresInDays int64) (ShareLink, error) {
+	if err := s.requireLinks(ctx); err != nil {
+		return ShareLink{}, err
+	}
 	token, err := auth.NewToken()
 	if err != nil {
 		return ShareLink{}, err
@@ -1049,6 +1074,9 @@ func anonymous(r Recipe) Recipe {
 
 // GetSharedRecipe opens a share link without any account.
 func (s *Service) GetSharedRecipe(ctx context.Context, locale, token string) (Recipe, error) {
+	if ok, err := s.linksAllowed(ctx); err != nil || !ok {
+		return Recipe{}, orNotFound(err)
+	}
 	q := s.Store.Queries
 	l, err := q.GetShareLinkByToken(ctx, token)
 	if isNoRows(err) {
@@ -1240,4 +1268,12 @@ func (s *Service) GetStep(ctx context.Context, v Viewer, id int64) (Step, int, e
 		}
 	}
 	return Step{}, 0, ErrNotFound
+}
+
+// orNotFound passes a real error on, and otherwise answers as if the thing didn't exist.
+func orNotFound(err error) error {
+	if err != nil {
+		return err
+	}
+	return ErrNotFound
 }

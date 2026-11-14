@@ -87,8 +87,11 @@ await step('conflict is detected, draft kept', async () => {
 await step('share sheet and link', async () => {
   await p.click('button[aria-label="Share"]'); await p.waitForSelector('text=Who can see this');
   await p.fill('input[aria-label="Exact handle"]', 'nobody-here'); await p.click('dialog form button:has-text("Share")'); await p.waitForSelector('text=No user has exactly this handle');
-  await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Share link"]'); await shot('08-share');
-  const url = await p.inputValue('input[aria-label="Share link"]'); console.log('   ', url.replace(/s\/.*/, 's/…'));
+  if (!(await p.inputValue('input[aria-label="Recipe link"]')).match(/\/recipes\/\d+$/)) throw new Error('login link');
+  // A link without login is confirmed first, because it reaches people outside the household.
+  await p.click('button:has-text("Create public link")'); await p.waitForSelector('dialog [role="alert"]:has-text("without logging in")');
+  await p.click('dialog [role="alert"] button:has-text("Create public link")'); await p.waitForSelector('input[aria-label="Public link"]'); await shot('08-share');
+  const url = await p.inputValue('input[aria-label="Public link"]'); console.log('   ', url.replace(/s\/.*/, 's/…'));
   const path = new URL(url, base).pathname; await p.click('dialog button[aria-label="Close"]');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'de-DE' }); const a = await anon.newPage();
   await a.goto(base + path); await a.waitForSelector('h1:has-text("My version")');
@@ -180,7 +183,8 @@ await step('live cooking and printing with only a share link', async () => {
   await p.click('button[aria-label="More"]'); await p.click('button:has-text("Export")'); await p.waitForSelector('a:has-text("For another Wokko")');
   if (!/\/api\/v1\/recipes\/\d+\/export\?format=wokko$/.test(await p.getAttribute('a:has-text("For another Wokko")', 'href'))) throw new Error('export link');
   await p.click('dialog[open] button[aria-label="Close"]'); await p.click('button[aria-label="Share"]'); await p.waitForSelector('text=Who can see this');
-  await p.click('button:has-text("Create link")'); await p.waitForSelector('input[aria-label="Share link"]'); const url = await p.inputValue('input[aria-label="Share link"]'); await p.click('dialog button[aria-label="Close"]');
+  await p.click('button:has-text("Create public link")'); if (await p.locator('dialog [role="alert"]').count()) await p.click('dialog [role="alert"] button:has-text("Create public link")');
+  await p.waitForSelector('input[aria-label="Public link"]'); const url = await p.inputValue('input[aria-label="Public link"]'); await p.click('dialog button[aria-label="Close"]');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const a = await anon.newPage();
   const path = new URL(url, base).pathname;
   await a.goto(base + path); await a.waitForSelector('button:has-text("Print")'); await a.click('button[aria-label="More servings"]'); await a.emulateMedia({ media: 'print' }); await a.waitForTimeout(100); await a.screenshot({ path: `${shots}/32-print.png`, fullPage: true });
