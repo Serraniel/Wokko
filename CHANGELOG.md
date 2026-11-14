@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.0](https://github.com/Serraniel/Wokko/compare/v0.3.0...v0.4.0) (2026-11-14)
+
+
+### Features
+
+* **ingredients:** starter catalog updates reach existing databases ([#110](https://github.com/Serraniel/Wokko/issues/110)) ([a97b89e](https://github.com/Serraniel/Wokko/commit/a97b89eda647d16cf779850773fdd5caf9a9b285)), closes [#107](https://github.com/Serraniel/Wokko/issues/107)
+* **knowledge:** built-in kitchen knowledge for every recipe ([#108](https://github.com/Serraniel/Wokko/issues/108)) ([57cd0a5](https://github.com/Serraniel/Wokko/commit/57cd0a5a91036d4874a2d8efa7bcb2f19a9467c5)), closes [#105](https://github.com/Serraniel/Wokko/issues/105)
+* **knowledge:** set the kind of a food Wokko doesn't recognise ([#111](https://github.com/Serraniel/Wokko/issues/111)) ([6712fba](https://github.com/Serraniel/Wokko/commit/6712fba9821af1e8e9c0620d15f27d32ca3f90a2)), closes [#105](https://github.com/Serraniel/Wokko/issues/105)
+* **mcp:** assistants look up the catalog, and you decide on new ingredients ([#104](https://github.com/Serraniel/Wokko/issues/104)) ([e89998f](https://github.com/Serraniel/Wokko/commit/e89998f6d2b396e1d8469ccdeb689d13b0add236)), closes [#102](https://github.com/Serraniel/Wokko/issues/102)
+* **recipes:** export a single recipe for another Wokko or other apps ([#97](https://github.com/Serraniel/Wokko/issues/97)) ([03e09e9](https://github.com/Serraniel/Wokko/commit/03e09e94ee1f30cc40a411ae3290c5596f97c801)), closes [#93](https://github.com/Serraniel/Wokko/issues/93)
+* **recipes:** export my recipes or all I can see, for Wokko or other apps ([#98](https://github.com/Serraniel/Wokko/issues/98)) ([22bde9d](https://github.com/Serraniel/Wokko/commit/22bde9deaf43dff61d19fca593b21dd7f027b686)), closes [#94](https://github.com/Serraniel/Wokko/issues/94)
+* **recipes:** import files exported from another Wokko ([#95](https://github.com/Serraniel/Wokko/issues/95)) ([3a80b4b](https://github.com/Serraniel/Wokko/commit/3a80b4bf9a2cbe910c3b63f60157d5a960a0801a)), closes [#92](https://github.com/Serraniel/Wokko/issues/92)
+
+
+### Fixes
+
+* **recipes:** ingredients written with an alias use the known food or unit ([#103](https://github.com/Serraniel/Wokko/issues/103)) ([3980952](https://github.com/Serraniel/Wokko/commit/39809521ef992788488e0228bbbe63d9f7231ddc)), closes [#102](https://github.com/Serraniel/Wokko/issues/102)
+
 ## [0.3.0](https://github.com/Serraniel/Wokko/compare/v0.2.0...v0.3.0) (2026-11-08)
 
 
