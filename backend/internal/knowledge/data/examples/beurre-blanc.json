@@ -1,0 +1,48 @@
+{
+ "steps": [
+  {
+   "text": "Finely chopped shallot with white wine and white wine vinegar, reduce until almost dry.",
+   "ingredients": [
+    {
+     "names": [
+      "shallot"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "white wine"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "white wine vinegar"
+     ],
+     "amount": 2,
+     "unit": "tbsp"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Off the heat, whisk in cold butter piece by piece.",
+   "ingredients": [
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "salt"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

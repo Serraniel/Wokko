@@ -1,0 +1,60 @@
+{
+ "steps": [
+  {
+   "text": "Rindfleisch in Öl scharf anbraten, Zwiebeln zugeben und mit Paprikapulver und Brühe 2 Stunden schmoren.",
+   "ingredients": [
+    {
+     "names": [
+      "Rindfleisch"
+     ],
+     "amount": 800,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Öl"
+     ]
+    },
+    {
+     "names": [
+      "Zwiebeln"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Paprikapulver"
+     ]
+    },
+    {
+     "names": [
+      "Rinderbrühe"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 120
+  },
+  {
+   "text": "Zum Schluss mit etwas Mehlbutter binden.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 20,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 20,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

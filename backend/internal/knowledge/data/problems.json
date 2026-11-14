@@ -1,0 +1,1277 @@
+{
+ "entries": [
+  {
+   "id": "problem.times_disagree",
+   "kind": "problem",
+   "names": {
+    "en": "Times don't add up",
+    "de": "Zeiten passen nicht zusammen"
+   },
+   "explain": {
+    "en": "The steps take {steps} minutes in total, but the recipe says {total}. One of them may be wrong.",
+    "de": "Die Schritte dauern zusammen {steps} Minuten, das Rezept gibt aber {total} an. Eine der Angaben stimmt vielleicht nicht."
+   },
+   "detect": {},
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [],
+    "no_match": []
+   },
+   "severity": "info",
+   "check": "times"
+  },
+  {
+   "id": "problem.salt_before_reduction",
+   "kind": "problem",
+   "names": {
+    "en": "Salt before reducing",
+    "de": "Salz vor dem Reduzieren"
+   },
+   "explain": {
+    "en": "Salt goes in before a later step reduces the liquid. Reducing concentrates the salt, so the result can end up too salty.",
+    "de": "Salz kommt vor einem späteren Schritt hinein, der die Flüssigkeit reduziert. Reduzieren konzentriert das Salz, das Ergebnis kann zu salzig werden."
+   },
+   "detect": {
+    "then": [
+     {
+      "class": "seasoning.salt"
+     },
+     {
+      "words": [
+       "reduzier",
+       "einkoch",
+       "einreduz",
+       "reduce"
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "salted-stock"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Season to taste at the end.",
+     "de": "Zum Schluss abschmecken."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.liaison_boil",
+   "kind": "problem",
+   "names": {
+    "en": "Egg yolk may curdle",
+    "de": "Eigelb kann gerinnen"
+   },
+   "explain": {
+    "en": "Egg yolk goes into something that is then boiled, and there's no flour or starch to protect it. Yolks set from about 65 °C, so the sauce can curdle.",
+    "de": "Eigelb kommt in etwas, das danach kocht, und es gibt kein Mehl und keine Stärke, die es schützen. Eigelb stockt ab etwa 65 °C, die Soße kann gerinnen."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "class": "egg.yolk"
+       },
+       {
+        "words": [
+         "aufkoch",
+         "sprudelnd",
+         "kochen lassen",
+         "bring to the boil",
+         "bring to a boil",
+         "boil"
+        ]
+       }
+      ],
+      "window": 1
+     },
+     {
+      "not": {
+       "entry": "technique.roux"
+      }
+     },
+     {
+      "not": {
+       "class": "starch"
+      }
+     },
+     {
+      "not": {
+       "class": "grain.gluten.flour"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "curdled-liaison"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Take it off the heat before adding the yolk and only warm it gently afterwards, or bind the sauce with a little starch first.",
+     "de": "Vor dem Eigelb vom Herd nehmen und danach nur sanft erwärmen, oder die Soße vorher mit etwas Stärke binden."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.acid_dairy_heat",
+   "kind": "problem",
+   "names": {
+    "en": "Milk may curdle",
+    "de": "Milch kann gerinnen"
+   },
+   "explain": {
+    "en": "Milk is heated together with an acid such as lemon, vinegar, wine or tomato. Without starch to stabilise it, the milk can split.",
+    "de": "Milch wird zusammen mit Säure wie Zitrone, Essig, Wein oder Tomate erhitzt. Ohne Stärke zur Stabilisierung kann sie gerinnen."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "any": [
+         {
+          "class": "dairy.milk"
+         },
+         {
+          "class": "dairy.yogurt"
+         }
+        ]
+       },
+       {
+        "any": [
+         {
+          "class": "fruit.citrus"
+         },
+         {
+          "class": "acid.vinegar"
+         },
+         {
+          "class": "alcohol.wine"
+         },
+         {
+          "class": "veg.tomato"
+         }
+        ]
+       },
+       {
+        "words": [
+         "koch",
+         "köchel",
+         "erhitz",
+         "simmer",
+         "boil",
+         "heat",
+         "erwärm",
+         "sieden"
+        ]
+       }
+      ],
+      "window": 1
+     },
+     {
+      "not": {
+       "class": "starch"
+      }
+     },
+     {
+      "not": {
+       "class": "grain.gluten.flour"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "curdled-milk"
+    ],
+    "no_match": [
+     "bechamel-lasagne"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Add the acid at the end, off the heat, or use cream, which has more fat and copes better.",
+     "de": "Die Säure zum Schluss und abseits der Hitze zugeben, oder Sahne nehmen, die mit mehr Fett besser zurechtkommt."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.slurry_long_boil",
+   "kind": "problem",
+   "names": {
+    "en": "Starch boiled for a long time",
+    "de": "Stärke lange gekocht"
+   },
+   "explain": {
+    "en": "Cornstarch or another starch cooks for a long time. Starch thickening weakens again with long boiling or hard stirring.",
+    "de": "Speisestärke oder andere Stärke kocht lange mit. Stärkebindung lässt bei langem Kochen oder kräftigem Rühren wieder nach."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "starch"
+     },
+     {
+      "min_minutes": 10
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "America's Test Kitchen, thickening with cornstarch",
+     "added": "2026-11-14",
+     "url": "https://www.americastestkitchen.com/articles/7359-how-to-thicken-sauces-with-cornstarch"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cornstarch-long"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Stir the starch in at the end and let it boil for just a minute.",
+     "de": "Die Stärke zum Schluss einrühren und nur kurz aufkochen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.lean_poultry_long",
+   "kind": "problem",
+   "names": {
+    "en": "Lean poultry cooked for long",
+    "de": "Magere Geflügelbrust lange gegart"
+   },
+   "explain": {
+    "en": "Chicken or turkey breast cooks for a long time. Breast has little fat and connective tissue, so it turns dry and stringy.",
+    "de": "Hähnchen- oder Putenbrust gart lange. Brust hat wenig Fett und Bindegewebe und wird trocken und faserig."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "meat.poultry.breast"
+     },
+     {
+      "min_minutes": 40
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "simmered-chicken-breast"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Add breast meat only for the last minutes, or use thighs or a soup hen for long cooking.",
+     "de": "Brustfleisch erst für die letzten Minuten zugeben, oder für langes Garen Keulen oder ein Suppenhuhn nehmen."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.delicate_herbs_early",
+   "kind": "problem",
+   "names": {
+    "en": "Delicate herbs cooked long",
+    "de": "Zarte Kräuter lange gekocht"
+   },
+   "explain": {
+    "en": "Delicate herbs such as basil, parsley leaves or dill cook for a long time and lose most of their aroma.",
+    "de": "Zarte Kräuter wie Basilikum, Petersilienblätter oder Dill kochen lange mit und verlieren fast ihr ganzes Aroma."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "herb.delicate"
+     },
+     {
+      "min_minutes": 45
+     },
+     {
+      "not": {
+       "words": [
+        "stiel",
+        "stängel",
+        "stengel",
+        "stems",
+        "stalks"
+       ]
+      }
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "herbs-early"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Stems can simmer along; add the leaves at the end.",
+     "de": "Stiele dürfen mitköcheln; die Blätter erst zum Schluss."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.zest_early",
+   "kind": "problem",
+   "names": {
+    "en": "Zest cooked long",
+    "de": "Zitrusschale lange gekocht"
+   },
+   "explain": {
+    "en": "Citrus zest cooks for a long time. Its aroma is volatile and mostly gone after long cooking.",
+    "de": "Zitrusschale kocht lange mit. Ihr Aroma ist flüchtig und nach langem Kochen weitgehend verschwunden."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "fruit.citrus_zest"
+     },
+     {
+      "min_minutes": 30
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "zest-early"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Grate it in at the very end.",
+     "de": "Ganz zum Schluss dazureiben."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.peas_long",
+   "kind": "problem",
+   "names": {
+    "en": "Peas cooked long",
+    "de": "Erbsen lange gekocht"
+   },
+   "explain": {
+    "en": "Peas cook for a long time and turn grey and mushy.",
+    "de": "Erbsen kochen lange mit und werden grau und matschig."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "legume.pea"
+     },
+     {
+      "min_minutes": 15
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "peas-long"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Add them in the last few minutes.",
+     "de": "Erst in den letzten Minuten zugeben."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.soda_without_acid",
+   "kind": "problem",
+   "names": {
+    "en": "Baking soda without acid",
+    "de": "Natron ohne Säure"
+   },
+   "explain": {
+    "en": "Baking soda needs an acid, such as buttermilk, yogurt, lemon or vinegar, to rise. Without one it doesn't lift the dough and can taste soapy.",
+    "de": "Natron braucht Säure wie Buttermilch, Joghurt, Zitrone oder Essig, um zu treiben. Ohne sie geht der Teig nicht auf und kann seifig schmecken."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "leavening.soda"
+     },
+     {
+      "not": {
+       "any": [
+        {
+         "class": "fruit.citrus"
+        },
+        {
+         "class": "acid"
+        },
+        {
+         "class": "dairy.buttermilk"
+        },
+        {
+         "class": "dairy.yogurt"
+        },
+        {
+         "class": "dairy.sour"
+        },
+        {
+         "class": "sweet.honey"
+        },
+        {
+         "class": "sweet.syrup"
+        },
+        {
+         "class": "sweet.chocolate"
+        },
+        {
+         "words": [
+          "brauner zucker",
+          "brown sugar"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "soda-no-acid"
+    ],
+    "no_match": [
+     "soda-buttermilk"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use baking powder instead, which brings its own acid.",
+     "de": "Stattdessen Backpulver nehmen, das seine Säure mitbringt."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.roux_not_boiled",
+   "kind": "problem",
+   "names": {
+    "en": "Roux sauce never boils",
+    "de": "Mehlschwitze kocht nie auf"
+   },
+   "explain": {
+    "en": "A roux is made, but no step brings the sauce to a boil. The starch doesn't swell fully, so the sauce tastes of flour and can turn pasty.",
+    "de": "Es gibt eine Mehlschwitze, aber kein Schritt bringt die Soße zum Kochen. Die Stärke quillt nicht ganz auf, die Soße schmeckt nach Mehl und kann kleistrig werden."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "technique.roux"
+     },
+     {
+      "not": {
+       "words": [
+        "aufkoch",
+        "koch",
+        "köchel",
+        "simmer",
+        "boil",
+        "sied",
+        "schmor",
+        "back",
+        "bake",
+        "ofen",
+        "oven"
+       ]
+      }
+     },
+     {
+      "not": {
+       "entry": "technique.beurre_manie"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Culinary Institute of America, The Professional Chef (9th ed., 2011)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "roux-not-boiled"
+    ],
+    "no_match": [
+     "huehnerfrikassee",
+     "bechamel-lasagne"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Bring it to the boil and let it simmer for a few minutes.",
+     "de": "Aufkochen und einige Minuten köcheln lassen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.hot_roux_hot_liquid",
+   "kind": "problem",
+   "names": {
+    "en": "Hot liquid into a hot roux",
+    "de": "Heiße Flüssigkeit in heiße Mehlschwitze"
+   },
+   "explain": {
+    "en": "Hot liquid goes into the hot roux. The starch on the outside sets before the inside is wet, which gives lumps.",
+    "de": "Heiße Flüssigkeit kommt in die heiße Mehlschwitze. Die Stärke außen bindet, bevor das Innere nass ist, und es entstehen Klümpchen."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "technique.roux"
+     },
+     {
+      "words": [
+       "heisse bruhe",
+       "heisse milch",
+       "heissen fond",
+       "heisser bruhe",
+       "heisser milch",
+       "kochende bruhe",
+       "kochende milch",
+       "hot stock",
+       "hot milk",
+       "hot broth",
+       "boiling stock",
+       "boiling milk"
+      ]
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Culinary Institute of America, The Professional Chef (9th ed., 2011)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "hot-roux"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use cold or room-temperature liquid with a hot roux, add it little by little, and whisk.",
+     "de": "Zu heißer Mehlschwitze kalte oder zimmerwarme Flüssigkeit nach und nach zugeben und dabei rühren."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.gelatine_enzyme_fruit",
+   "kind": "problem",
+   "names": {
+    "en": "Fruit stops the gelatine",
+    "de": "Obst verhindert das Gelieren"
+   },
+   "explain": {
+    "en": "Raw pineapple, kiwi, papaya, fresh figs or mango contain enzymes that digest gelatine, so it won't set.",
+    "de": "Rohe Ananas, Kiwi, Papaya, frische Feigen oder Mango enthalten Enzyme, die Gelatine abbauen, sie wird nicht fest."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "gelling.gelatine"
+     },
+     {
+      "class": "fruit.protease"
+     },
+     {
+      "not": {
+       "words": [
+        "dose",
+        "konserve",
+        "canned",
+        "tinned",
+        "gekocht",
+        "aufgekocht",
+        "cooked",
+        "kompott"
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "gelatine-pineapple"
+    ],
+    "no_match": [
+     "panna-cotta"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use canned or briefly cooked fruit, or agar, which these enzymes don't affect.",
+     "de": "Dosenobst oder kurz aufgekochtes Obst verwenden, oder Agar-Agar, das von diesen Enzymen nicht betroffen ist."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.gelatine_boiled",
+   "kind": "problem",
+   "names": {
+    "en": "Gelatine boiled",
+    "de": "Gelatine gekocht"
+   },
+   "explain": {
+    "en": "Gelatine is boiled. Long, strong heat weakens it, and the result sets softer.",
+    "de": "Gelatine wird gekocht. Langes, starkes Erhitzen schwächt sie, das Ergebnis wird weicher."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "gelling.gelatine"
+     },
+     {
+      "words": [
+       "aufkoch",
+       "sprudelnd",
+       "kochen lassen",
+       "zum kochen",
+       "bring to the boil",
+       "bring to a boil",
+       "boil"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "gelatine-boiled"
+    ],
+    "no_match": [
+     "panna-cotta"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Dissolve it in warm liquid off the heat.",
+     "de": "In warmer Flüssigkeit abseits der Hitze auflösen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.agar_not_boiled",
+   "kind": "problem",
+   "names": {
+    "en": "Agar never boils",
+    "de": "Agar-Agar kocht nicht"
+   },
+   "explain": {
+    "en": "Agar only dissolves when boiled. Without boiling it won't set.",
+    "de": "Agar-Agar löst sich nur beim Kochen. Ohne Aufkochen wird es nicht fest."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "gelling.agar"
+     },
+     {
+      "not": {
+       "words": [
+        "koch",
+        "boil",
+        "sprudel"
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "FAO, agar properties",
+     "added": "2026-11-14",
+     "url": "https://www.fao.org/4/ag156e/AG156E03.htm"
+    }
+   ],
+   "examples": {
+    "match": [
+     "agar-not-boiled"
+    ],
+    "no_match": [
+     "agar-jelly"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Boil it for 1 to 2 minutes.",
+     "de": "1 bis 2 Minuten sprudelnd kochen."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.yeast_hot_liquid",
+   "kind": "problem",
+   "names": {
+    "en": "Yeast in hot liquid",
+    "de": "Hefe in heißer Flüssigkeit"
+   },
+   "explain": {
+    "en": "Yeast goes into hot liquid. It dies from about 55 to 60 °C, and the dough won't rise.",
+    "de": "Hefe kommt in heiße Flüssigkeit. Ab etwa 55 bis 60 °C stirbt sie, und der Teig geht nicht auf."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "leavening.yeast"
+     },
+     {
+      "words": [
+       "heisse",
+       "heisser",
+       "heissem",
+       "heisses",
+       "heiss ",
+       "kochende",
+       "kochendem",
+       "hot milk",
+       "hot water",
+       "boiling"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "yeast-hot"
+    ],
+    "no_match": [
+     "yeast-dough"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use lukewarm liquid, about 30 to 37 °C. It should feel barely warm on your wrist.",
+     "de": "Lauwarme Flüssigkeit nehmen, etwa 30 bis 37 °C. Am Handgelenk soll sie sich kaum warm anfühlen."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.garlic_hard_sear",
+   "kind": "problem",
+   "names": {
+    "en": "Garlic may burn",
+    "de": "Knoblauch kann verbrennen"
+   },
+   "explain": {
+    "en": "Garlic goes into a hot pan for searing. Small pieces burn within a minute or two and turn bitter.",
+    "de": "Knoblauch kommt zum scharfen Anbraten in die heiße Pfanne. Kleine Stücke verbrennen in ein bis zwei Minuten und werden bitter."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "veg.garlic"
+     },
+     {
+      "words": [
+       "scharf anbrat",
+       "bei starker hitze anbrat",
+       "sear"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "garlic-sear"
+    ],
+    "no_match": [
+     "pan-sauce"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Add the garlic for the last minute, just before the liquid.",
+     "de": "Den Knoblauch erst für die letzte Minute zugeben, kurz vor der Flüssigkeit."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.emulsion_boiled",
+   "kind": "problem",
+   "names": {
+    "en": "Butter sauce may split",
+    "de": "Buttersoße kann gerinnen"
+   },
+   "explain": {
+    "en": "A butter sauce such as hollandaise or beurre blanc is brought to the boil. The emulsion breaks and egg yolks scramble.",
+    "de": "Eine Buttersoße wie Hollandaise oder Beurre blanc wird aufgekocht. Die Emulsion bricht, und Eigelb stockt."
+   },
+   "detect": {
+    "all": [
+     {
+      "any": [
+       {
+        "entry": "sauce.hollandaise"
+       },
+       {
+        "entry": "sauce.beurre_blanc"
+       }
+      ]
+     },
+     {
+      "words": [
+       "aufkoch",
+       "sprudelnd",
+       "kochen lassen",
+       "starker hitze",
+       "boil",
+       "high heat"
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "hollandaise-boiled"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use a water bath or very low heat. A split sauce can be saved by whisking it slowly into a spoon of warm water or a fresh yolk.",
+     "de": "Ein Wasserbad oder sehr milde Hitze nehmen. Geronnene Soße langsam in einen Löffel warmes Wasser oder ein frisches Eigelb schlagen."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "problem.mayo_oil_at_once",
+   "kind": "problem",
+   "names": {
+    "en": "Oil added all at once",
+    "de": "Öl auf einmal zugegeben"
+   },
+   "explain": {
+    "en": "All the oil goes into the egg yolk at once. The yolk can't take up that much at the start, and the mayonnaise splits.",
+    "de": "Das ganze Öl kommt auf einmal zum Eigelb. Am Anfang kann es so viel nicht aufnehmen, die Mayonnaise gerinnt."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "egg.yolk"
+     },
+     {
+      "class": "fat.oil"
+     },
+     {
+      "words": [
+       "auf einmal",
+       "all at once"
+      ]
+     },
+     {
+      "not": {
+       "words": [
+        "stabmixer",
+        "pürierstab",
+        "purierstab",
+        "stick blender",
+        "immersion blender"
+       ]
+      }
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "mayo-at-once"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Add the oil drop by drop at first, then in a thin stream. A stick blender in a tall jar can take it all at once.",
+     "de": "Das Öl erst tropfenweise, dann in dünnem Strahl zugeben. Mit dem Stabmixer im hohen Gefäß geht auch alles auf einmal."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.beans_acid_early",
+   "kind": "problem",
+   "names": {
+    "en": "Dried beans cooked with acid",
+    "de": "Getrocknete Bohnen mit Säure gekocht"
+   },
+   "explain": {
+    "en": "Dried beans cook together with tomato, vinegar or wine from the start. Acid keeps their skins firm, so they may never get soft. Salt doesn't do this.",
+    "de": "Getrocknete Bohnen kochen von Anfang an mit Tomate, Essig oder Wein. Säure hält die Schale fest, sie werden womöglich nie weich. Salz hat diesen Effekt nicht."
+   },
+   "detect": {
+    "all": [
+     {
+      "any": [
+       {
+        "class": "legume"
+       },
+       {
+        "class": "legume.kidney"
+       }
+      ]
+     },
+     {
+      "words": [
+       "getrocknet",
+       "eingeweicht",
+       "einweich",
+       "dried",
+       "soaked",
+       "soak"
+      ]
+     },
+     {
+      "any": [
+       {
+        "class": "veg.tomato"
+       },
+       {
+        "class": "acid.vinegar"
+       },
+       {
+        "class": "alcohol.wine"
+       }
+      ]
+     },
+     {
+      "words": [
+       "koch",
+       "köchel",
+       "simmer",
+       "boil",
+       "cook"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "beans-acid"
+    ],
+    "no_match": [
+     "chili-canned"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Cook the beans soft first, then add the acidic ingredients.",
+     "de": "Die Bohnen erst weich kochen, dann die sauren Zutaten zugeben."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.yogurt_boiled",
+   "kind": "problem",
+   "names": {
+    "en": "Yogurt or sour cream boiled",
+    "de": "Joghurt oder saure Sahne gekocht"
+   },
+   "explain": {
+    "en": "Yogurt or sour cream boils in the dish. Their proteins curdle when boiled and the sauce turns grainy.",
+    "de": "Joghurt oder saure Sahne kochen im Gericht mit. Ihr Eiweiß gerinnt beim Kochen, die Soße wird grießig."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "any": [
+         {
+          "class": "dairy.yogurt"
+         },
+         {
+          "class": "dairy.sour"
+         }
+        ]
+       },
+       {
+        "words": [
+         "aufkoch",
+         "sprudelnd",
+         "kochen lassen",
+         "zum kochen",
+         "bring to the boil",
+         "bring to a boil",
+         "boil"
+        ]
+       }
+      ],
+      "window": 1
+     },
+     {
+      "not": {
+       "class": "starch"
+      }
+     },
+     {
+      "not": {
+       "class": "grain.gluten.flour"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "yogurt-boiled"
+    ],
+    "no_match": [
+     "curdled-milk"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Stir it in off the heat, or stabilise it with a teaspoon of flour or starch first.",
+     "de": "Abseits der Hitze unterrühren, oder vorher mit einem Teelöffel Mehl oder Stärke stabilisieren."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "problem.cheese_boiling",
+   "kind": "problem",
+   "names": {
+    "en": "Cheese into a boiling sauce",
+    "de": "Käse in kochende Soße"
+   },
+   "explain": {
+    "en": "Cheese goes into a sauce that is boiling hard. Its proteins clump and the fat separates, so it turns stringy and greasy.",
+    "de": "Käse kommt in eine stark kochende Soße. Sein Eiweiß verklumpt und das Fett trennt sich, die Soße wird fädig und fettig."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "dairy.cheese"
+     },
+     {
+      "words": [
+       "sprudelnd",
+       "kochend",
+       "starker hitze",
+       "boiling",
+       "high heat",
+       "rapid boil"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cheese-boiling"
+    ],
+    "no_match": [
+     "mac-and-cheese"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Take the sauce off the heat and stir in the cheese a handful at a time.",
+     "de": "Die Soße vom Herd nehmen und den Käse nach und nach einrühren."
+    }
+   ],
+   "severity": "info"
+  }
+ ]
+}

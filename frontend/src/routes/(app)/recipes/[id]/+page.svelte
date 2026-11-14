@@ -173,7 +173,7 @@
 	<ErrorNote text={error} />
 	{#if recipe}
 		<div class={recipe.photo_url ? '' : 'pt-12 md:pt-0'}>
-			<RecipeView {recipe} cookHref="/recipes/{recipe.id}/cook">
+			<RecipeView {recipe} cookHref="/recipes/{recipe.id}/cook" insightsUrl="/recipes/{recipe.id}/insights">
 				{#snippet actions()}
 										<button class="btn btn-soft !px-3 sm:!px-3.5" aria-label={t('recipe.cooked_it')} onclick={() => (cookOpen = true)}><CookingPot size={17} /><span class="hidden sm:inline">{t('recipe.cooked_it')}</span></button>
 					{#if recipe?.can_edit}<a class="btn btn-soft" href="/recipes/{recipe.id}/edit" aria-label={t('common.edit')}><Pencil size={18} /><span class="hidden sm:inline">{t('common.edit')}</span></a>{/if}

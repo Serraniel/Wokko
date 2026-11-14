@@ -1,0 +1,69 @@
+{
+ "steps": [
+  {
+   "text": "Roast the bones and vegetables until dark brown, then add tomato paste.",
+   "ingredients": [
+    {
+     "names": [
+      "veal bones"
+     ],
+     "amount": 2,
+     "unit": "kg"
+    },
+    {
+     "names": [
+      "carrots"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "onion"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "tomato paste"
+     ],
+     "amount": 2,
+     "unit": "tbsp"
+    }
+   ],
+   "minutes": 60
+  },
+  {
+   "text": "Cook butter and flour to a brown roux.",
+   "ingredients": [
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 60,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "flour"
+     ],
+     "amount": 60,
+     "unit": "g"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Whisk in the brown veal stock and simmer for an hour, skimming.",
+   "ingredients": [
+    {
+     "names": [
+      "veal stock"
+     ],
+     "amount": 2,
+     "unit": "l"
+    }
+   ],
+   "minutes": 60
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+ "steps": [
+  {
+   "text": "Butter schmelzen und Mehl einrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 30,
+     "unit": "g"
+    }
+   ],
+   "minutes": 3
+  },
+  {
+   "text": "Hühnerbrühe nach und nach zugießen, aufkochen und mit Sahne verfeinern.",
+   "ingredients": [
+    {
+     "names": [
+      "Hühnerbrühe"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 15
+  }
+ ]
+}

@@ -1,0 +1,3367 @@
+{
+ "classes": [
+  {
+   "id": "acid",
+   "names": {
+    "en": "Acid",
+    "de": "Säure"
+   }
+  },
+  {
+   "id": "acid.caper",
+   "names": {
+    "en": "Capers",
+    "de": "Kapern"
+   },
+   "words": {
+    "en": [
+     "capers",
+     "caper"
+    ],
+    "de": [
+     "kapern"
+    ]
+   }
+  },
+  {
+   "id": "acid.vinegar",
+   "names": {
+    "en": "Vinegar",
+    "de": "Essig"
+   },
+   "words": {
+    "en": [
+     "vinegar",
+     "apple cider vinegar",
+     "rice vinegar"
+    ],
+    "de": [
+     "essig",
+     "apfelessig",
+     "reisessig",
+     "kräuteressig"
+    ]
+   }
+  },
+  {
+   "id": "acid.vinegar.balsamic",
+   "names": {
+    "en": "Balsamic vinegar",
+    "de": "Balsamico"
+   },
+   "words": {
+    "en": [
+     "balsamic vinegar",
+     "balsamic"
+    ],
+    "de": [
+     "balsamico",
+     "balsamicoessig",
+     "aceto balsamico"
+    ]
+   },
+   "allergens": [
+    "sulphites"
+   ]
+  },
+  {
+   "id": "acid.vinegar.wine",
+   "names": {
+    "en": "Wine vinegar",
+    "de": "Weinessig"
+   },
+   "words": {
+    "en": [
+     "white wine vinegar",
+     "red wine vinegar",
+     "sherry vinegar",
+     "wine vinegar",
+     "champagne vinegar"
+    ],
+    "de": [
+     "weißweinessig",
+     "rotweinessig",
+     "sherryessig",
+     "weinessig",
+     "champagneressig"
+    ]
+   },
+   "may_contain": [
+    "sulphites"
+   ]
+  },
+  {
+   "id": "additive",
+   "names": {
+    "en": "Additive",
+    "de": "Zusatzstoff"
+   }
+  },
+  {
+   "id": "additive.carmine",
+   "names": {
+    "en": "Carmine",
+    "de": "Karmin"
+   },
+   "words": {
+    "en": [
+     "carmine",
+     "cochineal",
+     "e120"
+    ],
+    "de": [
+     "karmin",
+     "echtes karmin",
+     "cochenille",
+     "e120"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "additive.glaze",
+   "names": {
+    "en": "Glazing agent",
+    "de": "Überzugsmittel"
+   },
+   "words": {
+    "en": [
+     "shellac",
+     "beeswax",
+     "e904",
+     "e901"
+    ],
+    "de": [
+     "schellack",
+     "bienenwachs",
+     "e904",
+     "e901"
+    ]
+   },
+   "not_vegan": true
+  },
+  {
+   "id": "alcohol",
+   "names": {
+    "en": "Alcohol",
+    "de": "Alkohol"
+   }
+  },
+  {
+   "id": "alcohol.spirit",
+   "names": {
+    "en": "Spirits",
+    "de": "Spirituose"
+   },
+   "words": {
+    "en": [
+     "rum",
+     "brandy",
+     "cognac",
+     "vodka",
+     "whisky",
+     "whiskey",
+     "grand marnier",
+     "kirsch",
+     "amaretto",
+     "frangelico",
+     "mirin",
+     "sake",
+     "shaoxing wine"
+    ],
+    "de": [
+     "rum",
+     "weinbrand",
+     "cognac",
+     "wodka",
+     "whisky",
+     "kirschwasser",
+     "amaretto",
+     "mirin",
+     "sake",
+     "shaoxing-wein",
+     "reiswein"
+    ]
+   }
+  },
+  {
+   "id": "alcohol.wine",
+   "names": {
+    "en": "Wine",
+    "de": "Wein"
+   },
+   "words": {
+    "en": [
+     "wine",
+     "white wine",
+     "red wine",
+     "dry white wine",
+     "sherry",
+     "port",
+     "marsala",
+     "madeira",
+     "vermouth",
+     "sparkling wine",
+     "champagne",
+     "prosecco",
+     "cider",
+     "rosé"
+    ],
+    "de": [
+     "wein",
+     "weißwein",
+     "rotwein",
+     "trockener weißwein",
+     "sherry",
+     "portwein",
+     "marsala",
+     "madeira",
+     "wermut",
+     "sekt",
+     "champagner",
+     "prosecco",
+     "cidre",
+     "apfelwein",
+     "roséwein"
+    ]
+   },
+   "allergens": [
+    "sulphites"
+   ]
+  },
+  {
+   "id": "condiment",
+   "names": {
+    "en": "Condiment",
+    "de": "Würzmittel"
+   },
+   "words": {
+    "en": [
+     "ketchup",
+     "hot sauce",
+     "sriracha",
+     "tabasco",
+     "harissa",
+     "sambal",
+     "pesto"
+    ],
+    "de": [
+     "ketchup",
+     "scharfe soße",
+     "scharfe sauce",
+     "sriracha",
+     "tabasco",
+     "harissa",
+     "sambal oelek",
+     "sambal"
+    ]
+   }
+  },
+  {
+   "id": "condiment.curry_paste",
+   "names": {
+    "en": "Curry paste",
+    "de": "Currypaste"
+   },
+   "words": {
+    "en": [
+     "curry paste",
+     "red curry paste",
+     "green curry paste",
+     "yellow curry paste",
+     "massaman curry paste",
+     "thai curry paste"
+    ],
+    "de": [
+     "currypaste",
+     "rote currypaste",
+     "grüne currypaste",
+     "gelbe currypaste",
+     "thai-currypaste"
+    ]
+   },
+   "may_contain": [
+    "crustaceans",
+    "fish",
+    "peanuts"
+   ],
+   "diet_unknown": true
+  },
+  {
+   "id": "condiment.gochujang",
+   "names": {
+    "en": "Gochujang",
+    "de": "Gochujang"
+   },
+   "words": {
+    "en": [
+     "gochujang"
+    ],
+    "de": [
+     "gochujang"
+    ]
+   },
+   "allergens": [
+    "soybeans"
+   ],
+   "may_contain": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "condiment.hummus",
+   "names": {
+    "en": "Hummus",
+    "de": "Hummus"
+   },
+   "words": {
+    "en": [
+     "hummus",
+     "houmous",
+     "baba ganoush",
+     "halva",
+     "halwa"
+    ],
+    "de": [
+     "hummus",
+     "humus",
+     "baba ghanoush",
+     "halva",
+     "halwa"
+    ]
+   },
+   "allergens": [
+    "sesame"
+   ]
+  },
+  {
+   "id": "condiment.kimchi",
+   "names": {
+    "en": "Kimchi",
+    "de": "Kimchi"
+   },
+   "words": {
+    "en": [
+     "kimchi"
+    ],
+    "de": [
+     "kimchi"
+    ]
+   },
+   "may_contain": [
+    "fish",
+    "crustaceans"
+   ],
+   "diet_unknown": true
+  },
+  {
+   "id": "condiment.mayonnaise",
+   "names": {
+    "en": "Mayonnaise",
+    "de": "Mayonnaise"
+   },
+   "words": {
+    "en": [
+     "mayonnaise",
+     "mayo",
+     "aioli"
+    ],
+    "de": [
+     "mayonnaise",
+     "mayo",
+     "aioli"
+    ]
+   },
+   "allergens": [
+    "eggs"
+   ],
+   "not_vegan": true,
+   "may_contain": [
+    "mustard"
+   ]
+  },
+  {
+   "id": "condiment.oyster_sauce",
+   "names": {
+    "en": "Oyster sauce",
+    "de": "Austernsauce"
+   },
+   "words": {
+    "en": [
+     "oyster sauce"
+    ],
+    "de": [
+     "austernsauce",
+     "austernsoße"
+    ]
+   },
+   "allergens": [
+    "molluscs"
+   ],
+   "may_contain": [
+    "gluten",
+    "soybeans"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "condiment.remoulade",
+   "names": {
+    "en": "Remoulade",
+    "de": "Remoulade"
+   },
+   "words": {
+    "en": [
+     "remoulade",
+     "tartare sauce",
+     "tartar sauce"
+    ],
+    "de": [
+     "remoulade",
+     "sauce tartare",
+     "tatarensoße"
+    ]
+   },
+   "allergens": [
+    "eggs"
+   ],
+   "may_contain": [
+    "mustard",
+    "fish"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "condiment.satay",
+   "names": {
+    "en": "Satay sauce",
+    "de": "Satésoße"
+   },
+   "words": {
+    "en": [
+     "satay sauce",
+     "peanut sauce"
+    ],
+    "de": [
+     "satésoße",
+     "satésauce",
+     "erdnusssoße",
+     "erdnusssauce"
+    ]
+   },
+   "allergens": [
+    "peanuts"
+   ],
+   "may_contain": [
+    "soybeans",
+    "fish"
+   ]
+  },
+  {
+   "id": "condiment.zaatar",
+   "names": {
+    "en": "Za'atar",
+    "de": "Za'atar"
+   },
+   "words": {
+    "en": [
+     "za'atar",
+     "zaatar",
+     "dukkah",
+     "furikake",
+     "gomasio"
+    ],
+    "de": [
+     "za'atar",
+     "zaatar",
+     "dukkah",
+     "furikake",
+     "gomasio"
+    ]
+   },
+   "may_contain": [
+    "sesame",
+    "nuts"
+   ]
+  },
+  {
+   "id": "crustacean",
+   "names": {
+    "en": "Crustacean",
+    "de": "Krebstier"
+   },
+   "words": {
+    "en": [
+     "shrimp",
+     "shrimps",
+     "prawn",
+     "prawns",
+     "crab",
+     "lobster",
+     "crayfish",
+     "langoustine",
+     "scampi",
+     "shrimp paste",
+     "krill",
+     "dried shrimp",
+     "langoustines",
+     "prawn cocktail",
+     "bisque"
+    ],
+    "de": [
+     "garnele",
+     "garnelen",
+     "krabben",
+     "krabbe",
+     "hummer",
+     "flusskrebse",
+     "languste",
+     "scampi",
+     "shrimps",
+     "crevetten",
+     "garnelenpaste",
+     "nordseekrabben",
+     "taschenkrebs",
+     "kaisergranat",
+     "krill",
+     "getrocknete garnelen",
+     "krabbencocktail",
+     "hummersuppe"
+    ]
+   },
+   "allergens": [
+    "crustaceans"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "dairy",
+   "names": {
+    "en": "Dairy",
+    "de": "Milchprodukt"
+   },
+   "words": {
+    "en": [
+     "dairy",
+     "whey",
+     "casein",
+     "milk powder",
+     "condensed milk",
+     "evaporated milk",
+     "lactose-free milk"
+    ],
+    "de": [
+     "milchprodukt",
+     "molke",
+     "kasein",
+     "milchpulver",
+     "kondensmilch",
+     "kaffeesahne",
+     "laktosefreie milch"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.buttermilk",
+   "names": {
+    "en": "Buttermilk",
+    "de": "Buttermilch"
+   },
+   "words": {
+    "en": [
+     "buttermilk"
+    ],
+    "de": [
+     "buttermilch"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.cheese",
+   "names": {
+    "en": "Cheese",
+    "de": "Käse"
+   },
+   "words": {
+    "en": [
+     "cheese",
+     "mozzarella",
+     "cheddar",
+     "feta",
+     "gouda",
+     "ricotta",
+     "mascarpone",
+     "cream cheese",
+     "emmental",
+     "halloumi",
+     "goat cheese",
+     "grated cheese",
+     "burrata"
+    ],
+    "de": [
+     "käse",
+     "mozzarella",
+     "cheddar",
+     "feta",
+     "schafskäse",
+     "gouda",
+     "ricotta",
+     "mascarpone",
+     "frischkäse",
+     "emmentaler",
+     "bergkäse",
+     "halloumi",
+     "ziegenkäse",
+     "reibekäse",
+     "geriebener käse",
+     "burrata",
+     "hüttenkäse"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.cheese.rennet",
+   "names": {
+    "en": "Cheese made with animal rennet",
+    "de": "Käse mit tierischem Lab"
+   },
+   "words": {
+    "en": [
+     "parmesan",
+     "parmigiano",
+     "parmigiano reggiano",
+     "grana padano",
+     "pecorino",
+     "pecorino romano",
+     "gruyère",
+     "gruyere",
+     "gorgonzola",
+     "comté",
+     "comte",
+     "pecorino sardo",
+     "manchego"
+    ],
+    "de": [
+     "parmesan",
+     "parmigiano",
+     "parmigiano reggiano",
+     "grana padano",
+     "pecorino",
+     "gruyère",
+     "greyerzer",
+     "gorgonzola",
+     "comté",
+     "manchego"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "dairy.chocolate",
+   "names": {
+    "en": "Milk chocolate",
+    "de": "Milchschokolade"
+   },
+   "words": {
+    "en": [
+     "milk chocolate",
+     "white chocolate"
+    ],
+    "de": [
+     "milchschokolade",
+     "vollmilchschokolade",
+     "weiße schokolade"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.cream",
+   "names": {
+    "en": "Cream",
+    "de": "Sahne"
+   },
+   "words": {
+    "en": [
+     "cream",
+     "heavy cream",
+     "double cream",
+     "whipping cream",
+     "single cream",
+     "cooking cream",
+     "crème fraîche",
+     "creme fraiche"
+    ],
+    "de": [
+     "sahne",
+     "schlagsahne",
+     "rahm",
+     "kochsahne",
+     "süße sahne",
+     "schlagrahm",
+     "schmand",
+     "crème fraîche",
+     "creme fraiche",
+     "crème fraiche"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.milk",
+   "names": {
+    "en": "Milk",
+    "de": "Milch"
+   },
+   "words": {
+    "en": [
+     "milk",
+     "whole milk",
+     "skim milk",
+     "semi-skimmed milk"
+    ],
+    "de": [
+     "milch",
+     "vollmilch",
+     "fettarme milch",
+     "magermilch"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.sour",
+   "names": {
+    "en": "Soured cream",
+    "de": "Saure Sahne"
+   },
+   "words": {
+    "en": [
+     "sour cream"
+    ],
+    "de": [
+     "saure sahne",
+     "sauerrahm"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "dairy.yogurt",
+   "names": {
+    "en": "Yogurt",
+    "de": "Joghurt"
+   },
+   "words": {
+    "en": [
+     "yogurt",
+     "yoghurt",
+     "greek yogurt",
+     "quark",
+     "skyr",
+     "kefir"
+    ],
+    "de": [
+     "joghurt",
+     "naturjoghurt",
+     "griechischer joghurt",
+     "quark",
+     "magerquark",
+     "skyr",
+     "kefir"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "drink",
+   "names": {
+    "en": "Drink",
+    "de": "Getränk"
+   }
+  },
+  {
+   "id": "drink.coffee",
+   "names": {
+    "en": "Coffee and tea",
+    "de": "Kaffee und Tee"
+   },
+   "words": {
+    "en": [
+     "coffee",
+     "espresso",
+     "instant coffee",
+     "tea",
+     "black tea",
+     "green tea",
+     "matcha"
+    ],
+    "de": [
+     "kaffee",
+     "espresso",
+     "instantkaffee",
+     "tee",
+     "schwarztee",
+     "grüntee",
+     "matcha"
+    ]
+   }
+  },
+  {
+   "id": "drink.juice",
+   "names": {
+    "en": "Juice",
+    "de": "Saft"
+   },
+   "words": {
+    "en": [
+     "apple juice",
+     "grape juice",
+     "cranberry juice",
+     "pineapple juice",
+     "juice"
+    ],
+    "de": [
+     "apfelsaft",
+     "traubensaft",
+     "cranberrysaft",
+     "ananassaft",
+     "saft",
+     "fruchtsaft"
+    ]
+   }
+  },
+  {
+   "id": "drink.plant",
+   "names": {
+    "en": "Plant-based drink",
+    "de": "Pflanzendrink"
+   },
+   "words": {
+    "en": [
+     "oat milk",
+     "rice milk",
+     "oat drink",
+     "plant milk"
+    ],
+    "de": [
+     "hafermilch",
+     "reismilch",
+     "haferdrink",
+     "pflanzendrink",
+     "pflanzenmilch"
+    ]
+   }
+  },
+  {
+   "id": "egg",
+   "names": {
+    "en": "Egg",
+    "de": "Ei"
+   },
+   "words": {
+    "en": [
+     "egg",
+     "eggs",
+     "whole egg"
+    ],
+    "de": [
+     "ei",
+     "eier",
+     "vollei"
+    ]
+   },
+   "allergens": [
+    "eggs"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "egg.white",
+   "names": {
+    "en": "Egg white",
+    "de": "Eiweiß"
+   },
+   "words": {
+    "en": [
+     "egg white",
+     "egg whites"
+    ],
+    "de": [
+     "eiweiß",
+     "eiklar"
+    ]
+   },
+   "allergens": [
+    "eggs"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "egg.yolk",
+   "names": {
+    "en": "Egg yolk",
+    "de": "Eigelb"
+   },
+   "words": {
+    "en": [
+     "egg yolk",
+     "egg yolks",
+     "yolk",
+     "yolks"
+    ],
+    "de": [
+     "eigelb",
+     "eigelbe",
+     "eidotter",
+     "dotter"
+    ]
+   },
+   "allergens": [
+    "eggs"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "fat",
+   "names": {
+    "en": "Fat",
+    "de": "Fett"
+   }
+  },
+  {
+   "id": "fat.butter",
+   "names": {
+    "en": "Butter",
+    "de": "Butter"
+   },
+   "words": {
+    "en": [
+     "butter",
+     "unsalted butter",
+     "salted butter",
+     "clarified butter",
+     "ghee"
+    ],
+    "de": [
+     "butter",
+     "süßrahmbutter",
+     "kräuterbutter",
+     "butterschmalz",
+     "ghee",
+     "geklärte butter"
+    ]
+   },
+   "allergens": [
+    "milk"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "fat.lard",
+   "names": {
+    "en": "Lard",
+    "de": "Schmalz"
+   },
+   "words": {
+    "en": [
+     "lard",
+     "dripping",
+     "duck fat",
+     "goose fat",
+     "beef dripping"
+    ],
+    "de": [
+     "schmalz",
+     "schweineschmalz",
+     "gänseschmalz",
+     "entenschmalz",
+     "bratfett"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "fat.margarine",
+   "names": {
+    "en": "Margarine",
+    "de": "Margarine"
+   },
+   "words": {
+    "en": [
+     "margarine"
+    ],
+    "de": [
+     "margarine"
+    ]
+   }
+  },
+  {
+   "id": "fat.oil",
+   "names": {
+    "en": "Oil",
+    "de": "Öl"
+   },
+   "words": {
+    "en": [
+     "oil",
+     "olive oil",
+     "extra virgin olive oil",
+     "vegetable oil",
+     "sunflower oil",
+     "canola oil",
+     "rapeseed oil",
+     "neutral oil",
+     "frying oil"
+    ],
+    "de": [
+     "öl",
+     "olivenöl",
+     "natives olivenöl",
+     "rapsöl",
+     "sonnenblumenöl",
+     "pflanzenöl",
+     "speiseöl",
+     "neutrales öl",
+     "bratöl"
+    ]
+   }
+  },
+  {
+   "id": "fish",
+   "names": {
+    "en": "Fish",
+    "de": "Fisch"
+   },
+   "words": {
+    "en": [
+     "fish",
+     "salmon",
+     "salmon fillet",
+     "tuna",
+     "cod",
+     "cod fillet",
+     "trout",
+     "herring",
+     "sardines",
+     "anchovies",
+     "anchovy",
+     "mackerel",
+     "pollock",
+     "haddock",
+     "sea bass",
+     "pike-perch",
+     "fish sauce",
+     "fish stock",
+     "roe",
+     "caviar",
+     "bonito flakes",
+     "katsuobushi",
+     "surimi",
+     "crab sticks",
+     "tapenade",
+     "caesar dressing",
+     "anchovy paste",
+     "fish fillet",
+     "halibut",
+     "sole",
+     "tilapia",
+     "pangasius",
+     "swordfish",
+     "monkfish",
+     "perch",
+     "carp"
+    ],
+    "de": [
+     "fisch",
+     "lachs",
+     "lachsfilet",
+     "thunfisch",
+     "kabeljau",
+     "dorsch",
+     "forelle",
+     "hering",
+     "sardinen",
+     "sardellen",
+     "anchovis",
+     "makrele",
+     "seelachs",
+     "schellfisch",
+     "wolfsbarsch",
+     "zander",
+     "fischsauce",
+     "fischfond",
+     "fischfilet",
+     "rogen",
+     "kaviar",
+     "bonitoflocken",
+     "katsuobushi",
+     "surimi",
+     "krebsfleischimitat",
+     "tapenade",
+     "caesar-dressing",
+     "sardellenpaste",
+     "heilbutt",
+     "seezunge",
+     "tilapia",
+     "pangasius",
+     "schwertfisch",
+     "seeteufel",
+     "barsch",
+     "karpfen",
+     "matjes",
+     "räucherlachs"
+    ]
+   },
+   "allergens": [
+    "fish"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "fish.dashi",
+   "names": {
+    "en": "Dashi",
+    "de": "Dashi"
+   },
+   "words": {
+    "en": [
+     "dashi",
+     "dashi stock",
+     "hondashi"
+    ],
+    "de": [
+     "dashi",
+     "dashibrühe"
+    ]
+   },
+   "allergens": [
+    "fish"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "fish.worcestershire",
+   "names": {
+    "en": "Worcestershire sauce",
+    "de": "Worcestershiresauce"
+   },
+   "words": {
+    "en": [
+     "worcestershire sauce",
+     "worcestershire",
+     "worcester sauce"
+    ],
+    "de": [
+     "worcestershiresauce",
+     "worcestershire-sauce",
+     "worcestersauce",
+     "worcestershire"
+    ]
+   },
+   "allergens": [
+    "fish"
+   ],
+   "may_contain": [
+    "gluten"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "fruit",
+   "names": {
+    "en": "Fruit",
+    "de": "Obst"
+   },
+   "words": {
+    "en": [
+     "apple",
+     "apples",
+     "banana",
+     "bananas",
+     "strawberry",
+     "strawberries",
+     "blueberry",
+     "blueberries",
+     "raspberry",
+     "raspberries",
+     "grape",
+     "grapes",
+     "watermelon",
+     "melon",
+     "peach",
+     "peaches",
+     "pear",
+     "pears",
+     "cherry",
+     "cherries",
+     "plum",
+     "plums",
+     "apricot",
+     "apricots",
+     "avocado",
+     "pomegranate",
+     "orange",
+     "oranges",
+     "dates"
+    ],
+    "de": [
+     "apfel",
+     "äpfel",
+     "banane",
+     "bananen",
+     "erdbeere",
+     "erdbeeren",
+     "heidelbeere",
+     "heidelbeeren",
+     "blaubeeren",
+     "himbeere",
+     "himbeeren",
+     "traube",
+     "trauben",
+     "weintrauben",
+     "wassermelone",
+     "melone",
+     "pfirsich",
+     "pfirsiche",
+     "birne",
+     "birnen",
+     "kirsche",
+     "kirschen",
+     "pflaume",
+     "pflaumen",
+     "aprikose",
+     "aprikosen",
+     "avocado",
+     "granatapfel",
+     "orange",
+     "orangen",
+     "datteln"
+    ]
+   }
+  },
+  {
+   "id": "fruit.citrus",
+   "names": {
+    "en": "Citrus",
+    "de": "Zitrusfrucht"
+   },
+   "words": {
+    "en": [
+     "lemon",
+     "lemons",
+     "lime",
+     "limes",
+     "lemon juice",
+     "lime juice",
+     "orange juice"
+    ],
+    "de": [
+     "zitrone",
+     "zitronen",
+     "limette",
+     "limetten",
+     "zitronensaft",
+     "limettensaft",
+     "orangensaft"
+    ]
+   }
+  },
+  {
+   "id": "fruit.citrus_zest",
+   "names": {
+    "en": "Citrus zest",
+    "de": "Zitrusschale"
+   },
+   "words": {
+    "en": [
+     "lemon zest",
+     "lime zest",
+     "orange zest",
+     "lemon peel",
+     "grated lemon",
+     "lemon rind",
+     "orange rind",
+     "lime rind"
+    ],
+    "de": [
+     "zitronenabrieb",
+     "zitronenschale",
+     "limettenabrieb",
+     "limettenschale",
+     "orangenabrieb",
+     "orangenschale",
+     "zitronenzeste"
+    ]
+   }
+  },
+  {
+   "id": "fruit.coconut",
+   "names": {
+    "en": "Coconut",
+    "de": "Kokos"
+   },
+   "words": {
+    "en": [
+     "coconut",
+     "coconut milk",
+     "coconut cream",
+     "coconut oil",
+     "desiccated coconut",
+     "coconut flour"
+    ],
+    "de": [
+     "kokos",
+     "kokosnuss",
+     "kokosmilch",
+     "kokoscreme",
+     "kokosöl",
+     "kokosraspel",
+     "kokosmehl"
+    ]
+   }
+  },
+  {
+   "id": "fruit.dried",
+   "names": {
+    "en": "Dried fruit",
+    "de": "Trockenobst"
+   },
+   "words": {
+    "en": [
+     "dried apricots",
+     "dried fruit",
+     "raisins",
+     "sultanas",
+     "dried figs",
+     "dried mango",
+     "prunes"
+    ],
+    "de": [
+     "getrocknete aprikosen",
+     "trockenobst",
+     "trockenaprikosen",
+     "rosinen",
+     "sultaninen",
+     "getrocknete feigen",
+     "trockenpflaumen",
+     "getrocknete mango",
+     "dörrobst"
+    ]
+   },
+   "may_contain": [
+    "sulphites"
+   ]
+  },
+  {
+   "id": "fruit.protease",
+   "names": {
+    "en": "Fruit that stops gelatine setting",
+    "de": "Obst, das Gelatine nicht fest werden lässt"
+   },
+   "words": {
+    "en": [
+     "pineapple",
+     "kiwi",
+     "kiwis",
+     "papaya",
+     "fresh figs",
+     "figs",
+     "mango",
+     "passion fruit"
+    ],
+    "de": [
+     "ananas",
+     "kiwi",
+     "kiwis",
+     "papaya",
+     "frische feigen",
+     "feigen",
+     "mango",
+     "maracuja",
+     "passionsfrucht"
+    ]
+   }
+  },
+  {
+   "id": "gelling",
+   "names": {
+    "en": "Gelling agent",
+    "de": "Geliermittel"
+   }
+  },
+  {
+   "id": "gelling.agar",
+   "names": {
+    "en": "Agar",
+    "de": "Agar-Agar"
+   },
+   "words": {
+    "en": [
+     "agar",
+     "agar agar",
+     "agar-agar"
+    ],
+    "de": [
+     "agar",
+     "agar-agar",
+     "agar agar"
+    ]
+   }
+  },
+  {
+   "id": "gelling.gelatine",
+   "names": {
+    "en": "Gelatine",
+    "de": "Gelatine"
+   },
+   "words": {
+    "en": [
+     "gelatin",
+     "gelatine",
+     "gelatine sheets",
+     "leaf gelatine"
+    ],
+    "de": [
+     "gelatine",
+     "blattgelatine",
+     "gelatinepulver"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "grain",
+   "names": {
+    "en": "Grain",
+    "de": "Getreide"
+   }
+  },
+  {
+   "id": "grain.free",
+   "names": {
+    "en": "Gluten-free grain",
+    "de": "Glutenfreies Getreide"
+   },
+   "words": {
+    "en": [
+     "corn",
+     "polenta",
+     "cornmeal",
+     "quinoa",
+     "buckwheat",
+     "millet",
+     "rice flour",
+     "rice noodles",
+     "popcorn",
+     "glass noodles",
+     "mung bean noodles",
+     "amaranth",
+     "teff",
+     "glucose syrup",
+     "dextrose"
+    ],
+    "de": [
+     "mais",
+     "polenta",
+     "maisgrieß",
+     "maismehl",
+     "quinoa",
+     "buchweizen",
+     "hirse",
+     "reismehl",
+     "reisnudeln",
+     "popcorn",
+     "glasnudeln",
+     "amaranth",
+     "teff",
+     "glukosesirup",
+     "traubenzucker",
+     "dextrose"
+    ]
+   }
+  },
+  {
+   "id": "grain.gluten",
+   "names": {
+    "en": "Gluten grain",
+    "de": "Glutenhaltiges Getreide"
+   },
+   "words": {
+    "en": [
+     "wheat",
+     "spelt",
+     "rye",
+     "barley",
+     "oats",
+     "rolled oats",
+     "oatmeal",
+     "semolina",
+     "couscous",
+     "bulgur",
+     "bread",
+     "bread crumbs",
+     "breadcrumbs",
+     "panko",
+     "toast",
+     "rolls",
+     "pasta",
+     "spaghetti",
+     "penne",
+     "fettuccine",
+     "tagliatelle",
+     "lasagna sheets",
+     "lasagne sheets",
+     "noodles",
+     "tortellini",
+     "gnocchi",
+     "beer",
+     "malt",
+     "pastry",
+     "puff pastry",
+     "pizza dough",
+     "tortilla",
+     "tortillas",
+     "croutons",
+     "seitan",
+     "green spelt",
+     "emmer",
+     "einkorn",
+     "khorasan",
+     "kamut",
+     "durum",
+     "triticale",
+     "freekeh",
+     "dumplings",
+     "shortcrust pastry",
+     "malt vinegar",
+     "malt extract",
+     "wheat noodles",
+     "udon",
+     "ramen noodles",
+     "pita",
+     "naan",
+     "bagel",
+     "baguette",
+     "croissant",
+     "brioche",
+     "gravy granules"
+    ],
+    "de": [
+     "weizen",
+     "dinkel",
+     "roggen",
+     "gerste",
+     "hafer",
+     "haferflocken",
+     "grieß",
+     "hartweizengrieß",
+     "couscous",
+     "bulgur",
+     "brot",
+     "paniermehl",
+     "semmelbrösel",
+     "panko",
+     "toastbrot",
+     "brötchen",
+     "nudeln",
+     "pasta",
+     "spaghetti",
+     "penne",
+     "fettuccine",
+     "tagliatelle",
+     "lasagneplatten",
+     "bandnudeln",
+     "tortellini",
+     "gnocchi",
+     "bier",
+     "malz",
+     "blätterteig",
+     "pizzateig",
+     "tortilla",
+     "tortillas",
+     "croûtons",
+     "seitan",
+     "weizenmehl type 550",
+     "grünkern",
+     "emmer",
+     "einkorn",
+     "kamut",
+     "hartweizen",
+     "triticale",
+     "knödel",
+     "semmelknödel",
+     "mürbeteig",
+     "malzessig",
+     "malzextrakt",
+     "udon",
+     "ramennudeln",
+     "pita",
+     "fladenbrot",
+     "naan",
+     "bagel",
+     "baguette",
+     "croissant",
+     "brioche",
+     "bratensoßenbinder",
+     "soßenbinder",
+     "weizentortilla"
+    ]
+   },
+   "allergens": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "grain.gluten.biscuit",
+   "names": {
+    "en": "Biscuits",
+    "de": "Kekse"
+   },
+   "words": {
+    "en": [
+     "ladyfingers",
+     "sponge fingers",
+     "savoiardi",
+     "biscuits",
+     "cookies",
+     "shortbread",
+     "digestives",
+     "graham crackers",
+     "sponge cake"
+    ],
+    "de": [
+     "löffelbiskuits",
+     "biskuits",
+     "kekse",
+     "butterkekse",
+     "plätzchen",
+     "biskuitboden",
+     "zwieback"
+    ]
+   },
+   "allergens": [
+    "gluten"
+   ],
+   "may_contain": [
+    "eggs",
+    "milk"
+   ]
+  },
+  {
+   "id": "grain.gluten.egg_pasta",
+   "names": {
+    "en": "Egg pasta",
+    "de": "Eiernudeln"
+   },
+   "words": {
+    "en": [
+     "egg noodles",
+     "fresh pasta",
+     "fresh egg pasta",
+     "egg pasta"
+    ],
+    "de": [
+     "eiernudeln",
+     "frische pasta",
+     "eierteigwaren",
+     "frische nudeln",
+     "spätzle"
+    ]
+   },
+   "allergens": [
+    "gluten",
+    "eggs"
+   ],
+   "not_vegan": true
+  },
+  {
+   "id": "grain.gluten.flour",
+   "names": {
+    "en": "Wheat flour",
+    "de": "Weizenmehl"
+   },
+   "words": {
+    "en": [
+     "flour",
+     "all-purpose flour",
+     "plain flour",
+     "wheat flour",
+     "bread flour",
+     "whole wheat flour",
+     "spelt flour",
+     "rye flour",
+     "cake flour",
+     "self-raising flour"
+    ],
+    "de": [
+     "mehl",
+     "weizenmehl",
+     "dinkelmehl",
+     "roggenmehl",
+     "vollkornmehl",
+     "weizenvollkornmehl",
+     "type 405",
+     "mehl type 405",
+     "mehl type 550"
+    ]
+   },
+   "allergens": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "grain.rice",
+   "names": {
+    "en": "Rice",
+    "de": "Reis"
+   },
+   "words": {
+    "en": [
+     "rice",
+     "basmati rice",
+     "jasmine rice",
+     "risotto rice",
+     "arborio rice",
+     "sushi rice",
+     "long grain rice",
+     "brown rice",
+     "cooked rice"
+    ],
+    "de": [
+     "reis",
+     "basmatireis",
+     "jasminreis",
+     "risottoreis",
+     "milchreis",
+     "sushireis",
+     "langkornreis",
+     "naturreis",
+     "vollkornreis",
+     "gekochter reis"
+    ]
+   }
+  },
+  {
+   "id": "herb",
+   "names": {
+    "en": "Herb",
+    "de": "Kraut"
+   },
+   "words": {
+    "en": [
+     "thyme",
+     "rosemary",
+     "oregano",
+     "sage",
+     "bay leaf",
+     "bay leaves",
+     "marjoram",
+     "herbs"
+    ],
+    "de": [
+     "thymian",
+     "rosmarin",
+     "oregano",
+     "salbei",
+     "lorbeer",
+     "lorbeerblatt",
+     "lorbeerblätter",
+     "majoran",
+     "kräuter"
+    ]
+   }
+  },
+  {
+   "id": "herb.delicate",
+   "names": {
+    "en": "Delicate herb",
+    "de": "Zartes Kraut"
+   },
+   "words": {
+    "en": [
+     "parsley",
+     "basil",
+     "dill",
+     "chives",
+     "mint",
+     "chervil",
+     "cilantro",
+     "fresh coriander",
+     "parsley leaves"
+    ],
+    "de": [
+     "petersilie",
+     "basilikum",
+     "dill",
+     "schnittlauch",
+     "minze",
+     "kerbel",
+     "koriandergrün",
+     "frischer koriander",
+     "blattpetersilie"
+    ]
+   }
+  },
+  {
+   "id": "herb.delicate.tarragon",
+   "names": {
+    "en": "Tarragon",
+    "de": "Estragon"
+   },
+   "words": {
+    "en": [
+     "tarragon"
+    ],
+    "de": [
+     "estragon"
+    ]
+   }
+  },
+  {
+   "id": "leavening",
+   "names": {
+    "en": "Raising agent",
+    "de": "Triebmittel"
+   }
+  },
+  {
+   "id": "leavening.baking_powder",
+   "names": {
+    "en": "Baking powder",
+    "de": "Backpulver"
+   },
+   "words": {
+    "en": [
+     "baking powder"
+    ],
+    "de": [
+     "backpulver",
+     "weinsteinbackpulver"
+    ]
+   }
+  },
+  {
+   "id": "leavening.soda",
+   "names": {
+    "en": "Baking soda",
+    "de": "Natron"
+   },
+   "words": {
+    "en": [
+     "baking soda",
+     "bicarbonate of soda",
+     "bicarb"
+    ],
+    "de": [
+     "natron",
+     "kaiser natron",
+     "speisenatron"
+    ]
+   }
+  },
+  {
+   "id": "leavening.yeast",
+   "names": {
+    "en": "Yeast",
+    "de": "Hefe"
+   },
+   "words": {
+    "en": [
+     "yeast",
+     "dry yeast",
+     "instant yeast",
+     "fresh yeast"
+    ],
+    "de": [
+     "hefe",
+     "trockenhefe",
+     "frischhefe",
+     "germ"
+    ]
+   }
+  },
+  {
+   "id": "legume",
+   "names": {
+    "en": "Legume",
+    "de": "Hülsenfrucht"
+   },
+   "words": {
+    "en": [
+     "lentils",
+     "red lentils",
+     "chickpeas",
+     "beans",
+     "black beans",
+     "white beans",
+     "split peas"
+    ],
+    "de": [
+     "linsen",
+     "rote linsen",
+     "kichererbsen",
+     "bohnen",
+     "schwarze bohnen",
+     "weiße bohnen",
+     "kichererbsenmehl"
+    ]
+   }
+  },
+  {
+   "id": "legume.kidney",
+   "names": {
+    "en": "Kidney beans",
+    "de": "Kidneybohnen"
+   },
+   "words": {
+    "en": [
+     "kidney beans",
+     "red kidney beans",
+     "dried kidney beans"
+    ],
+    "de": [
+     "kidneybohnen",
+     "rote bohnen",
+     "rote kidneybohnen",
+     "getrocknete kidneybohnen"
+    ]
+   }
+  },
+  {
+   "id": "legume.lupin",
+   "names": {
+    "en": "Lupin",
+    "de": "Lupine"
+   },
+   "words": {
+    "en": [
+     "lupin",
+     "lupin flour",
+     "lupini beans",
+     "lupin protein",
+     "lupin seeds"
+    ],
+    "de": [
+     "lupine",
+     "lupinen",
+     "lupinenmehl",
+     "lupinenkerne",
+     "lupinenprotein",
+     "lupinen-tofu",
+     "lupinenkaffee"
+    ]
+   },
+   "allergens": [
+    "lupin"
+   ]
+  },
+  {
+   "id": "legume.pea",
+   "names": {
+    "en": "Peas",
+    "de": "Erbsen"
+   },
+   "words": {
+    "en": [
+     "peas",
+     "green peas",
+     "frozen peas"
+    ],
+    "de": [
+     "erbsen",
+     "tiefkühlerbsen",
+     "grüne erbsen"
+    ]
+   }
+  },
+  {
+   "id": "legume.soy",
+   "names": {
+    "en": "Soy",
+    "de": "Soja"
+   },
+   "words": {
+    "en": [
+     "soy",
+     "soybeans",
+     "tofu",
+     "tempeh",
+     "edamame",
+     "miso",
+     "soy milk",
+     "soy yogurt",
+     "soy cream",
+     "textured soy protein",
+     "tvp",
+     "yuba",
+     "soy flour",
+     "soy lecithin",
+     "black bean sauce",
+     "doubanjiang",
+     "natto"
+    ],
+    "de": [
+     "soja",
+     "sojabohnen",
+     "tofu",
+     "tempeh",
+     "edamame",
+     "miso",
+     "sojamilch",
+     "sojajoghurt",
+     "sojasahne",
+     "sojaschnetzel",
+     "sojagranulat",
+     "sojamehl",
+     "sojalecithin",
+     "natto",
+     "doubanjiang",
+     "sojadrink"
+    ]
+   },
+   "allergens": [
+    "soybeans"
+   ]
+  },
+  {
+   "id": "legume.soy.sauce",
+   "names": {
+    "en": "Soy sauce",
+    "de": "Sojasauce"
+   },
+   "words": {
+    "en": [
+     "soy sauce",
+     "shoyu",
+     "hoisin sauce",
+     "teriyaki sauce",
+     "tamari",
+     "ponzu",
+     "kecap manis"
+    ],
+    "de": [
+     "sojasauce",
+     "sojasoße",
+     "hoisinsauce",
+     "teriyakisauce",
+     "tamari",
+     "ponzu",
+     "ketjap manis"
+    ]
+   },
+   "allergens": [
+    "gluten"
+   ]
+  },
+  {
+   "id": "liquid",
+   "names": {
+    "en": "Liquid",
+    "de": "Flüssigkeit"
+   },
+   "words": {
+    "en": [
+     "water"
+    ],
+    "de": [
+     "wasser"
+    ]
+   }
+  },
+  {
+   "id": "liquid.stock",
+   "names": {
+    "en": "Stock",
+    "de": "Brühe"
+   },
+   "words": {
+    "en": [
+     "stock",
+     "broth",
+     "bouillon"
+    ],
+    "de": [
+     "brühe",
+     "fond",
+     "bouillon",
+     "klare brühe"
+    ]
+   },
+   "diet_unknown": true
+  },
+  {
+   "id": "liquid.stock.instant",
+   "names": {
+    "en": "Stock cube or powder",
+    "de": "Brühwürfel oder Brühpulver"
+   },
+   "words": {
+    "en": [
+     "stock cube",
+     "stock cubes",
+     "bouillon cube",
+     "bouillon powder",
+     "stock powder",
+     "instant broth"
+    ],
+    "de": [
+     "brühwürfel",
+     "brühpulver",
+     "instantbrühe",
+     "gekörnte brühe",
+     "suppenwürze",
+     "fleischbrühwürfel"
+    ]
+   },
+   "may_contain": [
+    "celery",
+    "gluten",
+    "milk"
+   ],
+   "diet_unknown": true
+  },
+  {
+   "id": "liquid.stock.meat",
+   "names": {
+    "en": "Meat stock",
+    "de": "Fleischbrühe"
+   },
+   "words": {
+    "en": [
+     "beef stock",
+     "beef broth",
+     "veal stock",
+     "brown stock",
+     "meat stock",
+     "demi-glace"
+    ],
+    "de": [
+     "rinderbrühe",
+     "rinderfond",
+     "kalbsfond",
+     "fleischbrühe",
+     "bratenfond",
+     "kraftbrühe",
+     "demi-glace"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "liquid.stock.poultry",
+   "names": {
+    "en": "Poultry stock",
+    "de": "Geflügelbrühe"
+   },
+   "words": {
+    "en": [
+     "chicken stock",
+     "chicken broth",
+     "poultry stock"
+    ],
+    "de": [
+     "hühnerbrühe",
+     "hühnerfond",
+     "geflügelbrühe",
+     "geflügelfond",
+     "hühnersuppe",
+     "hühnerbouillon"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "liquid.stock.vegetable",
+   "names": {
+    "en": "Vegetable stock",
+    "de": "Gemüsebrühe"
+   },
+   "words": {
+    "en": [
+     "vegetable stock",
+     "vegetable broth"
+    ],
+    "de": [
+     "gemüsebrühe",
+     "gemüsefond"
+    ]
+   },
+   "may_contain": [
+    "celery"
+   ]
+  },
+  {
+   "id": "meat",
+   "names": {
+    "en": "Meat",
+    "de": "Fleisch"
+   },
+   "words": {
+    "en": [
+     "meat",
+     "beef",
+     "pork",
+     "lamb",
+     "veal",
+     "steak",
+     "beef steak",
+     "pork chop",
+     "pork belly",
+     "lamb chop",
+     "bacon",
+     "ham",
+     "prosciutto",
+     "salami",
+     "sausage",
+     "sausages",
+     "chorizo",
+     "venison",
+     "game",
+     "pancetta",
+     "bones",
+     "marrow bones",
+     "suet",
+     "guanciale",
+     "veal bones",
+     "beef bones",
+     "oxtail",
+     "ribs",
+     "spare ribs",
+     "pork tenderloin",
+     "pork shoulder",
+     "beef cheek",
+     "liver",
+     "kidneys"
+    ],
+    "de": [
+     "fleisch",
+     "rindfleisch",
+     "schweinefleisch",
+     "lammfleisch",
+     "kalbfleisch",
+     "rind",
+     "schwein",
+     "lamm",
+     "kalb",
+     "steak",
+     "rindersteak",
+     "schweinekotelett",
+     "kotelett",
+     "schweinebauch",
+     "lammkotelett",
+     "speck",
+     "schinken",
+     "salami",
+     "wurst",
+     "würstchen",
+     "bratwurst",
+     "chorizo",
+     "wild",
+     "hirsch",
+     "reh",
+     "pancetta",
+     "knochen",
+     "markknochen",
+     "gulasch",
+     "rindertalg",
+     "nierenfett",
+     "guanciale",
+     "kalbsknochen",
+     "rinderknochen",
+     "ochsenschwanz",
+     "rippchen",
+     "spareribs",
+     "schweinefilet",
+     "schweinenacken",
+     "schweineschulter",
+     "rinderfilet",
+     "rinderbrust",
+     "rinderbacke",
+     "rinderschulter",
+     "leber",
+     "nieren",
+     "leberkäse",
+     "rouladen",
+     "rinderrouladen",
+     "kassler",
+     "kasseler"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "meat.minced",
+   "names": {
+    "en": "Minced meat",
+    "de": "Hackfleisch"
+   },
+   "words": {
+    "en": [
+     "ground beef",
+     "minced beef",
+     "mince",
+     "ground pork",
+     "minced meat",
+     "ground meat",
+     "ground lamb",
+     "minced pork",
+     "burger patties",
+     "meatballs"
+    ],
+    "de": [
+     "hackfleisch",
+     "rinderhack",
+     "schweinehack",
+     "gemischtes hack",
+     "hack",
+     "mett",
+     "hackbällchen",
+     "frikadellen",
+     "buletten",
+     "lammhack"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "meat.poultry",
+   "names": {
+    "en": "Poultry",
+    "de": "Geflügel"
+   },
+   "words": {
+    "en": [
+     "chicken",
+     "whole chicken",
+     "chicken thigh",
+     "chicken thighs",
+     "chicken legs",
+     "chicken wings",
+     "turkey",
+     "duck",
+     "goose",
+     "stewing hen",
+     "soup chicken",
+     "duck legs",
+     "duck leg",
+     "chicken drumsticks",
+     "drumsticks"
+    ],
+    "de": [
+     "huhn",
+     "hühnchen",
+     "hähnchen",
+     "hendl",
+     "suppenhuhn",
+     "brathähnchen",
+     "hähnchenkeule",
+     "hähnchenkeulen",
+     "hühnerkeulen",
+     "hähnchenschenkel",
+     "chicken wings",
+     "hähnchenflügel",
+     "pute",
+     "truthahn",
+     "ente",
+     "gans",
+     "geflügel",
+     "hühnerfleisch",
+     "entenkeulen",
+     "entenkeule",
+     "gänsekeulen",
+     "hähnchenunterschenkel",
+     "chicken drumsticks"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "meat.poultry.breast",
+   "names": {
+    "en": "Poultry breast",
+    "de": "Geflügelbrust"
+   },
+   "words": {
+    "en": [
+     "chicken breast",
+     "chicken breasts",
+     "turkey breast",
+     "chicken fillet",
+     "chicken fillets",
+     "duck breast"
+    ],
+    "de": [
+     "hähnchenbrust",
+     "hühnerbrust",
+     "hühnchenbrust",
+     "hähnchenbrustfilet",
+     "putenbrust",
+     "hähnchenfilet",
+     "entenbrust"
+    ]
+   },
+   "not_vegetarian": true
+  },
+  {
+   "id": "mollusc",
+   "names": {
+    "en": "Mollusc",
+    "de": "Weichtier"
+   },
+   "words": {
+    "en": [
+     "mussels",
+     "mussel",
+     "clams",
+     "oysters",
+     "oyster",
+     "squid",
+     "calamari",
+     "octopus",
+     "scallops",
+     "snails",
+     "vongole",
+     "cuttlefish",
+     "squid ink",
+     "whelks",
+     "abalone",
+     "escargots"
+    ],
+    "de": [
+     "muscheln",
+     "miesmuscheln",
+     "venusmuscheln",
+     "austern",
+     "auster",
+     "tintenfisch",
+     "kalmar",
+     "calamari",
+     "oktopus",
+     "jakobsmuscheln",
+     "schnecken",
+     "vongole",
+     "krake",
+     "pulpo",
+     "sepia",
+     "sepiatinte",
+     "wellhornschnecken",
+     "abalone"
+    ]
+   },
+   "allergens": [
+    "molluscs"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "nut",
+   "names": {
+    "en": "Tree nut",
+    "de": "Schalenfrucht"
+   },
+   "words": {
+    "en": [
+     "almond",
+     "almonds",
+     "hazelnut",
+     "hazelnuts",
+     "walnut",
+     "walnuts",
+     "cashew",
+     "cashews",
+     "pistachio",
+     "pistachios",
+     "pecan",
+     "pecans",
+     "brazil nut",
+     "brazil nuts",
+     "macadamia",
+     "almond flour",
+     "ground almonds",
+     "almond butter",
+     "almond milk",
+     "marzipan",
+     "nuts",
+     "praline",
+     "nougat",
+     "frangipane",
+     "amaretti",
+     "gianduja",
+     "hazelnut spread",
+     "walnut oil",
+     "hazelnut oil",
+     "almond extract",
+     "praline paste",
+     "romesco",
+     "muhammara"
+    ],
+    "de": [
+     "mandel",
+     "mandeln",
+     "gemahlene mandeln",
+     "mandelmehl",
+     "mandelmus",
+     "mandelbutter",
+     "mandelmilch",
+     "haselnuss",
+     "haselnüsse",
+     "walnuss",
+     "walnüsse",
+     "cashew",
+     "cashews",
+     "cashewkerne",
+     "pistazie",
+     "pistazien",
+     "pekannuss",
+     "pekannüsse",
+     "paranuss",
+     "paranüsse",
+     "macadamia",
+     "marzipan",
+     "nüsse",
+     "nougat",
+     "frangipane",
+     "amarettini",
+     "gianduja",
+     "nuss-nougat-creme",
+     "nougatcreme",
+     "walnussöl",
+     "haselnussöl",
+     "bittermandelaroma",
+     "krokant",
+     "romesco",
+     "florentiner",
+     "makronen"
+    ]
+   },
+   "allergens": [
+    "nuts"
+   ]
+  },
+  {
+   "id": "nut.persipan",
+   "names": {
+    "en": "Persipan",
+    "de": "Persipan"
+   },
+   "words": {
+    "en": [
+     "persipan"
+    ],
+    "de": [
+     "persipan"
+    ]
+   },
+   "may_contain": [
+    "nuts"
+   ]
+  },
+  {
+   "id": "peanut",
+   "names": {
+    "en": "Peanut",
+    "de": "Erdnuss"
+   },
+   "words": {
+    "en": [
+     "peanut",
+     "peanuts",
+     "peanut butter",
+     "peanut oil"
+    ],
+    "de": [
+     "erdnuss",
+     "erdnüsse",
+     "erdnussbutter",
+     "erdnussmus",
+     "erdnussöl"
+    ]
+   },
+   "allergens": [
+    "peanuts"
+   ]
+  },
+  {
+   "id": "seafood",
+   "names": {
+    "en": "Seafood mix",
+    "de": "Meeresfrüchte"
+   },
+   "words": {
+    "en": [
+     "seafood",
+     "seafood mix",
+     "frutti di mare"
+    ],
+    "de": [
+     "meeresfrüchte",
+     "frutti di mare",
+     "meeresfrüchtemischung"
+    ]
+   },
+   "allergens": [
+    "crustaceans",
+    "molluscs"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "seasoning",
+   "names": {
+    "en": "Seasoning",
+    "de": "Würze"
+   }
+  },
+  {
+   "id": "seasoning.mustard",
+   "names": {
+    "en": "Mustard",
+    "de": "Senf"
+   },
+   "words": {
+    "en": [
+     "mustard",
+     "dijon mustard",
+     "mustard seeds",
+     "mustard powder",
+     "wholegrain mustard",
+     "mustard oil",
+     "mustard greens",
+     "honey mustard",
+     "piccalilli"
+    ],
+    "de": [
+     "senf",
+     "dijonsenf",
+     "senfsaat",
+     "senfkörner",
+     "senfpulver",
+     "dijon-senf",
+     "senföl",
+     "süßer senf",
+     "mittelscharfer senf",
+     "honigsenf",
+     "piccalilli"
+    ]
+   },
+   "allergens": [
+    "mustard"
+   ]
+  },
+  {
+   "id": "seasoning.salt",
+   "names": {
+    "en": "Salt",
+    "de": "Salz"
+   },
+   "words": {
+    "en": [
+     "salt",
+     "sea salt",
+     "table salt",
+     "kosher salt",
+     "flaky salt"
+    ],
+    "de": [
+     "salz",
+     "meersalz",
+     "speisesalz",
+     "jodsalz",
+     "fleur de sel",
+     "salzflocken"
+    ]
+   }
+  },
+  {
+   "id": "seed",
+   "names": {
+    "en": "Seed",
+    "de": "Saat"
+   },
+   "words": {
+    "en": [
+     "sunflower seeds",
+     "pumpkin seeds",
+     "chia seeds",
+     "flaxseed",
+     "linseed",
+     "poppy seeds"
+    ],
+    "de": [
+     "sonnenblumenkerne",
+     "kürbiskerne",
+     "chiasamen",
+     "leinsamen",
+     "mohn"
+    ]
+   }
+  },
+  {
+   "id": "seed.pine",
+   "names": {
+    "en": "Pine nuts",
+    "de": "Pinienkerne"
+   },
+   "words": {
+    "en": [
+     "pine nuts",
+     "pine kernels"
+    ],
+    "de": [
+     "pinienkerne"
+    ]
+   }
+  },
+  {
+   "id": "seed.sesame",
+   "names": {
+    "en": "Sesame",
+    "de": "Sesam"
+   },
+   "words": {
+    "en": [
+     "sesame",
+     "sesame seeds",
+     "sesame oil",
+     "tahini"
+    ],
+    "de": [
+     "sesam",
+     "sesamsamen",
+     "sesamöl",
+     "tahini",
+     "tahin",
+     "sesampaste"
+    ]
+   },
+   "allergens": [
+    "sesame"
+   ]
+  },
+  {
+   "id": "spice",
+   "names": {
+    "en": "Spice",
+    "de": "Gewürz"
+   },
+   "words": {
+    "en": [
+     "pepper",
+     "black pepper",
+     "white pepper",
+     "peppercorns",
+     "paprika powder",
+     "smoked paprika",
+     "sweet paprika",
+     "cumin",
+     "coriander",
+     "coriander seeds",
+     "turmeric",
+     "cinnamon",
+     "chili flakes",
+     "chili powder",
+     "cayenne",
+     "cayenne pepper",
+     "garlic powder",
+     "onion powder",
+     "nutmeg",
+     "cardamom",
+     "curry powder",
+     "curry",
+     "star anise",
+     "fennel seeds",
+     "cloves",
+     "allspice",
+     "vanilla",
+     "vanilla extract",
+     "vanilla bean",
+     "saffron",
+     "juniper"
+    ],
+    "de": [
+     "pfeffer",
+     "schwarzer pfeffer",
+     "weißer pfeffer",
+     "pfefferkörner",
+     "paprikapulver",
+     "rosenpaprika",
+     "edelsüß",
+     "geräuchertes paprikapulver",
+     "kreuzkümmel",
+     "koriander",
+     "koriandersaat",
+     "kurkuma",
+     "zimt",
+     "chiliflocken",
+     "chilipulver",
+     "cayennepfeffer",
+     "knoblauchpulver",
+     "zwiebelpulver",
+     "muskat",
+     "muskatnuss",
+     "kardamom",
+     "currypulver",
+     "curry",
+     "sternanis",
+     "fenchelsaat",
+     "fenchelsamen",
+     "nelken",
+     "gewürznelken",
+     "piment",
+     "vanille",
+     "vanilleschote",
+     "vanilleextrakt",
+     "safran",
+     "wacholder",
+     "wacholderbeeren"
+    ]
+   }
+  },
+  {
+   "id": "starch",
+   "names": {
+    "en": "Starch",
+    "de": "Stärke"
+   },
+   "words": {
+    "en": [
+     "potato starch",
+     "tapioca starch",
+     "arrowroot"
+    ],
+    "de": [
+     "kartoffelstärke",
+     "tapiokastärke",
+     "pfeilwurzelmehl",
+     "stärke"
+    ]
+   }
+  },
+  {
+   "id": "starch.corn",
+   "names": {
+    "en": "Cornstarch",
+    "de": "Maisstärke"
+   },
+   "words": {
+    "en": [
+     "cornstarch",
+     "corn starch",
+     "cornflour"
+    ],
+    "de": [
+     "speisestärke",
+     "maisstärke",
+     "mondamin"
+    ]
+   }
+  },
+  {
+   "id": "sweet",
+   "names": {
+    "en": "Sweetener",
+    "de": "Süßungsmittel"
+   }
+  },
+  {
+   "id": "sweet.chocolate",
+   "names": {
+    "en": "Chocolate",
+    "de": "Schokolade"
+   },
+   "words": {
+    "en": [
+     "dark chocolate",
+     "chocolate",
+     "cocoa",
+     "cocoa powder",
+     "cocoa butter",
+     "natural cocoa"
+    ],
+    "de": [
+     "zartbitterschokolade",
+     "schokolade",
+     "kuvertüre",
+     "kakao",
+     "kakaopulver",
+     "kakaobutter"
+    ]
+   }
+  },
+  {
+   "id": "sweet.honey",
+   "names": {
+    "en": "Honey",
+    "de": "Honig"
+   },
+   "words": {
+    "en": [
+     "honey"
+    ],
+    "de": [
+     "honig"
+    ]
+   },
+   "not_vegan": true
+  },
+  {
+   "id": "sweet.sugar",
+   "names": {
+    "en": "Sugar",
+    "de": "Zucker"
+   },
+   "words": {
+    "en": [
+     "sugar",
+     "brown sugar",
+     "powdered sugar",
+     "icing sugar",
+     "caster sugar",
+     "cane sugar",
+     "vanilla sugar"
+    ],
+    "de": [
+     "zucker",
+     "brauner zucker",
+     "puderzucker",
+     "rohrzucker",
+     "feinzucker",
+     "vanillezucker",
+     "kristallzucker"
+    ]
+   }
+  },
+  {
+   "id": "sweet.syrup",
+   "names": {
+    "en": "Syrup",
+    "de": "Sirup"
+   },
+   "words": {
+    "en": [
+     "maple syrup",
+     "agave syrup",
+     "golden syrup",
+     "rice syrup",
+     "molasses",
+     "treacle",
+     "glucose"
+    ],
+    "de": [
+     "ahornsirup",
+     "agavendicksaft",
+     "agavensirup",
+     "zuckerrübensirup",
+     "reissirup",
+     "melasse",
+     "glukose"
+    ]
+   }
+  },
+  {
+   "id": "veg",
+   "names": {
+    "en": "Vegetable",
+    "de": "Gemüse"
+   }
+  },
+  {
+   "id": "veg.celery",
+   "names": {
+    "en": "Celery",
+    "de": "Sellerie"
+   },
+   "words": {
+    "en": [
+     "celery",
+     "celery stalk",
+     "celery stalks",
+     "celeriac",
+     "celery root",
+     "celery salt",
+     "celery seed",
+     "celery powder",
+     "celery leaves"
+    ],
+    "de": [
+     "sellerie",
+     "staudensellerie",
+     "stangensellerie",
+     "bleichsellerie",
+     "knollensellerie",
+     "selleriesalz",
+     "selleriesamen",
+     "selleriepulver",
+     "sellerieblätter",
+     "sellerieknolle"
+    ]
+   },
+   "allergens": [
+    "celery"
+   ]
+  },
+  {
+   "id": "veg.celery.mix",
+   "names": {
+    "en": "Soup greens",
+    "de": "Suppengrün"
+   },
+   "words": {
+    "en": [
+     "soup greens",
+     "mirepoix",
+     "soffritto"
+    ],
+    "de": [
+     "suppengrün",
+     "suppengemüse",
+     "wurzelwerk"
+    ]
+   },
+   "allergens": [
+    "celery"
+   ]
+  },
+  {
+   "id": "veg.garlic",
+   "names": {
+    "en": "Garlic",
+    "de": "Knoblauch"
+   },
+   "words": {
+    "en": [
+     "garlic",
+     "garlic clove",
+     "garlic cloves"
+    ],
+    "de": [
+     "knoblauch",
+     "knoblauchzehe",
+     "knoblauchzehen"
+    ]
+   }
+  },
+  {
+   "id": "veg.ginger",
+   "names": {
+    "en": "Ginger",
+    "de": "Ingwer"
+   },
+   "words": {
+    "en": [
+     "ginger",
+     "fresh ginger"
+    ],
+    "de": [
+     "ingwer"
+    ]
+   }
+  },
+  {
+   "id": "veg.leafy",
+   "names": {
+    "en": "Leafy vegetable",
+    "de": "Blattgemüse"
+   },
+   "words": {
+    "en": [
+     "spinach",
+     "lettuce",
+     "kale",
+     "chard",
+     "rocket",
+     "arugula",
+     "cabbage",
+     "red cabbage",
+     "savoy cabbage"
+    ],
+    "de": [
+     "spinat",
+     "salat",
+     "kopfsalat",
+     "grünkohl",
+     "mangold",
+     "rucola",
+     "kohl",
+     "weißkohl",
+     "rotkohl",
+     "wirsing"
+    ]
+   }
+  },
+  {
+   "id": "veg.leek",
+   "names": {
+    "en": "Leek",
+    "de": "Lauch"
+   },
+   "words": {
+    "en": [
+     "leek",
+     "leeks"
+    ],
+    "de": [
+     "lauch",
+     "porree"
+    ]
+   }
+  },
+  {
+   "id": "veg.mushroom",
+   "names": {
+    "en": "Mushroom",
+    "de": "Pilz"
+   },
+   "words": {
+    "en": [
+     "mushroom",
+     "mushrooms",
+     "button mushrooms",
+     "porcini",
+     "chanterelles",
+     "shiitake"
+    ],
+    "de": [
+     "pilz",
+     "pilze",
+     "champignon",
+     "champignons",
+     "steinpilze",
+     "pfifferlinge",
+     "shiitake"
+    ]
+   }
+  },
+  {
+   "id": "veg.onion",
+   "names": {
+    "en": "Onion family",
+    "de": "Zwiebelgewächs"
+   },
+   "words": {
+    "en": [
+     "onion",
+     "onions",
+     "shallot",
+     "shallots",
+     "spring onion",
+     "spring onions",
+     "scallion",
+     "scallions",
+     "red onion"
+    ],
+    "de": [
+     "zwiebel",
+     "zwiebeln",
+     "schalotte",
+     "schalotten",
+     "frühlingszwiebel",
+     "frühlingszwiebeln",
+     "lauchzwiebel",
+     "lauchzwiebeln"
+    ]
+   }
+  },
+  {
+   "id": "veg.other",
+   "names": {
+    "en": "Vegetable",
+    "de": "Gemüse"
+   },
+   "words": {
+    "en": [
+     "cucumber",
+     "bell pepper",
+     "bell peppers",
+     "red pepper",
+     "zucchini",
+     "courgette",
+     "eggplant",
+     "aubergine",
+     "broccoli",
+     "cauliflower",
+     "asparagus",
+     "artichoke",
+     "pumpkin",
+     "squash",
+     "fennel",
+     "green beans",
+     "snow peas",
+     "corn on the cob",
+     "olives",
+     "chili",
+     "chilli",
+     "chili pepper",
+     "jalapeño"
+    ],
+    "de": [
+     "gurke",
+     "gurken",
+     "paprikaschote",
+     "paprikaschoten",
+     "paprika",
+     "zucchini",
+     "aubergine",
+     "auberginen",
+     "brokkoli",
+     "blumenkohl",
+     "spargel",
+     "artischocke",
+     "artischocken",
+     "kürbis",
+     "fenchel",
+     "grüne bohnen",
+     "zuckerschoten",
+     "oliven",
+     "chili",
+     "chilischote",
+     "peperoni",
+     "jalapeño"
+    ]
+   }
+  },
+  {
+   "id": "veg.pickle",
+   "names": {
+    "en": "Pickles",
+    "de": "Eingelegtes Gemüse"
+   },
+   "words": {
+    "en": [
+     "pickles",
+     "gherkins",
+     "pickled cucumbers"
+    ],
+    "de": [
+     "gewürzgurken",
+     "essiggurken",
+     "cornichons"
+    ]
+   },
+   "may_contain": [
+    "mustard",
+    "sulphites"
+   ]
+  },
+  {
+   "id": "veg.root",
+   "names": {
+    "en": "Root vegetable",
+    "de": "Wurzelgemüse"
+   },
+   "words": {
+    "en": [
+     "carrot",
+     "carrots",
+     "potato",
+     "potatoes",
+     "sweet potato",
+     "sweet potatoes",
+     "parsnip",
+     "parsnips",
+     "radish",
+     "radishes",
+     "beet",
+     "beets",
+     "beetroot",
+     "turnip"
+    ],
+    "de": [
+     "karotte",
+     "karotten",
+     "möhre",
+     "möhren",
+     "mohrrübe",
+     "kartoffel",
+     "kartoffeln",
+     "süßkartoffel",
+     "süßkartoffeln",
+     "pastinake",
+     "pastinaken",
+     "radieschen",
+     "rote bete",
+     "rote beete",
+     "steckrübe"
+    ]
+   }
+  },
+  {
+   "id": "veg.tomato",
+   "names": {
+    "en": "Tomato",
+    "de": "Tomate"
+   },
+   "words": {
+    "en": [
+     "tomato",
+     "tomatoes",
+     "cherry tomato",
+     "cherry tomatoes",
+     "canned tomatoes",
+     "chopped tomatoes",
+     "passata",
+     "crushed tomatoes"
+    ],
+    "de": [
+     "tomate",
+     "tomaten",
+     "kirschtomate",
+     "kirschtomaten",
+     "dosentomaten",
+     "passierte tomaten",
+     "stückige tomaten",
+     "passata",
+     "pizzatomaten"
+    ]
+   }
+  },
+  {
+   "id": "veg.tomato.paste",
+   "names": {
+    "en": "Tomato paste",
+    "de": "Tomatenmark"
+   },
+   "words": {
+    "en": [
+     "tomato paste",
+     "tomato purée",
+     "tomato puree"
+    ],
+    "de": [
+     "tomatenmark"
+    ]
+   }
+  }
+ ]
+}

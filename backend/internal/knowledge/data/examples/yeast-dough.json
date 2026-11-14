@@ -1,0 +1,36 @@
+{
+ "steps": [
+  {
+   "text": "Hefe in lauwarmer Milch auflösen und mit dem Mehl verkneten.",
+   "ingredients": [
+    {
+     "names": [
+      "Trockenhefe"
+     ],
+     "amount": 7,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Milch"
+     ],
+     "amount": 250,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 500,
+     "unit": "g"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Eine Stunde gehen lassen und 30 Minuten backen.",
+   "ingredients": [],
+   "minutes": 90
+  }
+ ]
+}

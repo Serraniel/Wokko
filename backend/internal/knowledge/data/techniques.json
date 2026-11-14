@@ -1,0 +1,1122 @@
+{
+ "entries": [
+  {
+   "id": "technique.roux",
+   "kind": "technique",
+   "names": {
+    "en": "Roux",
+    "de": "Mehlschwitze"
+   },
+   "explain": {
+    "en": "Fat and flour cooked together, then a liquid stirred in. The flour's starch thickens the liquid once it boils, and cooking it first removes the raw flour taste. The longer it cooks, the darker and nuttier it gets, and the less it thickens.",
+    "de": "Fett und Mehl werden zusammen angeschwitzt, dann wird Flüssigkeit eingerührt. Die Stärke im Mehl bindet, sobald es kocht, und das Anschwitzen nimmt den Mehlgeschmack. Je länger sie röstet, desto dunkler und nussiger wird sie, und desto weniger bindet sie."
+   },
+   "detect": {
+    "any": [
+     {
+      "words": [
+       "mehlschwitze",
+       "einbrenne",
+       " roux"
+      ]
+     },
+     {
+      "all": [
+       {
+        "any": [
+         {
+          "class": "fat.butter"
+         },
+         {
+          "class": "fat.oil"
+         },
+         {
+          "class": "fat.margarine"
+         },
+         {
+          "class": "fat.lard"
+         }
+        ]
+       },
+       {
+        "class": "grain.gluten.flour"
+       },
+       {
+        "not": {
+         "class": "sweet.sugar"
+        }
+       },
+       {
+        "not": {
+         "class": "egg"
+        }
+       },
+       {
+        "not": {
+         "class": "leavening"
+        }
+       },
+       {
+        "not": {
+         "entry": "technique.beurre_manie"
+        }
+       }
+      ],
+      "window": 1
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee",
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "ruehrkuchen",
+     "mayonnaise",
+     "gulasch-mehlbutter"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Equal weights of butter and flour are the classic ratio. Stir until no white flour is left; it may foam.",
+     "de": "Butter und Mehl zu gleichen Teilen nach Gewicht sind das klassische Verhältnis. Rühren, bis kein weißes Mehl mehr zu sehen ist; schäumen darf es."
+    },
+    {
+     "en": "Against lumps, combine opposite temperatures: a hot roux with cold or room-temperature liquid, or a cold roux with hot liquid. Hot into hot seals the flour on the outside and leaves dry powder inside.",
+     "de": "Gegen Klümpchen gegensätzliche Temperaturen verbinden: heiße Mehlschwitze mit kalter oder zimmerwarmer Flüssigkeit, oder kalte Mehlschwitze mit heißer. Heiß auf heiß schließt das Mehl außen ein, innen bleibt trockenes Pulver."
+    },
+    {
+     "en": "Add the liquid little by little, keep stirring, and let it boil once. Starch only binds fully from about 60 °C; a sauce reduced before that turns gluey.",
+     "de": "Die Flüssigkeit nach und nach zugeben, ständig rühren und einmal aufkochen lassen. Stärke bindet erst ab etwa 60 °C richtig; wer vorher reduziert, bekommt Kleister."
+    }
+   ]
+  },
+  {
+   "id": "technique.liaison",
+   "kind": "technique",
+   "names": {
+    "en": "Liaison",
+    "de": "Legieren"
+   },
+   "explain": {
+    "en": "Egg yolk mixed with cream, stirred into a hot sauce or soup at the end. It thickens, adds shine and richness, and needs no further starch.",
+    "de": "Eigelb wird mit Sahne verquirlt und zum Schluss in eine heiße Soße oder Suppe gerührt. Das bindet, gibt Glanz und Fülle und braucht keine weitere Stärke."
+   },
+   "detect": {
+    "any": [
+     {
+      "words": [
+       "legier",
+       "liaison"
+      ]
+     },
+     {
+      "all": [
+       {
+        "class": "egg.yolk"
+       },
+       {
+        "class": "dairy.cream"
+       },
+       {
+        "not": {
+         "class": "sweet.sugar"
+        }
+       }
+      ],
+      "window": 1
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne",
+     "creme-brulee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Stir a little of the hot sauce into the yolk and cream first, then pour it back, so the yolks warm up gently.",
+     "de": "Erst etwas heiße Soße unter Eigelb und Sahne rühren, dann alles zurückgießen, damit das Eigelb sanft warm wird."
+    },
+    {
+     "en": "A sauce with flour in it can boil once after the liaison, because the starch protects the yolks. Without starch, keep it below the boil or it curdles.",
+     "de": "Eine Soße mit Mehl darf nach dem Legieren einmal aufkochen, weil die Stärke das Eigelb schützt. Ohne Stärke darf sie nicht mehr kochen, sonst gerinnt sie."
+    }
+   ]
+  },
+  {
+   "id": "technique.beurre_manie",
+   "kind": "technique",
+   "names": {
+    "en": "Beurre manié",
+    "de": "Mehlbutter"
+   },
+   "explain": {
+    "en": "Cold butter kneaded with an equal amount of flour, whisked into a hot liquid in small pieces to thicken it quickly at the end.",
+    "de": "Kalte Butter mit gleich viel Mehl verknetet und in kleinen Stücken in heiße Flüssigkeit gerührt, um sie zum Schluss schnell zu binden."
+   },
+   "detect": {
+    "words": [
+     "beurre manie",
+     "mehlbutter",
+     "kneaded butter"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "gulasch-mehlbutter"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Let it simmer a few minutes afterwards so the flour loses its raw taste.",
+     "de": "Danach ein paar Minuten köcheln lassen, damit das Mehl nicht roh schmeckt."
+    }
+   ]
+  },
+  {
+   "id": "technique.slurry",
+   "kind": "technique",
+   "names": {
+    "en": "Starch slurry",
+    "de": "Angerührte Stärke"
+   },
+   "explain": {
+    "en": "Starch stirred into a little cold liquid, then into the hot dish. It thickens within a minute of boiling and gives a clear, glossy result.",
+    "de": "Stärke wird in etwas kalter Flüssigkeit angerührt und dann in das heiße Gericht gegeben. Sie bindet nach kurzem Aufkochen und macht klar und glänzend."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "starch"
+     },
+     {
+      "words": [
+       "anrühr",
+       "angerühr",
+       "verrühr",
+       "kalte",
+       "kaltem",
+       "slurry",
+       "cold water",
+       "mix with"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cornstarch-long"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Always mix starch with cold liquid first; dropped straight into hot liquid it forms lumps.",
+     "de": "Stärke immer erst in kalter Flüssigkeit anrühren; direkt ins Heiße gegeben klumpt sie."
+    },
+    {
+     "en": "Cornstarch thickening breaks down again if boiled for long or stirred hard, so add it at the end.",
+     "de": "Bindung mit Speisestärke lässt bei langem Kochen oder kräftigem Rühren wieder nach, darum zum Schluss zugeben."
+    }
+   ]
+  },
+  {
+   "id": "technique.cold_start",
+   "kind": "technique",
+   "names": {
+    "en": "Cold start",
+    "de": "Kalt ansetzen"
+   },
+   "explain": {
+    "en": "Starting in cold water and heating slowly. For a stock this draws more flavour out of meat, bones and vegetables, and proteins set slowly as a foam you can skim, so the stock stays clear.",
+    "de": "In kaltem Wasser ansetzen und langsam erhitzen. Bei einer Brühe löst sich so mehr Geschmack aus Fleisch, Knochen und Gemüse, und Eiweiß stockt langsam als Schaum, den man abschöpfen kann, damit sie klar bleibt."
+   },
+   "detect": {
+    "all": [
+     {
+      "words": [
+       "kalt ansetz",
+       "kalt aufsetz",
+       "kaltem wasser",
+       "kaltes wasser",
+       "cold water"
+      ]
+     },
+     {
+      "any": [
+       {
+        "class": "meat"
+       },
+       {
+        "class": "veg"
+       },
+       {
+        "class": "fish"
+       }
+      ]
+     },
+     {
+      "words": [
+       "aufsetz",
+       "erhitz",
+       "aufkoch",
+       "köchel",
+       "simmer",
+       "bring",
+       "heat",
+       "zum kochen",
+       "zum sieden"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne",
+     "washed-chicken"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use unsalted water and season at the end: salt slows the extraction, and reducing concentrates it.",
+     "de": "Ungesalzenes Wasser nehmen und erst am Ende würzen: Salz bremst das Auslaugen, und Reduzieren konzentriert es."
+    },
+    {
+     "en": "Smaller pieces give up their flavour faster. Old soup hens and chicken wings give the most body; wings bring gelatine, so the stock sets when cold.",
+     "de": "Kleinere Stücke geben ihren Geschmack schneller ab. Alte Suppenhühner und Chicken Wings geben am meisten Körper; Flügel bringen Gelatine, die Brühe wird kalt fest."
+    },
+    {
+     "en": "A pressure cooker makes a stock in about 30 to 60 minutes instead of 2 to 2½ hours.",
+     "de": "Im Schnellkochtopf ist eine Brühe in etwa 30 bis 60 Minuten fertig statt in 2 bis 2½ Stunden."
+    }
+   ]
+  },
+  {
+   "id": "technique.skim",
+   "kind": "technique",
+   "names": {
+    "en": "Skimming",
+    "de": "Abschäumen"
+   },
+   "explain": {
+    "en": "Lifting off the grey foam of set proteins while a stock or soup heats up. It keeps the liquid clear and clean-tasting.",
+    "de": "Den grauen Schaum aus gestocktem Eiweiß abnehmen, während Brühe oder Suppe heiß wird. So bleibt sie klar und schmeckt sauber."
+   },
+   "detect": {
+    "words": [
+     "abschäum",
+     "schaum abschöpf",
+     "schaum abnehm",
+     "abschöpf",
+     "skim"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Keep it at a gentle simmer: a rolling boil churns the foam back in and clouds the stock. Some soups, like tonkotsu, are boiled hard on purpose to make them milky.",
+     "de": "Nur leise köcheln lassen: sprudelndes Kochen rührt den Schaum wieder unter und trübt die Brühe. Manche Suppen wie Tonkotsu kocht man absichtlich stark, damit sie milchig werden."
+    }
+   ]
+  },
+  {
+   "id": "technique.toast_spices",
+   "kind": "technique",
+   "names": {
+    "en": "Toasting spices",
+    "de": "Gewürze anrösten"
+   },
+   "explain": {
+    "en": "Whole spices heated in a dry pan until fragrant. The heat releases aromas that cold spices don't give off.",
+    "de": "Ganze Gewürze in einer Pfanne ohne Fett erhitzen, bis sie duften. Die Hitze setzt Aromen frei, die kalte Gewürze nicht abgeben."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "spice"
+     },
+     {
+      "words": [
+       "ohne fett",
+       "ohne öl",
+       "trocken rösten",
+       "trockenen pfanne",
+       "anröst",
+       "dry pan",
+       "toast"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Take them off the heat as soon as they smell strongly; burnt spices turn bitter.",
+     "de": "Vom Herd nehmen, sobald sie kräftig duften; verbrannte Gewürze werden bitter."
+    }
+   ]
+  },
+  {
+   "id": "technique.char_aromatics",
+   "kind": "technique",
+   "names": {
+    "en": "Charring onion and ginger",
+    "de": "Zwiebel und Ingwer rösten"
+   },
+   "explain": {
+    "en": "Onion and ginger roasted until dark before they go into a stock, as for Vietnamese pho. It adds depth and a light smokiness and softens their sharpness, but colours the stock golden.",
+    "de": "Zwiebel und Ingwer werden dunkel geröstet, bevor sie in die Brühe kommen, wie bei der vietnamesischen Pho. Das gibt Tiefe, leichte Rauchigkeit und nimmt die Schärfe, färbt die Brühe aber golden."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "any": [
+         {
+          "class": "veg.onion"
+         },
+         {
+          "class": "veg.ginger"
+         }
+        ]
+       },
+       {
+        "words": [
+         "röst",
+         "schwärz",
+         " char",
+         "charred",
+         "verkohl",
+         "grill",
+         "broil"
+        ]
+       }
+      ],
+      "window": 1
+     },
+     {
+      "any": [
+       {
+        "words": [
+         "brühe",
+         "fond",
+         "stock",
+         "broth",
+         "pho"
+        ]
+       },
+       {
+        "class": "liquid.stock"
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne",
+     "gulasch-mehlbutter"
+    ]
+   }
+  },
+  {
+   "id": "technique.deglaze",
+   "kind": "technique",
+   "names": {
+    "en": "Deglazing",
+    "de": "Ablöschen"
+   },
+   "explain": {
+    "en": "Pouring liquid into a hot pan after searing and scraping up the browned bits. Those bits carry much of the flavour into the sauce.",
+    "de": "Nach dem Anbraten Flüssigkeit in die heiße Pfanne gießen und den Bratensatz lösen. Er trägt viel Geschmack in die Soße."
+   },
+   "detect": {
+    "words": [
+     "ablösch",
+     "deglaz"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "The browned bits should be brown, not black; burnt residue makes the sauce bitter.",
+     "de": "Der Bratensatz sollte braun sein, nicht schwarz; Verbranntes macht die Soße bitter."
+    }
+   ]
+  },
+  {
+   "id": "technique.sweat",
+   "kind": "technique",
+   "names": {
+    "en": "Sweating",
+    "de": "Anschwitzen"
+   },
+   "explain": {
+    "en": "Cooking vegetables gently in fat until soft and translucent, without browning. It brings out sweetness and keeps a sauce light in colour.",
+    "de": "Gemüse sanft in Fett garen, bis es weich und glasig ist, ohne zu bräunen. Das holt die Süße heraus und hält eine Soße hell."
+   },
+   "detect": {
+    "all": [
+     {
+      "words": [
+       "anschwitz",
+       "glasig",
+       "sweat",
+       "translucent"
+      ]
+     },
+     {
+      "class": "veg"
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "risotto"
+    ],
+    "no_match": [
+     "mayonnaise",
+     "huehnerfrikassee",
+     "hot-roux"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Medium-low heat and a pinch of salt draw out moisture so nothing browns.",
+     "de": "Mittlere bis niedrige Hitze und eine Prise Salz ziehen Wasser heraus, so bräunt nichts."
+    }
+   ]
+  },
+  {
+   "id": "technique.browning",
+   "kind": "technique",
+   "names": {
+    "en": "Browning",
+    "de": "Anbraten und Bräunen"
+   },
+   "explain": {
+    "en": "Searing at high heat so the surface browns. Above roughly 140 °C, sugars and proteins react (the Maillard reaction) and form the roasted flavours and dark colour of a brown sauce.",
+    "de": "Bei starker Hitze anbraten, bis die Oberfläche bräunt. Ab etwa 140 °C reagieren Zucker und Eiweiß miteinander (Maillard-Reaktion) und bilden die Röstaromen und die dunkle Farbe einer braunen Soße."
+   },
+   "detect": {
+    "words": [
+     "scharf anbrat",
+     "anbrat",
+     "sear",
+     "brown the",
+     "bräun",
+     "röst"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne",
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Dry the surface and don't crowd the pan, or the food steams instead of browning.",
+     "de": "Die Oberfläche trocken tupfen und die Pfanne nicht überfüllen, sonst dünstet es, statt zu bräunen."
+    },
+    {
+     "en": "For a light sauce, stay below the browning point: no roasted bones, browned vegetables or tomato paste.",
+     "de": "Für eine helle Soße unter der Bräunungstemperatur bleiben: keine gerösteten Knochen, kein gebräuntes Gemüse, kein Tomatenmark."
+    }
+   ]
+  },
+  {
+   "id": "technique.blanch",
+   "kind": "technique",
+   "names": {
+    "en": "Blanching",
+    "de": "Blanchieren"
+   },
+   "explain": {
+    "en": "Cooking vegetables briefly in plenty of boiling salted water, then cooling them in ice water. Green vegetables stay bright and crisp.",
+    "de": "Gemüse kurz in viel kochendem Salzwasser garen und dann in Eiswasser abschrecken. Grünes Gemüse bleibt leuchtend und knackig."
+   },
+   "detect": {
+    "words": [
+     "blanchier",
+     "blanch"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "green-beans-blanched"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Green vegetables turn grey when cooked too long or covered with a lid in acid; keep it short and cool them at once.",
+     "de": "Grünes Gemüse wird grau, wenn es zu lange gart oder mit Säure zugedeckt kocht; kurz halten und sofort abschrecken."
+    }
+   ]
+  },
+  {
+   "id": "technique.reduce",
+   "kind": "technique",
+   "names": {
+    "en": "Reducing",
+    "de": "Reduzieren"
+   },
+   "explain": {
+    "en": "Simmering a liquid uncovered so water evaporates. Flavour gets stronger and the sauce thicker, but so does the salt.",
+    "de": "Flüssigkeit offen köcheln lassen, damit Wasser verdampft. Geschmack wird kräftiger und die Soße dicker, aber auch salziger."
+   },
+   "detect": {
+    "words": [
+     "reduzier",
+     "einkoch",
+     "einreduz",
+     "reduce"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "salted-stock"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Season after reducing, not before.",
+     "de": "Erst nach dem Reduzieren abschmecken, nicht vorher."
+    }
+   ]
+  },
+  {
+   "id": "technique.braise",
+   "kind": "technique",
+   "names": {
+    "en": "Braising",
+    "de": "Schmoren"
+   },
+   "explain": {
+    "en": "Browning first, then cooking slowly, covered, in a little liquid. Tough cuts with connective tissue turn tender as the collagen becomes gelatine.",
+    "de": "Erst anbraten, dann zugedeckt mit wenig Flüssigkeit langsam garen. Zähe Stücke mit Bindegewebe werden zart, weil Kollagen zu Gelatine wird."
+   },
+   "detect": {
+    "words": [
+     "schmor",
+     "braise"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "gulasch-mehlbutter"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Lean cuts like chicken breast or fillet dry out when braised; use legs, shoulder or cheek.",
+     "de": "Magere Stücke wie Hähnchenbrust oder Filet werden beim Schmoren trocken; besser Keule, Schulter oder Backe."
+    }
+   ]
+  },
+  {
+   "id": "technique.poach",
+   "kind": "technique",
+   "names": {
+    "en": "Poaching",
+    "de": "Pochieren"
+   },
+   "explain": {
+    "en": "Cooking gently in liquid just below the boil, around 70 to 90 °C. Delicate food like eggs, fish and chicken breast stays moist.",
+    "de": "Sanft in Flüssigkeit knapp unter dem Siedepunkt garen, bei etwa 70 bis 90 °C. Empfindliches wie Eier, Fisch und Hähnchenbrust bleibt saftig."
+   },
+   "detect": {
+    "words": [
+     "pochier",
+     "poach",
+     "gar ziehen",
+     "garziehen",
+     "unter dem siedepunkt",
+     "barely simmering",
+     "below a simmer"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "poached-eggs"
+    ],
+    "no_match": [
+     "bechamel-lasagne",
+     "ceviche"
+    ]
+   }
+  },
+  {
+   "id": "technique.confit",
+   "kind": "technique",
+   "names": {
+    "en": "Confit",
+    "de": "Confieren"
+   },
+   "explain": {
+    "en": "Cooking slowly while submerged in fat, at about 80 to 95 °C, far below frying. Duck legs are traditionally salted first, which seasons and firms the meat.",
+    "de": "Langsam ganz in Fett liegend garen, bei etwa 80 bis 95 °C und damit weit unter Frittiertemperatur. Entenkeulen werden traditionell vorher gesalzen, das würzt und festigt das Fleisch."
+   },
+   "detect": {
+    "words": [
+     "confier",
+     "konfier",
+     "confit",
+     "im eigenen fett"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Culinary Institute of America, The Professional Chef (9th ed., 2011)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "duck-confit"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Garlic or herbs kept in oil can grow botulism at room temperature. Keep them in the fridge and use them within a few days.",
+     "de": "Knoblauch oder Kräuter in Öl können bei Raumtemperatur Botulismus begünstigen. Im Kühlschrank aufbewahren und in wenigen Tagen verbrauchen."
+    }
+   ]
+  },
+  {
+   "id": "technique.caramelize",
+   "kind": "technique",
+   "names": {
+    "en": "Caramelizing",
+    "de": "Karamellisieren"
+   },
+   "explain": {
+    "en": "Browning sugar, or the natural sugars in onions and other vegetables, with heat. Sugar itself caramelizes from about 160 °C.",
+    "de": "Zucker oder den natürlichen Zucker in Zwiebeln und anderem Gemüse durch Hitze bräunen. Zucker selbst karamellisiert ab etwa 160 °C."
+   },
+   "detect": {
+    "words": [
+     "karamellis",
+     "caramelis",
+     "carameliz"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "caramel-onions"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Properly caramelized onions take 30 to 45 minutes over low to medium heat, not the 10 minutes many recipes claim.",
+     "de": "Richtig karamellisierte Zwiebeln brauchen 30 bis 45 Minuten bei niedriger bis mittlerer Hitze, nicht die 10 Minuten aus vielen Rezepten."
+    },
+    {
+     "en": "For a caramel made with water, don't stir once the sugar has dissolved, and brush crystals off the sides. A stray crystal can make the syrup grainy; a little lemon juice or glucose helps.",
+     "de": "Bei Karamell mit Wasser nicht mehr rühren, sobald sich der Zucker gelöst hat, und Kristalle vom Rand pinseln. Ein einzelner Kristall kann den Sirup körnig machen; etwas Zitronensaft oder Glukose hilft."
+    }
+   ]
+  },
+  {
+   "id": "technique.gelatine",
+   "kind": "technique",
+   "names": {
+    "en": "Setting with gelatine",
+    "de": "Gelieren mit Gelatine"
+   },
+   "explain": {
+    "en": "Gelatine dissolves in warm liquid and sets as it cools in the fridge. It melts again around body temperature, which is why it melts in the mouth.",
+    "de": "Gelatine löst sich in warmer Flüssigkeit und wird beim Abkühlen im Kühlschrank fest. Bei etwa Körpertemperatur schmilzt sie wieder, darum zergeht sie im Mund."
+   },
+   "detect": {
+    "class": "gelling.gelatine"
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "FAO, agar properties",
+     "added": "2026-11-14",
+     "url": "https://www.fao.org/4/ag156e/AG156E03.htm"
+    }
+   ],
+   "examples": {
+    "match": [
+     "panna-cotta"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Soak sheets in cold water for 5 to 10 minutes, squeeze them, and dissolve them in warm, not boiling, liquid.",
+     "de": "Blätter 5 bis 10 Minuten in kaltem Wasser einweichen, ausdrücken und in warmer, nicht kochender Flüssigkeit auflösen."
+    },
+    {
+     "en": "Stir a little of a cold mixture into the warm gelatine first, then the gelatine into the rest, or it sets in strings.",
+     "de": "Erst etwas von der kalten Masse unter die warme Gelatine rühren, dann die Gelatine unter den Rest, sonst bildet sie Fäden."
+    },
+    {
+     "en": "How much liquid a sheet sets depends on the brand; check the pack.",
+     "de": "Wie viel Flüssigkeit ein Blatt bindet, hängt von der Marke ab; die Packung gibt es an."
+    }
+   ]
+  },
+  {
+   "id": "technique.agar",
+   "kind": "technique",
+   "names": {
+    "en": "Setting with agar",
+    "de": "Gelieren mit Agar-Agar"
+   },
+   "explain": {
+    "en": "Agar is a plant-based gelling agent from seaweed. It only dissolves when boiled, sets at about 35 °C, and stays firm up to about 85 °C, so it also works for warm dishes.",
+    "de": "Agar-Agar ist ein pflanzliches Geliermittel aus Algen. Es löst sich nur beim Kochen, wird bei etwa 35 °C fest und bleibt bis etwa 85 °C stabil, eignet sich also auch für Warmes."
+   },
+   "detect": {
+    "class": "gelling.agar"
+   },
+   "sources": [
+    {
+     "title": "FAO, agar properties",
+     "added": "2026-11-14",
+     "url": "https://www.fao.org/4/ag156e/AG156E03.htm"
+    }
+   ],
+   "examples": {
+    "match": [
+     "agar-jelly"
+    ],
+    "no_match": [
+     "panna-cotta"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Boil it for 1 to 2 minutes. Add strong acids after it has dissolved, because acid weakens the gel.",
+     "de": "1 bis 2 Minuten kochen. Starke Säure erst nach dem Auflösen zugeben, weil sie das Gel schwächt."
+    },
+    {
+     "en": "Agar sets firmer and more brittle than gelatine. Brands differ a lot in strength, so test a spoonful on a cold plate.",
+     "de": "Agar wird fester und brüchiger als Gelatine. Marken sind sehr unterschiedlich stark, darum einen Löffel auf einem kalten Teller testen."
+    }
+   ]
+  },
+  {
+   "id": "technique.creaming",
+   "kind": "technique",
+   "names": {
+    "en": "Creaming butter and sugar",
+    "de": "Butter und Zucker schaumig rühren"
+   },
+   "explain": {
+    "en": "Beating soft butter with sugar traps air bubbles, which the raising agent later enlarges in the oven. It gives cakes a light, even crumb.",
+    "de": "Weiche Butter mit Zucker schaumig schlagen schließt Luftbläschen ein, die das Triebmittel im Ofen vergrößert. Das macht Kuchen locker und gleichmäßig."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "fat.butter"
+     },
+     {
+      "class": "sweet.sugar"
+     },
+     {
+      "words": [
+       "schaumig",
+       "cream the butter",
+       "cream butter",
+       "creamed",
+       "light and fluffy",
+       "hell und cremig"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "ruehrkuchen"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Butter should be soft but cool, around 18 to 21 °C. Melted butter can't hold air.",
+     "de": "Die Butter sollte weich, aber kühl sein, etwa 18 bis 21 °C. Geschmolzene Butter hält keine Luft."
+    },
+    {
+     "en": "Add room-temperature eggs one at a time. If the batter splits, a spoon of flour brings it back.",
+     "de": "Zimmerwarme Eier einzeln unterrühren. Gerinnt der Teig, hilft ein Löffel Mehl."
+    }
+   ]
+  },
+  {
+   "id": "technique.folding",
+   "kind": "technique",
+   "names": {
+    "en": "Folding",
+    "de": "Unterheben"
+   },
+   "explain": {
+    "en": "Gently turning a light, airy mixture such as whipped egg whites or cream into a heavier one with a spatula, so the air stays in.",
+    "de": "Eine lockere, luftige Masse wie Eischnee oder Sahne vorsichtig mit dem Teigschaber unter eine schwerere ziehen, damit die Luft erhalten bleibt."
+   },
+   "detect": {
+    "words": [
+     "unterheb",
+     "fold in",
+     "fold the",
+     "fold through"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "ruehrkuchen"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Stir in a third of the foam first to loosen the mixture, then fold in the rest.",
+     "de": "Erst ein Drittel des Schaums unterrühren, um die Masse zu lockern, dann den Rest unterheben."
+    },
+    {
+     "en": "For muffins and quick breads, mix only until the flour disappears; more mixing develops gluten and makes them tough.",
+     "de": "Muffins und Rührteige nur so lange rühren, bis kein Mehl mehr zu sehen ist; längeres Rühren bildet Gluten und macht sie zäh."
+    }
+   ]
+  },
+  {
+   "id": "technique.blind_bake",
+   "kind": "technique",
+   "names": {
+    "en": "Blind baking",
+    "de": "Blindbacken"
+   },
+   "explain": {
+    "en": "Pre-baking a pastry case lined with paper and weights before a wet filling goes in. It keeps the base crisp and the sides from slumping.",
+    "de": "Einen Teigboden mit Papier und Gewichten vorbacken, bevor eine feuchte Füllung hineinkommt. So bleibt der Boden knusprig und der Rand fällt nicht ein."
+   },
+   "detect": {
+    "words": [
+     "blindback",
+     "blind bak",
+     "blind-bak"
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "quiche"
+    ],
+    "no_match": [
+     "ruehrkuchen"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Prick the base and chill the lined tin before baking, so the pastry shrinks less.",
+     "de": "Den Boden einstechen und die ausgelegte Form vor dem Backen kühlen, dann schrumpft der Teig weniger."
+    }
+   ]
+  }
+ ]
+}

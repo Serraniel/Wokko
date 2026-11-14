@@ -1,6 +1,6 @@
 # Kitchen knowledge: built-in recipe insights without an AI model
 
-Status: plan, not started. Tracking issue: #105.
+Status: first version built (food classes, allergens, diets, sauces, techniques, problem and safety rules, the recipe page section and the MCP tool). Admin-assigned food classes and editor hints are still open. Tracking issue: #105.
 
 ## Goal
 

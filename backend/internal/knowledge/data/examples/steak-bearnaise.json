@@ -1,0 +1,52 @@
+{
+ "steps": [
+  {
+   "text": "Schalotte, Estragon und Weißweinessig auf ein Drittel einkochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Schalotte"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Estragon"
+     ]
+    },
+    {
+     "names": [
+      "Weißweinessig"
+     ],
+     "amount": 60,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Reduktion mit Eigelb über dem Wasserbad aufschlagen, warme Butter langsam einrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Weißweinessig"
+     ]
+    }
+   ],
+   "minutes": 8
+  }
+ ]
+}

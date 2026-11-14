@@ -1,0 +1,58 @@
+{
+ "steps": [
+  {
+   "text": "Reduce shallot, tarragon and white wine vinegar.",
+   "ingredients": [
+    {
+     "names": [
+      "shallot"
+     ]
+    },
+    {
+     "names": [
+      "tarragon"
+     ]
+    },
+    {
+     "names": [
+      "white wine vinegar"
+     ],
+     "amount": 50,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Whisk the reduction with egg yolks over simmering water and beat in melted butter. Stir in tomato paste.",
+   "ingredients": [
+    {
+     "names": [
+      "egg yolks"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "white wine vinegar"
+     ]
+    },
+    {
+     "names": [
+      "tomato paste"
+     ],
+     "amount": 1,
+     "unit": "tbsp"
+    }
+   ],
+   "minutes": 8
+  }
+ ]
+}

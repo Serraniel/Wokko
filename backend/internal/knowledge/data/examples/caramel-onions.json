@@ -1,0 +1,28 @@
+{
+ "steps": [
+  {
+   "text": "Slice the onions and cook them in butter over low heat for 40 minutes until caramelized.",
+   "ingredients": [
+    {
+     "names": [
+      "onions"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "salt"
+     ]
+    }
+   ],
+   "minutes": 40
+  }
+ ]
+}

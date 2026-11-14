@@ -1,0 +1,31 @@
+{
+ "steps": [
+  {
+   "text": "Milch mit Zitronensaft und Zucker in einem Topf erhitzen und 5 Minuten köcheln lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Milch"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 3,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 50,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

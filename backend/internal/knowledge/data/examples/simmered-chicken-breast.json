@@ -1,0 +1,29 @@
+{
+ "steps": [
+  {
+   "text": "Hähnchenbrust mit Gemüse in Brühe 90 Minuten köcheln lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hähnchenbrust"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Karotten"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Gemüsebrühe"
+     ],
+     "amount": 1,
+     "unit": "l"
+    }
+   ],
+   "minutes": 90
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "steps": [
+  {
+   "text": "Speisestärke mit kaltem Wasser anrühren und in die Soße geben.",
+   "ingredients": [
+    {
+     "names": [
+      "Speisestärke"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Wasser"
+     ]
+    }
+   ],
+   "minutes": 2
+  },
+  {
+   "text": "Alles zusammen 30 Minuten köcheln lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Speisestärke"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 30
+  }
+ ]
+}

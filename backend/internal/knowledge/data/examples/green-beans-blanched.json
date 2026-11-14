@@ -1,0 +1,22 @@
+{
+ "steps": [
+  {
+   "text": "Bohnen 3 Minuten in Salzwasser blanchieren und in Eiswasser abschrecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Grüne Bohnen"
+     ],
+     "amount": 400,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

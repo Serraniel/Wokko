@@ -1,0 +1,41 @@
+{
+ "steps": [
+  {
+   "text": "Gelatine in kaltem Wasser einweichen.",
+   "ingredients": [
+    {
+     "names": [
+      "Blattgelatine"
+     ],
+     "amount": 3
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Sahne mit Zucker und Vanille erwärmen, vom Herd nehmen, Gelatine ausdrücken und darin auflösen. In Gläser füllen und kalt stellen.",
+   "ingredients": [
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 60,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Vanilleschote"
+     ]
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "steps": [
+  {
+   "text": "Entenkeulen über Nacht salzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Entenkeulen"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Abspülen, trocken tupfen und in Entenschmalz bei 90 °C drei Stunden im Ofen confieren.",
+   "ingredients": [
+    {
+     "names": [
+      "Entenschmalz"
+     ],
+     "amount": 1,
+     "unit": "kg"
+    }
+   ],
+   "minutes": 180
+  }
+ ]
+}

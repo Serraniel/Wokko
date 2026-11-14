@@ -1,0 +1,36 @@
+{
+ "steps": [
+  {
+   "text": "Die Gemüsebrühe erhitzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Gemüsebrühe"
+     ],
+     "amount": 1,
+     "unit": "l"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Eigelb mit Sahne verquirlen, in die Suppe rühren und noch einmal aufkochen lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

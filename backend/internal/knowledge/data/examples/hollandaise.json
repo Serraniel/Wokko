@@ -1,0 +1,41 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zitronensaft und einem Löffel Wasser über dem Wasserbad aufschlagen.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Die geklärte Butter langsam unterschlagen und mit Salz würzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Butterschmalz"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb, Senf und Salz verrühren, dann das Öl erst tropfenweise, später in dünnem Strahl unterschlagen. Mit Zitronensaft abschmecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Senf"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    },
+    {
+     "names": [
+      "Rapsöl"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "steps": [
+  {
+   "text": "Erdnussbutter mit Kokosmilch, Sojasauce und Limettensaft glatt rühren und kurz erwärmen.",
+   "ingredients": [
+    {
+     "names": [
+      "Erdnussbutter"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Kokosmilch"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Sojasauce"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Limettensaft"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

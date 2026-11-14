@@ -1,0 +1,27 @@
+{
+ "steps": [
+  {
+   "text": "Simmer the stock with lemon zest and thyme for 45 minutes.",
+   "ingredients": [
+    {
+     "names": [
+      "vegetable stock"
+     ],
+     "amount": 1,
+     "unit": "l"
+    },
+    {
+     "names": [
+      "lemon zest"
+     ]
+    },
+    {
+     "names": [
+      "thyme"
+     ]
+    }
+   ],
+   "minutes": 45
+  }
+ ]
+}

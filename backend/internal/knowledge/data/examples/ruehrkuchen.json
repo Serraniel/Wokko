@@ -1,0 +1,49 @@
+{
+ "steps": [
+  {
+   "text": "Butter, Zucker und Eier schaumig schlagen, Mehl und Backpulver unterheben.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Eier"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 250,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Backpulver"
+     ],
+     "amount": 1,
+     "unit": "Päckchen"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "50 Minuten backen.",
+   "ingredients": [],
+   "minutes": 50
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "steps": [
+  {
+   "text": "Orangensaft mit Agar-Agar verrühren, 2 Minuten sprudelnd kochen und in Förmchen füllen.",
+   "ingredients": [
+    {
+     "names": [
+      "Orangensaft"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Agar-Agar"
+     ],
+     "amount": 4,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

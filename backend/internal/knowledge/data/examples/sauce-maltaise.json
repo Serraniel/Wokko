@@ -1,0 +1,36 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zitronensaft über dem Wasserbad aufschlagen, Butter einrühren und mit Blutorangensaft und Orangenabrieb abschmecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Blutorange"
+     ],
+     "amount": 1
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

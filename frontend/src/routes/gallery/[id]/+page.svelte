@@ -27,7 +27,7 @@
 <PublicShell>
 	<ErrorNote text={error} />
 	{#if recipe}
-		<RecipeView {recipe} cookHref="/gallery/{page.params.id}/cook" exportBase="/api/v1/public/recipes/{page.params.id}/export" />
+		<RecipeView {recipe} cookHref="/gallery/{page.params.id}/cook" exportBase="/api/v1/public/recipes/{page.params.id}/export" insightsUrl="/public/recipes/{page.params.id}/insights" />
 	{:else if missing}
 		<div class="flex flex-col items-center gap-3 p-10 text-center"><Mascot /><h1 class="text-xl font-bold">{t('notfound.title')}</h1></div>
 	{/if}

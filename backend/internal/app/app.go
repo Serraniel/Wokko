@@ -17,6 +17,7 @@ import (
 	"github.com/serraniel/wokko/backend/internal/auth"
 	"github.com/serraniel/wokko/backend/internal/config"
 	"github.com/serraniel/wokko/backend/internal/importer"
+	"github.com/serraniel/wokko/backend/internal/knowledge"
 	"github.com/serraniel/wokko/backend/internal/media"
 	"github.com/serraniel/wokko/backend/internal/store"
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
@@ -54,7 +55,9 @@ type Service struct {
 	passkeys passkeyFlows
 	// Fetcher downloads pages for recipe imports.
 	Fetcher *importer.Fetcher
-	Now     func() time.Time
+	// Knowledge is the built-in kitchen knowledge, shipped in the binary.
+	Knowledge *knowledge.Pack
+	Now       func() time.Time
 
 	backupMu sync.Mutex
 	healthMu sync.RWMutex
@@ -62,7 +65,7 @@ type Service struct {
 }
 
 func New(s *store.Store, cfg config.Config, log *slog.Logger) *Service {
-	return &Service{Store: s, Media: media.Store{Dir: cfg.UploadsDir()}, Cfg: cfg, Log: log, Now: time.Now, Fetcher: importer.NewFetcher(cfg.Version, false)}
+	return &Service{Store: s, Media: media.Store{Dir: cfg.UploadsDir()}, Cfg: cfg, Log: log, Now: time.Now, Fetcher: importer.NewFetcher(cfg.Version, false), Knowledge: knowledge.MustLoad()}
 }
 
 const timeFormat = "2006-01-02T15:04:05Z"

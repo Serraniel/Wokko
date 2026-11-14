@@ -1,0 +1,30 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb und Senf verrühren und das Öl auf einmal zugießen, dann kräftig rühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Senf"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Rapsöl"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}
