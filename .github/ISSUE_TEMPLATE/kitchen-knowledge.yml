@@ -1,0 +1,25 @@
+name: Kitchen knowledge
+description: Share cooking knowledge that Wokko should understand, such as sauces, techniques or common mistakes
+labels: [knowledge]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Wokko ships its kitchen knowledge as data reviewed by people. Paste or describe what you know. It will be rewritten in Wokko's own words and checked before it ships. Please don't paste whole books.
+  - type: textarea
+    id: knowledge
+    attributes:
+      label: Knowledge
+      description: A transcript, notes or your own explanation, in any language.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Where it comes from, such as a video, a book or your own experience.
+  - type: textarea
+    id: example
+    attributes:
+      label: Example recipe
+      description: Optional. A recipe where this knowledge applies.
