@@ -1,0 +1,34 @@
+{
+ "steps": [
+  {
+   "text": "Für das Ceviche den Fisch würfeln und 15 Minuten in Limettensaft mit Zwiebeln und Chili ziehen lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Wolfsbarsch"
+     ],
+     "amount": 400,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Limettensaft"
+     ],
+     "amount": 150,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Rote Zwiebel"
+     ]
+    },
+    {
+     "names": [
+      "Chili"
+     ]
+    }
+   ],
+   "minutes": 15
+  }
+ ]
+}

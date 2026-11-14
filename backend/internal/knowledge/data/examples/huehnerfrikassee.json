@@ -1,0 +1,243 @@
+{
+ "name": "Hühnerfrikassee",
+ "steps": [
+  {
+   "text": "Sternanis, Fenchelsaat, Pfefferkörner und Koriandersaat in einer Pfanne ohne Fett anrösten, bis sie duften.",
+   "ingredients": [
+    {
+     "names": [
+      "Sternanis"
+     ]
+    },
+    {
+     "names": [
+      "Fenchelsaat"
+     ]
+    },
+    {
+     "names": [
+      "Pfefferkörner"
+     ]
+    },
+    {
+     "names": [
+      "Koriandersaat"
+     ]
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Zwiebel und Ingwer halbieren und im Ofen bei Oberhitze dunkel rösten.",
+   "ingredients": [
+    {
+     "names": [
+      "Zwiebel"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Ingwer"
+     ],
+     "amount": 30,
+     "unit": "g"
+    }
+   ],
+   "minutes": 20
+  },
+  {
+   "text": "Suppenhuhn, Chicken Wings, Karotte, Staudensellerie, Lauch, Pilze, das geröstete Gemüse, die Gewürze, Lorbeer, Knoblauch und Petersilienstiele in einen Topf geben, knapp mit kaltem Wasser bedecken und langsam erhitzen. Den Schaum abschöpfen und 2 bis 2½ Stunden leise köcheln lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Suppenhuhn"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Chicken Wings"
+     ],
+     "amount": 500,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Karotte"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Staudensellerie"
+     ],
+     "amount": 2,
+     "unit": "Stangen"
+    },
+    {
+     "names": [
+      "Lauch"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Champignons"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Lorbeerblätter"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Knoblauch"
+     ],
+     "amount": 3,
+     "unit": "Zehen"
+    },
+    {
+     "names": [
+      "Petersilie"
+     ],
+     "amount": 1,
+     "unit": "Bund"
+    },
+    {
+     "names": [
+      "Wasser"
+     ],
+     "amount": 3,
+     "unit": "l"
+    }
+   ],
+   "minutes": 150
+  },
+  {
+   "text": "Die Brühe durch ein feines Sieb abgießen. Das Fleisch von den Knochen zupfen und in etwas Brühe warm halten.",
+   "ingredients": [],
+   "minutes": 15
+  },
+  {
+   "text": "Butter schmelzen, Mehl einrühren und anschwitzen, bis kein weißes Mehl mehr zu sehen ist (Mehlschwitze).",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 50,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 50,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Nach und nach kalte Brühe zugießen und dabei ständig rühren. Einmal aufkochen lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hühnerbrühe"
+     ],
+     "amount": 750,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Zuerst die Karotten darin garen, dann Pilze und Zwiebeln, zuletzt Erbsen, das Hühnerfleisch und Kapern mit etwas Kapernwasser zugeben.",
+   "ingredients": [
+    {
+     "names": [
+      "Karotte"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Champignons"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Zwiebel"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Erbsen"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Kapern"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Eigelb mit Sahne verquirlen, die Soße damit legieren und einmal aufkochen. Mit Salz, ein paar Tropfen Worcestershiresauce, Zitronenabrieb, Pfeffer und etwas Cayenne abschmecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    },
+    {
+     "names": [
+      "Worcestershiresauce"
+     ]
+    },
+    {
+     "names": [
+      "Zitronenabrieb"
+     ]
+    },
+    {
+     "names": [
+      "Pfeffer"
+     ]
+    },
+    {
+     "names": [
+      "Cayennepfeffer"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

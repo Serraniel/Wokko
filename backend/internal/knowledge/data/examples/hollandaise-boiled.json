@@ -1,0 +1,30 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zitronensaft aufschlagen, Butter einrühren und die Soße einmal aufkochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    }
+   ],
+   "minutes": 8
+  }
+ ]
+}

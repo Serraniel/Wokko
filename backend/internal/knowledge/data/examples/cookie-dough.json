@@ -1,0 +1,38 @@
+{
+ "steps": [
+  {
+   "text": "Butter, Zucker und Mehl verkneten, Schokostückchen unterrühren und in Kugeln kalt stellen.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Brauner Zucker"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Zartbitterschokolade"
+     ],
+     "amount": 80,
+     "unit": "g"
+    }
+   ],
+   "minutes": 15
+  }
+ ]
+}

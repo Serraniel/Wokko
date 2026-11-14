@@ -1,0 +1,28 @@
+{
+ "steps": [
+  {
+   "text": "Rindfleisch mit Knoblauch in der heißen Pfanne scharf anbraten.",
+   "ingredients": [
+    {
+     "names": [
+      "Rindersteak"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Knoblauch"
+     ],
+     "amount": 3,
+     "unit": "Zehen"
+    },
+    {
+     "names": [
+      "Öl"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

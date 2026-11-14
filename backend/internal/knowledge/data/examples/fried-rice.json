@@ -1,0 +1,35 @@
+{
+ "steps": [
+  {
+   "text": "Den Reis vom Vortag mit Ei und Gemüse im Wok braten und mit Sojasauce würzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Reis"
+     ],
+     "amount": 500,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Eier"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Erbsen"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Sojasauce"
+     ]
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

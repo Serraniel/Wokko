@@ -1,0 +1,40 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zucker verrühren, heiße Sahne mit Vanille unterrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 5
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 80,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Vanilleschote"
+     ]
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Im Wasserbad bei 150 °C 40 Minuten stocken lassen.",
+   "ingredients": [],
+   "minutes": 40
+  }
+ ]
+}

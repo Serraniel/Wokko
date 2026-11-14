@@ -1,0 +1,37 @@
+{
+ "steps": [
+  {
+   "text": "Kartoffeln, Karotten und Erbsen in der Brühe 30 Minuten kochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Kartoffeln"
+     ],
+     "amount": 500,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Karotten"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Erbsen"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Gemüsebrühe"
+     ],
+     "amount": 1,
+     "unit": "l"
+    }
+   ],
+   "minutes": 30
+  }
+ ]
+}

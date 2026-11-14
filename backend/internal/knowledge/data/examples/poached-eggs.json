@@ -1,0 +1,23 @@
+{
+ "steps": [
+  {
+   "text": "Wasser mit Essig zum Sieden bringen, Eier hineingleiten lassen und 4 Minuten pochieren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eier"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "Essig"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

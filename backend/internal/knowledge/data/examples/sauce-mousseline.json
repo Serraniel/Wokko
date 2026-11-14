@@ -1,0 +1,43 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zitronensaft über dem Wasserbad aufschlagen und Butter einrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    }
+   ],
+   "minutes": 8
+  },
+  {
+   "text": "Kurz vor dem Servieren geschlagene Sahne unterheben.",
+   "ingredients": [
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 1
+  }
+ ]
+}

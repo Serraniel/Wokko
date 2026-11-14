@@ -1,0 +1,102 @@
+{
+ "allergens": [
+  {
+   "id": "gluten",
+   "names": {
+    "en": "Cereals containing gluten",
+    "de": "Glutenhaltiges Getreide"
+   }
+  },
+  {
+   "id": "crustaceans",
+   "names": {
+    "en": "Crustaceans",
+    "de": "Krebstiere"
+   }
+  },
+  {
+   "id": "eggs",
+   "names": {
+    "en": "Eggs",
+    "de": "Eier"
+   }
+  },
+  {
+   "id": "fish",
+   "names": {
+    "en": "Fish",
+    "de": "Fisch"
+   }
+  },
+  {
+   "id": "peanuts",
+   "names": {
+    "en": "Peanuts",
+    "de": "Erdnüsse"
+   }
+  },
+  {
+   "id": "soybeans",
+   "names": {
+    "en": "Soy",
+    "de": "Soja"
+   }
+  },
+  {
+   "id": "milk",
+   "names": {
+    "en": "Milk",
+    "de": "Milch"
+   }
+  },
+  {
+   "id": "nuts",
+   "names": {
+    "en": "Tree nuts",
+    "de": "Schalenfrüchte"
+   }
+  },
+  {
+   "id": "celery",
+   "names": {
+    "en": "Celery",
+    "de": "Sellerie"
+   }
+  },
+  {
+   "id": "mustard",
+   "names": {
+    "en": "Mustard",
+    "de": "Senf"
+   }
+  },
+  {
+   "id": "sesame",
+   "names": {
+    "en": "Sesame",
+    "de": "Sesam"
+   }
+  },
+  {
+   "id": "sulphites",
+   "names": {
+    "en": "Sulphites",
+    "de": "Sulfite"
+   }
+  },
+  {
+   "id": "lupin",
+   "names": {
+    "en": "Lupin",
+    "de": "Lupinen"
+   }
+  },
+  {
+   "id": "molluscs",
+   "names": {
+    "en": "Molluscs",
+    "de": "Weichtiere"
+   }
+  }
+ ]
+}

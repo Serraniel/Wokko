@@ -1,0 +1,30 @@
+{
+ "steps": [
+  {
+   "text": "Pour the pan juices from the roast into a pan and stir in the flour.",
+   "ingredients": [
+    {
+     "names": [
+      "flour"
+     ],
+     "amount": 2,
+     "unit": "tbsp"
+    }
+   ],
+   "minutes": 3
+  },
+  {
+   "text": "Whisk in the chicken stock and simmer until thick.",
+   "ingredients": [
+    {
+     "names": [
+      "chicken stock"
+     ],
+     "amount": 400,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

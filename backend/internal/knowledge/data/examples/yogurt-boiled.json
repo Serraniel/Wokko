@@ -1,0 +1,22 @@
+{
+ "steps": [
+  {
+   "text": "Joghurt in das Curry rühren und noch einmal aufkochen lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Joghurt"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Currypulver"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

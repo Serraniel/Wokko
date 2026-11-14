@@ -1,0 +1,46 @@
+{
+ "steps": [
+  {
+   "text": "Schalotte und Weißweinessig einkochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Schalotte"
+     ]
+    },
+    {
+     "names": [
+      "Weißweinessig"
+     ],
+     "amount": 50,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Mit Eigelb über dem Wasserbad aufschlagen, Butter einrühren und frische Minze zugeben.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 150,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Minze"
+     ]
+    }
+   ],
+   "minutes": 8
+  }
+ ]
+}

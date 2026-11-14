@@ -125,6 +125,20 @@ Recipes, photos, search and filters, cook logs, meal plans, shopping lists, reci
 
 These Tandoor features aren't in Wokko: AI import, shopping lists split into several named lists, and sharing a book with one person (books are shared with your household). Food names can only be edited in the web app, where every language is visible at once.
 
+## Kitchen knowledge
+
+Every recipe page has a **Kitchen knowledge** section, worked out by Wokko itself, without any AI model or internet connection. It covers:
+- **allergens**: the EU's 14, and what "may contain" them depending on the product, such as celery in stock cubes
+- whether the recipe is **vegetarian or vegan**
+- **sauces** it recognises, such as a velouté finished as an Allemande, with tips
+- **techniques**, such as a roux, a liaison or a cold-start stock, with tips
+- **likely problems**, such as yolks that may curdle or salting before reducing
+- **food safety notes**, such as raw egg or dried kidney beans that aren't boiled hard
+
+Assistants can read the same through MCP.
+
+The knowledge is curated data in `backend/internal/knowledge/data/`, reviewed by people and shipped with each release. Each entry comes with example recipes that the tests check. To contribute some, open an issue with the **Kitchen knowledge** template: a transcript, notes or your own experience is enough. It gets rewritten in Wokko's own words before it ships.
+
 ## Connecting an AI assistant
 
 Wokko has a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp`. It's off until an admin turns it on under **Admin**. An assistant can never do more than the person it acts for. It can't find other people, make recipes public or delete anything for good, and its changes appear under **Integrations**.

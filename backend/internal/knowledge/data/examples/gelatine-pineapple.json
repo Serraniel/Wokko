@@ -1,0 +1,42 @@
+{
+ "steps": [
+  {
+   "text": "Gelatine einweichen, in warmem Saft auflösen.",
+   "ingredients": [
+    {
+     "names": [
+      "Blattgelatine"
+     ],
+     "amount": 6
+    },
+    {
+     "names": [
+      "Orangensaft"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Frische Ananas würfeln, mit Joghurt und der Gelatine mischen und kalt stellen.",
+   "ingredients": [
+    {
+     "names": [
+      "Ananas"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Joghurt"
+     ],
+     "amount": 400,
+     "unit": "g"
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

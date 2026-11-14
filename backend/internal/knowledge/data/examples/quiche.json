@@ -1,0 +1,42 @@
+{
+ "steps": [
+  {
+   "text": "Mürbeteig in die Form legen, einstechen und 15 Minuten blindbacken.",
+   "ingredients": [
+    {
+     "names": [
+      "Mürbeteig"
+     ],
+     "amount": 1
+    }
+   ],
+   "minutes": 20
+  },
+  {
+   "text": "Eier, Sahne und Käse verquirlen, auf den Boden gießen und 35 Minuten backen.",
+   "ingredients": [
+    {
+     "names": [
+      "Eier"
+     ],
+     "amount": 3
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Gruyère"
+     ],
+     "amount": 100,
+     "unit": "g"
+    }
+   ],
+   "minutes": 35
+  }
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "steps": [
+  {
+   "text": "Hähnchenbrust in Streifen schneiden und mit Salat und Dressing mischen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hähnchenbrust"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Kopfsalat"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Olivenöl"
+     ]
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

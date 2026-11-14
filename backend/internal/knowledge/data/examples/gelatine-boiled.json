@@ -1,0 +1,23 @@
+{
+ "steps": [
+  {
+   "text": "Saft mit eingeweichter Gelatine aufkochen und in Förmchen füllen.",
+   "ingredients": [
+    {
+     "names": [
+      "Apfelsaft"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Blattgelatine"
+     ],
+     "amount": 6
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb und Senf verrühren, Öl tropfenweise unterschlagen.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Senf"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Rapsöl"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Gewürzgurken, Kapern und Kräuter hacken und unterrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Gewürzgurken"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Kapern"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Schnittlauch"
+     ]
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

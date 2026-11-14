@@ -1,0 +1,75 @@
+{
+ "steps": [
+  {
+   "text": "Butter schmelzen, Mehl einrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 30,
+     "unit": "g"
+    }
+   ],
+   "minutes": 3
+  },
+  {
+   "text": "Kalbsfond zugießen und aufkochen, Champignons darin garen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hühnerbrühe"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Champignons"
+     ],
+     "amount": 150,
+     "unit": "g"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Mit Eigelb und Sahne legieren, mit Zitronensaft und gehackter Petersilie abschmecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Sahne"
+     ],
+     "amount": 50,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zitronensaft"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Petersilie"
+     ]
+    }
+   ],
+   "minutes": 3
+  }
+ ]
+}

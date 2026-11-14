@@ -1,0 +1,41 @@
+{
+ "steps": [
+  {
+   "text": "Für das Dressing Essig, Senf, Salz und Pfeffer verrühren und das Olivenöl unterschlagen.",
+   "ingredients": [
+    {
+     "names": [
+      "Weißweinessig"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Senf"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    },
+    {
+     "names": [
+      "Pfeffer"
+     ]
+    },
+    {
+     "names": [
+      "Olivenöl"
+     ],
+     "amount": 6,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 3
+  }
+ ]
+}

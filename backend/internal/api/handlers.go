@@ -805,3 +805,26 @@ func (s *Server) serveMedia(w http.ResponseWriter, r *http.Request) error {
 	http.ServeFile(w, r, path)
 	return nil
 }
+
+func (s *Server) recipeInsights(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	res, err := s.svc.RecipeInsights(r.Context(), v, id)
+	return reply(w, res, err)
+}
+
+func (s *Server) sharedInsights(w http.ResponseWriter, r *http.Request) error {
+	res, err := s.svc.SharedRecipeInsights(r.Context(), s.anonLocale(r), r.PathValue("token"))
+	return reply(w, res, err)
+}
+
+func (s *Server) publicInsights(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	res, err := s.svc.PublicRecipeInsights(r.Context(), s.anonLocale(r), id)
+	return reply(w, res, err)
+}

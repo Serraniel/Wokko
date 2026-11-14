@@ -271,6 +271,18 @@ await step('passkeys with a virtual authenticator', async () => {
   await k.goto(local + '/settings'); await k.fill('input[aria-label="Name for this passkey"]', 'Test key'); await k.click('button:has-text("Add a passkey")'); await k.waitForSelector('li:has-text("Test key")'); await k.locator('li:has-text("Test key")').scrollIntoViewIfNeeded(); await k.screenshot({ path: `${shots}/31-passkey.png` });
   await c3.clearCookies(); await k.goto(local + '/login'); await k.click('button:has-text("Log in with a passkey")'); await k.waitForURL('**/recipes'); await c3.close();
 });
+await step('kitchen knowledge explains a recipe', async () => {
+  const ing = (food_name, amount, unit_name = '') => ({ food_name, unit_name, amount, note: '', food_id: 0, unit_id: 0 });
+  const res = await p.request.post(base + '/api/v1/recipes', { data: { name: 'Asparagus with hollandaise', description: '', work_minutes: 20, wait_minutes: 0, servings: 2, servings_text: '', source_url: '', visibility: 'private', keywords: [], base_version: 0, steps: [
+    { name: '', minutes: 8, instruction: 'Whisk the egg yolks with lemon juice over a water bath, then slowly beat in the melted butter.', ingredients: [ing('egg yolk', 3), ing('lemon juice', 1, 'tablespoon'), ing('butter', 150, 'gram')] },
+    { name: '', minutes: 10, instruction: 'Cook the asparagus and serve with the sauce.', ingredients: [ing('asparagus', 500, 'gram')] }] } });
+  if (res.status() !== 201) throw new Error('create: ' + res.status() + ' ' + (await res.text()));
+  const id = (await res.json()).id;
+  await p.goto(base + '/recipes/' + id); await p.waitForSelector('h2:has-text("Kitchen knowledge")');
+  await p.waitForSelector('text=Vegetarian'); await p.waitForSelector('text=Allergens:');
+  await p.click('summary:has-text("Hollandaise")'); await p.waitForSelector('text=above about 65 °C');
+  await p.locator('#insights-title').scrollIntoViewIfNeeded(); await shot('37-kitchen-knowledge');
+});
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {
   await p.setViewportSize({ width: 1280, height: 800 }); await p.goto(base + '/settings'); await p.click('aside button:has-text("Log out")'); await p.waitForURL('**/login**'); await p.goto(base + '/recipes'); await p.waitForURL('**/login**'); await shot('19-login');
