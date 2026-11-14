@@ -63,6 +63,13 @@ export interface Food extends FoodRef {
   recognized_classes: string[];
   uses: number /* int64 */;
   can_edit: boolean;
+  /**
+   * Match says how a search found the food: "exact", "contains" (the search is part of a name)
+   * or "within" (a name is part of the search, as Cheddar is in "geriebener Cheddar"). A "within"
+   * match is a suggestion only. MatchedName is the spelling that matched.
+   */
+  match: string | null;
+  matched_name: string | null;
 }
 export interface Unit extends UnitRef {
   translations: Translation[];

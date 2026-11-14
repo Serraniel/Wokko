@@ -105,6 +105,9 @@ type classWord struct {
 // compounding lists languages that write compound nouns as one word.
 var compounding = map[string]bool{"de": true, "nl": true, "da": true, "sv": true, "nb": true, "no": true, "fi": true, "is": true}
 
+// Compounding tells whether a language writes compound nouns as one word.
+func Compounding(locale string) bool { return compounding[locale] }
+
 type file struct {
 	Classes   []Class    `json:"classes"`
 	Allergens []Allergen `json:"allergens"`
@@ -193,7 +196,7 @@ func (p *Pack) ClassesOf(names []string) []string {
 			continue
 		}
 		for _, cw := range p.words {
-			if matchesWord(n, cw.word, cw.compound) {
+			if MatchesWord(n, cw.word, cw.compound) {
 				hits = append(hits, hit{cw.word, cw.class})
 			}
 		}
@@ -217,10 +220,10 @@ func (p *Pack) ClassesOf(names []string) []string {
 	return out
 }
 
-// matchesWord accepts the whole name, a whole word or phrase in it, or, for languages that
+// MatchesWord accepts the whole name, a whole word or phrase in it, or, for languages that
 // build compounds, the end of a word: "Hühnerbrühe" ends with "brühe". English "unicorn" doesn't
 // end in corn.
-func matchesWord(name, word string, compound bool) bool {
+func MatchesWord(name, word string, compound bool) bool {
 	if name == word {
 		return true
 	}

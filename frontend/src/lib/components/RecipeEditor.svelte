@@ -145,10 +145,22 @@
 
 	let foodCache = new Map<number, Food>();
 
+	let lastFoodQuery = '';
+
 	async function searchFoods(q: string): Promise<Option[]> {
 		const p = await api.get<Page<Food>>(`/foods${query({ q, limit: 8 })}`);
+		lastFoodQuery = q;
 		for (const f of p.items) foodCache.set(f.id, f);
-		return p.items.map((f) => ({ id: f.id, label: f.name, sub: f.default_unit?.abbreviation || f.default_unit?.name }));
+		// A known food found inside the text, such as Cheddar in "geriebener Cheddar", is offered
+		// as a suggestion and says so.
+		return p.items.map((f) => ({ id: f.id, label: f.name, sub: f.match === 'within' ? t('editor.food_within') : f.default_unit?.abbreviation || f.default_unit?.name }));
+	}
+
+	/** What's left of the typed text once the matched name is taken out, for the note. */
+	function restOf(typed: string, matched: string): string {
+		const escaped = matched.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const rest = typed.replace(new RegExp(`(^|[\\s,])${escaped}(?=$|[\\s,])`, 'iu'), ' ');
+		return rest === typed ? '' : rest.replace(/[\s,]+/g, ' ').trim();
 	}
 
 	async function searchUnits(q: string): Promise<Option[]> {
@@ -163,6 +175,14 @@
 
 	function pickFood(row: IngredientRow, o: Option | null) {
 		row.food_id = o?.id ?? 0;
+		const f = o ? foodCache.get(o.id) : undefined;
+		if (f?.match === 'within' && f.matched_name && !row.note.trim()) {
+			const rest = restOf(lastFoodQuery, f.matched_name);
+			if (rest) {
+				row.note = rest;
+				row.showNote = true;
+			}
+		}
 		// Suggest the unit this food is usually measured in, if none was chosen yet.
 		if (o && !row.unit_name) {
 			const u = foodCache.get(o.id)?.default_unit;

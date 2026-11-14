@@ -110,6 +110,7 @@
   "editor.amount": "Menge",
   "editor.unit": "Einheit",
   "editor.ingredient": "Zutat",
+  "editor.food_within": "Bekannte Zutat in deinem Text",
   "editor.note": "Notiz",
   "editor.note_placeholder": "Notiz, zum Beispiel „fein gehackt“",
   "editor.add_note": "Notiz hinzufügen",
