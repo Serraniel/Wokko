@@ -97,6 +97,9 @@ await step('share sheet and link', async () => {
   await p.click('dialog [role="alert"] button:has-text("Create public link")'); await p.waitForSelector('input[aria-label="Public link"]'); await shot('08-share');
   const url = await p.inputValue('input[aria-label="Public link"]'); console.log('   ', url.replace(/s\/.*/, 's/…'));
   const path = new URL(url, base).pathname; await p.click('dialog button[aria-label="Close"]');
+  // Link preview bots don't run JavaScript: the page itself carries the recipe's preview.
+  const html = await (await p.request.get(base + path)).text(); if (!html.includes('<meta property="og:title" content="My version" />') || !html.includes('content="noindex"')) throw new Error('share link preview missing');
+  const generic = await (await p.request.get(base + '/recipes/1')).text(); if (generic.includes('My version') || !generic.includes('<meta property="og:title" content="Wokko" />')) throw new Error('a private page previews its recipe');
   const anon = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'de-DE' }); const a = await anon.newPage();
   await a.goto(base + path); await a.waitForSelector('h1:has-text("My version")');
   if (await a.locator('text=anna').count()) throw new Error('author visible');

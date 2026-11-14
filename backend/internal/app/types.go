@@ -615,3 +615,13 @@ type PhotoUploadLink struct {
 type PhotoUpload struct {
 	RecipeName string `json:"recipe_name"`
 }
+
+// LinkPreviewSettings is how link previews of Wokko pages look, in Discord, messengers and
+// elsewhere. Empty fields use Wokko's defaults.
+type LinkPreviewSettings struct {
+	SiteName    string `json:"site_name"`
+	Description string `json:"description"`
+	// ShowRecipes lets links that work without login preview their recipe's name and photo.
+	ShowRecipes bool `json:"show_recipes"`
+	HasImage    bool `json:"has_image"`
+}
