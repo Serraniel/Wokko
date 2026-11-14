@@ -344,6 +344,9 @@ func (s *Service) ListCollectionLinks(ctx context.Context, v Viewer) ([]Collecti
 }
 
 func (s *Service) CreateCollectionLink(ctx context.Context, v Viewer, expiresInDays int64) (CollectionLink, error) {
+	if err := s.requireLinks(ctx); err != nil {
+		return CollectionLink{}, err
+	}
 	token, err := auth.NewToken()
 	if err != nil {
 		return CollectionLink{}, err
@@ -378,6 +381,9 @@ func (s *Service) RevokeCollectionLink(ctx context.Context, v Viewer, id int64) 
 }
 
 func (s *Service) collectionOwner(ctx context.Context, token string) (int64, error) {
+	if ok, err := s.linksAllowed(ctx); err != nil || !ok {
+		return 0, orNotFound(err)
+	}
 	l, err := s.Store.Queries.GetCollectionLinkByToken(ctx, token)
 	if isNoRows(err) {
 		return 0, ErrNotFound

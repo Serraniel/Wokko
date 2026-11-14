@@ -739,3 +739,43 @@ func TestIngredientsWrittenWithAnAliasUseTheKnownEntry(t *testing.T) {
 		t.Fatalf("a duplicate food was created: %+v", foods.Items)
 	}
 }
+
+// TestLinksFollowTheAdminSwitch: turning public recipes off pauses every link that works
+// without an account, and turning it on again brings them back.
+func TestLinksFollowTheAdminSwitch(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	r := admin.createRecipe(simpleRecipe("Soup"))
+	if res := admin.upload(r.ID, testPNG(t)); res.status != 200 {
+		t.Fatalf("upload: %s", res.body)
+	}
+	var link app.ShareLink
+	admin.ok("POST", path("/recipes/%d/sharing/links", r.ID), map[string]any{}, 201).decode(t, &link)
+	token := link.URL[strings.LastIndex(link.URL, "/")+1:]
+	var collection app.CollectionLink
+	admin.ok("POST", v1+"/me/collection-links", map[string]any{}, 201).decode(t, &collection)
+	ctoken := collection.URL[strings.LastIndex(collection.URL, "/")+1:]
+	anon := e.anon()
+	var got app.Recipe
+	anon.ok("GET", path("/public/share/%s", token), nil, 200).decode(t, &got)
+
+	admin.ok("PUT", v1+"/admin/settings", app.Settings{AllowPublic: false}, 200)
+	anon.ok("GET", path("/public/share/%s", token), nil, 404)
+	anon.ok("GET", path("/public/share/%s/export", token), nil, 404)
+	anon.ok("GET", path("/public/collections/%s", ctoken), nil, 404)
+	if res := anon.do("GET", got.ThumbURL, nil); res.status != 404 {
+		t.Fatalf("a paused link must not unlock the photo: %d", res.status)
+	}
+	if res := admin.do("POST", path("/recipes/%d/sharing/links", r.ID), map[string]any{}); res.status != 403 || !strings.Contains(string(res.body), "links_disabled") {
+		t.Fatalf("new link while turned off: %d %s", res.status, res.body)
+	}
+	if res := admin.do("POST", v1+"/me/collection-links", map[string]any{}); res.status != 403 {
+		t.Fatalf("new collection link while turned off: %d", res.status)
+	}
+	// The owner still sees their own recipe and photo.
+	admin.ok("GET", path("/recipes/%d", r.ID), nil, 200)
+
+	admin.ok("PUT", v1+"/admin/settings", app.Settings{AllowPublic: true}, 200)
+	anon.ok("GET", path("/public/share/%s", token), nil, 200)
+	anon.ok("GET", path("/public/collections/%s", ctoken), nil, 200)
+}
