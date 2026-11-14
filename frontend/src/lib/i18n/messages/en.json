@@ -594,5 +594,10 @@
   "catalog.kinds_unknown": "Wokko doesn't recognise it by its names.",
   "catalog.kinds_hint": "Kinds set here replace that, and decide its allergens, diets and kitchen knowledge.",
   "err.unknown_class": "This kind of food doesn't exist.",
-  "err.too_many_classes": "Choose at most 10 kinds."
+  "err.too_many_classes": "Choose at most 10 kinds.",
+  "editor.hints": "Kitchen knowledge",
+  "editor.hints_none": "Nothing to watch out for so far.",
+  "editor.hints_no_allergens": "No allergens found so far.",
+  "err.too_many_steps": "A recipe can have at most 200 steps.",
+  "err.too_many_ingredients": "A step can have at most 200 ingredients."
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import EditorHints from './EditorHints.svelte';
 	import { ArrowDown, ArrowUp, Camera, ChevronDown, Plus, Trash2, X } from '@lucide/svelte';
 	import { onMount, untrack } from 'svelte';
 	import { goto, replaceState } from '$app/navigation';
@@ -107,6 +108,9 @@
 		ready = true;
 	});
 
+	// What the kitchen knowledge looks at while editing. Nothing is saved for it.
+	const hintsDraft = $derived(buildInput(true));
+
 	// Every change is kept in the browser after a short pause, until the save succeeds.
 	let draftTimer: ReturnType<typeof setTimeout>;
 	$effect(() => {
@@ -180,7 +184,8 @@
 		return Number.isFinite(n) && n > 0 ? n : 0;
 	}
 
-	function buildInput(): RecipeInput | null {
+	// quiet skips what can't be read yet instead of reporting it, for hints while typing.
+	function buildInput(quiet = false): RecipeInput | null {
 		const steps = [];
 		for (const s of form.steps) {
 			const rows = s.ingredients.filter((i) => i.food_name.trim() || i.amount.trim() || i.note.trim());
@@ -188,11 +193,12 @@
 			const ingredients = [];
 			for (const i of rows) {
 				if (!i.food_name.trim()) {
+					if (quiet) continue;
 					error = t('err.ingredient_required');
 					return null;
 				}
 				const amount = parseAmount(i.amount);
-				if (i.amount.trim() && amount === null) {
+				if (i.amount.trim() && amount === null && !quiet) {
 					error = t('editor.bad_amount', { value: i.amount });
 					return null;
 				}
@@ -469,6 +475,8 @@
 		</section>
 	{/each}
 	<button type="button" class="btn btn-soft w-full" onclick={() => form.steps.push(newStep())}><Plus size={18} />{t('editor.add_step')}</button>
+
+	<EditorHints draft={hintsDraft} />
 
 	<!-- Always reachable: on phones it sits above the navigation bar. -->
 	<div class="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-20 border-t border-line bg-surface/95 p-3 backdrop-blur md:static md:border-0 md:bg-transparent md:p-0">

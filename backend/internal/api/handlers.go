@@ -851,3 +851,12 @@ func (s *Server) resolveCatalogSuggestion(w http.ResponseWriter, r *http.Request
 func (s *Server) knowledgeClasses(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
 	return reply(w, s.svc.Knowledge.ClassList(v.Locale), nil)
 }
+
+func (s *Server) draftInsights(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	var in app.RecipeInput
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	res, err := s.svc.DraftInsights(r.Context(), v, in)
+	return reply(w, res, err)
+}

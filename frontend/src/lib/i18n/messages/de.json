@@ -594,5 +594,10 @@
   "catalog.kinds_unknown": "Wokko erkennt es an seinen Namen nicht.",
   "catalog.kinds_hint": "Hier gesetzte Arten ersetzen das und bestimmen Allergene, Ernährungsweise und Küchenwissen.",
   "err.unknown_class": "Diese Art von Lebensmittel gibt es nicht.",
-  "err.too_many_classes": "Wähle höchstens 10 Arten."
+  "err.too_many_classes": "Wähle höchstens 10 Arten.",
+  "editor.hints": "Küchenwissen",
+  "editor.hints_none": "Bisher gibt es nichts zu beachten.",
+  "editor.hints_no_allergens": "Bisher keine Allergene gefunden.",
+  "err.too_many_steps": "Ein Rezept kann höchstens 200 Schritte haben.",
+  "err.too_many_ingredients": "Ein Schritt kann höchstens 200 Zutaten haben."
 }

@@ -81,6 +81,7 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("GET "+p+"/recipes/{id}", s.user(s.getRecipe))
 	m.HandleFunc("GET "+p+"/recipes/{id}/export", s.user(s.exportRecipe))
 	m.HandleFunc("GET "+p+"/recipes/{id}/insights", s.user(s.recipeInsights))
+	m.HandleFunc("POST "+p+"/recipes/insights", s.user(s.draftInsights))
 	m.HandleFunc("PUT "+p+"/recipes/{id}", s.user(s.updateRecipe))
 	m.HandleFunc("DELETE "+p+"/recipes/{id}", s.user(s.deleteRecipe))
 	m.HandleFunc("POST "+p+"/recipes/{id}/restore", s.user(s.restoreRecipe))
