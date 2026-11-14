@@ -14,6 +14,33 @@ It should also point out likely problems: missing amounts, ingredients that no s
 
 All of this runs inside Wokko: no cloud or local LLM, and no network. It has to work the same in every language, and it must never change a recipe by itself.
 
+## How knowledge gets in
+
+The knowledge is **curated and built in**, not learned from users' data and not fetched at runtime:
+
+1. Someone brings knowledge: a video transcript, notes from a cookbook, their own experience. They open an issue with the "Kitchen knowledge" template, or hand it to Claude in a session.
+2. Claude turns it into **knowledge entries**. Each entry is a sauce, technique, tip or problem rule, written in Wokko's own words in English and German. Wokko never copies or ships source text: it extracts facts and techniques, which aren't protected, and names the source.
+3. Each entry comes with **example recipes** that must trigger it, and examples that must not. Tests check every entry against its examples, so a new entry can't quietly break another.
+4. A pull request shows the entries to a person, who checks the cooking facts. Merged entries ship with the next release, as `feat(knowledge)`.
+
+Entries are JSON files in `backend/internal/knowledge/data/`, one file per topic (`sauces.json`, `techniques.json`, `rules.json`). The standard library reads them, and Claude writes them, so a friendlier format isn't needed. For example:
+
+```json
+{
+  "id": "sauce.allemande",
+  "kind": "sauce",
+  "parent": "sauce.veloute",
+  "names": { "en": "Allemande", "de": "Allemande" },
+  "detect": { "all": ["sauce.veloute", "egg.yolk", "dairy.cream"], "technique": "liaison" },
+  "explain": {
+    "en": "A velouté thickened and enriched with egg yolk and cream. It needs no extra starch.",
+    "de": "Eine Velouté, mit Eigelb und Sahne gebunden und verfeinert. Weitere Stärke braucht es nicht."
+  },
+  "sources": [{ "title": "Hühnerfrikassee cooking video (transcript)", "added": "2026-11-14" }],
+  "examples": { "match": ["huehnerfrikassee"], "no_match": ["bechamel-lasagne"] }
+}
+```
+
 ## Where it works
 
 The analysis reads the **saved, structured recipe**: foods from the catalog, units, amounts and step text. It does not read transcripts or web pages. An assistant or the importer turns those into a recipe first, so each source arrives in the same shape.
@@ -46,7 +73,7 @@ It has three layers:
    - English and German ship first. A missing language falls back to the ingredient-only rules.
 3. **Rules.** Each rule is a small declarative entry: conditions over classes, amounts, units, step order and techniques. It produces a finding with a severity, a localized title and explanation, and the steps it refers to.
 
-Rules are written in Go, with tables in the data files. A rule language is not worth it at this size.
+The engine that evaluates entries is written in Go. The entries stay plain data, so adding knowledge needs no code.
 
 ## What it finds, first version
 
@@ -93,6 +120,46 @@ Saved as a recipe, the analysis would show:
 - **Tips** matching the video: cold stock into hot roux, and season after reducing.
 - **Allergens**: celery, egg, milk, gluten.
 - **No warnings**: the boil after the liaison is fine because the flour protects the yolks.
+
+## First batch: the Hühnerfrikassee video
+
+What the transcript of 2026-11-14 contributes, in Wokko's own words. Its health talk, product opinions and ads are left out.
+
+**Sauces**
+- The five mother sauces: velouté, béchamel, espagnole, hollandaise and tomato sauce. Most other classic sauces derive from them.
+- Velouté is a roux plus light stock. Béchamel is a roux plus milk, used for lasagne for example.
+- Suprême is velouté plus cream. Allemande is velouté bound with egg yolk and cream (a liaison).
+- Ragoût fin is velouté with mushrooms and veal. Königsberger Klopse are served in a velouté with capers.
+- Béarnaise is hollandaise with tarragon and chervil. Choron is béarnaise with tomato paste.
+
+**Techniques and tips**
+- **Roux:** equal parts butter and flour over medium heat, stirred until no white flour is left. It may foam. Add liquid little by little and keep stirring.
+- **Avoiding lumps:** combine opposite temperatures, a hot roux with cold or room-temperature liquid, or a cold roux with hot liquid. Hot into hot seals the starch on the outside and leaves dry flour inside.
+- **Boil it once:** starch binds properly only from about 60 °C. Reducing before it has swelled leaves a gluey, pasty sauce.
+- **Beurre manié:** cold cubes of kneaded butter and flour bind a hot liquid quickly.
+- **Liaison:** egg yolk mixed with cream binds and enriches a sauce, with no further thickener needed.
+- **Color is temperature:** a light sauce or stock stays below about 140 °C, where browning (the Maillard reaction) starts. Roasted bones, browned vegetables and tomato paste make it dark.
+- **Stock:** start in cold, unsalted water and heat slowly. Skim the protein foam for a clear stock, because a hard boil makes it cloudy, which some soups, like tonkotsu, want on purpose. Small pieces give up their flavor faster. Season only at the end, because reducing concentrates salt.
+- **Which chicken:**
+  - A soup hen (old, lots of connective tissue) gives the most flavor and survives hours of simmering.
+  - A young roasting chicken falls apart.
+  - Lean breast dries out quickly and is better fried.
+  - Wings, being skin, cartilage and bone, give gelatine, so the stock sets when cold.
+- **Spices:** toast whole spices in a dry pan to release their aromas. Charring onion and ginger first, as for pho, adds depth and a slight smokiness and softens their sharpness.
+- **Herbs:** parsley stems can simmer for long, but the leaves go in late.
+- **Pressure cooker:** a stock takes about 30 to 60 minutes instead of 2 to 2½ hours.
+- **Straining:** the finer the sieve, the clearer the result. A cloth is used for a jus.
+- **Cooking order:** add vegetables by how long they need, so carrots go first, then mushrooms and onions, with peas last so they stay green.
+- **Freshness:** lemon zest goes in at the very end because its aroma is volatile. When capers already bring acidity, zest gives freshness without more sourness.
+
+**Problem rules**
+- A hot roux combined with hot liquid risks lumps.
+- Salt added before a long reduction risks an over-salted dish.
+- A stock started in hot or salted water gives less flavor and turns cloudy.
+- Chicken breast simmered for hours dries out.
+- A dish meant to be light that uses roasted bones or tomato paste will turn dark.
+- Zest or delicate herbs cooked from the start lose their aroma.
+- Reducing a roux-thickened sauce before it has boiled leaves it gluey.
 
 ## Machine learning, honestly
 
