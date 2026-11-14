@@ -473,6 +473,12 @@ func (s *Service) resolveFood(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 	} else if !isNoRows(err) {
 		return 0, err
 	}
+	// Another spelling of a known food, such as one kept after a merge, is that food.
+	if id, err := q.FindFoodIDByAlias(ctx, text.Normalize(name)); err == nil {
+		return id, nil
+	} else if !isNoRows(err) {
+		return 0, err
+	}
 	f, err := q.CreateFood(ctx, sqlcgen.CreateFoodParams{CreatedBy: nullID(v.id())})
 	if err != nil {
 		return 0, err
@@ -495,6 +501,11 @@ func (s *Service) resolveUnit(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 		return sql.NullInt64{}, nil
 	}
 	if id, err := q.FindUnitIDByName(ctx, name); err == nil {
+		return sql64(id), nil
+	} else if !isNoRows(err) {
+		return sql.NullInt64{}, err
+	}
+	if id, err := q.FindUnitIDByAlias(ctx, text.Normalize(name)); err == nil {
 		return sql64(id), nil
 	} else if !isNoRows(err) {
 		return sql.NullInt64{}, err

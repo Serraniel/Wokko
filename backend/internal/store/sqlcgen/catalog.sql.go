@@ -208,6 +208,17 @@ func (q *Queries) DeleteUnitNames(ctx context.Context, unitID int64) error {
 	return err
 }
 
+const findFoodIDByAlias = `-- name: FindFoodIDByAlias :one
+SELECT food_id FROM food_aliases WHERE search_name = ?1 ORDER BY food_id LIMIT 1
+`
+
+func (q *Queries) FindFoodIDByAlias(ctx context.Context, searchName string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, findFoodIDByAlias, searchName)
+	var food_id int64
+	err := row.Scan(&food_id)
+	return food_id, err
+}
+
 const findFoodIDByName = `-- name: FindFoodIDByName :one
 SELECT food_id FROM food_names WHERE name = ?1 COLLATE NOCASE OR plural = ?1 COLLATE NOCASE LIMIT 1
 `
@@ -228,6 +239,17 @@ func (q *Queries) FindKeywordBySearchName(ctx context.Context, searchName string
 	var keyword_id int64
 	err := row.Scan(&keyword_id)
 	return keyword_id, err
+}
+
+const findUnitIDByAlias = `-- name: FindUnitIDByAlias :one
+SELECT unit_id FROM unit_aliases WHERE search_name = ?1 ORDER BY unit_id LIMIT 1
+`
+
+func (q *Queries) FindUnitIDByAlias(ctx context.Context, searchName string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, findUnitIDByAlias, searchName)
+	var unit_id int64
+	err := row.Scan(&unit_id)
+	return unit_id, err
 }
 
 const findUnitIDByName = `-- name: FindUnitIDByName :one
