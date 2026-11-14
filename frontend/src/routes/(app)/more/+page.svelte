@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Blocks, BookMarked, Carrot, ChevronRight, Settings, Shield, Trash2, Users } from '@lucide/svelte';
 	import { t } from '#lib/i18n/index.svelte.ts';
+	import ThemeSwitch from '#lib/components/ThemeSwitch.svelte';
 	import { session } from '#lib/session.svelte.ts';
 
 	const links = $derived([
@@ -18,6 +19,7 @@
 
 <div class="mx-auto max-w-2xl space-y-3 p-4">
 	<h1 class="text-xl font-semibold">{t('nav.more')}</h1>
+	<div class="card overflow-hidden"><ThemeSwitch withLabel class="flex min-h-12 w-full items-center gap-3 px-4 font-medium hover:bg-surface-2 [&>svg]:text-muted" /></div>
 	<ul class="card divide-y divide-line overflow-hidden">
 		{#each links as l (l.href)}
 			{@const Icon = l.icon}

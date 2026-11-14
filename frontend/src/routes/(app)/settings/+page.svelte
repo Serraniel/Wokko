@@ -7,7 +7,7 @@
 	import PasskeysCard from '#lib/components/PasskeysCard.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import { prefs } from '#lib/prefs.svelte.ts';
-	import { currentLocale, languages, setLocale, t } from '#lib/i18n/index.svelte.ts';
+	import { currentLocale, languages, chooseLocale, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import { theme, type ThemeChoice } from '#lib/theme.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
@@ -47,7 +47,7 @@
 	async function changeLanguage(e: Event) {
 		const code = (e.currentTarget as HTMLSelectElement).value;
 		error = '';
-		await setLocale(code);
+		await chooseLocale(code);
 		try {
 			session.user = await api.patch<User>('/me', { locale: code });
 			forget(); // Ingredient names come back in the new language.

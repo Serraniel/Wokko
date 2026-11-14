@@ -203,6 +203,8 @@
   "settings.theme_system": "System",
   "settings.theme_light": "Light",
   "settings.theme_dark": "Dark",
+  "prefs.title": "Language and appearance",
+  "theme.switch": "Appearance: {theme}",
   "settings.profile": "Profile",
   "settings.your_handle": "Your handle:",
   "settings.saved": "Saved",

@@ -12,6 +12,7 @@
 	import { connection } from '#lib/online.svelte.ts';
 	import { prepareForOffline } from '#lib/offline.ts';
 	import { session } from '#lib/session.svelte.ts';
+	import ThemeSwitch from '#lib/components/ThemeSwitch.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -86,6 +87,7 @@
 			{/if}
 			<a href="/recipes/new" class="btn btn-primary mt-3"><Plus size={16} />{t('recipes.new')}</a>
 			<div class="mt-auto">
+				<ThemeSwitch withLabel class="flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-sm font-medium text-muted hover:bg-surface-2 hover:text-ink" />
 				<button class="flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-sm font-medium text-muted hover:bg-surface-2 hover:text-ink" onclick={logout}><LogOut size={17} />{t('auth.logout')}</button>
 			</div>
 		</aside>

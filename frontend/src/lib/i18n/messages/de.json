@@ -203,6 +203,8 @@
   "settings.theme_system": "System",
   "settings.theme_light": "Hell",
   "settings.theme_dark": "Dunkel",
+  "prefs.title": "Sprache und Darstellung",
+  "theme.switch": "Darstellung: {theme}",
   "settings.profile": "Profil",
   "settings.your_handle": "Dein Handle:",
   "settings.saved": "Gespeichert",

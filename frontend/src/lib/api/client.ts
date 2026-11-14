@@ -1,4 +1,4 @@
-import { t } from '#lib/i18n/index.svelte.ts';
+import { currentLocale, t } from '#lib/i18n/index.svelte.ts';
 
 export class ApiError extends Error {
 	constructor(
@@ -36,7 +36,8 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
 		res = await fetch(`/api/v1${path}`, {
 			method,
 			credentials: 'same-origin',
-			headers: body !== undefined && !(body instanceof FormData) ? { 'Content-Type': 'application/json' } : undefined,
+			// Pages without login get names in the language picked here, not the browser's.
+			headers: { 'Accept-Language': currentLocale(), ...(body !== undefined && !(body instanceof FormData) ? { 'Content-Type': 'application/json' } : {}) },
 			body: body instanceof FormData ? body : body !== undefined ? JSON.stringify(body) : undefined
 		});
 	} catch {
