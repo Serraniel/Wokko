@@ -147,6 +147,19 @@ h3 {
 		background: var(--brand-soft);
 		color: var(--brand-soft-ink);
 	}
+	/* Tailwind gives buttons the arrow cursor. Everything clickable shows the hand instead, so
+	   no component has to remember it. */
+	button:not(:disabled),
+	[role='button'],
+	summary,
+	select:not(:disabled),
+	label:has(> input[type='checkbox']:not(:disabled)),
+	label:has(> input[type='radio']:not(:disabled)),
+	input[type='checkbox']:not(:disabled),
+	input[type='radio']:not(:disabled),
+	input[type='file']:not(:disabled) {
+		cursor: pointer;
+	}
 }
 
 @layer components {
