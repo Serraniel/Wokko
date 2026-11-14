@@ -34,6 +34,21 @@ func newerCatalog(p *catalog.Pack, hash string, change func(kind string, e *cata
 	return out
 }
 
+// originalCatalog is the catalog exactly as the seed migrations created it.
+func originalCatalog(p *catalog.Pack) *catalog.Pack {
+	out := &catalog.Pack{Entries: map[string][]catalog.Entry{}, Original: p.Original, Hash: "original"}
+	keys := make([]string, 0, len(p.Original))
+	for k := range p.Original {
+		keys = append(keys, k)
+	}
+	slices.Sort(keys)
+	for _, k := range keys {
+		kind := k[:strings.Index(k, "/")]
+		out.Entries[kind] = append(out.Entries[kind], p.Original[k])
+	}
+	return out
+}
+
 func foodNamed(t *testing.T, c *client, q string) app.Food {
 	t.Helper()
 	var page app.Page[app.Food]
@@ -54,7 +69,9 @@ func TestStarterCatalogUpdatesReachExistingDatabases(t *testing.T) {
 	ctx := context.Background()
 	admin := e.admin()
 
-	// The first run adopts the seed this database already has, without changing anything.
+	// The first run adopts the seed this database already has, without changing anything. The
+	// test starts from the original seed, so it doesn't depend on what the shipped catalog adds.
+	e.svc.Catalog = originalCatalog(e.svc.Catalog)
 	first, err := e.svc.SyncCatalog(ctx)
 	if err != nil {
 		t.Fatal(err)
