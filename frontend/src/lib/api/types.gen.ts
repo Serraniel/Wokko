@@ -16,6 +16,31 @@ export interface User {
    * AssistantNewEntries decides whether assistants may add foods and units: never, ask or allow.
    */
   assistant_new_entries: string;
+  /**
+   * NeedsSetup is true for an account an admin created until its password is set.
+   */
+  needs_setup: boolean;
+}
+/**
+ * NewAccountInput is an account an admin creates. The person sets their own password through
+ * a one-time setup link.
+ */
+export interface NewAccountInput {
+  handle: string;
+  display_name: string;
+  locale: string;
+  role: string;
+  /**
+   * JoinMyHousehold puts the account in the admin's household. Otherwise it gets its own.
+   */
+  join_my_household: boolean;
+}
+/**
+ * NewAccount is the created account and its setup link's token, shown only this once.
+ */
+export interface NewAccount {
+  user: User;
+  token: string;
 }
 export interface ProfileInput {
   display_name: string;
@@ -271,6 +296,7 @@ export interface Household {
  */
 export interface Invite {
   id: number /* int64 */;
+  note: string;
   token: string | null;
   max_uses: number /* int64 */;
   use_count: number /* int64 */;
@@ -280,6 +306,10 @@ export interface Invite {
 export interface InviteInput {
   max_uses: number /* int64 */;
   expires_in_days: number /* int64 */;
+  /**
+   * Note says who the link is for, such as "For Oma".
+   */
+  note: string;
 }
 export interface Settings {
   open_registration: boolean;

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { CheckCircle2, DatabaseBackup, KeyRound, Link2, Trash2, TriangleAlert, UserRoundCheck, UserRoundX } from '@lucide/svelte';
+	import { CheckCircle2, DatabaseBackup, KeyRound, Link2, Trash2, TriangleAlert, UserPlus, UserRoundCheck, UserRoundX } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
 	import { api, ApiError, errorText } from '#lib/api/client.ts';
-	import type { Health, Invite, Settings, User } from '#lib/api/types.gen.ts';
+	import type { Health, Invite, NewAccount, Settings, User } from '#lib/api/types.gen.ts';
 	import CatalogUpdatesCard from '#lib/components/CatalogUpdatesCard.svelte';
 	import CopyField from '#lib/components/CopyField.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
-	import { formatBytes, formatDate, t } from '#lib/i18n/index.svelte.ts';
+	import { currentLocale, formatBytes, formatDate, languages, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 	import LinkPreviewCard from '#lib/components/LinkPreviewCard.svelte';
@@ -79,19 +79,35 @@
 		}
 	}
 
+	let inviteNote = $state('');
+
 	async function createInvite() {
 		await run(async () => {
-			const inv = await api.post<Invite>('/admin/invites', { max_uses: 1, expires_in_days: 14 });
+			const inv = await api.post<Invite>('/admin/invites', { max_uses: 1, expires_in_days: 14, note: inviteNote.trim() });
 			link = `${location.origin}/register?invite=${inv.token}`;
-			linkLabel = t('admin.invite_link');
+			linkLabel = inv.note ? `${t('admin.invite_link')}: ${inv.note}` : t('admin.invite_link');
+			inviteNote = '';
+		});
+	}
+
+	// An account an admin creates. The person sets their password through the setup link.
+	let account = $state({ handle: '', display_name: '', locale: currentLocale(), role: 'user', join_my_household: true });
+
+	async function createAccount(e: SubmitEvent) {
+		e.preventDefault();
+		await run(async () => {
+			const made = await api.post<NewAccount>('/admin/users', account);
+			link = `${location.origin}/reset?token=${made.token}&setup=1`;
+			linkLabel = t('admin.setup_link', { handle: made.user.handle });
+			account = { handle: '', display_name: '', locale: currentLocale(), role: 'user', join_my_household: true };
 		});
 	}
 
 	async function resetLink(u: User) {
 		await run(async () => {
 			const res = await api.post<{ token: string }>(`/admin/users/${u.id}/reset`);
-			link = `${location.origin}/reset?token=${res.token}`;
-			linkLabel = t('admin.reset_link', { handle: u.handle });
+			link = `${location.origin}/reset?token=${res.token}${u.needs_setup ? '&setup=1' : ''}`;
+			linkLabel = u.needs_setup ? t('admin.setup_link', { handle: u.handle }) : t('admin.reset_link', { handle: u.handle });
 		});
 	}
 
@@ -168,10 +184,10 @@
 				<li class="flex flex-wrap items-center gap-1 py-2">
 					<span class="min-w-0 flex-1 basis-40">
 						<span class="block truncate font-medium">{u.display_name || u.handle} {#if u.disabled}<span class="text-sm font-normal text-danger">({t('admin.disabled')})</span>{/if}</span>
-						<span class="block text-sm text-muted">@{u.handle}{u.role === 'admin' ? ` · ${t('admin.role_admin')}` : ''}</span>
+						<span class="block text-sm text-muted">@{u.handle}{u.role === 'admin' ? ` · ${t('admin.role_admin')}` : ''}{#if u.needs_setup}{' · '}<span class="text-warn">{t('admin.waiting_setup')}</span>{/if}</span>
 					</span>
 					{#if u.id !== session.user?.id}
-						<button class="btn btn-ghost btn-icon !min-h-9 !w-9" aria-label={t('admin.reset_password')} onclick={() => resetLink(u)}><KeyRound size={17} /></button>
+						<button class="btn btn-ghost btn-icon !min-h-9 !w-9" aria-label={u.needs_setup ? t('admin.new_setup_link') : t('admin.reset_password')} onclick={() => resetLink(u)}><KeyRound size={17} /></button>
 						<button class="btn btn-ghost btn-icon !min-h-9 !w-9" aria-label={u.disabled ? t('admin.enable') : t('admin.disable')} onclick={() => run(() => api.patch(`/admin/users/${u.id}`, { disabled: !u.disabled }))}>
 							{#if u.disabled}<UserRoundCheck size={17} />{:else}<UserRoundX size={17} />{/if}
 						</button>
@@ -180,6 +196,32 @@
 				</li>
 			{/each}
 		</ul>
+		<details class="border-t border-line pt-2">
+			<summary class="flex min-h-10 cursor-pointer items-center gap-2 font-medium"><UserPlus size={17} class="text-muted" />{t('admin.create_account')}</summary>
+			<form class="mt-2 space-y-3" onsubmit={createAccount}>
+				<p class="hint !mt-0">{t('admin.create_account_hint')}</p>
+				<div class="grid gap-3 sm:grid-cols-2">
+					<div>
+						<label class="label" for="new-handle">{t('auth.handle')}</label>
+						<input id="new-handle" class="input" bind:value={account.handle} required autocomplete="off" autocapitalize="off" spellcheck="false" />
+					</div>
+					<div>
+						<label class="label" for="new-name">{t('auth.display_name')}</label>
+						<input id="new-name" class="input" bind:value={account.display_name} autocomplete="off" />
+					</div>
+					<div>
+						<label class="label" for="new-locale">{t('settings.language')}</label>
+						<select id="new-locale" class="input" bind:value={account.locale}>{#each languages as l (l.code)}<option value={l.code}>{l.name}</option>{/each}</select>
+					</div>
+					<div>
+						<label class="label" for="new-role">{t('admin.role')}</label>
+						<select id="new-role" class="input" bind:value={account.role}><option value="user">{t('admin.role_user')}</option><option value="admin">{t('admin.role_admin')}</option></select>
+					</div>
+				</div>
+				<label class="flex items-center gap-3 text-sm"><input type="checkbox" class="h-4 w-4 accent-[var(--brand)]" bind:checked={account.join_my_household} />{t('admin.join_my_household')}</label>
+				<button class="btn btn-soft w-full" disabled={!account.handle.trim()}><UserPlus size={18} />{t('admin.create_account')}</button>
+			</form>
+		</details>
 	</section>
 
 	<section class="card space-y-2 p-4">
@@ -188,12 +230,13 @@
 			<ul class="divide-y divide-line">
 				{#each invites as inv (inv.id)}
 					<li class="flex items-center gap-2 py-2 text-sm">
-						<span class="min-w-0 flex-1">{t('admin.invite_used', { used: inv.use_count, max: inv.max_uses })}{#if inv.expires_at}{' · '}{t('share.expires', { date: formatDate(inv.expires_at) })}{/if}</span>
+						<span class="min-w-0 flex-1">{#if inv.note}<span class="font-medium">{inv.note}</span>{' · '}{/if}{t('admin.invite_used', { used: inv.use_count, max: inv.max_uses })}{#if inv.expires_at}{' · '}{t('share.expires', { date: formatDate(inv.expires_at) })}{/if}</span>
 						<button class="btn btn-ghost btn-icon !min-h-9 !w-9 text-danger" aria-label={t('common.delete')} onclick={() => run(() => api.del(`/admin/invites/${inv.id}`))}><Trash2 size={17} /></button>
 					</li>
 				{/each}
 			</ul>
 		{/if}
+		<input class="input" bind:value={inviteNote} maxlength="100" placeholder={t('admin.invite_note')} aria-label={t('admin.invite_note')} />
 		<button class="btn btn-soft w-full" onclick={createInvite}><Link2 size={18} />{t('admin.create_invite')}</button>
 	</section>
 

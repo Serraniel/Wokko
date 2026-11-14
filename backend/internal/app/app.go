@@ -100,7 +100,7 @@ func (v Viewer) locale() string {
 func isNoRows(err error) bool { return errors.Is(err, sql.ErrNoRows) }
 
 func toUser(u sqlcgen.User) User {
-	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid, AssistantNewEntries: u.AssistantNewEntries}
+	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid, AssistantNewEntries: u.AssistantNewEntries, NeedsSetup: u.NeedsSetup != 0}
 }
 
 func toPerson(u sqlcgen.User) Person {
@@ -113,10 +113,17 @@ func nullID(id int64) sql.NullInt64   { return sql.NullInt64{Int64: id, Valid: i
 var handleRe = regexp.MustCompile(`^[a-zA-Z0-9_.-]{3,32}$`)
 
 func validateCredentials(handle, password string) error {
+	if err := validateHandle(handle); err != nil {
+		return err
+	}
+	return validatePassword(password)
+}
+
+func validateHandle(handle string) error {
 	if !handleRe.MatchString(handle) {
 		return invalid("bad_handle", "Handles have 3 to 32 letters, numbers, dots, dashes or underscores")
 	}
-	return validatePassword(password)
+	return nil
 }
 
 func validatePassword(pw string) error {
@@ -409,6 +416,9 @@ func (s *Service) setPassword(ctx context.Context, userID int64, pw string) erro
 		if err := q.DeletePasswordResets(ctx, userID); err != nil {
 			return err
 		}
+		if err := q.SetUserNeedsSetup(ctx, sqlcgen.SetUserNeedsSetupParams{NeedsSetup: 0, ID: userID}); err != nil {
+			return err
+		}
 		return q.DeleteUserSessions(ctx, userID)
 	})
 }
@@ -423,17 +433,75 @@ func (s *Service) CreatePasswordReset(ctx context.Context, v Viewer, userID int6
 	} else if err != nil {
 		return "", err
 	}
+	var token string
+	err := s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
+		var err error
+		token, err = s.newResetLink(ctx, q, userID)
+		return err
+	})
+	return token, err
+}
+
+// newResetLink replaces a person's reset links with a new one. An account that hasn't been
+// set up yet gets a week, since the person may only open it days later; a reset gets 3 days.
+func (s *Service) newResetLink(ctx context.Context, q *sqlcgen.Queries, userID int64) (string, error) {
+	u, err := q.GetUser(ctx, userID)
+	if err != nil {
+		return "", err
+	}
 	token, err := auth.NewToken()
 	if err != nil {
 		return "", err
 	}
+	life := 72 * time.Hour
+	if u.NeedsSetup != 0 {
+		life = 7 * 24 * time.Hour
+	}
+	if err := q.DeletePasswordResets(ctx, userID); err != nil {
+		return "", err
+	}
+	if err := q.CreatePasswordReset(ctx, sqlcgen.CreatePasswordResetParams{TokenHash: auth.HashToken(token), UserID: userID, ExpiresAt: s.stamp(s.Now().Add(life))}); err != nil {
+		return "", err
+	}
+	return token, nil
+}
+
+// CreateAccount lets an admin add someone. Nobody knows the account's password: the person
+// sets it through the setup link, so the admin never picks or sees it.
+func (s *Service) CreateAccount(ctx context.Context, v Viewer, in NewAccountInput) (NewAccount, error) {
+	if !v.isAdmin() {
+		return NewAccount{}, ErrForbidden
+	}
+	in.Handle = strings.TrimSpace(in.Handle)
+	if err := validateHandle(in.Handle); err != nil {
+		return NewAccount{}, err
+	}
+	if in.Role != "admin" {
+		in.Role = "user"
+	}
+	unknown, err := auth.NewToken()
+	if err != nil {
+		return NewAccount{}, err
+	}
+	var out NewAccount
 	err = s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
-		if err := q.DeletePasswordResets(ctx, userID); err != nil {
+		var household int64
+		if in.JoinMyHousehold {
+			household = v.User.HouseholdID
+		}
+		u, err := s.createUser(ctx, q, in.Handle, in.DisplayName, unknown, in.Role, in.Locale, household)
+		if err != nil {
 			return err
 		}
-		return q.CreatePasswordReset(ctx, sqlcgen.CreatePasswordResetParams{TokenHash: auth.HashToken(token), UserID: userID, ExpiresAt: s.stamp(s.Now().Add(72 * time.Hour))})
+		if err := q.SetUserNeedsSetup(ctx, sqlcgen.SetUserNeedsSetupParams{NeedsSetup: 1, ID: u.ID}); err != nil {
+			return err
+		}
+		u.NeedsSetup = 1
+		out.User = toUser(u)
+		out.Token, err = s.newResetLink(ctx, q, u.ID)
+		return err
 	})
-	return token, err
+	return out, err
 }
 
 func (s *Service) ResetPassword(ctx context.Context, token, password string) error {
@@ -617,7 +685,11 @@ func (s *Service) createInvite(ctx context.Context, v Viewer, household int64, i
 	if in.MaxUses < 1 {
 		in.MaxUses = 1
 	}
-	params := sqlcgen.CreateInviteParams{TokenHash: auth.HashToken(token), CreatedBy: v.id(), HouseholdID: nullID(household), MaxUses: in.MaxUses}
+	note := strings.TrimSpace(in.Note)
+	if len([]rune(note)) > 100 {
+		return Invite{}, invalid("too_long", "The note can be 100 characters long")
+	}
+	params := sqlcgen.CreateInviteParams{TokenHash: auth.HashToken(token), CreatedBy: v.id(), HouseholdID: nullID(household), MaxUses: in.MaxUses, Note: note}
 	if in.ExpiresInDays > 0 {
 		params.ExpiresAt = nullStr(s.stamp(s.Now().AddDate(0, 0, int(in.ExpiresInDays))))
 	}
@@ -635,7 +707,7 @@ func (s *Service) createInvite(ctx context.Context, v Viewer, household int64, i
 }
 
 func toInvite(r sqlcgen.Invite) Invite {
-	return Invite{ID: r.ID, MaxUses: r.MaxUses, UseCount: r.UseCount, ExpiresAt: r.ExpiresAt.String, CreatedAt: r.CreatedAt}
+	return Invite{ID: r.ID, Note: r.Note, MaxUses: r.MaxUses, UseCount: r.UseCount, ExpiresAt: r.ExpiresAt.String, CreatedAt: r.CreatedAt}
 }
 
 func (s *Service) CreateRegistrationInvite(ctx context.Context, v Viewer, in InviteInput) (Invite, error) {

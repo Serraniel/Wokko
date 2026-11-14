@@ -13,6 +13,25 @@ type User struct {
 	Disabled    bool   `json:"disabled"`
 	// AssistantNewEntries decides whether assistants may add foods and units: never, ask or allow.
 	AssistantNewEntries string `json:"assistant_new_entries"`
+	// NeedsSetup is true for an account an admin created until its password is set.
+	NeedsSetup bool `json:"needs_setup"`
+}
+
+// NewAccountInput is an account an admin creates. The person sets their own password through
+// a one-time setup link.
+type NewAccountInput struct {
+	Handle      string `json:"handle"`
+	DisplayName string `json:"display_name"`
+	Locale      string `json:"locale"`
+	Role        string `json:"role"`
+	// JoinMyHousehold puts the account in the admin's household. Otherwise it gets its own.
+	JoinMyHousehold bool `json:"join_my_household"`
+}
+
+// NewAccount is the created account and its setup link's token, shown only this once.
+type NewAccount struct {
+	User  User   `json:"user"`
+	Token string `json:"token"`
 }
 
 type ProfileInput struct {
@@ -272,6 +291,7 @@ type Household struct {
 // Invite carries Token only in the response that created it, since only a hash is stored.
 type Invite struct {
 	ID        int64  `json:"id"`
+	Note      string `json:"note"`
 	Token     string `json:"token,omitempty"`
 	MaxUses   int64  `json:"max_uses"`
 	UseCount  int64  `json:"use_count"`
@@ -282,6 +302,8 @@ type Invite struct {
 type InviteInput struct {
 	MaxUses       int64 `json:"max_uses"`
 	ExpiresInDays int64 `json:"expires_in_days"`
+	// Note says who the link is for, such as "For Oma".
+	Note string `json:"note"`
 }
 
 type Settings struct {

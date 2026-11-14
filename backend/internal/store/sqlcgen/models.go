@@ -162,6 +162,7 @@ type Invite struct {
 	UseCount    int64
 	ExpiresAt   sql.NullString
 	CreatedAt   string
+	Note        string
 }
 
 type Keyword struct {
@@ -441,4 +442,5 @@ type User struct {
 	CreatedAt           string
 	UpdatedAt           string
 	AssistantNewEntries string
+	NeedsSetup          int64
 }
