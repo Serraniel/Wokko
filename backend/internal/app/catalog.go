@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/serraniel/wokko/backend/internal/knowledge"
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
 	"github.com/serraniel/wokko/backend/internal/text"
 )
@@ -107,9 +108,100 @@ func (s *Service) ListFoods(ctx context.Context, v Viewer, query string, limit, 
 		if err != nil {
 			return Page[Food]{}, err
 		}
+		if n != "" {
+			f.Match = "contains"
+			if spelling := spellingOf(f, text.Normalize(query)); spelling != "" {
+				f.Match, f.MatchedName = "exact", spelling
+			}
+		}
 		items = append(items, f)
 	}
-	return Page[Food]{Items: items, Total: total}, nil
+	if len(items) > 0 || offset > 0 || strings.TrimSpace(query) == "" {
+		return Page[Food]{Items: items, Total: total}, nil
+	}
+	// Nothing has the search in its name, so look the other way round: a known food inside the
+	// search, such as Cheddar in "geriebener Cheddar".
+	within, err := foodsWithin(ctx, q, text.Normalize(query), limit)
+	if err != nil {
+		return Page[Food]{}, err
+	}
+	for _, m := range within {
+		f, err := s.foodDetail(ctx, q, v, m.food)
+		if err != nil {
+			return Page[Food]{}, err
+		}
+		f.Match, f.MatchedName = "within", spellingOf(f, m.spelling)
+		if f.MatchedName == "" {
+			f.MatchedName = f.Name
+		}
+		items = append(items, f)
+	}
+	return Page[Food]{Items: items, Total: int64(len(items))}, nil
+}
+
+// spellingOf returns the food's name, plural, translation or alias whose normalized form is n.
+func spellingOf(f Food, n string) string {
+	all := []string{f.Name, f.Plural}
+	for _, tr := range f.Translations {
+		all = append(all, tr.Name, tr.Plural)
+	}
+	all = append(all, f.Aliases...)
+	for _, s := range all {
+		if s != "" && text.Normalize(s) == n {
+			return s
+		}
+	}
+	return ""
+}
+
+type withinMatch struct {
+	food     int64
+	spelling string // normalized
+}
+
+// foodsWithin finds foods whose name, plural or alias appears in the search as a whole word or,
+// for languages that join words, at the end of one ("Bergkäse" ends in "käse"). The longest
+// match comes first, so "Kochschinken" beats "Schinken".
+func foodsWithin(ctx context.Context, q *sqlcgen.Queries, query string, limit int64) ([]withinMatch, error) {
+	best := map[int64]string{}
+	consider := func(food int64, spelling string, compound bool) {
+		if len([]rune(spelling)) < 3 || spelling == query || !knowledge.MatchesWord(query, spelling, compound) {
+			return
+		}
+		if len(spelling) > len(best[food]) {
+			best[food] = spelling
+		}
+	}
+	names, err := q.ListEveryFoodSpelling(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for _, n := range names {
+		compound := knowledge.Compounding(n.Locale)
+		consider(n.FoodID, text.Normalize(n.Name), compound)
+		consider(n.FoodID, text.Normalize(n.Plural), compound)
+	}
+	aliases, err := q.ListEveryFoodAlias(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for _, a := range aliases {
+		consider(a.FoodID, a.SearchName, false)
+	}
+	out := make([]withinMatch, 0, len(best))
+	for food, spelling := range best {
+		out = append(out, withinMatch{food, spelling})
+	}
+	sort.Slice(out, func(i, j int) bool {
+		if len(out[i].spelling) != len(out[j].spelling) {
+			return len(out[i].spelling) > len(out[j].spelling)
+		}
+		return out[i].food < out[j].food
+	})
+	if int64(len(out)) > limit {
+		out = out[:limit]
+	}
+	return out, nil
 }
 
 func (s *Service) GetFood(ctx context.Context, v Viewer, id int64) (Food, error) {

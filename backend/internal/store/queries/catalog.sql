@@ -33,6 +33,13 @@ WHERE CAST(sqlc.arg(q) AS TEXT) = ''
    OR EXISTS (SELECT 1 FROM food_names n WHERE n.food_id = f.id AND n.search_name LIKE '%' || CAST(sqlc.arg(q) AS TEXT) || '%')
    OR EXISTS (SELECT 1 FROM food_aliases a WHERE a.food_id = f.id AND a.search_name LIKE '%' || CAST(sqlc.arg(q) AS TEXT) || '%');
 
+-- name: ListEveryFoodSpelling :many
+-- Every spelling of every food, for finding known foods inside a longer phrase.
+SELECT food_id, locale, name, COALESCE(plural, '') AS plural FROM food_names;
+
+-- name: ListEveryFoodAlias :many
+SELECT food_id, search_name FROM food_aliases;
+
 -- name: ListFoodDefaults :many
 SELECT id, default_unit_id FROM foods WHERE id IN (sqlc.slice(ids));
 

@@ -31,6 +31,10 @@ await step('create recipe with new and existing ingredients', async () => {
   await p.locator('input[aria-label="Qty"]').nth(1).fill('1 1/2');
   await p.locator('input[aria-label="Ingredient"]').nth(1).fill('Smoked unicorn dust');
   await p.waitForSelector('text=Create “Smoked unicorn dust”'); await p.click('text=Create “Smoked unicorn dust”');
+  // A known food inside a longer name is offered, and the rest becomes the note.
+  await p.click('button:has-text("Add ingredient")'); await p.locator('input[aria-label="Ingredient"]').nth(2).fill('geriebener Cheddar');
+  await p.waitForSelector('li[role=option]:has-text("Known ingredient in your text")'); await p.click('li[role=option]:has-text("cheddar")');
+  if (await p.locator('input[aria-label="Note"]').last().inputValue() !== 'geriebener') throw new Error('rest of the name not moved to the note');
   await p.fill('textarea[id^="ins-"]', 'Chop everything and simmer.');
   await p.click('button:has-text("Add step")');
   await p.locator('textarea[id^="ins-"]').nth(1).fill('Blend until smooth.');

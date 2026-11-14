@@ -407,6 +407,78 @@ func (q *Queries) ListAllUnitSpellings(ctx context.Context) ([]ListAllUnitSpelli
 	return items, nil
 }
 
+const listEveryFoodAlias = `-- name: ListEveryFoodAlias :many
+SELECT food_id, search_name FROM food_aliases
+`
+
+type ListEveryFoodAliasRow struct {
+	FoodID     int64
+	SearchName string
+}
+
+func (q *Queries) ListEveryFoodAlias(ctx context.Context) ([]ListEveryFoodAliasRow, error) {
+	rows, err := q.db.QueryContext(ctx, listEveryFoodAlias)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListEveryFoodAliasRow{}
+	for rows.Next() {
+		var i ListEveryFoodAliasRow
+		if err := rows.Scan(&i.FoodID, &i.SearchName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listEveryFoodSpelling = `-- name: ListEveryFoodSpelling :many
+SELECT food_id, locale, name, COALESCE(plural, '') AS plural FROM food_names
+`
+
+type ListEveryFoodSpellingRow struct {
+	FoodID int64
+	Locale string
+	Name   string
+	Plural string
+}
+
+// Every spelling of every food, for finding known foods inside a longer phrase.
+func (q *Queries) ListEveryFoodSpelling(ctx context.Context) ([]ListEveryFoodSpellingRow, error) {
+	rows, err := q.db.QueryContext(ctx, listEveryFoodSpelling)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListEveryFoodSpellingRow{}
+	for rows.Next() {
+		var i ListEveryFoodSpellingRow
+		if err := rows.Scan(
+			&i.FoodID,
+			&i.Locale,
+			&i.Name,
+			&i.Plural,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listFoodAliases = `-- name: ListFoodAliases :many
 SELECT food_id, alias, search_name FROM food_aliases WHERE food_id IN (/*SLICE:ids*/?) ORDER BY alias
 `

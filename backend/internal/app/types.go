@@ -66,6 +66,11 @@ type Food struct {
 	RecognizedClasses []string `json:"recognized_classes"`
 	Uses              int64    `json:"uses"`
 	CanEdit           bool     `json:"can_edit"`
+	// Match says how a search found the food: "exact", "contains" (the search is part of a name)
+	// or "within" (a name is part of the search, as Cheddar is in "geriebener Cheddar"). A "within"
+	// match is a suggestion only. MatchedName is the spelling that matched.
+	Match       string `json:"match,omitempty"`
+	MatchedName string `json:"matched_name,omitempty"`
 }
 
 type Unit struct {

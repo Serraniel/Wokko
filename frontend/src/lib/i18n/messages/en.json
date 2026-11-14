@@ -110,6 +110,7 @@
   "editor.amount": "Qty",
   "editor.unit": "Unit",
   "editor.ingredient": "Ingredient",
+  "editor.food_within": "Known ingredient in your text",
   "editor.note": "Note",
   "editor.note_placeholder": "Note, such as “finely chopped”",
   "editor.add_note": "Add note",
