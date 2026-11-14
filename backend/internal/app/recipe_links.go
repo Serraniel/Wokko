@@ -169,28 +169,36 @@ func recipeYield(ctx context.Context, q *sqlcgen.Queries, r sqlcgen.Recipe, loca
 // can be compared with it, directly or by weight (450 ml of a stock that makes 1.5 l is 0.3);
 // otherwise the servings asked for; otherwise the whole recipe.
 func (s *Service) cookScale(ctx context.Context, q *sqlcgen.Queries, sub sqlcgen.Recipe, unit sql.NullInt64, amount sql.NullFloat64, servings float64) (float64, error) {
-	if sub.YieldAmount.Valid && sub.YieldAmount.Float64 > 0 && amount.Valid && amount.Float64 > 0 {
-		if unit.Valid && sub.YieldUnitID.Valid && unit.Int64 == sub.YieldUnitID.Int64 {
-			return amount.Float64 / sub.YieldAmount.Float64, nil
-		}
-		if unit.Valid && sub.YieldUnitID.Valid {
-			rows, err := q.ListUnitGrams(ctx, []int64{unit.Int64, sub.YieldUnitID.Int64})
-			if err != nil {
-				return 0, err
-			}
-			grams := map[int64]float64{}
-			for _, r := range rows {
-				if r.Grams.Valid {
-					grams[r.ID] = r.Grams.Float64
-				}
-			}
-			if g, y := grams[unit.Int64], grams[sub.YieldUnitID.Int64]; g > 0 && y > 0 {
-				return amount.Float64 * g / (sub.YieldAmount.Float64 * y), nil
-			}
-		}
+	if scale, ok, err := yieldScale(ctx, q, sub, unit, amount); err != nil || ok {
+		return scale, err
 	}
 	if servings > 0 && sub.Servings > 0 {
 		return servings / float64(sub.Servings), nil
 	}
 	return 1, nil
+}
+
+// yieldScale compares an amount with what a recipe makes, directly or by weight. ok is false
+// when they can't be compared.
+func yieldScale(ctx context.Context, q *sqlcgen.Queries, sub sqlcgen.Recipe, unit sql.NullInt64, amount sql.NullFloat64) (float64, bool, error) {
+	if !sub.YieldAmount.Valid || sub.YieldAmount.Float64 <= 0 || !amount.Valid || amount.Float64 <= 0 || !unit.Valid || !sub.YieldUnitID.Valid {
+		return 0, false, nil
+	}
+	if unit.Int64 == sub.YieldUnitID.Int64 {
+		return amount.Float64 / sub.YieldAmount.Float64, true, nil
+	}
+	rows, err := q.ListUnitGrams(ctx, []int64{unit.Int64, sub.YieldUnitID.Int64})
+	if err != nil {
+		return 0, false, err
+	}
+	grams := map[int64]float64{}
+	for _, r := range rows {
+		if r.Grams.Valid {
+			grams[r.ID] = r.Grams.Float64
+		}
+	}
+	if g, y := grams[unit.Int64], grams[sub.YieldUnitID.Int64]; g > 0 && y > 0 {
+		return amount.Float64 * g / (sub.YieldAmount.Float64 * y), true, nil
+	}
+	return 0, false, nil
 }

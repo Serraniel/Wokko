@@ -182,9 +182,13 @@ func (s *Service) ImportFile(ctx context.Context, v Viewer, data io.ReaderAt, si
 		return FileImportResult{}, err
 	}
 	known := map[string]bool{}
+	byName := map[string]int64{} // recipes a link in the file can point to
 	for _, k := range keys {
 		known[text.Normalize(k.Name)] = true
+		byName[text.Normalize(k.Name)] = k.ID
 	}
+	type pendingLink struct{ food, recipe string }
+	var links []pendingLink
 	out := FileImportResult{Items: make([]FileImportItem, 0, len(recipes))}
 	for _, r := range recipes {
 		in := fileRecipeInput(r, units)
@@ -211,6 +215,14 @@ func (s *Service) ImportFile(ctx context.Context, v Viewer, data io.ReaderAt, si
 			}
 			item.RecipeID = saved.ID
 			out.Imported++
+			byName[key] = saved.ID
+			for _, st := range r.Steps {
+				for _, i := range st.Ingredients {
+					if i.Recipe != "" && i.Food != "" {
+						links = append(links, pendingLink{i.Food, i.Recipe})
+					}
+				}
+			}
 			if len(r.Photo) > 0 {
 				if _, err := s.SetPhoto(ctx, v, saved.ID, bytes.NewReader(r.Photo)); err != nil {
 					item.PhotoFailed = true // The recipe matters more than its picture.
@@ -219,6 +231,35 @@ func (s *Service) ImportFile(ctx context.Context, v Viewer, data io.ReaderAt, si
 			}
 		}
 		out.Items = append(out.Items, item)
+	}
+	// Foods cooked from a recipe link to it, when that recipe came in the same file or exists
+	// already. A food that links somewhere else keeps its link.
+	for _, l := range links {
+		target, ok := byName[text.Normalize(l.recipe)]
+		if !ok {
+			continue
+		}
+		food, found, err := lookupFood(ctx, s.Store.Queries, strings.TrimSpace(l.food))
+		if err != nil {
+			return out, err
+		}
+		if !found {
+			continue
+		}
+		row, err := s.Store.Queries.GetFood(ctx, food)
+		if err != nil {
+			return out, err
+		}
+		if row.RecipeID.Valid {
+			continue
+		}
+		if _, err := s.LinkFoodRecipe(ctx, v, food, target); err != nil {
+			var ae *Error
+			if !errors.As(err, &ae) {
+				return out, err
+			}
+			s.Log.Info("imported recipe link skipped", "food", food, "error", err)
+		}
 	}
 	return out, nil
 }
@@ -230,6 +271,9 @@ func fileRecipeInput(r importer.FileRecipe, units map[string]string) RecipeInput
 	}
 	if in.Servings <= 0 {
 		in.Servings = 4
+	}
+	if r.YieldAmount > 0 {
+		in.Yield = &RecipeYieldInput{Amount: r.YieldAmount, UnitName: firstRunes(strings.TrimSpace(r.YieldUnit), 60)}
 	}
 	if strings.HasPrefix(r.Source, "http://") || strings.HasPrefix(r.Source, "https://") {
 		in.SourceURL = r.Source

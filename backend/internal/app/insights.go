@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"slices"
 	"strings"
 
 	"github.com/serraniel/wokko/backend/internal/knowledge"
@@ -96,6 +97,21 @@ func (s *Service) insights(ctx context.Context, r Recipe, locale string) (knowle
 			parts = append(parts, ing.Note)
 			// Classes someone set for the food win over what its names suggest.
 			out := knowledge.Ingredient{Names: append([]string{ing.Food.Name}, names[ing.Food.ID]...), Classes: set[ing.Food.ID], Amount: ing.Amount}
+			// A food cooked from a recipe also holds what's in that recipe, such as the celery
+			// in a stock.
+			if ing.Recipe != nil {
+				inner, err := s.linkedClasses(ctx, ing.Recipe.ID)
+				if err != nil {
+					return knowledge.Result{}, err
+				}
+				if len(inner) > 0 {
+					own := out.Classes
+					if len(own) == 0 {
+						own = s.Knowledge.ClassesOf(out.Names)
+					}
+					out.Classes = append(slices.Clone(own), inner...)
+				}
+			}
 			if ing.Unit != nil {
 				out.Unit = ing.Unit.Name
 			}
@@ -151,4 +167,41 @@ func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe
 		}
 	}
 	return out, set, nil
+}
+
+// linkedClasses are the food classes of what a linked recipe uses, one level deep.
+func (s *Service) linkedClasses(ctx context.Context, id int64) ([]string, error) {
+	q := s.Store.Queries
+	row, err := q.GetRecipe(ctx, id)
+	if isNoRows(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	doc, err := s.buildRecipe(ctx, q, Viewer{}, row)
+	if err != nil {
+		return nil, err
+	}
+	names, set, err := s.allFoodNames(ctx, q, doc)
+	if err != nil {
+		return nil, err
+	}
+	var out []string
+	seen := map[string]bool{}
+	for _, st := range doc.Steps {
+		for _, ing := range st.Ingredients {
+			classes := set[ing.Food.ID]
+			if len(classes) == 0 {
+				classes = s.Knowledge.ClassesOf(append([]string{ing.Food.Name}, names[ing.Food.ID]...))
+			}
+			for _, c := range classes {
+				if !seen[c] {
+					seen[c] = true
+					out = append(out, c)
+				}
+			}
+		}
+	}
+	return out, nil
 }

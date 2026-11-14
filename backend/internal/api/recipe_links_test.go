@@ -1,7 +1,10 @@
 package api_test
 
 import (
+	"encoding/json"
+	"fmt"
 	"math"
+	"slices"
 	"strings"
 	"testing"
 
@@ -37,6 +40,26 @@ func TestRecipesCanBeIngredients(t *testing.T) {
 	admin.ok("GET", path("/recipes/%d", dish.ID), nil, 200).decode(t, &got)
 	if l := got.Steps[1].Ingredients[0].Recipe; l == nil || l.ID != stock.ID {
 		t.Fatalf("ingredient link: %+v", l)
+	}
+	// kitshn shows it as Tandoor's food.recipe.
+	var kr struct {
+		Steps []struct {
+			Ingredients []struct {
+				Food struct {
+					Recipe *struct {
+						ID   int64  `json:"id"`
+						Name string `json:"name"`
+					} `json:"recipe"`
+				} `json:"food"`
+			} `json:"ingredients"`
+		} `json:"steps"`
+	}
+	cookie := kitshnLogin(t, e, "admin", "password123")
+	if err := json.Unmarshal(kitshnGet(t, e, cookie, fmt.Sprintf("/api/recipe/%d/", dish.ID), 200), &kr); err != nil {
+		t.Fatal(err)
+	}
+	if fr := kr.Steps[1].Ingredients[0].Food.Recipe; fr == nil || fr.ID != stock.ID || fr.Name != "Hühnerbrühe" {
+		t.Fatalf("kitshn food.recipe: %+v", fr)
 	}
 	// The stock recipe doesn't link to itself through its own food.
 	admin.ok("GET", path("/recipes/%d", stock.ID), nil, 200).decode(t, &got)
@@ -182,5 +205,102 @@ func TestYieldSurvivesAppsThatDontSendIt(t *testing.T) {
 	admin.ok("PUT", path("/recipes/%d", r.ID), in, 200).decode(t, &got)
 	if got.Yield == nil || got.Yield.Amount != 2 {
 		t.Fatalf("yield lost: %+v", got.Yield)
+	}
+}
+
+// TestLinkedRecipesCountForNutritionAndKnowledge: what's in the stock counts in the dish, for
+// allergens and diet always, and for nutrition when the stock's yield says how much is used.
+func TestLinkedRecipesCountForNutritionAndKnowledge(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	stockIn := simpleRecipe("Veg stock")
+	stockIn.Steps = []app.StepInput{{Instruction: "Simmer.", Ingredients: []app.IngredientInput{{FoodName: "celery", UnitName: "g", Amount: ptr(100.0)}, {FoodName: "rice", UnitName: "g", Amount: ptr(300.0)}}}}
+	stockIn.Yield = &app.RecipeYieldInput{Amount: 1.5, UnitName: "l"}
+	stock := admin.createRecipe(stockIn)
+	dishIn := simpleRecipe("Risotto")
+	dishIn.Steps = []app.StepInput{{Instruction: "Stir.", Ingredients: []app.IngredientInput{{FoodName: "Wokko veg stock", UnitName: "ml", Amount: ptr(450.0)}}}}
+	dish := admin.createRecipe(dishIn)
+	var broth app.Food
+	admin.ok("GET", path("/foods/%d", dish.Steps[0].Ingredients[0].Food.ID), nil, 200).decode(t, &broth)
+
+	var before app.RecipeNutrition
+	admin.ok("GET", path("/recipes/%d/nutrition", dish.ID), nil, 200).decode(t, &before)
+	if before.Counted != 0 || len(before.Missing) != 1 {
+		t.Fatalf("before linking: %+v", before)
+	}
+	linkFood(admin, broth, stock.ID, 200)
+
+	var stockN, dishN app.RecipeNutrition
+	admin.ok("GET", path("/recipes/%d/nutrition", stock.ID), nil, 200).decode(t, &stockN)
+	admin.ok("GET", path("/recipes/%d/nutrition", dish.ID), nil, 200).decode(t, &dishN)
+	if dishN.Counted != 1 || len(dishN.Missing) != 0 {
+		t.Fatalf("after linking: %+v", dishN)
+	}
+	if want := stockN.Nutrients[0].Total * 0.3; math.Abs(dishN.Nutrients[0].Total-want) > 1e-6 || want <= 0 {
+		t.Fatalf("energy %v, want %v (0.3 of the stock)", dishN.Nutrients[0].Total, want)
+	}
+
+	// Without a yield, the amount can't be compared, so it stays missing rather than guessed.
+	stockIn.Yield = &app.RecipeYieldInput{}
+	stockIn.BaseVersion = stock.Version
+	admin.ok("PUT", path("/recipes/%d", stock.ID), stockIn, 200)
+	admin.ok("GET", path("/recipes/%d/nutrition", dish.ID), nil, 200).decode(t, &dishN)
+	if dishN.Counted != 0 {
+		t.Fatalf("guessed without a yield: %+v", dishN)
+	}
+
+	// The stock's celery is an allergen of the risotto.
+	var res struct {
+		Allergens []struct {
+			ID    string   `json:"id"`
+			Foods []string `json:"foods"`
+		} `json:"allergens"`
+	}
+	admin.ok("GET", path("/recipes/%d/insights", dish.ID), nil, 200).decode(t, &res)
+	found := false
+	for _, a := range res.Allergens {
+		if a.ID == "celery" && slices.Contains(a.Foods, "Wokko veg stock") {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("celery from the stock: %+v", res.Allergens)
+	}
+}
+
+// TestImportKeepsRecipeLinksAndYield: a Wokko export and a Tandoor file bring their links
+// between foods and recipes, and Wokko's how much a recipe makes.
+func TestImportKeepsRecipeLinksAndYield(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	wokko := `{"format":"wokko-export-1","recipes":[
+	  {"name":"Imported stock","servings":4,"yield":{"amount":1.5,"unit":{"name":"l"}},"steps":[{"instruction":"Simmer.","ingredients":[{"food":{"name":"Imported hen"},"amount":1}]}]},
+	  {"name":"Imported dish","servings":2,"steps":[{"instruction":"Stir.","ingredients":[{"food":{"name":"Imported stock food"},"unit":{"name":"ml"},"amount":450,"recipe":{"id":99,"name":"Imported stock"}}]}]}]}`
+	var res app.FileImportResult
+	if r := importUpload(t, admin, false, []byte(wokko)); r.status != 200 {
+		t.Fatalf("import: %d %s", r.status, r.body)
+	} else {
+		r.decode(t, &res)
+	}
+	var stock, dish app.Recipe
+	admin.ok("GET", path("/recipes/%d", res.Items[0].RecipeID), nil, 200).decode(t, &stock)
+	admin.ok("GET", path("/recipes/%d", res.Items[1].RecipeID), nil, 200).decode(t, &dish)
+	if stock.Yield == nil || stock.Yield.Amount != 1.5 {
+		t.Fatalf("yield: %+v", stock.Yield)
+	}
+	if l := dish.Steps[0].Ingredients[0].Recipe; l == nil || l.ID != stock.ID {
+		t.Fatalf("wokko link: %+v", l)
+	}
+
+	tandoor := `{"name":"Tandoor dish","working_time":10,"waiting_time":0,"servings":2,"steps":[{"instruction":"Mix.","ingredients":[{"food":{"name":"Tandoor sauce","recipe":{"id":5,"name":"Imported stock"}},"amount":1}]}]}`
+	if r := importUpload(t, admin, false, []byte(tandoor)); r.status != 200 {
+		t.Fatalf("tandoor import: %d %s", r.status, r.body)
+	} else {
+		r.decode(t, &res)
+	}
+	var td app.Recipe
+	admin.ok("GET", path("/recipes/%d", res.Items[0].RecipeID), nil, 200).decode(t, &td)
+	if l := td.Steps[0].Ingredients[0].Recipe; l == nil || l.ID != stock.ID {
+		t.Fatalf("tandoor link to an existing recipe: %+v", l)
 	}
 }
