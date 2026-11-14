@@ -45,3 +45,6 @@ Thumbs.db
 # Local tools
 /.claude/
 /.playwright-mcp/
+
+# The owner's local drafts, not part of the project
+/docs/plans/2026-04-11-language-preference*.md
