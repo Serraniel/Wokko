@@ -11,6 +11,14 @@ type User struct {
 	Locale      string `json:"locale"`
 	HouseholdID int64  `json:"household_id"`
 	Disabled    bool   `json:"disabled"`
+	// AssistantNewEntries decides whether assistants may add foods and units: never, ask or allow.
+	AssistantNewEntries string `json:"assistant_new_entries"`
+}
+
+type ProfileInput struct {
+	DisplayName         string `json:"display_name"`
+	Locale              string `json:"locale"`
+	AssistantNewEntries string `json:"assistant_new_entries"`
 }
 
 type Person struct {

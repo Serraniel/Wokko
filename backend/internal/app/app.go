@@ -94,7 +94,7 @@ func (v Viewer) locale() string {
 func isNoRows(err error) bool { return errors.Is(err, sql.ErrNoRows) }
 
 func toUser(u sqlcgen.User) User {
-	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid}
+	return User{ID: u.ID, Handle: u.Handle, DisplayName: u.DisplayName, Role: u.Role, Locale: u.Locale, HouseholdID: u.HouseholdID, Disabled: u.DisabledAt.Valid, AssistantNewEntries: u.AssistantNewEntries}
 }
 
 func toPerson(u sqlcgen.User) Person {
@@ -354,12 +354,17 @@ func (s *Service) Logout(ctx context.Context, token string) error {
 // Me returns the viewer's account.
 func (s *Service) Me(v Viewer) User { return toUser(*v.User) }
 
-func (s *Service) UpdateProfile(ctx context.Context, v Viewer, display, locale string) (User, error) {
-	if !text.ValidLocale(locale) {
+func (s *Service) UpdateProfile(ctx context.Context, v Viewer, in ProfileInput) (User, error) {
+	if !text.ValidLocale(in.Locale) {
 		return User{}, invalid("bad_locale", "Unknown language")
 	}
+	switch in.AssistantNewEntries {
+	case NewEntriesNever, NewEntriesAsk, NewEntriesAllow:
+	default:
+		return User{}, invalid("bad_new_entries", "Choose never, ask or allow")
+	}
 	err := s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
-		return q.UpdateProfile(ctx, sqlcgen.UpdateProfileParams{DisplayName: strings.TrimSpace(display), Locale: locale, ID: v.id()})
+		return q.UpdateProfile(ctx, sqlcgen.UpdateProfileParams{DisplayName: strings.TrimSpace(in.DisplayName), Locale: in.Locale, AssistantNewEntries: in.AssistantNewEntries, ID: v.id()})
 	})
 	if err != nil {
 		return User{}, err

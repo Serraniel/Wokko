@@ -139,6 +139,8 @@ Set it up under **Integrations**: choose your app, such as Claude, ChatGPT, Clau
 | The same, on another computer with Docker | Use `docker run -i --rm ghcr.io/serraniel/wokko:<version> mcp-stdio --url http://your-server:8080/mcp --token <token>` as its command |
 | Claude, ChatGPT or another app with custom connectors, on the web or phone | Add a custom connector with `https://your-server/mcp`, and approve it when Wokko asks, choosing whether it may only read. No token needed, but Wokko must be reachable from the internet over HTTPS, with `PUBLIC_URL` set. Tested with Claude |
 
+Assistants are told to look up every ingredient and unit before saving a recipe, and to try other names and languages, so a recipe written from a video transcript reuses the foods you already have. Under **Integrations** you choose what happens with an ingredient or unit that isn't in the catalog yet: **don't allow** it, have the assistant **ask** you first (the default), or **allow** it like the editor does.
+
 ## Adding a language
 
 Copy `frontend/src/lib/i18n/messages/en.json` to `<code>.json` and translate it. The language appears in the app automatically, and the tests check that it's complete. Ingredient and unit names can be translated in the app, under **Ingredients**. Anything without a translation falls back to English.

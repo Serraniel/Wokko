@@ -138,7 +138,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) er
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (handle, display_name, password_hash, role, locale, household_id)
-VALUES (?, ?, ?, ?, ?, ?) RETURNING id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at
+VALUES (?, ?, ?, ?, ?, ?) RETURNING id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries
 `
 
 type CreateUserParams struct {
@@ -171,6 +171,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.DisabledAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.AssistantNewEntries,
 	)
 	return i, err
 }
@@ -335,7 +336,7 @@ func (q *Queries) GetInviteByHash(ctx context.Context, tokenHash string) (Invite
 }
 
 const getSessionUser = `-- name: GetSessionUser :one
-SELECT sessions.id, sessions.user_id, sessions.token_hash, sessions.expires_at, sessions.created_at, users.id, users.handle, users.display_name, users.password_hash, users.role, users.locale, users.household_id, users.disabled_at, users.created_at, users.updated_at FROM sessions JOIN users ON users.id = sessions.user_id
+SELECT sessions.id, sessions.user_id, sessions.token_hash, sessions.expires_at, sessions.created_at, users.id, users.handle, users.display_name, users.password_hash, users.role, users.locale, users.household_id, users.disabled_at, users.created_at, users.updated_at, users.assistant_new_entries FROM sessions JOIN users ON users.id = sessions.user_id
 WHERE sessions.token_hash = ? AND sessions.expires_at > ? AND users.disabled_at IS NULL
 `
 
@@ -368,6 +369,7 @@ func (q *Queries) GetSessionUser(ctx context.Context, arg GetSessionUserParams) 
 		&i.User.DisabledAt,
 		&i.User.CreatedAt,
 		&i.User.UpdatedAt,
+		&i.User.AssistantNewEntries,
 	)
 	return i, err
 }
@@ -384,7 +386,7 @@ func (q *Queries) GetSetting(ctx context.Context, key string) (string, error) {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at FROM users WHERE id = ?
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries FROM users WHERE id = ?
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
@@ -401,12 +403,13 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 		&i.DisabledAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.AssistantNewEntries,
 	)
 	return i, err
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at FROM users WHERE handle = ?
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries FROM users WHERE handle = ?
 `
 
 func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
@@ -423,6 +426,7 @@ func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, err
 		&i.DisabledAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.AssistantNewEntries,
 	)
 	return i, err
 }
@@ -516,7 +520,7 @@ func (q *Queries) ListHouseholdInvites(ctx context.Context, householdID sql.Null
 }
 
 const listHouseholdMembers = `-- name: ListHouseholdMembers :many
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at FROM users WHERE household_id = ? ORDER BY handle
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries FROM users WHERE household_id = ? ORDER BY handle
 `
 
 func (q *Queries) ListHouseholdMembers(ctx context.Context, householdID int64) ([]User, error) {
@@ -539,6 +543,7 @@ func (q *Queries) ListHouseholdMembers(ctx context.Context, householdID int64) (
 			&i.DisabledAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.AssistantNewEntries,
 		); err != nil {
 			return nil, err
 		}
@@ -590,7 +595,7 @@ func (q *Queries) ListRegistrationInvites(ctx context.Context) ([]Invite, error)
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at FROM users ORDER BY handle
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries FROM users ORDER BY handle
 `
 
 func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
@@ -613,6 +618,7 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 			&i.DisabledAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.AssistantNewEntries,
 		); err != nil {
 			return nil, err
 		}
@@ -628,7 +634,7 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 }
 
 const listVisibleUsers = `-- name: ListVisibleUsers :many
-SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at FROM users u WHERE u.id = ?1 OR u.household_id = ?2
+SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at, u.assistant_new_entries FROM users u WHERE u.id = ?1 OR u.household_id = ?2
    OR u.id IN (SELECT addressee_id FROM friendships WHERE requester_id = ?1 AND accepted_at IS NOT NULL)
    OR u.id IN (SELECT requester_id FROM friendships WHERE addressee_id = ?1 AND accepted_at IS NOT NULL)
 ORDER BY u.handle
@@ -659,6 +665,7 @@ func (q *Queries) ListVisibleUsers(ctx context.Context, arg ListVisibleUsersPara
 			&i.DisabledAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.AssistantNewEntries,
 		); err != nil {
 			return nil, err
 		}
@@ -758,17 +765,23 @@ func (q *Queries) UpdatePassword(ctx context.Context, arg UpdatePasswordParams) 
 }
 
 const updateProfile = `-- name: UpdateProfile :exec
-UPDATE users SET display_name = ?, locale = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
+UPDATE users SET display_name = ?, locale = ?, assistant_new_entries = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
 `
 
 type UpdateProfileParams struct {
-	DisplayName string
-	Locale      string
-	ID          int64
+	DisplayName         string
+	Locale              string
+	AssistantNewEntries string
+	ID                  int64
 }
 
 func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) error {
-	_, err := q.db.ExecContext(ctx, updateProfile, arg.DisplayName, arg.Locale, arg.ID)
+	_, err := q.db.ExecContext(ctx, updateProfile,
+		arg.DisplayName,
+		arg.Locale,
+		arg.AssistantNewEntries,
+		arg.ID,
+	)
 	return err
 }
 
