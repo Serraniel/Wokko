@@ -11,8 +11,10 @@ import (
 )
 
 type ingredientArgs struct {
-	Food   string   `json:"food" jsonschema:"food name, reusing one from list_foods when possible"`
-	Unit   string   `json:"unit,omitempty" jsonschema:"unit name or abbreviation, such as g or tbsp"`
+	FoodID int64    `json:"food_id,omitempty" jsonschema:"id of a known food from search_foods. Preferred over food, because it always means that exact entry"`
+	Food   string   `json:"food,omitempty" jsonschema:"food name, used when there is no food_id. Copy a name exactly from search_foods. A name that isn't in the catalog becomes a new food"`
+	UnitID int64    `json:"unit_id,omitempty" jsonschema:"id of a known unit from search_units. Preferred over unit"`
+	Unit   string   `json:"unit,omitempty" jsonschema:"unit name or abbreviation, such as g or tbsp, used when there is no unit_id. Leave both out for whole items, such as 2 eggs"`
 	Amount *float64 `json:"amount,omitempty" jsonschema:"amount for the recipe's servings. Leave out for 'to taste'"`
 	Note   string   `json:"note,omitempty" jsonschema:"a note, such as finely chopped"`
 }
@@ -25,36 +27,39 @@ type stepArgs struct {
 }
 
 type recipeArgs struct {
-	Name        string     `json:"name"`
-	Description string     `json:"description,omitempty"`
-	Servings    int64      `json:"servings,omitempty"`
-	WorkMinutes int64      `json:"work_minutes,omitempty"`
-	WaitMinutes int64      `json:"wait_minutes,omitempty"`
-	SourceURL   string     `json:"source_url,omitempty"`
-	Keywords    []string   `json:"keywords,omitempty" jsonschema:"tags"`
-	Steps       []stepArgs `json:"steps,omitempty"`
+	Name         string     `json:"name"`
+	Description  string     `json:"description,omitempty"`
+	Servings     int64      `json:"servings,omitempty" jsonschema:"how many the amounts make"`
+	ServingsText string     `json:"servings_text,omitempty" jsonschema:"what servings counts when it isn't portions, such as loaf or cookies. Leave out for portions"`
+	WorkMinutes  int64      `json:"work_minutes,omitempty"`
+	WaitMinutes  int64      `json:"wait_minutes,omitempty"`
+	SourceURL    string     `json:"source_url,omitempty"`
+	Keywords     []string   `json:"keywords,omitempty" jsonschema:"tags. Reuse names from search_tags, a new name becomes a new tag"`
+	Steps        []stepArgs `json:"steps,omitempty"`
 }
 
 type createArgs struct {
 	recipeArgs
-	Household bool `json:"share_with_household,omitempty" jsonschema:"also show it to the person's household. Otherwise only they can see it"`
+	ConfirmedNew []string `json:"confirmed_new,omitempty" jsonschema:"new food and unit names the person agreed to add, only after a save asked for confirmation"`
+	Household    bool     `json:"share_with_household,omitempty" jsonschema:"also show it to the person's household. Otherwise only they can see it"`
 }
 
 type updateArgs struct {
 	recipeArgs
-	ID          int64 `json:"id"`
-	BaseVersion int64 `json:"base_version" jsonschema:"the version from get_recipe, so a newer edit isn't overwritten"`
+	ConfirmedNew []string `json:"confirmed_new,omitempty" jsonschema:"new food and unit names the person agreed to add, only after a save asked for confirmation"`
+	ID           int64    `json:"id"`
+	BaseVersion  int64    `json:"base_version" jsonschema:"the version from get_recipe, so a newer edit isn't overwritten"`
 }
 
 func (a recipeArgs) input() app.RecipeInput {
-	in := app.RecipeInput{Name: a.Name, Description: a.Description, Servings: a.Servings, WorkMinutes: a.WorkMinutes, WaitMinutes: a.WaitMinutes, SourceURL: a.SourceURL, Keywords: a.Keywords, Steps: []app.StepInput{}}
+	in := app.RecipeInput{Name: a.Name, Description: a.Description, Servings: a.Servings, ServingsText: a.ServingsText, WorkMinutes: a.WorkMinutes, WaitMinutes: a.WaitMinutes, SourceURL: a.SourceURL, Keywords: a.Keywords, Steps: []app.StepInput{}}
 	if in.Keywords == nil {
 		in.Keywords = []string{}
 	}
 	for _, st := range a.Steps {
 		out := app.StepInput{Name: st.Name, Instruction: st.Instruction, Minutes: st.Minutes, Ingredients: []app.IngredientInput{}}
 		for _, i := range st.Ingredients {
-			out.Ingredients = append(out.Ingredients, app.IngredientInput{FoodName: i.Food, UnitName: i.Unit, Amount: i.Amount, Note: i.Note})
+			out.Ingredients = append(out.Ingredients, app.IngredientInput{FoodID: i.FoodID, FoodName: i.Food, UnitID: i.UnitID, UnitName: i.Unit, Amount: i.Amount, Note: i.Note})
 		}
 		in.Steps = append(in.Steps, out)
 	}
@@ -73,8 +78,69 @@ type searchArgs struct {
 }
 
 type catalogArgs struct {
-	Query string `json:"query,omitempty"`
+	Query   string   `json:"query,omitempty" jsonschema:"part of a name, in any language"`
+	Queries []string `json:"queries,omitempty" jsonschema:"several names at once, such as every ingredient of a recipe. Each gets its own matches"`
+	Limit   int64    `json:"limit,omitempty" jsonschema:"matches per name, 10 if left out"`
+}
+
+type tagArgs struct {
+	Query string `json:"query,omitempty" jsonschema:"part of a tag name"`
 	Limit int64  `json:"limit,omitempty"`
+}
+
+type matches[T any] struct {
+	Query string `json:"query"`
+	Total int64  `json:"total"`
+	Items []T    `json:"items"`
+}
+
+// search looks up each name the assistant asks about, so a whole ingredient list takes one call.
+func search[T any](in catalogArgs, fn func(query string, limit int64) (app.Page[T], error)) (any, error) {
+	limit := in.Limit
+	if limit <= 0 {
+		limit = 10
+	}
+	if len(in.Queries) == 0 {
+		return fn(in.Query, limit)
+	}
+	if len(in.Queries) > 50 {
+		return nil, &app.Error{Status: 400, Code: "too_many_queries", Message: "Search at most 50 names at once"}
+	}
+	out := []matches[T]{}
+	for _, q := range in.Queries {
+		page, err := fn(q, limit)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, matches[T]{Query: q, Total: page.Total, Items: page.Items})
+	}
+	return out, nil
+}
+
+type photoArgs struct {
+	ID       int64  `json:"id" jsonschema:"the recipe"`
+	ImageURL string `json:"image_url" jsonschema:"public address of a photo, such as the image of the page the recipe came from"`
+}
+
+type nameArgs struct {
+	Locale       string `json:"locale" jsonschema:"language code, such as en or de"`
+	Name         string `json:"name"`
+	Plural       string `json:"plural,omitempty"`
+	Abbreviation string `json:"abbreviation,omitempty" jsonschema:"units only, such as tbsp"`
+}
+
+func (a namesArgs) translations() []app.Translation {
+	out := []app.Translation{}
+	for _, t := range a.Translations {
+		out = append(out, app.Translation{Locale: t.Locale, Name: t.Name, Plural: t.Plural, Abbreviation: t.Abbreviation})
+	}
+	return out
+}
+
+type namesArgs struct {
+	ID           int64      `json:"id" jsonschema:"the entry from search_foods or search_units. Only works where can_edit is true"`
+	Aliases      []string   `json:"aliases,omitempty" jsonschema:"other spellings or synonyms, such as a regional name"`
+	Translations []nameArgs `json:"translations,omitempty" jsonschema:"names in other languages, with locale such as en or de. A language that already has a name keeps it and only gains a missing plural or abbreviation"`
 }
 
 type urlArgs struct {
@@ -164,7 +230,7 @@ func write[In any](l *Layer, s *mcp.Server, a app.TokenAccess, name, description
 // Some things are deliberately never offered: finding or listing other people, making a
 // recipe public, account and admin actions, and permanent deletion.
 func (l *Layer) server(a app.TokenAccess) *mcp.Server {
-	s := mcp.NewServer(&mcp.Implementation{Name: "wokko", Title: "Wokko", Version: l.svc.Cfg.Version}, &mcp.ServerOptions{Instructions: instructions})
+	s := mcp.NewServer(&mcp.Implementation{Name: "wokko", Title: "Wokko", Version: l.svc.Cfg.Version}, &mcp.ServerOptions{Instructions: instructionsFor(a)})
 	v, svc := a.Viewer, l.svc
 
 	read(l, s, "search_recipes", "Find recipes this person can see. Without a query it lists the most recently changed.", func(ctx context.Context, in searchArgs) (any, error) {
@@ -176,13 +242,13 @@ func (l *Layer) server(a app.TokenAccess) *mcp.Server {
 	read(l, s, "get_recipe_nutrition", "Estimate a recipe's nutrition. 'missing' lists ingredients that couldn't be counted.", func(ctx context.Context, in idArgs) (any, error) {
 		return svc.GetRecipeNutrition(ctx, v, in.ID)
 	})
-	read(l, s, "list_foods", "Search the ingredient catalog, so new recipes can reuse its names.", func(ctx context.Context, in catalogArgs) (any, error) {
-		return svc.ListFoods(ctx, v, in.Query, in.Limit, 0)
+	read(l, s, "search_foods", "Find known ingredients before writing a recipe. Matches part of any name, in every language and every alias, and returns each food's id, translations and aliases. Pass every ingredient in queries at once. When a name finds nothing, try again with the singular, the word stem, a synonym, a regional name or the name in another language (Frühlingszwiebel, Lauchzwiebel, spring onion, scallion), then use the food_id you found.", func(ctx context.Context, in catalogArgs) (any, error) {
+		return search(in, func(q string, n int64) (app.Page[app.Food], error) { return svc.ListFoods(ctx, v, q, n, 0) })
 	})
-	read(l, s, "list_units", "Search the units of measure.", func(ctx context.Context, in catalogArgs) (any, error) {
-		return svc.ListUnits(ctx, v, in.Query, in.Limit, 0)
+	read(l, s, "search_units", "Find known units of measure by name, plural, abbreviation or alias, in every language. Use the unit_id you find. Try the abbreviation and the full name (EL, Esslöffel, tbsp).", func(ctx context.Context, in catalogArgs) (any, error) {
+		return search(in, func(q string, n int64) (app.Page[app.Unit], error) { return svc.ListUnits(ctx, v, q, n, 0) })
 	})
-	read(l, s, "list_tags", "Search the recipe tags.", func(ctx context.Context, in catalogArgs) (any, error) {
+	read(l, s, "search_tags", "Find existing recipe tags, so a recipe reuses them instead of adding near-duplicates.", func(ctx context.Context, in tagArgs) (any, error) {
 		return svc.ListKeywords(ctx, v, in.Query, in.Limit, 0)
 	})
 	read(l, s, "import_recipe_from_url", "Read a recipe from a public web page into a draft. This saves nothing: show it, then use create_recipe.", func(ctx context.Context, in urlArgs) (any, error) {
@@ -203,16 +269,19 @@ func (l *Layer) server(a app.TokenAccess) *mcp.Server {
 	})
 
 	if a.Scope == "write" || a.Scope == "delete" {
-		write(l, s, a, "create_recipe", "Save a new recipe. It stays private unless share_with_household is set.", func(ctx context.Context, in createArgs) (any, string, error) {
+		write(l, s, a, "create_recipe", "Save a new recipe, with steps that each list the ingredients they use. Look up every ingredient and unit with search_foods and search_units first and give their ids. It stays private unless share_with_household is set.", func(ctx context.Context, in createArgs) (any, string, error) {
 			draft := in.input()
 			draft.Visibility = "private"
 			if in.Household {
 				draft.Visibility = "household"
 			}
+			if err := svc.CheckAssistantNewEntries(ctx, v, draft, in.ConfirmedNew); err != nil {
+				return nil, "", err
+			}
 			r, err := svc.CreateRecipe(ctx, v, draft)
 			return r, r.Name, err
 		})
-		write(l, s, a, "update_recipe", "Replace a recipe's contents. Its sharing doesn't change, and the previous version stays in its history.", func(ctx context.Context, in updateArgs) (any, string, error) {
+		write(l, s, a, "update_recipe", "Replace a recipe's whole contents, including every step and ingredient, so send everything that should stay. Keep the food_id and unit_id from get_recipe. Its sharing and photo don't change, and the previous version stays in its history.", func(ctx context.Context, in updateArgs) (any, string, error) {
 			cur, err := svc.GetRecipe(ctx, v, in.ID)
 			if err != nil {
 				return nil, "", err
@@ -220,8 +289,23 @@ func (l *Layer) server(a app.TokenAccess) *mcp.Server {
 			draft := in.input()
 			draft.Visibility = cur.Visibility
 			draft.BaseVersion = in.BaseVersion
+			if err := svc.CheckAssistantNewEntries(ctx, v, draft, in.ConfirmedNew); err != nil {
+				return nil, "", err
+			}
 			r, err := svc.UpdateRecipe(ctx, v, in.ID, draft)
 			return r, r.Name, err
+		})
+		write(l, s, a, "set_recipe_photo", "Give a recipe a photo from a public image address. It replaces the current photo.", func(ctx context.Context, in photoArgs) (any, string, error) {
+			r, err := svc.SetPhotoFromURL(ctx, v, in.ID, in.ImageURL)
+			return r, r.Name, err
+		})
+		write(l, s, a, "add_food_names", "Teach a known food another name: an alias, synonym or regional spelling, or a translation. Use it when a recipe says a food differently than the catalog, so later searches find it. Nothing is removed or renamed.", func(ctx context.Context, in namesArgs) (any, string, error) {
+			f, err := svc.AddFoodNames(ctx, v, in.ID, in.translations(), in.Aliases)
+			return f, f.Name, err
+		})
+		write(l, s, a, "add_unit_names", "Teach a known unit another name, abbreviation or translation, the same way as add_food_names.", func(ctx context.Context, in namesArgs) (any, string, error) {
+			u, err := svc.AddUnitNames(ctx, v, in.ID, in.translations(), in.Aliases)
+			return u, u.Name, err
 		})
 		write(l, s, a, "create_meal_plan", "Plan a meal, with a recipe or just a title.", func(ctx context.Context, in planArgs) (any, string, error) {
 			p, err := svc.CreateMealPlan(ctx, v, app.MealPlanInput{Title: in.Title, Note: in.Note, Servings: in.Servings, FromDate: in.Date, ToDate: in.ToDate, MealTypeID: in.MealTypeID, RecipeID: in.RecipeID})

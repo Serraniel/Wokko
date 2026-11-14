@@ -136,20 +136,24 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request, v app.Viewer) error 
 
 func (s *Server) updateMe(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
 	in := struct {
-		DisplayName *string `json:"display_name"`
-		Locale      *string `json:"locale"`
+		DisplayName         *string `json:"display_name"`
+		Locale              *string `json:"locale"`
+		AssistantNewEntries *string `json:"assistant_new_entries"`
 	}{}
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
-	display, locale := v.User.DisplayName, v.User.Locale
+	p := app.ProfileInput{DisplayName: v.User.DisplayName, Locale: v.User.Locale, AssistantNewEntries: v.User.AssistantNewEntries}
 	if in.DisplayName != nil {
-		display = *in.DisplayName
+		p.DisplayName = *in.DisplayName
 	}
 	if in.Locale != nil {
-		locale = *in.Locale
+		p.Locale = *in.Locale
 	}
-	u, err := s.svc.UpdateProfile(r.Context(), v, display, locale)
+	if in.AssistantNewEntries != nil {
+		p.AssistantNewEntries = *in.AssistantNewEntries
+	}
+	u, err := s.svc.UpdateProfile(r.Context(), v, p)
 	return reply(w, u, err)
 }
 

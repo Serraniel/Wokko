@@ -381,14 +381,15 @@ type UnitName struct {
 }
 
 type User struct {
-	ID           int64
-	Handle       string
-	DisplayName  string
-	PasswordHash string
-	Role         string
-	Locale       string
-	HouseholdID  int64
-	DisabledAt   sql.NullString
-	CreatedAt    string
-	UpdatedAt    string
+	ID                  int64
+	Handle              string
+	DisplayName         string
+	PasswordHash        string
+	Role                string
+	Locale              string
+	HouseholdID         int64
+	DisabledAt          sql.NullString
+	CreatedAt           string
+	UpdatedAt           string
+	AssistantNewEntries string
 }

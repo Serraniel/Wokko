@@ -12,6 +12,15 @@ export interface User {
   locale: string;
   household_id: number /* int64 */;
   disabled: boolean;
+  /**
+   * AssistantNewEntries decides whether assistants may add foods and units: never, ask or allow.
+   */
+  assistant_new_entries: string;
+}
+export interface ProfileInput {
+  display_name: string;
+  locale: string;
+  assistant_new_entries: string;
 }
 export interface Person {
   id: number /* int64 */;

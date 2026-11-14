@@ -33,7 +33,7 @@ SELECT * FROM users ORDER BY handle;
 SELECT * FROM users WHERE household_id = ? ORDER BY handle;
 
 -- name: UpdateProfile :exec
-UPDATE users SET display_name = ?, locale = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
+UPDATE users SET display_name = ?, locale = ?, assistant_new_entries = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
 
 -- name: UpdatePassword :exec
 UPDATE users SET password_hash = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
