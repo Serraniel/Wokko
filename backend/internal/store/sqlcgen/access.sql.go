@@ -32,7 +32,7 @@ func (q *Queries) AddAssistantActivity(ctx context.Context, arg AddAssistantActi
 }
 
 const createAPIToken = `-- name: CreateAPIToken :one
-INSERT INTO api_tokens (user_id, name, token_hash, scope, client_id, expires_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at
+INSERT INTO api_tokens (user_id, name, token_hash, scope, client_id, expires_at, app) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at, app
 `
 
 type CreateAPITokenParams struct {
@@ -42,6 +42,7 @@ type CreateAPITokenParams struct {
 	Scope     string
 	ClientID  string
 	ExpiresAt sql.NullString
+	App       string
 }
 
 func (q *Queries) CreateAPIToken(ctx context.Context, arg CreateAPITokenParams) (ApiToken, error) {
@@ -52,6 +53,7 @@ func (q *Queries) CreateAPIToken(ctx context.Context, arg CreateAPITokenParams) 
 		arg.Scope,
 		arg.ClientID,
 		arg.ExpiresAt,
+		arg.App,
 	)
 	var i ApiToken
 	err := row.Scan(
@@ -64,6 +66,7 @@ func (q *Queries) CreateAPIToken(ctx context.Context, arg CreateAPITokenParams) 
 		&i.ExpiresAt,
 		&i.LastUsedAt,
 		&i.CreatedAt,
+		&i.App,
 	)
 	return i, err
 }
@@ -281,7 +284,7 @@ func (q *Queries) DeletePasskey(ctx context.Context, arg DeletePasskeyParams) (i
 }
 
 const getAPITokenByHash = `-- name: GetAPITokenByHash :one
-SELECT id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at FROM api_tokens WHERE token_hash = ?
+SELECT id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at, app FROM api_tokens WHERE token_hash = ?
 `
 
 func (q *Queries) GetAPITokenByHash(ctx context.Context, tokenHash string) (ApiToken, error) {
@@ -297,6 +300,7 @@ func (q *Queries) GetAPITokenByHash(ctx context.Context, tokenHash string) (ApiT
 		&i.ExpiresAt,
 		&i.LastUsedAt,
 		&i.CreatedAt,
+		&i.App,
 	)
 	return i, err
 }
@@ -354,7 +358,7 @@ func (q *Queries) GetOAuthRefresh(ctx context.Context, tokenHash string) (OauthR
 }
 
 const listAPITokens = `-- name: ListAPITokens :many
-SELECT id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at FROM api_tokens WHERE user_id = ? ORDER BY id DESC
+SELECT id, user_id, name, token_hash, scope, client_id, expires_at, last_used_at, created_at, app FROM api_tokens WHERE user_id = ? ORDER BY id DESC
 `
 
 func (q *Queries) ListAPITokens(ctx context.Context, userID int64) ([]ApiToken, error) {
@@ -376,6 +380,7 @@ func (q *Queries) ListAPITokens(ctx context.Context, userID int64) ([]ApiToken, 
 			&i.ExpiresAt,
 			&i.LastUsedAt,
 			&i.CreatedAt,
+			&i.App,
 		); err != nil {
 			return nil, err
 		}

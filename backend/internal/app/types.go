@@ -503,8 +503,10 @@ type Passkey struct {
 
 // APIToken lets an AI assistant act for its owner through MCP.
 type APIToken struct {
-	ID         int64  `json:"id"`
-	Name       string `json:"name"`
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+	// App is the assistant app it was made for, such as claude or cursor, or other.
+	App        string `json:"app"`
 	Scope      string `json:"scope"`
 	IsApp      bool   `json:"is_app"`
 	ExpiresAt  string `json:"expires_at"`
@@ -516,6 +518,8 @@ type APITokenInput struct {
 	Name          string `json:"name"`
 	Scope         string `json:"scope"`
 	ExpiresInDays int64  `json:"expires_in_days"`
+	// App is the assistant app the token is for. Unknown or empty counts as other.
+	App string `json:"app"`
 }
 
 // NewAPIToken holds the secret, which is shown only this once.

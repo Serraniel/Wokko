@@ -25,8 +25,40 @@ const (
 
 func validScope(s string) bool { return s == "read" || s == "write" || s == "delete" }
 
+// assistantApps are the apps the integrations page knows how to connect.
+var assistantApps = []string{"claude", "chatgpt", "claude_code", "codex", "gemini", "cursor", "vscode", "openclaw", "hermes", "other"}
+
+func cleanApp(app string) string {
+	if slices.Contains(assistantApps, app) {
+		return app
+	}
+	return "other"
+}
+
+// appForClient guesses the app from the name it registered with over OAuth.
+func appForClient(name string) string {
+	n := strings.ToLower(name)
+	switch {
+	case strings.Contains(n, "claude code"):
+		return "claude_code"
+	case strings.Contains(n, "claude"):
+		return "claude"
+	case strings.Contains(n, "chatgpt"), strings.Contains(n, "openai"):
+		return "chatgpt"
+	case strings.Contains(n, "cursor"):
+		return "cursor"
+	case strings.Contains(n, "visual studio code"), strings.Contains(n, "vs code"), strings.Contains(n, "vscode"):
+		return "vscode"
+	case strings.Contains(n, "codex"):
+		return "codex"
+	case strings.Contains(n, "gemini"):
+		return "gemini"
+	}
+	return "other"
+}
+
 func toAPIToken(t sqlcgen.ApiToken) APIToken {
-	return APIToken{ID: t.ID, Name: t.Name, Scope: t.Scope, IsApp: t.ClientID != "", ExpiresAt: t.ExpiresAt.String, LastUsedAt: t.LastUsedAt.String, CreatedAt: t.CreatedAt}
+	return APIToken{ID: t.ID, Name: t.Name, App: t.App, Scope: t.Scope, IsApp: t.ClientID != "", ExpiresAt: t.ExpiresAt.String, LastUsedAt: t.LastUsedAt.String, CreatedAt: t.CreatedAt}
 }
 
 func (s *Service) MCPEnabled(ctx context.Context) (bool, error) {
@@ -74,7 +106,7 @@ func (s *Service) CreateAPIToken(ctx context.Context, v Viewer, in APITokenInput
 	secret = tokenPrefix + secret
 	var out NewAPIToken
 	err = s.Store.Tx(ctx, func(q *sqlcgen.Queries) error {
-		p := sqlcgen.CreateAPITokenParams{UserID: v.id(), Name: name, TokenHash: auth.HashToken(secret), Scope: in.Scope}
+		p := sqlcgen.CreateAPITokenParams{UserID: v.id(), Name: name, TokenHash: auth.HashToken(secret), Scope: in.Scope, App: cleanApp(in.App)}
 		if in.ExpiresInDays > 0 {
 			p.ExpiresAt = nullStr(s.stamp(s.Now().AddDate(0, 0, int(in.ExpiresInDays))))
 		}
@@ -345,7 +377,7 @@ func (s *Service) issueOAuthTokens(ctx context.Context, q *sqlcgen.Queries, clie
 	if err := q.DeleteAPITokensForClient(ctx, sqlcgen.DeleteAPITokensForClientParams{UserID: userID, ClientID: clientID}); err != nil {
 		return OAuthTokens{}, err
 	}
-	if _, err := q.CreateAPIToken(ctx, sqlcgen.CreateAPITokenParams{UserID: userID, Name: c.Name, TokenHash: auth.HashToken(access), Scope: scope, ClientID: clientID, ExpiresAt: nullStr(s.stamp(now.Add(oauthAccessLife)))}); err != nil {
+	if _, err := q.CreateAPIToken(ctx, sqlcgen.CreateAPITokenParams{UserID: userID, Name: c.Name, TokenHash: auth.HashToken(access), Scope: scope, ClientID: clientID, ExpiresAt: nullStr(s.stamp(now.Add(oauthAccessLife))), App: appForClient(c.Name)}); err != nil {
 		return OAuthTokens{}, err
 	}
 	if err := q.CreateOAuthRefresh(ctx, sqlcgen.CreateOAuthRefreshParams{TokenHash: auth.HashToken(refresh), ClientID: clientID, UserID: userID, Scope: scope, ExpiresAt: s.stamp(now.Add(oauthRefreshLife))}); err != nil {
