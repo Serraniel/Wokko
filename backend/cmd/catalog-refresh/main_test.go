@@ -36,3 +36,20 @@ func TestLatinNamesAreNotAliases(t *testing.T) {
 		t.Error("the genus of the item's own taxon")
 	}
 }
+
+func TestNamesStayWithTheirFood(t *testing.T) {
+	taken := map[string]string{"cherrytomaten": "food.cherry_tomato", "tomate": "food.tomato", "kohl": "food.cabbage"}
+	cases := map[string]bool{
+		"Cherrytomate":  false, // the singular of another food's name
+		"Cherrytomaten": false,
+		"Tomaten":       true, // the entry's own name with an ending
+		"Fleischtomate": true,
+		"Kohle":         false,
+		"Pomidore":      true,
+	}
+	for name, want := range cases {
+		if got := free(taken, name, "food.tomato"); got != want {
+			t.Errorf("free(%q) = %v", name, got)
+		}
+	}
+}

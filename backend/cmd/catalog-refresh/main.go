@@ -101,9 +101,10 @@ func run(dir, langList, messages, summaryPath string, limit int) error {
 			return err
 		}
 		// The first exact match that Wikidata says is something to eat. Homonyms, such as a
-		// singer called Mango or the town of Orange, aren't.
+		// singer called Mango or the town of Orange, aren't. Neither is a genus that merely
+		// carries the food's name, as the insects called Semolina do.
 		for _, id := range candidates {
-			if it, ok := found[id]; ok && it.edible() {
+			if it, ok := found[id]; ok && it.edible() && !strings.EqualFold(it.taxon(), f.Names["en"].Name) {
 				f.Wikidata = id
 				log = append(log, fmt.Sprintf("- `%s`: linked to [%s](https://www.wikidata.org/wiki/%s)", f.Key, id, id))
 				break
@@ -267,9 +268,26 @@ func latin(s, taxon string) bool {
 	return true
 }
 
+// free tells whether a name can go to the entry: no other food uses it, or a form of it that
+// differs only by an ending, as "Cherrytomate" does from the cherry tomatoes' "Cherrytomaten".
 func free(taken map[string]string, name, key string) bool {
-	owner, ok := taken[text.Normalize(name)]
-	return !ok || owner == key
+	n := text.Normalize(name)
+	if owner, ok := taken[n]; ok {
+		return owner == key
+	}
+	for word, owner := range taken {
+		if owner == key {
+			continue
+		}
+		short, long := word, n
+		if len(short) > len(long) {
+			short, long = long, short
+		}
+		if len(short) >= 4 && strings.HasPrefix(long, short) && len(long)-len(short) <= 2 {
+			return false
+		}
+	}
+	return true
 }
 
 func get(params url.Values, out any) error {
