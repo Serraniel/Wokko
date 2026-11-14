@@ -1253,7 +1253,10 @@
      "pomegranate",
      "orange",
      "oranges",
-     "dates"
+     "dates",
+     "jam",
+     "jams",
+     "preserves"
     ],
     "de": [
      "apfel",
@@ -1286,7 +1289,9 @@
      "granatapfel",
      "orange",
      "orangen",
-     "datteln"
+     "datteln",
+     "marmelade",
+     "konfitüre"
     ]
    }
   },
@@ -1385,7 +1390,8 @@
      "sultanas",
      "dried figs",
      "dried mango",
-     "prunes"
+     "prunes",
+     "raisin"
     ],
     "de": [
      "getrocknete aprikosen",
@@ -1396,7 +1402,8 @@
      "getrocknete feigen",
      "trockenpflaumen",
      "getrocknete mango",
-     "dörrobst"
+     "dörrobst",
+     "rosine"
     ]
    },
    "may_contain": [
@@ -2827,7 +2834,9 @@
      "vanilla extract",
      "vanilla bean",
      "saffron",
-     "juniper"
+     "juniper",
+     "caraway",
+     "caraway seeds"
     ],
     "de": [
      "pfeffer",
@@ -2864,7 +2873,8 @@
      "vanilleextrakt",
      "safran",
      "wacholder",
-     "wacholderbeeren"
+     "wacholderbeeren",
+     "kümmel"
     ]
    }
   },
@@ -3263,7 +3273,8 @@
      "chili",
      "chilli",
      "chili pepper",
-     "jalapeño"
+     "jalapeño",
+     "olive"
     ],
     "de": [
      "gurke",
@@ -3287,7 +3298,8 @@
      "chili",
      "chilischote",
      "peperoni",
-     "jalapeño"
+     "jalapeño",
+     "olive"
     ]
    }
   },
@@ -3301,12 +3313,19 @@
     "en": [
      "pickles",
      "gherkins",
-     "pickled cucumbers"
+     "pickled cucumbers",
+     "pickle",
+     "gherkin",
+     "pickled gherkin",
+     "pickled gherkins"
     ],
     "de": [
      "gewürzgurken",
      "essiggurken",
-     "cornichons"
+     "cornichons",
+     "gewürzgurke",
+     "essiggurke",
+     "cornichon"
     ]
    },
    "may_contain": [
