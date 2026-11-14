@@ -1209,7 +1209,6 @@
     }
    },
    "aliases": [
-    "Nektarine",
     "peachfruit"
    ],
    "nutrients": {
@@ -1222,7 +1221,8 @@
     "7": 0.91,
     "8": 0
    },
-   "wikidata": "Q13202263"
+   "wikidata": "Q13202263",
+   "curated": true
   },
   {
    "key": "food.pear",
@@ -1515,8 +1515,7 @@
    },
    "aliases": [
     "Rinderhack",
-    "mince beef meat",
-    "minced meat"
+    "mince beef meat"
    ],
    "nutrients": {
     "1": 254,
@@ -1528,7 +1527,8 @@
     "7": 17.17,
     "8": 0.165
    },
-   "wikidata": "Q3408258"
+   "wikidata": "Q3408258",
+   "curated": true
   },
   {
    "key": "food.beef_steak",
