@@ -130,3 +130,18 @@ SELECT u.* FROM users u WHERE u.id = sqlc.arg(user_id) OR u.household_id = sqlc.
    OR u.id IN (SELECT addressee_id FROM friendships WHERE requester_id = sqlc.arg(user_id) AND accepted_at IS NOT NULL)
    OR u.id IN (SELECT requester_id FROM friendships WHERE addressee_id = sqlc.arg(user_id) AND accepted_at IS NOT NULL)
 ORDER BY u.handle;
+
+-- name: SetUserEmail :exec
+UPDATE users SET email = ?, email_verified = ? WHERE id = ?;
+
+-- name: GetUserByVerifiedEmail :one
+SELECT * FROM users WHERE lower(email) = lower(?) AND email_verified = 1 AND email != '';
+
+-- name: CreateEmailConfirmation :exec
+INSERT INTO email_confirmations (token_hash, user_id, email, expires_at) VALUES (?, ?, ?, ?);
+
+-- name: GetEmailConfirmation :one
+SELECT * FROM email_confirmations WHERE token_hash = ? AND expires_at > ?;
+
+-- name: DeleteEmailConfirmations :exec
+DELETE FROM email_confirmations WHERE user_id = ?;

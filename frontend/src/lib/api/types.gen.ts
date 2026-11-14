@@ -20,12 +20,38 @@ export interface User {
    * NeedsSetup is true for an account an admin created until its password is set.
    */
   needs_setup: boolean;
+  /**
+   * Email is optional and only used once EmailVerified. Only the person and admins see it.
+   */
+  email: string;
+  email_verified: boolean;
+}
+/**
+ * MailStatus tells admins whether Wokko can send mail, never the password.
+ */
+export interface MailStatus {
+  configured: boolean;
+  public_url: boolean;
+  ready: boolean;
+  host: string;
+  from: string;
+}
+/**
+ * Mailed says whether a link also went out by mail. MailError holds a code when it didn't.
+ */
+export interface Mailed {
+  mailed: boolean;
+  mail_error: string | null;
 }
 /**
  * NewAccountInput is an account an admin creates. The person sets their own password through
  * a one-time setup link.
  */
 export interface NewAccountInput {
+  /**
+   * Email, when given, gets the setup link and counts as confirmed: the admin vouches for it.
+   */
+  email: string;
   handle: string;
   display_name: string;
   locale: string;
@@ -38,7 +64,7 @@ export interface NewAccountInput {
 /**
  * NewAccount is the created account and its setup link's token, shown only this once.
  */
-export interface NewAccount {
+export interface NewAccount extends Mailed {
   user: User;
   token: string;
 }
@@ -57,6 +83,10 @@ export interface Status {
   open_registration: boolean;
   allow_public: boolean;
   mcp_enabled: boolean;
+  /**
+   * MailEnabled shows mail options, such as Forgot password.
+   */
+  mail_enabled: boolean;
   version: string;
 }
 export interface Translation {
@@ -294,7 +324,7 @@ export interface Household {
 /**
  * Invite carries Token only in the response that created it, since only a hash is stored.
  */
-export interface Invite {
+export interface Invite extends Mailed {
   id: number /* int64 */;
   note: string;
   token: string | null;
@@ -310,6 +340,11 @@ export interface InviteInput {
    * Note says who the link is for, such as "For Oma".
    */
   note: string;
+  /**
+   * Email, when given and mail is set up, gets the link, in Locale.
+   */
+  email: string;
+  locale: string;
 }
 export interface Settings {
   open_registration: boolean;

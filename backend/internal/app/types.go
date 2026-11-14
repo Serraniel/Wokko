@@ -15,11 +15,31 @@ type User struct {
 	AssistantNewEntries string `json:"assistant_new_entries"`
 	// NeedsSetup is true for an account an admin created until its password is set.
 	NeedsSetup bool `json:"needs_setup"`
+	// Email is optional and only used once EmailVerified. Only the person and admins see it.
+	Email         string `json:"email"`
+	EmailVerified bool   `json:"email_verified"`
+}
+
+// MailStatus tells admins whether Wokko can send mail, never the password.
+type MailStatus struct {
+	Configured bool   `json:"configured"`
+	PublicURL  bool   `json:"public_url"`
+	Ready      bool   `json:"ready"`
+	Host       string `json:"host"`
+	From       string `json:"from"`
+}
+
+// Mailed says whether a link also went out by mail. MailError holds a code when it didn't.
+type Mailed struct {
+	Mailed    bool   `json:"mailed"`
+	MailError string `json:"mail_error,omitempty"`
 }
 
 // NewAccountInput is an account an admin creates. The person sets their own password through
 // a one-time setup link.
 type NewAccountInput struct {
+	// Email, when given, gets the setup link and counts as confirmed: the admin vouches for it.
+	Email       string `json:"email"`
 	Handle      string `json:"handle"`
 	DisplayName string `json:"display_name"`
 	Locale      string `json:"locale"`
@@ -30,8 +50,9 @@ type NewAccountInput struct {
 
 // NewAccount is the created account and its setup link's token, shown only this once.
 type NewAccount struct {
-	User  User   `json:"user"`
-	Token string `json:"token"`
+	User   User   `json:"user"`
+	Token  string `json:"token"`
+	Mailed `json:",inline" tstype:",extends"`
 }
 
 type ProfileInput struct {
@@ -47,11 +68,13 @@ type Person struct {
 }
 
 type Status struct {
-	SetupComplete    bool   `json:"setup_complete"`
-	OpenRegistration bool   `json:"open_registration"`
-	AllowPublic      bool   `json:"allow_public"`
-	MCPEnabled       bool   `json:"mcp_enabled"`
-	Version          string `json:"version"`
+	SetupComplete    bool `json:"setup_complete"`
+	OpenRegistration bool `json:"open_registration"`
+	AllowPublic      bool `json:"allow_public"`
+	MCPEnabled       bool `json:"mcp_enabled"`
+	// MailEnabled shows mail options, such as Forgot password.
+	MailEnabled bool   `json:"mail_enabled"`
+	Version     string `json:"version"`
 }
 
 type Translation struct {
@@ -201,10 +224,10 @@ type Recipe struct {
 	// Yield is how much the recipe makes, when known.
 	Yield     *RecipeYield `json:"yield"`
 	SourceURL string       `json:"source_url"`
-	Version       int64  `json:"version"`
-	CanEdit       bool   `json:"can_edit"`
-	CanManage     bool   `json:"can_manage"`
-	Steps         []Step `json:"steps"`
+	Version   int64        `json:"version"`
+	CanEdit   bool         `json:"can_edit"`
+	CanManage bool         `json:"can_manage"`
+	Steps     []Step       `json:"steps"`
 }
 
 type IngredientInput struct {
@@ -290,6 +313,7 @@ type Household struct {
 
 // Invite carries Token only in the response that created it, since only a hash is stored.
 type Invite struct {
+	Mailed    `json:",inline" tstype:",extends"`
 	ID        int64  `json:"id"`
 	Note      string `json:"note"`
 	Token     string `json:"token,omitempty"`
@@ -304,6 +328,9 @@ type InviteInput struct {
 	ExpiresInDays int64 `json:"expires_in_days"`
 	// Note says who the link is for, such as "For Oma".
 	Note string `json:"note"`
+	// Email, when given and mail is set up, gets the link, in Locale.
+	Email  string `json:"email"`
+	Locale string `json:"locale"`
 }
 
 type Settings struct {

@@ -20,6 +20,16 @@ type Config struct {
 	BackupRetentionDays int
 	TrashRetentionDays  int
 	Version             string
+	// SMTP sends mail when SMTPHost is set. Mail is optional: without it, links are copied.
+	SMTP SMTP
+}
+
+// SMTP is the mail server Wokko hands its mail to: a provider, a sending service or a relay.
+type SMTP struct {
+	Host, Username, Password, From string
+	Port                           int
+	// TLS is starttls (port 587), tls (port 465) or none, for a relay on a private network.
+	TLS string
 }
 
 func Load(version string) (Config, error) {
@@ -43,6 +53,29 @@ func Load(version string) (Config, error) {
 	}
 	if c.TrashRetentionDays, err = envInt("TRASH_RETENTION_DAYS", 30); err != nil {
 		return c, err
+	}
+	c.SMTP = SMTP{Host: env("SMTP_HOST", ""), Username: env("SMTP_USERNAME", ""), Password: env("SMTP_PASSWORD", ""), From: env("SMTP_FROM", ""), TLS: strings.ToLower(env("SMTP_TLS", "starttls"))}
+	if file := env("SMTP_PASSWORD_FILE", ""); file != "" {
+		b, err := os.ReadFile(file)
+		if err != nil {
+			return c, fmt.Errorf("SMTP_PASSWORD_FILE: %w", err)
+		}
+		c.SMTP.Password = strings.TrimSpace(string(b))
+	}
+	port := 587
+	if c.SMTP.TLS == "tls" {
+		port = 465
+	}
+	if c.SMTP.Port, err = envInt("SMTP_PORT", port); err != nil {
+		return c, err
+	}
+	if c.SMTP.Host != "" {
+		if c.SMTP.TLS != "starttls" && c.SMTP.TLS != "tls" && c.SMTP.TLS != "none" {
+			return c, fmt.Errorf("SMTP_TLS must be starttls, tls or none, got %q", c.SMTP.TLS)
+		}
+		if c.SMTP.From == "" {
+			return c, fmt.Errorf("SMTP_FROM is needed when SMTP_HOST is set, such as Wokko <wokko@example.com>")
+		}
 	}
 	return c, nil
 }

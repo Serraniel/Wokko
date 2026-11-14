@@ -353,6 +353,11 @@ await step('an admin creates an account and the person sets their own password',
   await o.goto(setup); await o.waitForSelector('text=Welcome to Wokko'); await o.fill('#password', 'omas-own-secret'); await o.click('form button'); await o.waitForURL('**/login**');
   await o.fill('#handle', 'oma'); await o.fill('#password', 'omas-own-secret'); await o.click('form button:has-text("Log in")'); await o.waitForURL('**/recipes'); await fresh.close();
 });
+await step('without mail, forgot password points to the admin and the mail options stay hidden', async () => {
+  const fresh = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US' }); const o = await fresh.newPage();
+  await o.goto(base + '/login'); await o.waitForSelector('text=Ask your admin for a reset link'); if (await o.locator('a[href="/forgot"]').count()) throw new Error('forgot link without mail'); await fresh.close();
+  await p.goto(base + '/admin'); await p.waitForSelector('text=Mail is off'); await p.goto(base + '/settings'); await p.waitForSelector('h2:has-text("Profile")'); if (await p.locator('#email').count()) throw new Error('email field without mail');
+});
 await step('a used or expired photo upload link explains itself', async () => {
   await p.goto(base + '/upload/not-a-real-token'); await p.waitForSelector('text=This link no longer works'); await p.waitForSelector('text=Ask the assistant for a new one');
 });

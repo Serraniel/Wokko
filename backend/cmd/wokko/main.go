@@ -20,6 +20,7 @@ import (
 	"github.com/serraniel/wokko/backend/internal/app"
 	"github.com/serraniel/wokko/backend/internal/backup"
 	"github.com/serraniel/wokko/backend/internal/config"
+	"github.com/serraniel/wokko/backend/internal/mail"
 	"github.com/serraniel/wokko/backend/internal/store"
 )
 
@@ -162,6 +163,16 @@ func serve(cfg config.Config, log *slog.Logger) error {
 	}
 
 	svc := app.New(st, cfg, log)
+	sender, err := mail.New(cfg.SMTP)
+	if err != nil {
+		return err
+	}
+	if sender != nil {
+		svc.Mail = sender
+		if cfg.PublicURL == "" {
+			log.Warn("SMTP is set up, but mail stays off until PUBLIC_URL is set, because links in mail need the address people use")
+		}
+	}
 	// A newer starter catalog reaches this database here. It runs in one transaction and never
 	// deletes, so a failure only means the update waits for the next start.
 	if _, err := svc.SyncCatalog(ctx); err != nil {

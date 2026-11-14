@@ -11,6 +11,7 @@
 	import { session } from '#lib/session.svelte.ts';
 	import { theme, type ThemeChoice } from '#lib/theme.svelte.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
+	import EmailCard from '#lib/components/EmailCard.svelte';
 
 	let displayName = $state(session.user?.display_name ?? '');
 	let current = $state('');
@@ -122,6 +123,8 @@
 			<button class="btn btn-soft shrink-0">{t('common.save')}</button>
 		</form>
 	</section>
+
+	<EmailCard />
 
 	<section class="card space-y-3 p-4">
 		<div>

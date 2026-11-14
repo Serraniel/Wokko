@@ -74,6 +74,6 @@
 	<div class="space-y-1 text-center text-sm text-muted">
 		<p><a class="font-semibold text-brand" href="/register">{t('auth.no_account')}</a></p>
 		{#if session.status?.allow_public}<p><a class="font-semibold text-brand" href="/gallery">{t('gallery.title')}</a></p>{/if}
-		<p>{t('auth.forgot_hint')}</p>
+		{#if session.status?.mail_enabled}<p><a class="font-semibold text-brand" href="/forgot">{t('forgot.link')}</a></p>{:else}<p>{t('auth.forgot_hint')}</p>{/if}
 	</div>
 </AuthCard>

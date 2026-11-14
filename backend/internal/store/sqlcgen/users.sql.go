@@ -61,6 +61,27 @@ func (q *Queries) CountUsers(ctx context.Context) (int64, error) {
 	return count, err
 }
 
+const createEmailConfirmation = `-- name: CreateEmailConfirmation :exec
+INSERT INTO email_confirmations (token_hash, user_id, email, expires_at) VALUES (?, ?, ?, ?)
+`
+
+type CreateEmailConfirmationParams struct {
+	TokenHash string
+	UserID    int64
+	Email     string
+	ExpiresAt string
+}
+
+func (q *Queries) CreateEmailConfirmation(ctx context.Context, arg CreateEmailConfirmationParams) error {
+	_, err := q.db.ExecContext(ctx, createEmailConfirmation,
+		arg.TokenHash,
+		arg.UserID,
+		arg.Email,
+		arg.ExpiresAt,
+	)
+	return err
+}
+
 const createFriendship = `-- name: CreateFriendship :exec
 INSERT INTO friendships (requester_id, addressee_id) VALUES (?, ?) ON CONFLICT DO NOTHING
 `
@@ -141,7 +162,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) er
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (handle, display_name, password_hash, role, locale, household_id)
-VALUES (?, ?, ?, ?, ?, ?) RETURNING id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup
+VALUES (?, ?, ?, ?, ?, ?) RETURNING id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified
 `
 
 type CreateUserParams struct {
@@ -176,8 +197,19 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UpdatedAt,
 		&i.AssistantNewEntries,
 		&i.NeedsSetup,
+		&i.Email,
+		&i.EmailVerified,
 	)
 	return i, err
+}
+
+const deleteEmailConfirmations = `-- name: DeleteEmailConfirmations :exec
+DELETE FROM email_confirmations WHERE user_id = ?
+`
+
+func (q *Queries) DeleteEmailConfirmations(ctx context.Context, userID int64) error {
+	_, err := q.db.ExecContext(ctx, deleteEmailConfirmations, userID)
+	return err
 }
 
 const deleteExpiredSessions = `-- name: DeleteExpiredSessions :exec
@@ -265,6 +297,27 @@ func (q *Queries) ExtendSession(ctx context.Context, arg ExtendSessionParams) er
 	return err
 }
 
+const getEmailConfirmation = `-- name: GetEmailConfirmation :one
+SELECT token_hash, user_id, email, expires_at FROM email_confirmations WHERE token_hash = ? AND expires_at > ?
+`
+
+type GetEmailConfirmationParams struct {
+	TokenHash string
+	ExpiresAt string
+}
+
+func (q *Queries) GetEmailConfirmation(ctx context.Context, arg GetEmailConfirmationParams) (EmailConfirmation, error) {
+	row := q.db.QueryRowContext(ctx, getEmailConfirmation, arg.TokenHash, arg.ExpiresAt)
+	var i EmailConfirmation
+	err := row.Scan(
+		&i.TokenHash,
+		&i.UserID,
+		&i.Email,
+		&i.ExpiresAt,
+	)
+	return i, err
+}
+
 const getFriendshipBetween = `-- name: GetFriendshipBetween :one
 SELECT id, requester_id, addressee_id, accepted_at, created_at FROM friendships
 WHERE (requester_id = ?1 AND addressee_id = ?2) OR (requester_id = ?2 AND addressee_id = ?1)
@@ -342,7 +395,7 @@ func (q *Queries) GetInviteByHash(ctx context.Context, tokenHash string) (Invite
 }
 
 const getSessionUser = `-- name: GetSessionUser :one
-SELECT sessions.id, sessions.user_id, sessions.token_hash, sessions.expires_at, sessions.created_at, users.id, users.handle, users.display_name, users.password_hash, users.role, users.locale, users.household_id, users.disabled_at, users.created_at, users.updated_at, users.assistant_new_entries, users.needs_setup FROM sessions JOIN users ON users.id = sessions.user_id
+SELECT sessions.id, sessions.user_id, sessions.token_hash, sessions.expires_at, sessions.created_at, users.id, users.handle, users.display_name, users.password_hash, users.role, users.locale, users.household_id, users.disabled_at, users.created_at, users.updated_at, users.assistant_new_entries, users.needs_setup, users.email, users.email_verified FROM sessions JOIN users ON users.id = sessions.user_id
 WHERE sessions.token_hash = ? AND sessions.expires_at > ? AND users.disabled_at IS NULL
 `
 
@@ -377,6 +430,8 @@ func (q *Queries) GetSessionUser(ctx context.Context, arg GetSessionUserParams) 
 		&i.User.UpdatedAt,
 		&i.User.AssistantNewEntries,
 		&i.User.NeedsSetup,
+		&i.User.Email,
+		&i.User.EmailVerified,
 	)
 	return i, err
 }
@@ -393,7 +448,7 @@ func (q *Queries) GetSetting(ctx context.Context, key string) (string, error) {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup FROM users WHERE id = ?
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified FROM users WHERE id = ?
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
@@ -412,12 +467,14 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 		&i.UpdatedAt,
 		&i.AssistantNewEntries,
 		&i.NeedsSetup,
+		&i.Email,
+		&i.EmailVerified,
 	)
 	return i, err
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup FROM users WHERE handle = ?
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified FROM users WHERE handle = ?
 `
 
 func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
@@ -436,6 +493,34 @@ func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, err
 		&i.UpdatedAt,
 		&i.AssistantNewEntries,
 		&i.NeedsSetup,
+		&i.Email,
+		&i.EmailVerified,
+	)
+	return i, err
+}
+
+const getUserByVerifiedEmail = `-- name: GetUserByVerifiedEmail :one
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified FROM users WHERE lower(email) = lower(?) AND email_verified = 1 AND email != ''
+`
+
+func (q *Queries) GetUserByVerifiedEmail(ctx context.Context, lower string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByVerifiedEmail, lower)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.DisplayName,
+		&i.PasswordHash,
+		&i.Role,
+		&i.Locale,
+		&i.HouseholdID,
+		&i.DisabledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.AssistantNewEntries,
+		&i.NeedsSetup,
+		&i.Email,
+		&i.EmailVerified,
 	)
 	return i, err
 }
@@ -530,7 +615,7 @@ func (q *Queries) ListHouseholdInvites(ctx context.Context, householdID sql.Null
 }
 
 const listHouseholdMembers = `-- name: ListHouseholdMembers :many
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup FROM users WHERE household_id = ? ORDER BY handle
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified FROM users WHERE household_id = ? ORDER BY handle
 `
 
 func (q *Queries) ListHouseholdMembers(ctx context.Context, householdID int64) ([]User, error) {
@@ -555,6 +640,8 @@ func (q *Queries) ListHouseholdMembers(ctx context.Context, householdID int64) (
 			&i.UpdatedAt,
 			&i.AssistantNewEntries,
 			&i.NeedsSetup,
+			&i.Email,
+			&i.EmailVerified,
 		); err != nil {
 			return nil, err
 		}
@@ -607,7 +694,7 @@ func (q *Queries) ListRegistrationInvites(ctx context.Context) ([]Invite, error)
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup FROM users ORDER BY handle
+SELECT id, handle, display_name, password_hash, role, locale, household_id, disabled_at, created_at, updated_at, assistant_new_entries, needs_setup, email, email_verified FROM users ORDER BY handle
 `
 
 func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
@@ -632,6 +719,8 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 			&i.UpdatedAt,
 			&i.AssistantNewEntries,
 			&i.NeedsSetup,
+			&i.Email,
+			&i.EmailVerified,
 		); err != nil {
 			return nil, err
 		}
@@ -647,7 +736,7 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 }
 
 const listVisibleUsers = `-- name: ListVisibleUsers :many
-SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at, u.assistant_new_entries, u.needs_setup FROM users u WHERE u.id = ?1 OR u.household_id = ?2
+SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at, u.assistant_new_entries, u.needs_setup, u.email, u.email_verified FROM users u WHERE u.id = ?1 OR u.household_id = ?2
    OR u.id IN (SELECT addressee_id FROM friendships WHERE requester_id = ?1 AND accepted_at IS NOT NULL)
    OR u.id IN (SELECT requester_id FROM friendships WHERE addressee_id = ?1 AND accepted_at IS NOT NULL)
 ORDER BY u.handle
@@ -680,6 +769,8 @@ func (q *Queries) ListVisibleUsers(ctx context.Context, arg ListVisibleUsersPara
 			&i.UpdatedAt,
 			&i.AssistantNewEntries,
 			&i.NeedsSetup,
+			&i.Email,
+			&i.EmailVerified,
 		); err != nil {
 			return nil, err
 		}
@@ -733,6 +824,21 @@ type SetUserDisabledParams struct {
 
 func (q *Queries) SetUserDisabled(ctx context.Context, arg SetUserDisabledParams) error {
 	_, err := q.db.ExecContext(ctx, setUserDisabled, arg.DisabledAt, arg.ID)
+	return err
+}
+
+const setUserEmail = `-- name: SetUserEmail :exec
+UPDATE users SET email = ?, email_verified = ? WHERE id = ?
+`
+
+type SetUserEmailParams struct {
+	Email         string
+	EmailVerified int64
+	ID            int64
+}
+
+func (q *Queries) SetUserEmail(ctx context.Context, arg SetUserEmailParams) error {
+	_, err := q.db.ExecContext(ctx, setUserEmail, arg.Email, arg.EmailVerified, arg.ID)
 	return err
 }
 
