@@ -465,6 +465,16 @@ type Nutrient struct {
 type FoodNutrition struct {
 	PieceGrams *float64          `json:"piece_grams"`
 	Values     map[int64]float64 `json:"values"`
+	// Source says where the values came from, such as a dataset entry or "package label".
+	Source string `json:"source"`
+}
+
+// NutritionSuggestion is a food from the dataset shipped with Wokko, with values per 100 g.
+type NutritionSuggestion struct {
+	Source      string            `json:"source"`
+	Ref         int64             `json:"ref"`
+	Description string            `json:"description"`
+	Values      map[int64]float64 `json:"values"`
 }
 
 type RecipeNutrient struct {

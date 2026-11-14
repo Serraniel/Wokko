@@ -171,6 +171,14 @@ func (s *Server) planningRoutes(m *http.ServeMux, p string) {
 		out, err := s.svc.GetFoodNutrition(r.Context(), id)
 		return reply(w, out, err)
 	}))
+	m.HandleFunc("GET "+p+"/foods/{id}/nutrition-suggestions", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+		id, err := pathID(r, "id")
+		if err != nil {
+			return err
+		}
+		out, err := s.svc.NutritionSuggestions(r.Context(), v, id, r.URL.Query().Get("q"))
+		return reply(w, out, err)
+	}))
 	m.HandleFunc("PUT "+p+"/foods/{id}/nutrition", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
 		id, err := pathID(r, "id")
 		if err != nil {

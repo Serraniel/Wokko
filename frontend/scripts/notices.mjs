@@ -14,7 +14,7 @@ const out = [
 	'',
 	'Data',
 	'====',
-	'Starting nutrition values: USDA FoodData Central, SR Legacy (2018-04). Public domain (CC0 1.0).',
+	'Starting nutrition values and the built-in nutrition lookup: USDA FoodData Central, SR Legacy (2018-04). Public domain (CC0 1.0).',
 	'',
 	'Frontend',
 	'========'

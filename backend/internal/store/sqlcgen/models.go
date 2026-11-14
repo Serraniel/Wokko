@@ -86,12 +86,13 @@ type CookLog struct {
 }
 
 type Food struct {
-	ID            int64
-	DefaultUnitID sql.NullInt64
-	CreatedBy     sql.NullInt64
-	CreatedAt     string
-	UpdatedAt     string
-	PieceGrams    sql.NullFloat64
+	ID              int64
+	DefaultUnitID   sql.NullInt64
+	CreatedBy       sql.NullInt64
+	CreatedAt       string
+	UpdatedAt       string
+	PieceGrams      sql.NullFloat64
+	NutritionSource string
 }
 
 type FoodAlias struct {
