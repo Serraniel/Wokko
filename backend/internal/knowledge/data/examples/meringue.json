@@ -1,0 +1,23 @@
+{
+ "steps": [
+  {
+   "text": "Eiweiß steif schlagen, Zucker einrieseln lassen und bei 100 °C zwei Stunden trocknen.",
+   "minutes": 120,
+   "ingredients": [
+    {
+     "names": [
+      "Eiweiß"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 200,
+     "unit": "g"
+    }
+   ]
+  }
+ ]
+}

@@ -1081,7 +1081,6 @@
      "haddock",
      "sea bass",
      "pike-perch",
-     "fish sauce",
      "fish stock",
      "roe",
      "caviar",
@@ -1119,7 +1118,6 @@
      "schellfisch",
      "wolfsbarsch",
      "zander",
-     "fischsauce",
      "fischfond",
      "fischfilet",
      "rogen",
@@ -1163,6 +1161,28 @@
     "de": [
      "dashi",
      "dashibrühe"
+    ]
+   },
+   "allergens": [
+    "fish"
+   ],
+   "not_vegetarian": true
+  },
+  {
+   "id": "fish.sauce",
+   "names": {
+    "en": "Fish sauce",
+    "de": "Fischsauce"
+   },
+   "words": {
+    "en": [
+     "fish sauce",
+     "nam pla",
+     "nuoc mam"
+    ],
+    "de": [
+     "fischsauce",
+     "fischsoße"
     ]
    },
    "allergens": [
@@ -2944,7 +2964,6 @@
    "words": {
     "en": [
      "sugar",
-     "brown sugar",
      "powdered sugar",
      "icing sugar",
      "caster sugar",
@@ -2953,12 +2972,33 @@
     ],
     "de": [
      "zucker",
-     "brauner zucker",
      "puderzucker",
      "rohrzucker",
      "feinzucker",
      "vanillezucker",
      "kristallzucker"
+    ]
+   }
+  },
+  {
+   "id": "sweet.sugar.brown",
+   "names": {
+    "en": "Brown sugar",
+    "de": "Brauner Zucker"
+   },
+   "words": {
+    "en": [
+     "brown sugar",
+     "dark brown sugar",
+     "light brown sugar",
+     "muscovado",
+     "demerara"
+    ],
+    "de": [
+     "brauner zucker",
+     "rohrohrzucker",
+     "muscovado",
+     "demerara"
     ]
    }
   },

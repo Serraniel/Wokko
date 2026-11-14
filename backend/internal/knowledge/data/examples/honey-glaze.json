@@ -1,0 +1,38 @@
+{
+ "steps": [
+  {
+   "text": "Honig, Senf und Sojasauce verrühren und die Möhren damit im Ofen glasieren.",
+   "minutes": 25,
+   "ingredients": [
+    {
+     "names": [
+      "Honig"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Senf"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Sojasauce"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Möhren"
+     ],
+     "amount": 500,
+     "unit": "g"
+    }
+   ]
+  }
+ ]
+}

@@ -54,20 +54,32 @@ func (p *Pack) Analyze(r Recipe, locale string) Result {
 	for _, st := range r.Steps {
 		x.text = append(x.text, " "+text.Normalize(st.Text)+" ")
 	}
-	res := Result{Sauces: []Finding{}, Techniques: []Finding{}, Problems: []Finding{}, Safety: []Finding{}, Allergens: []FoundAllergen{}, Unclassified: []string{}, Diet: Diet{Because: []string{}}}
+	res := Result{Sauces: []Finding{}, Techniques: []Finding{}, Problems: []Finding{}, Safety: []Finding{}, Substitutes: []Finding{}, Allergens: []FoundAllergen{}, Unclassified: []string{}, Diet: Diet{Because: []string{}}}
 	if len(r.Steps) > 0 {
 		all := span{0, len(r.Steps) - 1}
 		for i := range p.Entries {
 			e := &p.Entries[i]
-			if e.Check != "" || !x.entry(e.ID, all) {
+			if e.Check != "" {
 				continue
 			}
-			f := Finding{ID: e.ID, Kind: e.Kind, Parent: e.Parent, Severity: e.Severity, Title: e.Names.pick(locale), Text: e.Explain.pick(locale), Tips: []string{}, Steps: []int{}, Sources: e.Sources}
+			var foods []string
+			if e.For != "" {
+				foods = x.foodsOf(e.For)
+				if len(foods) == 0 || (!e.Detect.empty() && !x.entry(e.ID, all)) {
+					continue
+				}
+			} else if !x.entry(e.ID, all) {
+				continue
+			}
+			f := Finding{ID: e.ID, Kind: e.Kind, Parent: e.Parent, Severity: e.Severity, Title: e.Names.pick(locale), Text: e.Explain.pick(locale), Tips: []string{}, Steps: []int{}, Foods: []string{}, Sources: e.Sources}
+			if foods != nil {
+				f.Foods = foods
+			}
 			for _, t := range e.Tips {
 				f.Tips = append(f.Tips, t.pick(locale))
 			}
 			for k := range r.Steps {
-				if x.entry(e.ID, span{k, k}) {
+				if e.For == "" && x.entry(e.ID, span{k, k}) {
 					f.Steps = append(f.Steps, k+1)
 				}
 			}
@@ -78,6 +90,8 @@ func (p *Pack) Analyze(r Recipe, locale string) Result {
 				res.Techniques = append(res.Techniques, f)
 			case "safety":
 				res.Safety = append(res.Safety, f)
+			case "substitution":
+				res.Substitutes = append(res.Substitutes, f)
 			default:
 				res.Problems = append(res.Problems, f)
 			}
@@ -231,7 +245,7 @@ func (p *Pack) timeCheck(r Recipe, locale string) []Finding {
 	}
 	return []Finding{{ID: e.ID, Kind: e.Kind, Severity: e.Severity, Title: e.Names.pick(locale),
 		Text: strings.NewReplacer("{steps}", fmt.Sprint(sum), "{total}", fmt.Sprint(total)).Replace(e.Explain.pick(locale)),
-		Tips: []string{}, Steps: []int{}, Sources: e.Sources}}
+		Tips: []string{}, Steps: []int{}, Foods: []string{}, Sources: e.Sources}}
 }
 
 // foods works out allergens and diets from the classes of every ingredient.
@@ -349,4 +363,24 @@ func hasDietClass(p *Pack, classes []string) bool {
 		}
 	}
 	return false
+}
+
+// foodsOf names the recipe's ingredients of a class, each once.
+func (x *run) foodsOf(class string) []string {
+	var out []string
+	for _, st := range x.r.Steps {
+		for _, ing := range st.Ingredients {
+			for _, c := range ing.Classes {
+				if isA(c, class) && len(ing.Names) > 0 && !contains(out, ing.Names[0]) {
+					out = append(out, ing.Names[0])
+				}
+			}
+		}
+	}
+	return out
+}
+
+// empty is true for a condition that says nothing.
+func (c Cond) empty() bool {
+	return c.Class == "" && len(c.Words) == 0 && c.Entry == "" && len(c.All) == 0 && len(c.Any) == 0 && c.Not == nil && len(c.Then) == 0 && c.MinMinutes == 0
 }

@@ -52,7 +52,7 @@ func TestPackIsComplete(t *testing.T) {
 	}
 	used := map[string]bool{}
 	for _, e := range p.Entries {
-		if e.Kind != "sauce" && e.Kind != "technique" && e.Kind != "problem" && e.Kind != "safety" {
+		if e.Kind != "sauce" && e.Kind != "technique" && e.Kind != "problem" && e.Kind != "safety" && e.Kind != "substitution" {
 			t.Errorf("%s: unknown kind %q", e.ID, e.Kind)
 		}
 		if (e.Kind == "problem" || e.Kind == "safety") && e.Severity != "info" && e.Severity != "warning" {
@@ -60,6 +60,12 @@ func TestPackIsComplete(t *testing.T) {
 		}
 		if !strings.HasPrefix(e.ID, e.Kind+".") {
 			t.Errorf("%s: the id should start with %s.", e.ID, e.Kind)
+		}
+		if (e.Kind == "substitution") != (e.For != "") {
+			t.Errorf("%s: substitutions, and only they, name the class they replace", e.ID)
+		}
+		if e.For != "" && p.classes[e.For] == nil {
+			t.Errorf("%s: unknown class %s", e.ID, e.For)
 		}
 		if e.Parent != "" && p.entries[e.Parent] == nil {
 			t.Errorf("%s: unknown parent %s", e.ID, e.Parent)
@@ -124,7 +130,7 @@ func TestEntriesMatchTheirExamples(t *testing.T) {
 	for name, r := range p.Examples {
 		res := p.Analyze(r, "en")
 		found := map[string]bool{}
-		for _, list := range [][]Finding{res.Sauces, res.Techniques, res.Problems, res.Safety} {
+		for _, list := range [][]Finding{res.Sauces, res.Techniques, res.Problems, res.Safety, res.Substitutes} {
 			for _, f := range list {
 				found[f.ID] = true
 			}

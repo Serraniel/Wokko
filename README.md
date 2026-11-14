@@ -136,6 +136,7 @@ Every recipe page has a **Kitchen knowledge** section, worked out by Wokko itsel
 - **techniques**, such as a roux, a liaison or a cold-start stock, with tips
 - **likely problems**, such as yolks that may curdle or salting before reducing
 - **food safety notes**, such as raw egg or dried kidney beans that aren't boiled hard
+- **substitutes** for ingredients in the recipe, such as buttermilk, egg in baking or gelatine
 
 Assistants can read the same through MCP. For a food Wokko doesn't recognise by its name, whoever may edit it can set its kind under **Ingredients**, such as cream or a spice.
 
