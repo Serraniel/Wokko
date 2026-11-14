@@ -1037,7 +1037,7 @@ func (s *Service) GetFoodNutrition(ctx context.Context, id int64) (FoodNutrition
 	if err != nil {
 		return FoodNutrition{}, err
 	}
-	out := FoodNutrition{Values: map[int64]float64{}, Source: f.NutritionSource}
+	out := FoodNutrition{Values: map[int64]float64{}, Source: f.NutritionSource, Unchecked: f.NutritionUnchecked != 0}
 	if f.PieceGrams.Valid {
 		g := f.PieceGrams.Float64
 		out.PieceGrams = &g
@@ -1079,6 +1079,10 @@ func (s *Service) SetFoodNutrition(ctx context.Context, v Viewer, id int64, in F
 			return invalid("too_long", "The source is too long")
 		}
 		if err := q.SetFoodNutritionSource(ctx, sqlcgen.SetFoodNutritionSourceParams{NutritionSource: source, ID: id}); err != nil {
+			return err
+		}
+		// A person saved them, so they count as checked.
+		if err := q.SetFoodNutritionUnchecked(ctx, sqlcgen.SetFoodNutritionUncheckedParams{NutritionUnchecked: 0, ID: id}); err != nil {
 			return err
 		}
 		if err := q.ClearFoodNutrients(ctx, id); err != nil {

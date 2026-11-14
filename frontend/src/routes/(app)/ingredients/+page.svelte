@@ -92,6 +92,7 @@
 	let pieceGrams = $state('');
 	let nutritionLoaded = $state(false);
 	let nutritionSource = $state('');
+	let nutritionUnchecked = $state(false);
 	// Looking values up in the dataset shipped with Wokko. Nothing leaves the server.
 	let lookupOpen = $state(false);
 	let lookupQuery = $state('');
@@ -136,6 +137,7 @@
 			nutrition = Object.fromEntries(Object.entries(n.values).map(([k, v]) => [Number(k), formatNumber(v)]));
 			pieceGrams = n.piece_grams ? formatNumber(n.piece_grams) : '';
 			nutritionSource = n.source;
+			nutritionUnchecked = n.unchecked;
 			nutritionLoaded = true;
 		} catch (err) {
 			formError = errorText(err);
@@ -151,6 +153,7 @@
 		}
 		try {
 			await api.put(`/foods/${editing.id}/nutrition`, { piece_grams: parseAmount(pieceGrams), values, source: nutritionSource });
+			nutritionUnchecked = false;
 			toasts.show(t('catalog.nutrition_saved'));
 		} catch (err) {
 			formError = errorText(err);
@@ -318,6 +321,7 @@
 		<details class="mt-4 border-t border-line pt-3">
 			<summary class="min-h-9 cursor-pointer font-medium">{t('catalog.nutrition')}</summary>
 			<fieldset class="mt-2 space-y-2" disabled={readOnly}>
+				{#if nutritionUnchecked}<p class="rounded-xl bg-warn-soft p-3 text-sm text-warn" role="status">{t('catalog.nutrition_unchecked')}</p>{/if}
 				{#if !readOnly}
 					<div class="space-y-2 rounded-xl bg-surface-2 p-3">
 						<p class="hint !mt-0">{t('catalog.lookup_hint')}</p>

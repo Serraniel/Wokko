@@ -455,6 +455,10 @@ export interface FoodNutrition {
    * Source says where the values came from, such as a dataset entry or "package label".
    */
   source: string;
+  /**
+   * Unchecked is true while an assistant filled values and no person has saved them since.
+   */
+  unchecked: boolean;
 }
 /**
  * NutritionSuggestion is a food from the dataset shipped with Wokko, with values per 100 g.

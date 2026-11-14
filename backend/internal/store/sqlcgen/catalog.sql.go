@@ -127,7 +127,7 @@ func (q *Queries) CountUnits(ctx context.Context, q_ string) (int64, error) {
 }
 
 const createFood = `-- name: CreateFood :one
-INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source
+INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked
 `
 
 type CreateFoodParams struct {
@@ -146,6 +146,7 @@ func (q *Queries) CreateFood(ctx context.Context, arg CreateFoodParams) (Food, e
 		&i.UpdatedAt,
 		&i.PieceGrams,
 		&i.NutritionSource,
+		&i.NutritionUnchecked,
 	)
 	return i, err
 }
@@ -288,7 +289,7 @@ func (q *Queries) FindUnitIDByName(ctx context.Context, name string) (int64, err
 }
 
 const getFood = `-- name: GetFood :one
-SELECT id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source FROM foods WHERE id = ?
+SELECT id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked FROM foods WHERE id = ?
 `
 
 func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
@@ -302,6 +303,7 @@ func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
 		&i.UpdatedAt,
 		&i.PieceGrams,
 		&i.NutritionSource,
+		&i.NutritionUnchecked,
 	)
 	return i, err
 }

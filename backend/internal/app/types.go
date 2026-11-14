@@ -467,6 +467,8 @@ type FoodNutrition struct {
 	Values     map[int64]float64 `json:"values"`
 	// Source says where the values came from, such as a dataset entry or "package label".
 	Source string `json:"source"`
+	// Unchecked is true while an assistant filled values and no person has saved them since.
+	Unchecked bool `json:"unchecked"`
 }
 
 // NutritionSuggestion is a food from the dataset shipped with Wokko, with values per 100 g.
