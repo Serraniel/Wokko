@@ -1,6 +1,6 @@
 # Kitchen knowledge: built-in recipe insights without an AI model
 
-Status: first version built (food classes, allergens, diets, sauces, techniques, problem and safety rules, the recipe page section and the MCP tool). Admin-assigned food classes and editor hints are still open. Tracking issue: #105.
+Status: built. Food classes (word lists and admin-set), allergens, diets, sauces, techniques, problem and safety rules, substitutions, the recipe page section, hints while editing and the MCP tool. More knowledge arrives through contributions. Tracking issue: #105.
 
 ## Goal
 
