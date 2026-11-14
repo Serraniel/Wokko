@@ -160,3 +160,33 @@ func TestFoodClassesCanBeSetForUnknownFoods(t *testing.T) {
 		t.Errorf("merged: %+v", twin.KnowledgeClasses)
 	}
 }
+
+func TestDraftInsightsWhileEditing(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	var before app.Page[app.Food]
+	admin.ok("GET", v1+"/foods", nil, 200).decode(t, &before)
+	draft := app.RecipeInput{Name: "Draft", Steps: []app.StepInput{
+		{Instruction: "Whisk the yolks into the hot stock and bring to the boil.", Ingredients: []app.IngredientInput{{FoodName: "egg yolk", Amount: ptr(2.0)}, {FoodName: "vegetable broth", Amount: ptr(500.0)}, {FoodName: "Wokkopulver"}}},
+	}}
+	var res knowledge.Result
+	admin.ok("POST", v1+"/recipes/insights", draft, 200).decode(t, &res)
+	if !slices.Contains(findingIDs(res.Problems), "problem.liaison_boil") {
+		t.Errorf("problems: %v", findingIDs(res.Problems))
+	}
+	if !slices.Equal(res.Unclassified, []string{"Wokkopulver"}) {
+		t.Errorf("unclassified: %v", res.Unclassified)
+	}
+	// Nothing was saved: no recipe, and no new food.
+	var after app.Page[app.Food]
+	admin.ok("GET", v1+"/foods", nil, 200).decode(t, &after)
+	if after.Total != before.Total {
+		t.Errorf("foods: %d -> %d", before.Total, after.Total)
+	}
+	var recipes app.Page[app.RecipeSummary]
+	admin.ok("GET", v1+"/recipes", nil, 200).decode(t, &recipes)
+	if recipes.Total != 0 {
+		t.Errorf("recipes: %d", recipes.Total)
+	}
+	e.anon().wantCode("POST", v1+"/recipes/insights", draft, 401, "unauthorized")
+}

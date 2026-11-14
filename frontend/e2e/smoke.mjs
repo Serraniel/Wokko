@@ -290,6 +290,8 @@ await step('kitchen knowledge explains a recipe', async () => {
   await p.waitForSelector('text=Vegetarian'); await p.waitForSelector('text=Allergens:');
   await p.click('summary:has-text("Hollandaise")'); await p.waitForSelector('text=above about 65 °C');
   await p.locator('#insights-title').scrollIntoViewIfNeeded(); await shot('37-kitchen-knowledge');
+  await p.click('a[aria-label="Edit"]'); await p.waitForURL(/edit$/); await p.waitForSelector('#hints-title'); await p.waitForSelector('text=Allergens: Eggs, Milk');
+  await p.locator('#hints-title').scrollIntoViewIfNeeded(); await shot('39-editor-hints'); await p.click('a:has-text("Cancel")');
 });
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {
