@@ -142,8 +142,14 @@ WHERE CAST(sqlc.arg(q) AS TEXT) = '' OR EXISTS (SELECT 1 FROM keyword_names n WH
 -- name: FindFoodIDByName :one
 SELECT food_id FROM food_names WHERE name = sqlc.arg(name) COLLATE NOCASE OR plural = sqlc.arg(name) COLLATE NOCASE LIMIT 1;
 
+-- name: FindFoodIDByAlias :one
+SELECT food_id FROM food_aliases WHERE search_name = sqlc.arg(search_name) ORDER BY food_id LIMIT 1;
+
 -- name: FindUnitIDByName :one
 SELECT unit_id FROM unit_names WHERE name = sqlc.arg(name) COLLATE NOCASE OR plural = sqlc.arg(name) COLLATE NOCASE OR abbreviation = sqlc.arg(name) COLLATE NOCASE LIMIT 1;
+
+-- name: FindUnitIDByAlias :one
+SELECT unit_id FROM unit_aliases WHERE search_name = sqlc.arg(search_name) ORDER BY unit_id LIMIT 1;
 
 -- name: ListAllUnitSpellings :many
 SELECT name, plural, abbreviation FROM unit_names;
