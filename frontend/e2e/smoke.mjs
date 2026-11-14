@@ -229,6 +229,10 @@ await step('import another app\'s file, check first, undo', async () => {
   // The old address still works.
   await p.goto(base + '/import'); await p.waitForURL('**/integrations'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
+  // From New recipe too: a file with one recipe opens it right away.
+  await p.goto(base + '/recipes/new'); await p.click('button:has-text("Import a file instead")');
+  await p.setInputFiles('#import-file', { name: 'one.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify([{ '@type': 'Recipe', name: 'Aus Datei zwei', recipeIngredient: ['1 Salz'], recipeInstructions: ['Salzen.'] }])) });
+  await p.click('button:has-text("Import 1 recipe")'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('h1:has-text("Aus Datei zwei")');
   await p.goto(base + '/integrations'); await p.click('label:has-text("All I can see")'); await p.waitForSelector('text=To move a whole server'); await p.locator('#export-title').scrollIntoViewIfNeeded(); await shot('36-export-all');
   for (const label of ['For another Wokko', 'For other apps']) {
     const href = await p.getAttribute(`#export-title ~ div a:has-text("${label}")`, 'href'); if (!href.includes('scope=all')) throw new Error('export scope: ' + href);

@@ -1,16 +1,19 @@
 <script lang="ts">
-	import { Download, FileUp, Link2 } from '@lucide/svelte';
+	import { ClipboardPaste, Download, FileUp, Link2 } from '@lucide/svelte';
 	import { onMount, untrack } from 'svelte';
 	import { api, errorText } from '#lib/api/client.ts';
 	import type { ImportedRecipe } from '#lib/api/types.gen.ts';
 	import { t } from '#lib/i18n/index.svelte.ts';
 	import ErrorNote from './ErrorNote.svelte';
+	import FileImport from './FileImport.svelte';
 
 	let { onimport, sharedUrl = '', sharedText = '' }: { onimport: (draft: ImportedRecipe) => void; sharedUrl?: string; sharedText?: string } = $props();
 
 	let url = $state(untrack(() => sharedUrl));
 	let text = $state(untrack(() => sharedText));
-	let pasting = $state(untrack(() => !sharedUrl && !!sharedText));
+	// How the recipe comes in: from a link, pasted text, or a recipe file.
+	let mode = $state<'link' | 'text' | 'file'>(untrack(() => (!sharedUrl && sharedText ? 'text' : 'link')));
+	const pasting = $derived(mode === 'text');
 	let working = $state(false);
 	let error = $state('');
 
@@ -41,7 +44,10 @@
 		<h2 id="import-title" class="flex items-center gap-2 font-semibold"><Download size={18} class="text-brand" />{t('import.title')}</h2>
 		<p class="text-sm text-muted">{t('import.hint')}</p>
 	</div>
-	{#if pasting}
+	{#if mode === 'file'}
+		<p class="hint !mt-0">{t('fileimport.from_file_hint')}</p>
+		<FileImport openAfter />
+	{:else if pasting}
 		<div>
 			<label class="label" for="import-text">{t('import.text_label')}</label>
 			<textarea id="import-text" class="input resize-y" rows="7" bind:value={text} placeholder={t('import.text_placeholder')}></textarea>
@@ -64,8 +70,9 @@
 		</div>
 	{/if}
 	<ErrorNote text={error} />
-	<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { pasting = !pasting; error = ''; }}>
-		<Link2 size={15} />{pasting ? t('import.link_instead') : t('import.paste_instead')}
-	</button>
-	<a class="ml-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href="/integrations"><FileUp size={15} />{t('import.from_file')}</a>
+	<div class="flex flex-wrap gap-x-4">
+		{#if mode !== 'link'}<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { mode = 'link'; error = ''; }}><Link2 size={15} />{t('import.link_instead')}</button>{/if}
+		{#if mode !== 'text'}<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { mode = 'text'; error = ''; }}><ClipboardPaste size={15} />{t('import.paste_instead')}</button>{/if}
+		{#if mode !== 'file'}<button type="button" class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" onclick={() => { mode = 'file'; error = ''; }}><FileUp size={15} />{t('import.file_instead')}</button>{/if}
+	</div>
 </section>
