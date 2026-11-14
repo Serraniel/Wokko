@@ -9,6 +9,8 @@
 	import { toasts } from '#lib/toast.svelte.ts';
 
 	let password = $state('');
+	// The same page sets the first password of an account an admin created.
+	const setup = page.url.searchParams.get('setup') === '1';
 	let error = $state('');
 	let busy = $state(false);
 
@@ -19,7 +21,7 @@
 		try {
 			await api.post('/auth/reset', { token: page.url.searchParams.get('token') ?? '', password });
 			session.signedOut();
-			toasts.show(t('reset.done'));
+			toasts.show(setup ? t('reset.setup_done') : t('reset.done'));
 			await goto('/login', { replaceState: true });
 		} catch (err) {
 			error = errorText(err);
@@ -29,7 +31,7 @@
 	}
 </script>
 
-<AuthCard title={t('reset.title')}>
+<AuthCard title={setup ? t('reset.setup_title') : t('reset.title')} subtitle={setup ? t('reset.setup_hint') : undefined}>
 	<form class="space-y-4" onsubmit={submit}>
 		<ErrorNote text={error} />
 		<div>

@@ -150,6 +150,11 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST "+p+"/household/leave", s.user(s.leaveHousehold))
 
 	m.HandleFunc("GET "+p+"/admin/users", s.user(s.adminListUsers))
+	m.HandleFunc("POST "+p+"/admin/users", s.user(func(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+		return decodeAnd(w, r, 201, func(in app.NewAccountInput) (app.NewAccount, error) {
+			return s.svc.CreateAccount(r.Context(), v, in)
+		})
+	}))
 	m.HandleFunc("PATCH "+p+"/admin/users/{id}", s.user(s.adminUpdateUser))
 	m.HandleFunc("DELETE "+p+"/admin/users/{id}", s.user(s.adminDeleteUser))
 	m.HandleFunc("POST "+p+"/admin/users/{id}/reset", s.user(s.adminResetLink))

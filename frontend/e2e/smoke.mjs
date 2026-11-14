@@ -345,6 +345,14 @@ await step('a recipe used as an ingredient links to its recipe', async () => {
   const list = await (await p.request.get(base + '/api/v1/shopping')).json(); const hen = list.find((i) => i.food.name === 'Suppenhuhn');
   if (!hen || Math.abs(hen.amount - 0.3) > 1e-9 || list.some((i) => i.food.name === 'Wokko-Brühe')) throw new Error('cooked stock on the list: ' + JSON.stringify(list.map((i) => [i.food.name, i.amount])));
 });
+await step('an admin creates an account and the person sets their own password', async () => {
+  await p.goto(base + '/admin'); await p.click('summary:has-text("Create account")'); await p.fill('#new-handle', 'oma'); await p.fill('#new-name', 'Oma');
+  await p.click('form button:has-text("Create account")'); await p.waitForSelector('input[aria-label="Setup link for oma"]'); await shot('41-create-account');
+  const setup = await p.inputValue('input[aria-label="Setup link for oma"]'); await p.waitForSelector('text=waiting for setup');
+  const fresh = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US' }); const o = await fresh.newPage();
+  await o.goto(setup); await o.waitForSelector('text=Welcome to Wokko'); await o.fill('#password', 'omas-own-secret'); await o.click('form button'); await o.waitForURL('**/login**');
+  await o.fill('#handle', 'oma'); await o.fill('#password', 'omas-own-secret'); await o.click('form button:has-text("Log in")'); await o.waitForURL('**/recipes'); await fresh.close();
+});
 await step('a used or expired photo upload link explains itself', async () => {
   await p.goto(base + '/upload/not-a-real-token'); await p.waitForSelector('text=This link no longer works'); await p.waitForSelector('text=Ask the assistant for a new one');
 });

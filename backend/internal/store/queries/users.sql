@@ -73,8 +73,11 @@ DELETE FROM sessions WHERE user_id = ?;
 DELETE FROM sessions WHERE expires_at <= ?;
 
 -- name: CreateInvite :one
-INSERT INTO invites (token_hash, created_by, household_id, max_uses, expires_at)
-VALUES (?, ?, ?, ?, ?) RETURNING *;
+INSERT INTO invites (token_hash, created_by, household_id, max_uses, expires_at, note)
+VALUES (?, ?, ?, ?, ?, ?) RETURNING *;
+
+-- name: SetUserNeedsSetup :exec
+UPDATE users SET needs_setup = ? WHERE id = ?;
 
 -- name: GetInviteByHash :one
 SELECT * FROM invites WHERE token_hash = ?;
