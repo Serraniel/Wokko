@@ -86,3 +86,67 @@ func TestRecipeInsights(t *testing.T) {
 		t.Errorf("mcp: %+v", viaMCP.Allergens)
 	}
 }
+
+func TestFoodClassesCanBeSetForUnknownFoods(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	var food app.Food
+	admin.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "de", Name: "Wokkocreme"}}}, 201).decode(t, &food)
+	if food.KnowledgeClasses == nil || food.RecognizedClasses == nil || len(food.KnowledgeClasses) != 0 || len(food.RecognizedClasses) != 0 {
+		t.Fatalf("unknown food: %+v", food)
+	}
+	in := simpleRecipe("Dessert")
+	in.Steps = []app.StepInput{{Instruction: "Serve.", Ingredients: []app.IngredientInput{{FoodID: food.ID, Amount: ptr(100.0)}}}}
+	r := admin.createRecipe(in)
+	var res knowledge.Result
+	admin.ok("GET", path("/recipes/%d/insights", r.ID), nil, 200).decode(t, &res)
+	if !slices.Equal(res.Unclassified, []string{"Wokkocreme"}) {
+		t.Fatalf("before: %+v", res)
+	}
+
+	// Someone who may edit the food says what it is.
+	classes := []string{"dairy.cream"}
+	admin.ok("PUT", path("/foods/%d", food.ID), app.FoodInput{Translations: food.Translations, KnowledgeClasses: &classes}, 200).decode(t, &food)
+	if !slices.Equal(food.KnowledgeClasses, classes) {
+		t.Fatalf("set: %+v", food)
+	}
+	admin.ok("GET", path("/recipes/%d/insights", r.ID), nil, 200).decode(t, &res)
+	if len(res.Unclassified) != 0 || !slices.Equal(allergenIDs(res), []string{"milk"}) {
+		t.Errorf("after: %+v", res)
+	}
+	// Leaving the classes out keeps them; unknown ones are refused.
+	admin.ok("PUT", path("/foods/%d", food.ID), app.FoodInput{Translations: food.Translations}, 200).decode(t, &food)
+	if !slices.Equal(food.KnowledgeClasses, classes) {
+		t.Errorf("kept: %+v", food)
+	}
+	bad := []string{"dairy.unicorn"}
+	admin.wantCode("PUT", path("/foods/%d", food.ID), app.FoodInput{Translations: food.Translations, KnowledgeClasses: &bad}, 400, "unknown_class")
+	other := e.newUser(admin, "other")
+	other.wantCode("PUT", path("/foods/%d", food.ID), app.FoodInput{Translations: food.Translations, KnowledgeClasses: &bad}, 403, "forbidden")
+
+	// What Wokko recognises by name is shown too, and the list to choose from is translated.
+	broth := foodNamed(t, admin, "chicken broth")
+	if !slices.Equal(broth.RecognizedClasses, []string{"liquid.stock.poultry"}) {
+		t.Errorf("recognised: %+v", broth.RecognizedClasses)
+	}
+	var list []knowledge.ClassInfo
+	admin.ok("GET", v1+"/knowledge/classes?lang=de", nil, 200).decode(t, &list)
+	found := false
+	for _, c := range list {
+		if c.ID == "dairy.cream" {
+			found = c.Name == "Sahne" && slices.Equal(c.Allergens, []string{"milk"}) && c.NotVegan && !c.NotVegetarian
+		}
+	}
+	if !found || len(list) < 100 {
+		t.Errorf("classes: %d, cream ok %v", len(list), found)
+	}
+
+	// Merging keeps the classes with the surviving food.
+	var twin app.Food
+	admin.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "de", Name: "Wokkocreme 2"}}}, 201).decode(t, &twin)
+	admin.ok("POST", v1+"/foods/merge", app.MergeInput{SourceID: food.ID, TargetID: twin.ID}, 200)
+	admin.ok("GET", path("/foods/%d", twin.ID), nil, 200).decode(t, &twin)
+	if !slices.Equal(twin.KnowledgeClasses, classes) {
+		t.Errorf("merged: %+v", twin.KnowledgeClasses)
+	}
+}

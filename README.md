@@ -137,7 +137,7 @@ Every recipe page has a **Kitchen knowledge** section, worked out by Wokko itsel
 - **likely problems**, such as yolks that may curdle or salting before reducing
 - **food safety notes**, such as raw egg or dried kidney beans that aren't boiled hard
 
-Assistants can read the same through MCP.
+Assistants can read the same through MCP. For a food Wokko doesn't recognise by its name, whoever may edit it can set its kind under **Ingredients**, such as cream or a spice.
 
 The knowledge is curated data in `backend/internal/knowledge/data/`, reviewed by people and shipped with each release. Each entry comes with example recipes that the tests check. To contribute some, open an issue with the **Kitchen knowledge** template: a transcript, notes or your own experience is enough. It gets rewritten in Wokko's own words before it ships.
 

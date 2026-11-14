@@ -125,6 +125,7 @@ func (s *Server) routes(m *http.ServeMux) {
 	m.HandleFunc("POST "+p+"/foods", s.user(s.createFood))
 	m.HandleFunc("POST "+p+"/foods/merge", s.user(s.mergeFoods))
 	m.HandleFunc("GET "+p+"/foods/{id}", s.user(s.getFood))
+	m.HandleFunc("GET "+p+"/knowledge/classes", s.user(s.knowledgeClasses))
 	m.HandleFunc("PUT "+p+"/foods/{id}", s.user(s.updateFood))
 	m.HandleFunc("DELETE "+p+"/foods/{id}", s.user(s.deleteFood))
 	m.HandleFunc("GET "+p+"/units", s.user(s.listUnits))

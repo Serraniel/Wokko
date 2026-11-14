@@ -60,8 +60,12 @@ type Food struct {
 	DefaultUnit  *UnitRef      `json:"default_unit"`
 	Translations []Translation `json:"translations"`
 	Aliases      []string      `json:"aliases"`
-	Uses         int64         `json:"uses"`
-	CanEdit      bool          `json:"can_edit"`
+	// KnowledgeClasses were set by someone and replace RecognizedClasses, which Wokko's kitchen
+	// knowledge finds from the food's names.
+	KnowledgeClasses  []string `json:"knowledge_classes"`
+	RecognizedClasses []string `json:"recognized_classes"`
+	Uses              int64    `json:"uses"`
+	CanEdit           bool     `json:"can_edit"`
 }
 
 type Unit struct {
@@ -76,6 +80,8 @@ type FoodInput struct {
 	Translations  []Translation `json:"translations"`
 	DefaultUnitID *int64        `json:"default_unit_id"`
 	Aliases       []string      `json:"aliases"`
+	// KnowledgeClasses replaces the set classes. Leaving it out keeps them.
+	KnowledgeClasses *[]string `json:"knowledge_classes"`
 }
 
 type UnitInput struct {

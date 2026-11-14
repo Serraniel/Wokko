@@ -37,7 +37,7 @@ func (s *Service) PublicRecipeInsights(ctx context.Context, locale string, id in
 }
 
 func (s *Service) insights(ctx context.Context, r Recipe, locale string) (knowledge.Result, error) {
-	names, err := s.allFoodNames(ctx, s.Store.Queries, r)
+	names, set, err := s.allFoodNames(ctx, s.Store.Queries, r)
 	if err != nil {
 		return knowledge.Result{}, err
 	}
@@ -48,7 +48,8 @@ func (s *Service) insights(ctx context.Context, r Recipe, locale string) (knowle
 		k := knowledge.Step{Minutes: st.Minutes}
 		for _, ing := range st.Ingredients {
 			parts = append(parts, ing.Note)
-			out := knowledge.Ingredient{Names: append([]string{ing.Food.Name}, names[ing.Food.ID]...), Amount: ing.Amount}
+			// Classes someone set for the food win over what its names suggest.
+			out := knowledge.Ingredient{Names: append([]string{ing.Food.Name}, names[ing.Food.ID]...), Classes: set[ing.Food.ID], Amount: ing.Amount}
 			if ing.Unit != nil {
 				out.Unit = ing.Unit.Name
 			}
@@ -62,7 +63,7 @@ func (s *Service) insights(ctx context.Context, r Recipe, locale string) (knowle
 
 // allFoodNames collects every name a recipe's foods have, in all languages and as aliases, so a
 // food is recognised whatever language it was entered in.
-func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe) (map[int64][]string, error) {
+func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe) (map[int64][]string, map[int64][]string, error) {
 	var ids []int64
 	seen := map[int64]bool{}
 	for _, st := range r.Steps {
@@ -73,13 +74,13 @@ func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe
 			}
 		}
 	}
-	out := map[int64][]string{}
+	out, set := map[int64][]string{}, map[int64][]string{}
 	if len(ids) == 0 {
-		return out, nil
+		return out, set, nil
 	}
 	names, err := q.ListFoodNames(ctx, ids)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	for _, n := range names {
 		out[n.FoodID] = append(out[n.FoodID], n.Name)
@@ -89,10 +90,19 @@ func (s *Service) allFoodNames(ctx context.Context, q *sqlcgen.Queries, r Recipe
 	}
 	aliases, err := q.ListFoodAliases(ctx, ids)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	for _, a := range aliases {
 		out[a.FoodID] = append(out[a.FoodID], a.Alias)
 	}
-	return out, nil
+	classes, err := q.ListFoodKnowledgeClasses(ctx, ids)
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, c := range classes {
+		if s.Knowledge.HasClass(c.Class) {
+			set[c.FoodID] = append(set[c.FoodID], c.Class)
+		}
+	}
+	return out, set, nil
 }

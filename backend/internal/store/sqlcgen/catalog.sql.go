@@ -26,6 +26,20 @@ func (q *Queries) AddFoodAlias(ctx context.Context, arg AddFoodAliasParams) erro
 	return err
 }
 
+const addFoodKnowledgeClass = `-- name: AddFoodKnowledgeClass :exec
+INSERT INTO food_knowledge_classes (food_id, class) VALUES (?, ?) ON CONFLICT DO NOTHING
+`
+
+type AddFoodKnowledgeClassParams struct {
+	FoodID int64
+	Class  string
+}
+
+func (q *Queries) AddFoodKnowledgeClass(ctx context.Context, arg AddFoodKnowledgeClassParams) error {
+	_, err := q.db.ExecContext(ctx, addFoodKnowledgeClass, arg.FoodID, arg.Class)
+	return err
+}
+
 const addUnitAlias = `-- name: AddUnitAlias :exec
 INSERT INTO unit_aliases (unit_id, alias, search_name) VALUES (?, ?, ?) ON CONFLICT DO NOTHING
 `
@@ -38,6 +52,15 @@ type AddUnitAliasParams struct {
 
 func (q *Queries) AddUnitAlias(ctx context.Context, arg AddUnitAliasParams) error {
 	_, err := q.db.ExecContext(ctx, addUnitAlias, arg.UnitID, arg.Alias, arg.SearchName)
+	return err
+}
+
+const clearFoodKnowledgeClasses = `-- name: ClearFoodKnowledgeClasses :exec
+DELETE FROM food_knowledge_classes WHERE food_id = ?
+`
+
+func (q *Queries) ClearFoodKnowledgeClasses(ctx context.Context, foodID int64) error {
+	_, err := q.db.ExecContext(ctx, clearFoodKnowledgeClasses, foodID)
 	return err
 }
 
@@ -463,6 +486,43 @@ func (q *Queries) ListFoodDefaults(ctx context.Context, ids []int64) ([]ListFood
 	return items, nil
 }
 
+const listFoodKnowledgeClasses = `-- name: ListFoodKnowledgeClasses :many
+SELECT food_id, class FROM food_knowledge_classes WHERE food_id IN (/*SLICE:ids*/?) ORDER BY class
+`
+
+func (q *Queries) ListFoodKnowledgeClasses(ctx context.Context, ids []int64) ([]FoodKnowledgeClass, error) {
+	query := listFoodKnowledgeClasses
+	var queryParams []interface{}
+	if len(ids) > 0 {
+		for _, v := range ids {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:ids*/?", strings.Repeat(",?", len(ids))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
+	}
+	rows, err := q.db.QueryContext(ctx, query, queryParams...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []FoodKnowledgeClass{}
+	for rows.Next() {
+		var i FoodKnowledgeClass
+		if err := rows.Scan(&i.FoodID, &i.Class); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listFoodNames = `-- name: ListFoodNames :many
 SELECT food_id, locale, name, plural, search_name FROM food_names WHERE food_id IN (/*SLICE:ids*/?)
 `
@@ -689,6 +749,20 @@ type MoveFoodDefaultsToUnitParams struct {
 
 func (q *Queries) MoveFoodDefaultsToUnit(ctx context.Context, arg MoveFoodDefaultsToUnitParams) error {
 	_, err := q.db.ExecContext(ctx, moveFoodDefaultsToUnit, arg.Target, arg.Source)
+	return err
+}
+
+const moveFoodKnowledgeClasses = `-- name: MoveFoodKnowledgeClasses :exec
+UPDATE OR IGNORE food_knowledge_classes SET food_id = ?1 WHERE food_id = ?2
+`
+
+type MoveFoodKnowledgeClassesParams struct {
+	Target int64
+	Source int64
+}
+
+func (q *Queries) MoveFoodKnowledgeClasses(ctx context.Context, arg MoveFoodKnowledgeClassesParams) error {
+	_, err := q.db.ExecContext(ctx, moveFoodKnowledgeClasses, arg.Target, arg.Source)
 	return err
 }
 

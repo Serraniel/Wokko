@@ -847,3 +847,7 @@ func (s *Server) resolveCatalogSuggestion(w http.ResponseWriter, r *http.Request
 	}
 	return reply(w, map[string]bool{"ok": true}, s.svc.ResolveCatalogSuggestion(r.Context(), v, id, in.Take))
 }
+
+func (s *Server) knowledgeClasses(w http.ResponseWriter, r *http.Request, v app.Viewer) error {
+	return reply(w, s.svc.Knowledge.ClassList(v.Locale), nil)
+}

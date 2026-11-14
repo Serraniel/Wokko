@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { Plus, Search } from '@lucide/svelte';
+	import { Plus, Search, X } from '@lucide/svelte';
 	import { api, errorText, query } from '#lib/api/client.ts';
+	import type { ClassInfo } from '#lib/api/knowledge.gen.ts';
 	import type { Food, FoodNutrition, Nutrient, Page, Translation, Unit } from '#lib/api/types.gen.ts';
 	import Combobox, { type Option } from '#lib/components/Combobox.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
@@ -24,6 +25,26 @@
 	let editing = $state<Entry | null>(null);
 	let rows = $state<Translation[]>([]);
 	let aliases = $state('');
+	// Kitchen knowledge: the kinds of food someone set, and the list to choose from.
+	let classes = $state<string[]>([]);
+	let classList = $state<ClassInfo[]>([]);
+	let classPick = $state('');
+	const className = (id: string) => {
+		const c = classList.find((x) => x.id === id);
+		return c ? (c.parent ? `${c.name} (${c.parent})` : c.name) : id;
+	};
+	async function loadClasses() {
+		if (classList.length) return;
+		try {
+			classList = await api.get<ClassInfo[]>(`/knowledge/classes${query({ lang: currentLocale() })}`);
+		} catch {
+			// Without the list, the field just stays empty; saving keeps what is set.
+		}
+	}
+	function addClass() {
+		if (classPick && !classes.includes(classPick)) classes = [...classes, classPick];
+		classPick = '';
+	}
 	let formError = $state('');
 	let busy = $state(false);
 	let mergeTarget = $state('');
@@ -106,6 +127,8 @@
 		if (kind === 'foods') loadNutrition(e.id);
 		rows = buildRows(e.translations);
 		aliases = e.aliases.join(', ');
+		classes = 'knowledge_classes' in e ? [...(e.knowledge_classes ?? [])] : [];
+		if (kind === 'foods') loadClasses();
 		formError = '';
 		mergeTarget = '';
 		mergeId = 0;
@@ -122,7 +145,8 @@
 		const body = {
 			translations: rows.filter((r) => r.name.trim()),
 			aliases: aliases.split(',').map((a) => a.trim()).filter(Boolean),
-			default_unit_id: editing && 'default_unit' in editing ? (editing.default_unit?.id ?? null) : null
+			default_unit_id: editing && 'default_unit' in editing ? (editing.default_unit?.id ?? null) : null,
+			...(kind === 'foods' ? { knowledge_classes: classes } : {})
 		};
 		try {
 			if (editing) await api.put(`/${kind}/${editing.id}`, body);
@@ -223,6 +247,34 @@
 				<input id="aliases" class="input" bind:value={aliases} />
 				<p class="hint">{t('catalog.aliases_hint')}</p>
 			</div>
+			{#if kind === 'foods'}
+				<div>
+					<label class="label" for="food-class">{t('catalog.kinds')}</label>
+					{#if classes.length}
+						<ul class="mb-2 flex flex-wrap gap-2">
+							{#each classes as c (c)}
+								<li class="chip bg-surface-2">{className(c)}{#if !readOnly}<button type="button" class="-mr-1 rounded-full p-0.5 hover:bg-surface" aria-label={t('catalog.kinds_remove', { kind: className(c) })} onclick={() => (classes = classes.filter((x) => x !== c))}><X size={14} /></button>{/if}</li>
+							{/each}
+						</ul>
+					{/if}
+					{#if !readOnly}
+						<div class="flex gap-2">
+							<select id="food-class" class="input" bind:value={classPick} onchange={addClass}>
+								<option value="">{t('catalog.kinds_add')}</option>
+								{#each classList.filter((c) => !classes.includes(c.id)) as c (c.id)}<option value={c.id}>{c.parent ? `${c.name} (${c.parent})` : c.name}</option>{/each}
+							</select>
+						</div>
+					{/if}
+					<p class="hint">
+						{#if editing && 'recognized_classes' in editing && editing.recognized_classes?.length}
+							{t('catalog.kinds_recognized', { kinds: editing.recognized_classes.map(className).join(', ') })}
+						{:else}
+							{t('catalog.kinds_unknown')}
+						{/if}
+						{t('catalog.kinds_hint')}
+					</p>
+				</div>
+			{/if}
 		</fieldset>
 		{#if !readOnly}<button class="btn btn-primary w-full" disabled={busy}>{t('common.save')}</button>{/if}
 	</form>

@@ -49,3 +49,14 @@ export interface Result {
   diet: Diet;
   unclassified: string[]; // foods Wokko knows nothing about
 }
+/**
+ * ClassInfo describes a food class for people choosing one.
+ */
+export interface ClassInfo {
+  id: string;
+  name: string;
+  parent: string | null; // the parent class's name, for telling similar ones apart
+  allergens: string[];
+  not_vegetarian: boolean;
+  not_vegan: boolean;
+}
