@@ -3,6 +3,7 @@ package api_test
 import (
 	"encoding/json"
 	"math"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -318,4 +319,41 @@ func TestAddingTheSameShoppingItemAgainChangesNothing(t *testing.T) {
 		t.Fatalf("items: %+v", items)
 	}
 	admin.wantCode("POST", v1+"/shopping", app.ShoppingItemInput{Line: "x", ClientRef: strings.Repeat("r", 101)}, 400, "bad_request")
+}
+
+// TestNutritionSuggestionsComeFromTheShippedDataset: a food is looked up offline under all its
+// names, and the chosen entry is kept as the values' source.
+func TestNutritionSuggestionsComeFromTheShippedDataset(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	r := simpleRecipe("Toast")
+	r.Steps[1].Ingredients = []app.IngredientInput{{FoodName: "Kochschinken"}}
+	rec := admin.createRecipe(r)
+	ham := rec.Steps[1].Ingredients[0].Food.ID
+
+	var none []app.NutritionSuggestion
+	admin.ok("GET", path("/foods/%d/nutrition-suggestions", ham), nil, 200).decode(t, &none)
+	if len(none) != 0 {
+		t.Fatalf("a German name alone finds nothing in an English dataset: %+v", none)
+	}
+	var got []app.NutritionSuggestion
+	admin.ok("GET", path("/foods/%d/nutrition-suggestions?q=cooked+ham", ham), nil, 200).decode(t, &got)
+	if len(got) == 0 || !strings.HasPrefix(got[0].Description, "Ham") || got[0].Values[1] <= 0 || got[0].Source == "" || got[0].Ref == 0 {
+		t.Fatalf("search: %+v", got)
+	}
+	// With an English translation, the food's own names are enough.
+	admin.ok("PUT", path("/foods/%d", ham), map[string]any{"translations": []app.Translation{{Locale: "en", Name: "Kochschinken"}, {Locale: "de", Name: "Kochschinken"}}, "aliases": []string{"cooked ham"}}, 200)
+	admin.ok("GET", path("/foods/%d/nutrition-suggestions", ham), nil, 200).decode(t, &got)
+	if len(got) == 0 || !strings.HasPrefix(got[0].Description, "Ham") {
+		t.Fatalf("by alias: %+v", got)
+	}
+
+	source := got[0].Source + ", FDC " + strconv.FormatInt(got[0].Ref, 10)
+	var saved app.FoodNutrition
+	admin.ok("PUT", path("/foods/%d/nutrition", ham), app.FoodNutrition{Values: got[0].Values, Source: source}, 200).decode(t, &saved)
+	if saved.Source != source || saved.Values[1] != got[0].Values[1] {
+		t.Fatalf("saved: %+v", saved)
+	}
+	admin.ok("GET", v1+"/foods/999999/nutrition-suggestions", nil, 404)
+	e.anon().ok("GET", path("/foods/%d/nutrition-suggestions", ham), nil, 401)
 }

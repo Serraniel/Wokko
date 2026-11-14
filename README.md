@@ -11,7 +11,7 @@ Your recipes, on your own server. A self-hosted recipe manager built to be simpl
 - **Offline:** the shopping list, this week's plan and recent recipes keep working without a connection, on HTTPS
 - **Meal plans and shopping:** plan the week, add it to a shared shopping list, and sort that list by aisle for each shop
 - **Cooking mode and printing:** one step at a time in big text, with timers and tick-off ingredients, also on shared links with no account. Any recipe prints cleanly
-- **Recipe books and nutrition:** group recipes, and see estimates per serving from public-domain USDA data
+- **Recipe books and nutrition:** group recipes, and see estimates per serving from public-domain USDA data. Values for any food can be looked up in that data, built in and offline
 - **kitshn:** use the kitshn mobile app, including creating and editing
 - **AI assistants, if you want them:** connect Claude, ChatGPT or another MCP app. Wokko itself never calls an AI
 - **Passkeys:** log in with a fingerprint or device PIN, on HTTPS or localhost

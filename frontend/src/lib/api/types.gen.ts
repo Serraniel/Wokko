@@ -451,6 +451,19 @@ export interface Nutrient {
 export interface FoodNutrition {
   piece_grams: number /* float64 */ | null;
   values: { [key: number /* int64 */]: number /* float64 */};
+  /**
+   * Source says where the values came from, such as a dataset entry or "package label".
+   */
+  source: string;
+}
+/**
+ * NutritionSuggestion is a food from the dataset shipped with Wokko, with values per 100 g.
+ */
+export interface NutritionSuggestion {
+  source: string;
+  ref: number /* int64 */;
+  description: string;
+  values: { [key: number /* int64 */]: number /* float64 */};
 }
 export interface RecipeNutrient {
   nutrient: Nutrient;

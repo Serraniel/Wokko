@@ -293,6 +293,16 @@ await step('a kind of food can be set for one Wokko doesn\'t recognise', async (
   await p.click('text=Smoked unicorn dust'); await p.waitForSelector('li.chip:has-text("Spice")'); await shot('38-kind-of-food');
   await p.keyboard.press('Escape');
 });
+await step('nutrition values looked up offline fill only empty fields', async () => {
+  await p.goto(base + '/ingredients'); await p.fill('input[type=search]', 'unicorn'); await p.click('text=Smoked unicorn dust');
+  await p.click('summary:has-text("Nutrition per 100 g")'); await p.fill('#nutrient-1', '123');
+  await p.fill('input[aria-label="Search, such as cooked ham"]', 'cheddar'); await p.click('button:has-text("Look up")');
+  await p.waitForSelector('button:has-text("Cheese, cheddar")'); await shot('39-nutrition-lookup'); await p.locator('button:has-text("Cheese, cheddar")').first().click();
+  if (await p.inputValue('#nutrient-1') !== '123') throw new Error('a typed value was overwritten');
+  if (!(await p.inputValue('#nutrient-7'))) throw new Error('empty field not filled');
+  if (!(await p.inputValue('#nutrition-source')).startsWith('USDA FoodData Central SR Legacy, FDC')) throw new Error('source not set');
+  await p.click('details button:has-text("Save")'); await p.waitForSelector('text=Nutrition saved'); await p.keyboard.press('Escape');
+});
 await step('kitchen knowledge explains a recipe', async () => {
   const ing = (food_name, amount, unit_name = '') => ({ food_name, unit_name, amount, note: '', food_id: 0, unit_id: 0 });
   const res = await p.request.post(base + '/api/v1/recipes', { data: { name: 'Asparagus with hollandaise', description: '', work_minutes: 20, wait_minutes: 0, servings: 2, servings_text: '', source_url: '', visibility: 'private', keywords: [], base_version: 0, steps: [

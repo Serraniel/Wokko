@@ -2,7 +2,7 @@
 	import { Plus, Search, X } from '@lucide/svelte';
 	import { api, errorText, query } from '#lib/api/client.ts';
 	import type { ClassInfo } from '#lib/api/knowledge.gen.ts';
-	import type { Food, FoodNutrition, Nutrient, Page, Translation, Unit } from '#lib/api/types.gen.ts';
+	import type { Food, FoodNutrition, Nutrient, NutritionSuggestion, Page, Translation, Unit } from '#lib/api/types.gen.ts';
 	import Combobox, { type Option } from '#lib/components/Combobox.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
@@ -91,16 +91,51 @@
 	let nutrition = $state<Record<number, string>>({});
 	let pieceGrams = $state('');
 	let nutritionLoaded = $state(false);
+	let nutritionSource = $state('');
+	// Looking values up in the dataset shipped with Wokko. Nothing leaves the server.
+	let lookupOpen = $state(false);
+	let lookupQuery = $state('');
+	let lookupBusy = $state(false);
+	let suggestions = $state<NutritionSuggestion[] | null>(null);
+
+	async function lookUp() {
+		if (!editing) return;
+		lookupOpen = true;
+		lookupBusy = true;
+		try {
+			suggestions = await api.get<NutritionSuggestion[]>(`/foods/${editing.id}/nutrition-suggestions${query({ q: lookupQuery.trim() || undefined })}`);
+		} catch (err) {
+			formError = errorText(err);
+		} finally {
+			lookupBusy = false;
+		}
+	}
+
+	/** Fills only the empty fields, so nothing typed in is overwritten. */
+	function useSuggestion(s: NutritionSuggestion) {
+		for (const n of nutrients) {
+			const v = s.values[n.id];
+			if (v !== undefined && !(nutrition[n.id] ?? '').trim()) nutrition[n.id] = formatNumber(v);
+		}
+		nutritionSource = `${s.source}, FDC ${s.ref}: ${s.description}`;
+		lookupOpen = false;
+		suggestions = null;
+	}
 
 	async function loadNutrition(id: number) {
 		nutritionLoaded = false;
 		nutrition = {};
 		pieceGrams = '';
+		nutritionSource = '';
+		lookupOpen = false;
+		lookupQuery = '';
+		suggestions = null;
 		try {
 			if (!nutrients.length) nutrients = await api.get<Nutrient[]>('/nutrients');
 			const n = await api.get<FoodNutrition>(`/foods/${id}/nutrition`);
 			nutrition = Object.fromEntries(Object.entries(n.values).map(([k, v]) => [Number(k), formatNumber(v)]));
 			pieceGrams = n.piece_grams ? formatNumber(n.piece_grams) : '';
+			nutritionSource = n.source;
 			nutritionLoaded = true;
 		} catch (err) {
 			formError = errorText(err);
@@ -115,7 +150,7 @@
 			if (parsed !== null) values[Number(k)] = parsed;
 		}
 		try {
-			await api.put(`/foods/${editing.id}/nutrition`, { piece_grams: parseAmount(pieceGrams), values });
+			await api.put(`/foods/${editing.id}/nutrition`, { piece_grams: parseAmount(pieceGrams), values, source: nutritionSource });
 			toasts.show(t('catalog.nutrition_saved'));
 		} catch (err) {
 			formError = errorText(err);
@@ -283,6 +318,31 @@
 		<details class="mt-4 border-t border-line pt-3">
 			<summary class="min-h-9 cursor-pointer font-medium">{t('catalog.nutrition')}</summary>
 			<fieldset class="mt-2 space-y-2" disabled={readOnly}>
+				{#if !readOnly}
+					<div class="space-y-2 rounded-xl bg-surface-2 p-3">
+						<p class="hint !mt-0">{t('catalog.lookup_hint')}</p>
+						<form class="flex gap-2" onsubmit={(e) => { e.preventDefault(); lookUp(); }}>
+							<input class="input min-w-0 flex-1" bind:value={lookupQuery} placeholder={t('catalog.lookup_placeholder')} aria-label={t('catalog.lookup_placeholder')} />
+							<button class="btn btn-soft shrink-0" disabled={lookupBusy}><Search size={16} />{t('catalog.lookup')}</button>
+						</form>
+						{#if lookupOpen && suggestions}
+							{#if suggestions.length}
+								<ul class="max-h-64 divide-y divide-line overflow-y-auto text-sm">
+									{#each suggestions as s (s.ref)}
+										<li>
+											<button type="button" class="flex w-full flex-col items-start gap-0.5 py-2 text-left hover:text-brand" onclick={() => useSuggestion(s)}>
+												<span class="font-medium">{s.description}</span>
+												<span class="text-xs text-muted">{nutrients.filter((n) => s.values[n.id] !== undefined && [1, 2, 4, 7].includes(n.id)).map((n) => `${n.name} ${formatNumber(s.values[n.id])} ${n.unit}`).join(' · ')}</span>
+											</button>
+										</li>
+									{/each}
+								</ul>
+							{:else}
+								<p class="text-sm text-muted">{t('catalog.lookup_none')}</p>
+							{/if}
+						{/if}
+					</div>
+				{/if}
 				<div class="grid grid-cols-2 gap-2">
 					{#each nutrients as n (n.id)}
 						<div>
@@ -294,6 +354,10 @@
 				<div>
 					<label class="label" for="piece-grams">{t('catalog.piece_grams')}</label>
 					<input id="piece-grams" class="input" inputmode="decimal" bind:value={pieceGrams} />
+				</div>
+				<div>
+					<label class="label" for="nutrition-source">{t('catalog.nutrition_source')}</label>
+					<input id="nutrition-source" class="input" bind:value={nutritionSource} placeholder={t('catalog.nutrition_source_placeholder')} />
 				</div>
 				{#if !readOnly}<button type="button" class="btn btn-soft w-full" onclick={saveNutrition}>{t('common.save')}</button>{/if}
 			</fieldset>

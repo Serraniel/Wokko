@@ -182,6 +182,9 @@ ON CONFLICT (food_id, nutrient_id) DO UPDATE SET per_100g = excluded.per_100g;
 -- name: MoveFoodNutrients :exec
 UPDATE OR IGNORE food_nutrients SET food_id = sqlc.arg(target) WHERE food_id = sqlc.arg(source);
 
+-- name: SetFoodNutritionSource :exec
+UPDATE foods SET nutrition_source = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
+
 -- name: SetFoodPieceGrams :exec
 UPDATE foods SET piece_grams = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
 

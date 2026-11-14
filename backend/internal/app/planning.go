@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/serraniel/wokko/backend/internal/importer"
+	"github.com/serraniel/wokko/backend/internal/nutrition"
 	"github.com/serraniel/wokko/backend/internal/store/sqlcgen"
 )
 
@@ -1036,7 +1037,7 @@ func (s *Service) GetFoodNutrition(ctx context.Context, id int64) (FoodNutrition
 	if err != nil {
 		return FoodNutrition{}, err
 	}
-	out := FoodNutrition{Values: map[int64]float64{}}
+	out := FoodNutrition{Values: map[int64]float64{}, Source: f.NutritionSource}
 	if f.PieceGrams.Valid {
 		g := f.PieceGrams.Float64
 		out.PieceGrams = &g
@@ -1073,6 +1074,13 @@ func (s *Service) SetFoodNutrition(ctx context.Context, v Viewer, id int64, in F
 		if err := q.SetFoodPieceGrams(ctx, sqlcgen.SetFoodPieceGramsParams{PieceGrams: piece, ID: id}); err != nil {
 			return err
 		}
+		source := strings.TrimSpace(in.Source)
+		if len([]rune(source)) > 300 {
+			return invalid("too_long", "The source is too long")
+		}
+		if err := q.SetFoodNutritionSource(ctx, sqlcgen.SetFoodNutritionSourceParams{NutritionSource: source, ID: id}); err != nil {
+			return err
+		}
 		if err := q.ClearFoodNutrients(ctx, id); err != nil {
 			return err
 		}
@@ -1090,6 +1098,37 @@ func (s *Service) SetFoodNutrition(ctx context.Context, v Viewer, id int64, in F
 		return FoodNutrition{}, err
 	}
 	return s.GetFoodNutrition(ctx, id)
+}
+
+// NutritionSuggestions looks a food up in the dataset shipped with Wokko, offline. Without a
+// search of its own it uses all of the food's names and aliases, so a German food with an English
+// translation still finds its match.
+func (s *Service) NutritionSuggestions(ctx context.Context, v Viewer, id int64, search string) ([]NutritionSuggestion, error) {
+	names := []string{search}
+	if strings.TrimSpace(search) == "" {
+		f, err := s.GetFood(ctx, v, id)
+		if err != nil {
+			return nil, err
+		}
+		names = []string{f.Name, f.Plural}
+		for _, tr := range f.Translations {
+			names = append(names, tr.Name, tr.Plural)
+		}
+		names = append(names, f.Aliases...)
+	} else if _, err := s.Store.Queries.GetFood(ctx, id); isNoRows(err) {
+		return nil, ErrNotFound
+	} else if err != nil {
+		return nil, err
+	}
+	items, err := nutrition.Search(names, 8)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]NutritionSuggestion, len(items))
+	for i, it := range items {
+		out[i] = NutritionSuggestion{Source: nutrition.Source, Ref: it.ID, Description: it.Description, Values: it.Values}
+	}
+	return out, nil
 }
 
 // pieceUnitID is the catalog's "piece". Having no unit at all counts as pieces too.

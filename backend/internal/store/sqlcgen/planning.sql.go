@@ -1153,6 +1153,20 @@ func (q *Queries) SetFoodNutrient(ctx context.Context, arg SetFoodNutrientParams
 	return err
 }
 
+const setFoodNutritionSource = `-- name: SetFoodNutritionSource :exec
+UPDATE foods SET nutrition_source = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
+`
+
+type SetFoodNutritionSourceParams struct {
+	NutritionSource string
+	ID              int64
+}
+
+func (q *Queries) SetFoodNutritionSource(ctx context.Context, arg SetFoodNutritionSourceParams) error {
+	_, err := q.db.ExecContext(ctx, setFoodNutritionSource, arg.NutritionSource, arg.ID)
+	return err
+}
+
 const setFoodPieceGrams = `-- name: SetFoodPieceGrams :exec
 UPDATE foods SET piece_grams = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
 `
