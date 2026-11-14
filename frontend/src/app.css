@@ -160,6 +160,18 @@ h3 {
 	input[type='file']:not(:disabled) {
 		cursor: pointer;
 	}
+	/* Behind a sheet or the command palette, the page blurs a little as well as dimming, so the
+	   eye stays on the dialog. People who ask for less transparency only get the dimming. */
+	dialog::backdrop {
+		-webkit-backdrop-filter: blur(4px);
+		backdrop-filter: blur(4px);
+	}
+	@media (prefers-reduced-transparency: reduce) {
+		dialog::backdrop {
+			-webkit-backdrop-filter: none;
+			backdrop-filter: none;
+		}
+	}
 }
 
 @layer components {
