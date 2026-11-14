@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"slices"
 	"strings"
@@ -15,6 +16,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/serraniel/wokko/backend/internal/app"
+	"github.com/serraniel/wokko/backend/internal/importer"
 )
 
 func enableMCP(t *testing.T, admin *client) {
@@ -244,12 +246,12 @@ func TestMCPToolsWorkAndStayWithinTheOwnersRights(t *testing.T) {
 	var nutrition app.RecipeNutrition
 	call(t, s, "get_recipe_nutrition", map[string]any{"id": made.ID}, &nutrition)
 	var foods app.Page[app.Food]
-	call(t, s, "list_foods", map[string]any{"query": "onion"}, &foods)
+	call(t, s, "search_foods", map[string]any{"query": "onion"}, &foods)
 	if foods.Total == 0 {
 		t.Fatal("foods")
 	}
-	call(t, s, "list_units", map[string]any{"query": "gram"}, nil)
-	call(t, s, "list_tags", map[string]any{}, nil)
+	call(t, s, "search_units", map[string]any{"query": "gram"}, nil)
+	call(t, s, "search_tags", map[string]any{}, nil)
 
 	// Deleting goes to the trash, and the person can see what happened.
 	call(t, s, "delete_recipe", map[string]any{"id": made.ID}, nil)
@@ -465,4 +467,117 @@ func TestOAuthFlowForAssistants(t *testing.T) {
 	if res.StatusCode != 302 || !strings.HasPrefix(res.Header.Get("Location"), "/oauth/consent?client_id=") {
 		t.Fatalf("authorize: %d %s", res.StatusCode, res.Header.Get("Location"))
 	}
+}
+
+func TestMCPAsksBeforeAddingFoodsAndUnits(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	enableMCP(t, admin)
+	var herb app.Food
+	admin.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "de", Name: "Wokkokraut"}}}, 201).decode(t, &herb)
+	s := connect(t, e, newToken(t, admin, "write"))
+	recipe := func(food string, extra map[string]any) map[string]any {
+		args := map[string]any{"name": "Test " + food, "steps": []map[string]any{{"instruction": "Mix.", "ingredients": []map[string]any{{"food": food, "unit": "g", "amount": 5}}}}}
+		for k, v := range extra {
+			args[k] = v
+		}
+		return args
+	}
+
+	// By default the person confirms new entries, and the refusal points at close matches.
+	msg := callFails(t, s, "create_recipe", recipe("Wokkokrauts", nil))
+	if !strings.Contains(msg, "new_entries_need_confirmation") || !strings.Contains(msg, fmt.Sprintf("food_id %d", herb.ID)) {
+		t.Fatalf("ask: %s", msg)
+	}
+	var made app.Recipe
+	call(t, s, "create_recipe", recipe("Wokkobeere", map[string]any{"confirmed_new": []string{"wokkobeere"}}), &made)
+	if made.Steps[0].Ingredients[0].Food.Name != "Wokkobeere" {
+		t.Fatalf("confirmed: %+v", made.Steps[0].Ingredients[0])
+	}
+
+	// "never" refuses even a confirmed name, but known entries still work.
+	admin.ok("PATCH", v1+"/me", map[string]any{"assistant_new_entries": "never"}, 200)
+	if msg := callFails(t, s, "create_recipe", recipe("Wokkonuss", map[string]any{"confirmed_new": []string{"Wokkonuss"}})); !strings.Contains(msg, "new_entries_not_allowed") {
+		t.Fatalf("never: %s", msg)
+	}
+	call(t, s, "create_recipe", map[string]any{"name": "Known", "steps": []map[string]any{{"instruction": "Mix.", "ingredients": []map[string]any{{"food_id": herb.ID}, {"food": "wokkobeere"}}}}}, nil)
+
+	admin.ok("PATCH", v1+"/me", map[string]any{"assistant_new_entries": "allow"}, 200)
+	call(t, s, "create_recipe", recipe("Wokkonuss", nil), nil)
+	var me app.User
+	admin.ok("GET", v1+"/me", nil, 200).decode(t, &me)
+	if me.AssistantNewEntries != "allow" {
+		t.Fatalf("me: %+v", me)
+	}
+	admin.wantCode("PATCH", v1+"/me", map[string]any{"assistant_new_entries": "sometimes"}, 400, "bad_new_entries")
+}
+
+func TestMCPUsesTheWholeCatalog(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	enableMCP(t, admin)
+	e.svc.Fetcher = importer.NewFetcher("test", true)
+	photo := testPNG(t)
+	site := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/png")
+		_, _ = w.Write(photo)
+	}))
+	defer site.Close()
+	s := connect(t, e, newToken(t, admin, "write"))
+
+	// One call looks up a whole ingredient list.
+	var found []struct {
+		Query string     `json:"query"`
+		Total int64      `json:"total"`
+		Items []app.Food `json:"items"`
+	}
+	call(t, s, "search_foods", map[string]any{"queries": []string{"onion", "nothing like this"}}, &found)
+	if len(found) != 2 || found[0].Total == 0 || found[1].Total != 0 {
+		t.Fatalf("search: %+v", found)
+	}
+	onion := found[0].Items[0]
+	var units []struct {
+		Items []app.Unit `json:"items"`
+	}
+	call(t, s, "search_units", map[string]any{"queries": []string{"g"}}, &units)
+	gram := units[0].Items[0]
+
+	// Ids, the serving label and a photo are all available.
+	var made app.Recipe
+	call(t, s, "create_recipe", map[string]any{"name": "Bread", "servings": 1, "servings_text": "loaf", "steps": []map[string]any{{"instruction": "Bake.", "ingredients": []map[string]any{{"food_id": onion.ID, "unit_id": gram.ID, "amount": 50}}}}}, &made)
+	got := made.Steps[0].Ingredients[0]
+	if made.ServingsText != "loaf" || got.Food.ID != onion.ID || got.Unit == nil || got.Unit.ID != gram.ID {
+		t.Fatalf("made: %+v %+v", made, got)
+	}
+	var withPhoto app.Recipe
+	call(t, s, "set_recipe_photo", map[string]any{"id": made.ID, "image_url": site.URL + "/p.png"}, &withPhoto)
+	if withPhoto.PhotoURL == "" {
+		t.Fatalf("photo: %+v", withPhoto)
+	}
+
+	// A known food learns another name, without losing the ones it has.
+	var named app.Food
+	call(t, s, "add_food_names", map[string]any{"id": onion.ID, "aliases": []string{"Wokkozwiebel"}, "translations": []map[string]any{{"locale": "fr", "name": "oignon"}}}, &named)
+	if !slices.Contains(named.Aliases, "Wokkozwiebel") || len(named.Translations) <= len(onion.Translations) {
+		t.Fatalf("named: %+v", named)
+	}
+	call(t, s, "search_foods", map[string]any{"queries": []string{"wokkozwiebel"}}, &found)
+	if found[0].Total != 1 || found[0].Items[0].ID != onion.ID {
+		t.Fatalf("alias search: %+v", found)
+	}
+	var unit app.Unit
+	call(t, s, "add_unit_names", map[string]any{"id": gram.ID, "aliases": []string{"Wokkogramm"}}, &unit)
+	if !slices.Contains(unit.Aliases, "Wokkogramm") {
+		t.Fatalf("unit: %+v", unit)
+	}
+
+	// Someone who may not edit an entry can't name it either.
+	other := e.newUser(admin, "other")
+	theirs := connect(t, e, newToken(t, other, "write"))
+	if msg := callFails(t, theirs, "add_food_names", map[string]any{"id": onion.ID, "aliases": []string{"x"}}); !strings.Contains(msg, "forbidden") {
+		t.Fatalf("other: %s", msg)
+	}
+	// Photos come only from public addresses.
+	e.svc.Fetcher = importer.NewFetcher("test", false)
+	callFails(t, s, "set_recipe_photo", map[string]any{"id": made.ID, "image_url": site.URL + "/p.png"})
 }

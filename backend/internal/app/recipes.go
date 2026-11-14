@@ -468,16 +468,8 @@ func (s *Service) resolveFood(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 		return ing.FoodID, nil
 	}
 	name := strings.TrimSpace(ing.FoodName)
-	if id, err := q.FindFoodIDByName(ctx, name); err == nil {
-		return id, nil
-	} else if !isNoRows(err) {
-		return 0, err
-	}
-	// Another spelling of a known food, such as one kept after a merge, is that food.
-	if id, err := q.FindFoodIDByAlias(ctx, text.Normalize(name)); err == nil {
-		return id, nil
-	} else if !isNoRows(err) {
-		return 0, err
+	if id, ok, err := lookupFood(ctx, q, name); err != nil || ok {
+		return id, err
 	}
 	f, err := q.CreateFood(ctx, sqlcgen.CreateFoodParams{CreatedBy: nullID(v.id())})
 	if err != nil {
@@ -500,15 +492,8 @@ func (s *Service) resolveUnit(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 	if name == "" {
 		return sql.NullInt64{}, nil
 	}
-	if id, err := q.FindUnitIDByName(ctx, name); err == nil {
-		return sql64(id), nil
-	} else if !isNoRows(err) {
-		return sql.NullInt64{}, err
-	}
-	if id, err := q.FindUnitIDByAlias(ctx, text.Normalize(name)); err == nil {
-		return sql64(id), nil
-	} else if !isNoRows(err) {
-		return sql.NullInt64{}, err
+	if id, ok, err := lookupUnit(ctx, q, name); err != nil || ok {
+		return sql64(id), err
 	}
 	u, err := q.CreateUnit(ctx, nullID(v.id()))
 	if err != nil {

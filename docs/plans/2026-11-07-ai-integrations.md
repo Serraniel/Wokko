@@ -29,7 +29,9 @@ Tokens act as their owner and can never see more than the owner can.
 |---|---|---|
 | `search_recipes` | read | Same search as the app, only what the person may see |
 | `get_recipe` | read | Full recipe with scaling |
-| `list_foods`, `list_units`, `list_tags` | read | So new recipes reuse the catalog |
+| `search_foods`, `search_units`, `search_tags` | read | So new recipes reuse the catalog. Several names per call. Renamed from `list_*` in 0.5 |
+| `add_food_names`, `add_unit_names` | write | Adds aliases and translations, never removes. Same rule as editing the entry |
+| `set_recipe_photo` | write | From a public image address, through the importer's fetcher |
 | `create_recipe` | write | Private by default |
 | `update_recipe` | write | Needs the version it started from, so conflicts are caught |
 | `import_recipe_from_url` | read | Returns a draft through the existing importer, saves nothing |

@@ -987,7 +987,7 @@ func (q *Queries) ListRecipeKeywordsFor(ctx context.Context, ids []int64) ([]Rec
 }
 
 const listRecipeShareUsers = `-- name: ListRecipeShareUsers :many
-SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at FROM recipe_shares s JOIN users u ON u.id = s.user_id WHERE s.recipe_id = ? ORDER BY u.handle
+SELECT u.id, u.handle, u.display_name, u.password_hash, u.role, u.locale, u.household_id, u.disabled_at, u.created_at, u.updated_at, u.assistant_new_entries FROM recipe_shares s JOIN users u ON u.id = s.user_id WHERE s.recipe_id = ? ORDER BY u.handle
 `
 
 func (q *Queries) ListRecipeShareUsers(ctx context.Context, recipeID int64) ([]User, error) {
@@ -1010,6 +1010,7 @@ func (q *Queries) ListRecipeShareUsers(ctx context.Context, recipeID int64) ([]U
 			&i.DisabledAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.AssistantNewEntries,
 		); err != nil {
 			return nil, err
 		}

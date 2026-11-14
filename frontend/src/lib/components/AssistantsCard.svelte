@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Bot, ExternalLink, Trash2, TriangleAlert } from '@lucide/svelte';
 	import { api, errorText } from '#lib/api/client.ts';
-	import type { APIToken, AssistantActivity, NewAPIToken } from '#lib/api/types.gen.ts';
+	import type { APIToken, AssistantActivity, NewAPIToken, User } from '#lib/api/types.gen.ts';
 	import { formatDate, t } from '#lib/i18n/index.svelte.ts';
 	import { session } from '#lib/session.svelte.ts';
 	import CopyField from './CopyField.svelte';
@@ -36,6 +36,20 @@
 		{ id: 'hermes', name: 'Hermes Agent', steps: 1, doc: 'https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp', snippet: (tk) => `mcp_servers:\n  wokko:\n    url: "${address}"\n    headers:\n      Authorization: "Bearer ${tk}"` },
 		{ id: 'other', name: t('assistant.app_other'), steps: 2, snippet: (tk) => `Authorization: Bearer ${tk}` }
 	];
+	const newEntryChoices = ['never', 'ask', 'allow'] as const;
+	let savingEntries = $state(false);
+	async function setNewEntries(choice: string) {
+		savingEntries = true;
+		error = '';
+		try {
+			session.user = await api.patch<User>('/me', { assistant_new_entries: choice });
+		} catch (e) {
+			error = errorText(e);
+		} finally {
+			savingEntries = false;
+		}
+	}
+
 	let appId = $state('claude');
 	let createdFor = $state('');
 	const app = $derived(apps.find((a) => a.id === appId) ?? apps[0]);
@@ -157,6 +171,15 @@
 				{/if}
 			{/if}
 			{#if app.doc}<a class="inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" href={app.doc} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('assistant.their_guide', { app: app.name })}</a>{/if}
+		</div>
+		<div>
+			<h3 class="label" id="assistant-new-entries">{t('assistant.new_entries')}</h3>
+			<div class="grid grid-cols-3 gap-1 rounded-xl bg-surface-2 p-1" role="group" aria-labelledby="assistant-new-entries">
+				{#each newEntryChoices as c (c)}
+					<button type="button" class="rounded-lg py-2 text-sm font-medium transition-colors {session.user?.assistant_new_entries === c ? 'bg-surface shadow-card' : 'text-muted'}" aria-pressed={session.user?.assistant_new_entries === c} disabled={savingEntries} onclick={() => setNewEntries(c)}>{t(`assistant.new_entries_${c}`)}</button>
+				{/each}
+			</div>
+			<p class="hint">{t(`assistant.new_entries_${session.user?.assistant_new_entries ?? 'ask'}_hint`)}</p>
 		</div>
 		{#if tokens.length}
 			<div>
