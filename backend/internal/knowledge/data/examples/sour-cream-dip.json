@@ -1,0 +1,32 @@
+{
+ "steps": [
+  {
+   "text": "Saure Sahne mit Kräutern, Salz und Pfeffer verrühren.",
+   "minutes": 5,
+   "ingredients": [
+    {
+     "names": [
+      "Saure Sahne"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Schnittlauch"
+     ]
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    },
+    {
+     "names": [
+      "Pfeffer"
+     ]
+    }
+   ]
+  }
+ ]
+}

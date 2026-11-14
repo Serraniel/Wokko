@@ -19,6 +19,7 @@ type Finding struct {
 	Text     string   `json:"text"`
 	Tips     []string `json:"tips"`
 	Steps    []int    `json:"steps"` // 1-based step numbers where it applies, when known
+	Foods    []string `json:"foods"` // for substitutions: the recipe's ingredients it applies to
 	Sources  []Source `json:"sources"`
 }
 
@@ -42,6 +43,7 @@ type Result struct {
 	Techniques   []Finding       `json:"techniques"`
 	Problems     []Finding       `json:"problems"`
 	Safety       []Finding       `json:"safety"`
+	Substitutes  []Finding       `json:"substitutes"`
 	Allergens    []FoundAllergen `json:"allergens"`
 	Diet         Diet            `json:"diet"`
 	Unclassified []string        `json:"unclassified"` // foods Wokko knows nothing about

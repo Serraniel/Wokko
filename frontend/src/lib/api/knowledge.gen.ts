@@ -21,6 +21,7 @@ export interface Finding {
   text: string;
   tips: string[];
   steps: number /* int */[]; // 1-based step numbers where it applies, when known
+  foods: string[]; // for substitutions: the recipe's ingredients it applies to
   sources: Source[];
 }
 export interface FoundAllergen {
@@ -45,6 +46,7 @@ export interface Result {
   techniques: Finding[];
   problems: Finding[];
   safety: Finding[];
+  substitutes: Finding[];
   allergens: FoundAllergen[];
   diet: Diet;
   unclassified: string[]; // foods Wokko knows nothing about

@@ -18,8 +18,9 @@
 	const sure = $derived(result?.allergens.filter((a) => !a.maybe) ?? []);
 	const maybe = $derived(result?.allergens.filter((a) => a.maybe) ?? []);
 	const notes = $derived([...(result?.safety ?? []), ...(result?.problems ?? [])]);
-	const knowledge = $derived([...(result?.sauces ?? []), ...(result?.techniques ?? [])]);
+	const knowledge = $derived([...(result?.sauces ?? []), ...(result?.techniques ?? []), ...(result?.substitutes ?? [])]);
 	const anything = $derived(!!result && (result.allergens.length > 0 || notes.length > 0 || knowledge.length > 0 || result.diet.vegetarian !== null));
+	const kindLabel: Record<string, string> = { sauce: 'insights.sauce', technique: 'insights.technique', substitution: 'insights.substitute' };
 
 	function stepsText(f: Finding): string {
 		return f.steps.length ? t('insights.steps', { steps: f.steps.join(', ') }) : '';
@@ -79,9 +80,10 @@
 				{#each knowledge as f (f.id)}
 					<details class="group py-1">
 						<summary class="flex min-h-10 cursor-pointer list-none items-center gap-2 text-sm">
-							<span class="rounded-md bg-surface-2 px-1.5 py-0.5 text-xs text-muted">{t(f.kind === 'sauce' ? 'insights.sauce' : 'insights.technique')}</span>
+							<span class="rounded-md bg-surface-2 px-1.5 py-0.5 text-xs text-muted">{t(kindLabel[f.kind] ?? 'insights.technique')}</span>
 							<span class="font-medium">{f.title}</span>
 							{#if f.steps.length}<span class="text-xs text-muted">{stepsText(f)}</span>{/if}
+							{#if f.foods?.length}<span class="text-xs text-muted">{f.foods.join(', ')}</span>{/if}
 						</summary>
 						<div class="space-y-1.5 pb-2 pl-1 text-sm">
 							<p class="text-muted">{f.text}</p>
