@@ -496,6 +496,10 @@ export interface Passkey {
 export interface APIToken {
   id: number /* int64 */;
   name: string;
+  /**
+   * App is the assistant app it was made for, such as claude or cursor, or other.
+   */
+  app: string;
   scope: string;
   is_app: boolean;
   expires_at: string;
@@ -506,6 +510,10 @@ export interface APITokenInput {
   name: string;
   scope: string;
   expires_in_days: number /* int64 */;
+  /**
+   * App is the assistant app the token is for. Unknown or empty counts as other.
+   */
+  app: string;
 }
 /**
  * NewAPIToken holds the secret, which is shown only this once.

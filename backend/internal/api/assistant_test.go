@@ -445,7 +445,7 @@ func TestOAuthFlowForAssistants(t *testing.T) {
 	}
 	var listed []app.APIToken
 	admin.ok("GET", v1+"/me/tokens", nil, 200).decode(t, &listed)
-	if len(listed) != 1 || !listed[0].IsApp || listed[0].Name != "Claude" {
+	if len(listed) != 1 || !listed[0].IsApp || listed[0].Name != "Claude" || listed[0].App != "claude" {
 		t.Fatalf("listed: %+v", listed)
 	}
 	// An app that hasn't renewed its hour-long token for a while is still connected, and still
@@ -730,4 +730,24 @@ func TestMCPPhotosWithoutAPublicAddress(t *testing.T) {
 	other := e.newUser(admin, "other")
 	theirs := other.createRecipe(simpleRecipe("Theirs"))
 	callFails(t, s, "create_photo_upload_link", map[string]any{"id": theirs.ID})
+}
+
+// TestTokensRememberTheirApp lets the integrations page show each app as connected or not.
+func TestTokensRememberTheirApp(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	var tok app.NewAPIToken
+	admin.ok("POST", v1+"/me/tokens", app.APITokenInput{Name: "Laptop", Scope: "read", App: "cursor"}, 201).decode(t, &tok)
+	if tok.App != "cursor" {
+		t.Fatalf("app: %+v", tok.APIToken)
+	}
+	admin.ok("POST", v1+"/me/tokens", app.APITokenInput{Name: "Something", Scope: "read", App: "made-up"}, 201).decode(t, &tok)
+	if tok.App != "other" {
+		t.Fatalf("unknown app: %+v", tok.APIToken)
+	}
+	var listed []app.APIToken
+	admin.ok("GET", v1+"/me/tokens", nil, 200).decode(t, &listed)
+	if len(listed) != 2 || listed[1].App != "cursor" || listed[0].App != "other" {
+		t.Fatalf("listed: %+v", listed)
+	}
 }

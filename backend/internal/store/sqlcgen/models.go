@@ -18,6 +18,7 @@ type ApiToken struct {
 	ExpiresAt  sql.NullString
 	LastUsedAt sql.NullString
 	CreatedAt  string
+	App        string
 }
 
 type AssistantActivity struct {

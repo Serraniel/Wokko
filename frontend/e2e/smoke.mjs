@@ -222,23 +222,24 @@ await step('share to Wokko and the bookmark import from a link', async () => {
 });
 await step('import another app\'s file, check first, undo', async () => {
   const recipes = [{ '@type': 'Recipe', name: 'Aus Datei eins', recipeIngredient: ['200 g Mehl', '2 Eier'], recipeInstructions: ['Mischen.'] }, { '@type': 'Recipe', name: 'My version', recipeIngredient: ['1 Salz'] }];
-  await p.goto(base + '/more'); await p.click('a:has-text("Integrations")'); await p.waitForURL('**/integrations');
-  await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) });
+  await p.goto(base + '/more'); await p.click('a:has-text("Integrations")'); await p.waitForURL('**/integrations'); await shot('34-integrations');
+  await p.click('section:has(#card-file) button:has-text("Open")'); await p.setInputFiles('dialog[open] #import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) });
   await p.waitForSelector('text=Found 2 recipes'); await p.waitForSelector('li:has-text("My version") >> text=Already here'); await shot('35-file-preview');
   await p.goto(base + '/recipes'); await p.waitForSelector('a.recipe-card'); if (await p.locator('text=Aus Datei eins').count()) throw new Error('a preview saved something');
   // The old address still works.
-  await p.goto(base + '/import'); await p.waitForURL('**/integrations'); await p.setInputFiles('#import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
+  await p.goto(base + '/import'); await p.waitForURL('**/integrations?open=file'); await p.setInputFiles('dialog[open] #import-file', { name: 'export.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(recipes)) }); await p.click('button:has-text("Import 1 recipe")'); await p.waitForSelector('text=Imported 1 recipe'); await p.waitForSelector('text=Skipped 1');
   await p.goto(base + '/recipes'); await p.waitForSelector('text=Aus Datei eins');
   // From New recipe too: a file with one recipe opens it right away.
   await p.goto(base + '/recipes/new'); await p.click('button:has-text("Import a file instead")');
   await p.setInputFiles('#import-file', { name: 'one.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify([{ '@type': 'Recipe', name: 'Aus Datei zwei', recipeIngredient: ['1 Salz'], recipeInstructions: ['Salzen.'] }])) });
   await p.click('button:has-text("Import 1 recipe")'); await p.waitForURL(/recipes\/\d+$/); await p.waitForSelector('h1:has-text("Aus Datei zwei")');
-  await p.goto(base + '/integrations'); await p.click('label:has-text("All I can see")'); await p.waitForSelector('text=To move a whole server'); await p.locator('#export-title').scrollIntoViewIfNeeded(); await shot('36-export-all');
+  await p.goto(base + '/integrations'); await p.click('section:has(#card-export) button:has-text("Open")'); await p.click('dialog[open] label:has-text("All I can see")'); await p.waitForSelector('text=To move a whole server'); await shot('36-export-all');
   for (const label of ['For another Wokko', 'For other apps']) {
-    const href = await p.getAttribute(`#export-title ~ div a:has-text("${label}")`, 'href'); if (!href.includes('scope=all')) throw new Error('export scope: ' + href);
+    const href = await p.getAttribute(`dialog[open] a:has-text("${label}")`, 'href'); if (!href.includes('scope=all')) throw new Error('export scope: ' + href);
     const res = await p.request.get(base + href); if (!res.ok() || res.headers()['content-type'] !== 'application/zip') throw new Error(`${label}: ${res.status()}`);
   }
-  await p.goto(base + '/integrations'); await p.setInputFiles('#import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")'); await p.waitForSelector('input[aria-label="From any web page"]');
+  await p.goto(base + '/integrations?open=file'); await p.setInputFiles('dialog[open] #import-file', { name: 'bad.txt', mimeType: 'text/plain', buffer: Buffer.from('hello') }); await p.waitForSelector('[role=alert]:has-text("No recipes found")');
+  await p.keyboard.press('Escape'); await p.click('section:has(#card-website) button:has-text("Open")'); await p.waitForSelector('dialog[open] input[aria-label="From any web page"]'); await p.keyboard.press('Escape');
 });
 await step('offline: saved recipes open, shopping queues and syncs', async () => {
   const off = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-US', hasTouch: true, isMobile: true }); const o = await off.newPage(); o.setDefaultTimeout(15000);
@@ -265,15 +266,22 @@ await step('assistant access: admin switch, token and app approval', async () =>
   await p.goto(base + '/settings'); await p.click('a:has-text("Integrations")'); await p.waitForSelector('text=Turn this on in the admin settings first');
   await p.goto(base + '/admin'); await p.check('#mcp-enabled'); await p.waitForTimeout(200);
   const rows = await p.locator('section:has(#mcp-enabled) input[type=checkbox]').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().right))); if (rows.length !== 3 || new Set(rows).size !== 1) throw new Error('admin settings out of line: ' + rows);
-  await p.goto(base + '/integrations'); await p.waitForSelector('text=Add custom connector'); await p.click('button[aria-pressed]:has-text("Claude Code")'); await p.fill('#token-name', 'Claude test'); await p.click('button:has-text("Create access token")');
-  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('li:has-text("Claude test")'); await p.click('button[aria-pressed]:has-text("Don\'t allow")'); await p.waitForSelector('text=A recipe with an unknown one isn\'t saved'); const cmd = await p.inputValue('input[aria-label="Claude Code"]'); if (!cmd.startsWith('claude mcp add --transport http wokko ') || !cmd.includes('Bearer wokko_')) throw new Error('command without token: ' + cmd); await shot('29-assistant');
-  await p.click('button[aria-pressed]:has-text("Codex")'); if (!(await p.textContent('pre')).includes('<token>')) throw new Error('another app must not get the Claude Code token');
-  await p.click('button[aria-pressed]:has-text("Claude")'); const add = new URL(await p.getAttribute('a:has-text("Add to Claude")', 'href')); if (add.searchParams.get('connectorUrl') !== base + '/mcp' || add.searchParams.get('modal') !== 'add-custom-connector') throw new Error('Claude link: ' + add);
-  await p.click('button[aria-pressed]:has-text("Cursor")'); if (await p.locator('a:has-text("Add to Cursor")').count()) throw new Error('Cursor link before a token');
-  await p.fill('#token-name', 'Cursor test'); await p.click('button:has-text("Create access token")'); const cur = new URL(await p.getAttribute('a:has-text("Add to Cursor")', 'href'));
+  // Each app is a card; connecting it happens in its own dialog.
+  const openApp = async (id) => { await p.goto(base + '/integrations'); await p.click(`section:has(#app-${id}) button`); await p.waitForSelector('dialog[open]'); };
+  await openApp('claude_code'); await p.fill('dialog[open] #token-name', 'Claude test'); await p.click('dialog[open] button:has-text("Create access token")');
+  await p.waitForSelector('text=Copy this token now'); await p.waitForSelector('dialog[open] li:has-text("Claude test")');
+  const cmd = await p.inputValue('dialog[open] input[aria-label="Claude Code"]'); if (!cmd.startsWith('claude mcp add --transport http wokko ') || !cmd.includes('Bearer wokko_')) throw new Error('command without token: ' + cmd); await shot('29-assistant');
+  await p.keyboard.press('Escape'); await p.waitForSelector('section:has(#app-claude_code) >> text=Connected'); await shot('29-assistant-overview');
+  await p.click('button[aria-pressed]:has-text("Don\'t allow")'); await p.waitForSelector('text=A recipe with an unknown one isn\'t saved');
+  await openApp('codex'); if (!(await p.textContent('dialog[open] pre')).includes('<token>')) throw new Error('another app must not get the Claude Code token');
+  await openApp('claude'); await p.waitForSelector('dialog[open] >> text=Add custom connector'); const add = new URL(await p.getAttribute('dialog[open] a:has-text("Add to Claude")', 'href')); if (add.searchParams.get('connectorUrl') !== base + '/mcp' || add.searchParams.get('modal') !== 'add-custom-connector') throw new Error('Claude link: ' + add);
+  await openApp('cursor'); if (await p.locator('dialog[open] a:has-text("Add to Cursor")').count()) throw new Error('Cursor link before a token');
+  await p.fill('dialog[open] #token-name', 'Cursor test'); await p.click('dialog[open] button:has-text("Create access token")'); const cur = new URL(await p.getAttribute('dialog[open] a:has-text("Add to Cursor")', 'href'));
   const cfg = JSON.parse(Buffer.from(cur.searchParams.get('config'), 'base64').toString()); if (cfg.url !== base + '/mcp' || !cfg.headers.Authorization.startsWith('Bearer wokko_')) throw new Error('Cursor link: ' + JSON.stringify(cfg));
-  await p.click('button[aria-pressed]:has-text("VS Code")'); await p.fill('#token-name', 'VS Code test'); await p.click('button:has-text("Create access token")'); const vs = await p.getAttribute('a:has-text("Add to VS Code")', 'href');
+  await openApp('vscode'); await p.fill('dialog[open] #token-name', 'VS Code test'); await p.click('dialog[open] button:has-text("Create access token")'); const vs = await p.getAttribute('dialog[open] a:has-text("Add to VS Code")', 'href');
   const vcfg = JSON.parse(decodeURIComponent(vs.slice('vscode:mcp/install?'.length))); if (vcfg.type !== 'http' || vcfg.url !== base + '/mcp' || !vcfg.headers.Authorization.startsWith('Bearer wokko_')) throw new Error('VS Code link: ' + vs);
+  // A link can open an app's dialog directly.
+  await p.goto(base + '/integrations?connect=claude'); await p.waitForSelector('dialog[open] >> text=Connect Claude'); await p.keyboard.press('Escape');
   const reg = await p.evaluate(async () => (await (await fetch('/oauth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_name: 'Claude', redirect_uris: ['http://127.0.0.1:33333/callback'] }) })).json()));
   await p.route('http://127.0.0.1:33333/**', (r) => r.fulfill({ status: 200, contentType: 'text/html', body: 'ok' }));
   const q = new URLSearchParams({ client_id: reg.client_id, redirect_uri: 'http://127.0.0.1:33333/callback', response_type: 'code', code_challenge: 'abc', code_challenge_method: 'S256', scope: 'write', state: 'xyz' });

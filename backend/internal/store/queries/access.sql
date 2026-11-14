@@ -11,7 +11,7 @@ UPDATE passkeys SET credential = ?, last_used_at = strftime('%Y-%m-%dT%H:%M:%SZ'
 DELETE FROM passkeys WHERE id = ? AND user_id = ?;
 
 -- name: CreateAPIToken :one
-INSERT INTO api_tokens (user_id, name, token_hash, scope, client_id, expires_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING *;
+INSERT INTO api_tokens (user_id, name, token_hash, scope, client_id, expires_at, app) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *;
 
 -- name: GetAPITokenByHash :one
 SELECT * FROM api_tokens WHERE token_hash = ?;
