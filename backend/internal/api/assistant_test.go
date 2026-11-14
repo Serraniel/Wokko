@@ -13,6 +13,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/serraniel/wokko/backend/internal/app"
@@ -651,4 +652,73 @@ func TestMCPFillsMissingNutritionOnly(t *testing.T) {
 	if msg := callFails(t, s, "set_food_nutrition", map[string]any{"food_id": bread.ID, "fat": 3, "source": "estimate", "confirmed": true}); !strings.Contains(msg, "assistant_catalog_not_allowed") {
 		t.Fatalf("never: %s", msg)
 	}
+}
+
+// TestMCPPhotosWithoutAPublicAddress: an assistant that holds the file sends it as base64, and
+// one that only sees a photo in the chat hands the person a one-time upload link.
+func TestMCPPhotosWithoutAPublicAddress(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	enableMCP(t, admin)
+	s := connect(t, e, newToken(t, admin, "write"))
+	r := admin.createRecipe(simpleRecipe("Soup"))
+
+	png := base64.StdEncoding.EncodeToString(testPNG(t))
+	var got app.Recipe
+	call(t, s, "set_recipe_photo", map[string]any{"id": r.ID, "image_base64": "data:image/png;base64," + png}, &got)
+	if got.PhotoURL == "" {
+		t.Fatalf("base64: %+v", got)
+	}
+	if msg := callFails(t, s, "set_recipe_photo", map[string]any{"id": r.ID, "image_base64": "bm90IGFuIGltYWdl"}); !strings.Contains(msg, "invalid_image") {
+		t.Fatalf("not an image: %s", msg)
+	}
+	if msg := callFails(t, s, "set_recipe_photo", map[string]any{"id": r.ID, "image_base64": "%%%"}); !strings.Contains(msg, "invalid_image") {
+		t.Fatalf("not base64: %s", msg)
+	}
+	callFails(t, s, "set_recipe_photo", map[string]any{"id": r.ID})
+	callFails(t, s, "set_recipe_photo", map[string]any{"id": r.ID, "image_url": "https://example.com/p.png", "image_base64": png})
+
+	var link app.PhotoUploadLink
+	call(t, s, "create_photo_upload_link", map[string]any{"id": r.ID}, &link)
+	if !strings.HasPrefix(link.URL, "http://wokko.test/upload/") || link.ExpiresAt == "" {
+		t.Fatalf("link: %+v", link)
+	}
+	token := link.URL[strings.LastIndex(link.URL, "/")+1:]
+	anon := e.anon()
+	var info app.PhotoUpload
+	anon.ok("GET", path("/public/photo-upload/%s", token), nil, 200).decode(t, &info)
+	if info.RecipeName != "Soup" {
+		t.Fatalf("info: %+v", info)
+	}
+	// A wrong file doesn't use the link up.
+	if res := anon.uploadTo(path("/public/photo-upload/%s", token), []byte("not an image")); res.status != 400 {
+		t.Fatalf("bad file: %d %s", res.status, res.body)
+	}
+	if res := anon.uploadTo(path("/public/photo-upload/%s", token), testPNG(t)); res.status != 200 {
+		t.Fatalf("upload: %d %s", res.status, res.body)
+	}
+	var after app.Recipe
+	admin.ok("GET", path("/recipes/%d", r.ID), nil, 200).decode(t, &after)
+	if after.PhotoURL == "" || after.PhotoURL == got.PhotoURL {
+		t.Fatalf("photo not replaced: %s", after.PhotoURL)
+	}
+	// Once only.
+	anon.ok("GET", path("/public/photo-upload/%s", token), nil, 404)
+	if res := anon.uploadTo(path("/public/photo-upload/%s", token), testPNG(t)); res.status != 404 {
+		t.Fatalf("second use: %d", res.status)
+	}
+	anon.ok("GET", v1+"/public/photo-upload/not-a-token", nil, 404)
+
+	// Expired after 15 minutes.
+	call(t, s, "create_photo_upload_link", map[string]any{"id": r.ID}, &link)
+	token = link.URL[strings.LastIndex(link.URL, "/")+1:]
+	real := e.svc.Now
+	e.svc.Now = func() time.Time { return real().Add(16 * time.Minute) }
+	anon.ok("GET", path("/public/photo-upload/%s", token), nil, 404)
+	e.svc.Now = real
+
+	// Only for recipes the person may edit.
+	other := e.newUser(admin, "other")
+	theirs := other.createRecipe(simpleRecipe("Theirs"))
+	callFails(t, s, "create_photo_upload_link", map[string]any{"id": theirs.ID})
 }

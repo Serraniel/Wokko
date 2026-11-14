@@ -600,3 +600,14 @@ type CatalogStatus struct {
 	Last        *CatalogSync        `json:"last"`
 	Suggestions []CatalogSuggestion `json:"suggestions"`
 }
+
+// PhotoUploadLink is a one-time address for adding a photo to one recipe.
+type PhotoUploadLink struct {
+	URL       string `json:"url"`
+	ExpiresAt string `json:"expires_at"`
+}
+
+// PhotoUpload is what the upload page shows: only the recipe's name.
+type PhotoUpload struct {
+	RecipeName string `json:"recipe_name"`
+}

@@ -148,8 +148,9 @@ func (a fillNutritionArgs) values() map[int64]float64 {
 }
 
 type photoArgs struct {
-	ID       int64  `json:"id" jsonschema:"the recipe"`
-	ImageURL string `json:"image_url" jsonschema:"public address of a photo, such as the image of the page the recipe came from"`
+	ID          int64  `json:"id" jsonschema:"the recipe"`
+	ImageURL    string `json:"image_url,omitempty" jsonschema:"public address of a photo, such as the image of the page the recipe came from"`
+	ImageBase64 string `json:"image_base64,omitempty" jsonschema:"the image file's bytes in base64, for a file you actually hold, such as an upload in your sandbox. Not for an image you only see in the chat"`
 }
 
 type nameArgs struct {
@@ -340,9 +341,24 @@ func (l *Layer) server(a app.TokenAccess, base string) *mcp.Server {
 			out, err := svc.FillFoodNutrition(ctx, v, in.FoodID, in.values(), in.PieceGrams, in.Source, in.Confirmed)
 			return out, fmt.Sprintf("food %d", in.FoodID), err
 		})
-		write(l, s, a, "set_recipe_photo", "Give a recipe a photo from a public image address. It replaces the current photo.", func(ctx context.Context, in photoArgs) (any, string, error) {
-			r, err := svc.SetPhotoFromURL(ctx, v, in.ID, in.ImageURL)
+		write(l, s, a, "set_recipe_photo", "Give a recipe a photo. It replaces the current photo. Use image_url for a photo that is online. Use image_base64 only for an image file you actually hold, such as one uploaded to your sandbox, up to 20 MB. For a photo the person sent you in the chat that you can see but don't have as a file, use create_photo_upload_link instead.", func(ctx context.Context, in photoArgs) (any, string, error) {
+			var r app.Recipe
+			var err error
+			switch {
+			case in.ImageURL != "" && in.ImageBase64 != "":
+				return nil, "", errors.New("give either image_url or image_base64, not both")
+			case in.ImageBase64 != "":
+				r, err = svc.SetPhotoFromBase64(ctx, v, in.ID, in.ImageBase64)
+			case in.ImageURL != "":
+				r, err = svc.SetPhotoFromURL(ctx, v, in.ID, in.ImageURL)
+			default:
+				return nil, "", errors.New("give image_url or image_base64")
+			}
 			return r, r.Name, err
+		})
+		write(l, s, a, "create_photo_upload_link", "Make a one-time link the person opens to add a photo to a recipe themselves, for example from their phone's camera or gallery. It works once and for 15 minutes. Use it when the person sent you a photo in the chat: you can't pass that on, so give them this link.", func(ctx context.Context, in idArgs) (any, string, error) {
+			link, err := svc.CreatePhotoUploadLink(ctx, v, in.ID, base)
+			return link, fmt.Sprintf("recipe %d", in.ID), err
 		})
 		write(l, s, a, "add_food_names", "Teach a known food another name: an alias, synonym or regional spelling, or a translation. Use it when a recipe says a food differently than the catalog, so later searches find it. Nothing is removed or renamed.", func(ctx context.Context, in namesArgs) (any, string, error) {
 			f, err := svc.AddFoodNames(ctx, v, in.ID, in.translations(), in.Aliases)

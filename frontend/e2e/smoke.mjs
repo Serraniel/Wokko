@@ -317,6 +317,9 @@ await step('kitchen knowledge explains a recipe', async () => {
   await p.click('a[aria-label="Edit"]'); await p.waitForURL(/edit$/); await p.waitForSelector('#hints-title'); await p.waitForSelector('text=Allergens: Eggs, Milk');
   await p.locator('#hints-title').scrollIntoViewIfNeeded(); await shot('39-editor-hints'); await p.click('a:has-text("Cancel")');
 });
+await step('a used or expired photo upload link explains itself', async () => {
+  await p.goto(base + '/upload/not-a-real-token'); await p.waitForSelector('text=This link no longer works'); await p.waitForSelector('text=Ask the assistant for a new one');
+});
 await step('unknown page', async () => { await p.goto(base + '/does/not/exist'); await p.waitForSelector('text=Nothing here'); await shot('18-404'); });
 await step('log out protects pages', async () => {
   await p.setViewportSize({ width: 1280, height: 800 }); await p.goto(base + '/settings'); await p.click('aside button:has-text("Log out")'); await p.waitForURL('**/login**'); await p.goto(base + '/recipes'); await p.waitForURL('**/login**'); await shot('19-login');

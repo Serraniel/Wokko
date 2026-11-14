@@ -184,6 +184,12 @@ func testPNG(t *testing.T) []byte {
 
 func (c *client) upload(recipeID int64, content []byte) result {
 	c.e.t.Helper()
+	return c.uploadTo(path("/recipes/%d/photo", recipeID), content)
+}
+
+// uploadTo sends a photo as a form, the way the app does.
+func (c *client) uploadTo(target string, content []byte) result {
+	c.e.t.Helper()
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
 	f, err := w.CreateFormFile("photo", "photo.png")
@@ -196,7 +202,7 @@ func (c *client) upload(recipeID int64, content []byte) result {
 	if err := w.Close(); err != nil {
 		c.e.t.Fatal(err)
 	}
-	req, err := http.NewRequest("POST", c.e.srv.URL+path("/recipes/%d/photo", recipeID), &b)
+	req, err := http.NewRequest("POST", c.e.srv.URL+target, &b)
 	if err != nil {
 		c.e.t.Fatal(err)
 	}

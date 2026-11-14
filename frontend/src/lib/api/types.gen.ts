@@ -591,3 +591,16 @@ export interface CatalogStatus {
   last: CatalogSync | null;
   suggestions: CatalogSuggestion[];
 }
+/**
+ * PhotoUploadLink is a one-time address for adding a photo to one recipe.
+ */
+export interface PhotoUploadLink {
+  url: string;
+  expires_at: string;
+}
+/**
+ * PhotoUpload is what the upload page shows: only the recipe's name.
+ */
+export interface PhotoUpload {
+  recipe_name: string;
+}
