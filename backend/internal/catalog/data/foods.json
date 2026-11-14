@@ -14,6 +14,12 @@
      "plural": "onions"
     }
    },
+   "aliases": [
+    "Luftzwiebel",
+    "Sommerzwiebel",
+    "Etagenzwiebel",
+    "Speisezwiebel"
+   ],
    "nutrients": {
     "1": 40,
     "2": 0.1,
@@ -23,7 +29,8 @@
     "6": 1.7,
     "7": 1.1,
     "8": 0.01
-   }
+   },
+   "wikidata": "Q23485"
   },
   {
    "key": "food.garlic",
@@ -39,6 +46,10 @@
      "plural": "garlic cloves"
     }
    },
+   "aliases": [
+    "head of garlic",
+    "bulb of garlic"
+   ],
    "nutrients": {
     "1": 149,
     "2": 0.5,
@@ -48,7 +59,8 @@
     "6": 2.1,
     "7": 6.36,
     "8": 0.043
-   }
+   },
+   "wikidata": "Q21546392"
   },
   {
    "key": "food.carrot",
@@ -64,6 +76,14 @@
      "plural": "carrots"
     }
    },
+   "aliases": [
+    "Karottenwurzel",
+    "Mohrrübe",
+    "Möhre",
+    "Gelbrübe",
+    "carrot taproot",
+    "domesticated carrot"
+   ],
    "nutrients": {
     "1": 41,
     "2": 0.24,
@@ -73,7 +93,8 @@
     "6": 2.8,
     "7": 0.93,
     "8": 0.172
-   }
+   },
+   "wikidata": "Q81"
   },
   {
    "key": "food.potato",
@@ -89,6 +110,14 @@
      "plural": "potatoes"
     }
    },
+   "aliases": [
+    "Potaten",
+    "Potacke",
+    "Erdknolle",
+    "tater",
+    "tattie",
+    "spud"
+   ],
    "nutrients": {
     "1": 77,
     "2": 0.09,
@@ -98,7 +127,8 @@
     "6": 2.1,
     "7": 2.05,
     "8": 0.015
-   }
+   },
+   "wikidata": "Q10998"
   },
   {
    "key": "food.tomato",
@@ -114,6 +144,13 @@
      "plural": "tomatoes"
     }
    },
+   "aliases": [
+    "Fleischtomate",
+    "Cherrytomate",
+    "Kirschtomate",
+    "Pomidore",
+    "garden tomato"
+   ],
    "nutrients": {
     "1": 18,
     "2": 0.2,
@@ -123,7 +160,8 @@
     "6": 1.2,
     "7": 0.88,
     "8": 0.013
-   }
+   },
+   "wikidata": "Q23501"
   },
   {
    "key": "food.cucumber",
@@ -139,6 +177,9 @@
      "plural": "cucumbers"
     }
    },
+   "aliases": [
+    "cuke"
+   ],
    "nutrients": {
     "1": 15,
     "2": 0.11,
@@ -148,7 +189,8 @@
     "6": 0.5,
     "7": 0.65,
     "8": 0.005
-   }
+   },
+   "wikidata": "Q2735883"
   },
   {
    "key": "food.bell_pepper",
@@ -164,6 +206,10 @@
      "plural": "bell peppers"
     }
    },
+   "aliases": [
+    "Blockpaprika",
+    "sweet peppers"
+   ],
    "nutrients": {
     "1": 26,
     "2": 0.3,
@@ -173,7 +219,8 @@
     "6": 2.1,
     "7": 0.99,
     "8": 0.01
-   }
+   },
+   "wikidata": "Q1548030"
   },
   {
    "key": "food.broccoli",
@@ -189,6 +236,9 @@
      "plural": "broccoli heads"
     }
    },
+   "aliases": [
+    "Winterblumenkohl"
+   ],
    "nutrients": {
     "1": 34,
     "2": 0.37,
@@ -198,7 +248,8 @@
     "6": 2.6,
     "7": 2.82,
     "8": 0.083
-   }
+   },
+   "wikidata": "Q47722"
   },
   {
    "key": "food.spinach",
@@ -214,6 +265,9 @@
      "plural": "spinach"
     }
    },
+   "aliases": [
+    "green spinach"
+   ],
    "nutrients": {
     "1": 23,
     "2": 0.39,
@@ -223,7 +277,8 @@
     "6": 2.2,
     "7": 2.86,
     "8": 0.198
-   }
+   },
+   "wikidata": "Q36814998"
   },
   {
    "key": "food.lettuce",
@@ -264,6 +319,10 @@
      "plural": "zucchinis"
     }
    },
+   "aliases": [
+    "courgette",
+    "baby marrow"
+   ],
    "nutrients": {
     "1": 17,
     "2": 0.32,
@@ -273,7 +332,8 @@
     "6": 1,
     "7": 1.21,
     "8": 0.02
-   }
+   },
+   "wikidata": "Q7533"
   },
   {
    "key": "food.eggplant",
@@ -323,7 +383,8 @@
     "6": 2,
     "7": 1.92,
     "8": 0.075
-   }
+   },
+   "wikidata": "Q23900272"
   },
   {
    "key": "food.cabbage",
@@ -339,6 +400,10 @@
      "plural": "cabbages"
     }
    },
+   "aliases": [
+    "cabage",
+    "cabagge"
+   ],
    "nutrients": {
     "1": 25,
     "2": 0.1,
@@ -348,7 +413,8 @@
     "6": 2.5,
     "7": 1.28,
     "8": 0.045
-   }
+   },
+   "wikidata": "Q14328596"
   },
   {
    "key": "food.leek",
@@ -364,6 +430,12 @@
      "plural": "leeks"
     }
    },
+   "aliases": [
+    "Porree",
+    "Winterlauch",
+    "Gemeiner Lauch",
+    "Spanischer Lauch"
+   ],
    "nutrients": {
     "1": 61,
     "2": 0.3,
@@ -373,7 +445,8 @@
     "6": 1.8,
     "7": 1.5,
     "8": 0.05
-   }
+   },
+   "wikidata": "Q1807269"
   },
   {
    "key": "food.celery",
@@ -389,6 +462,11 @@
      "plural": "celery stalks"
     }
    },
+   "aliases": [
+    "Stangensellerie",
+    "Staudensellerie",
+    "leaf celery"
+   ],
    "nutrients": {
     "1": 14,
     "2": 0.17,
@@ -398,7 +476,8 @@
     "6": 1.6,
     "7": 0.69,
     "8": 0.2
-   }
+   },
+   "wikidata": "Q23012379"
   },
   {
    "key": "food.mushroom",
@@ -548,7 +627,8 @@
     "6": 0.5,
     "7": 1,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q165308"
   },
   {
    "key": "food.sweet_potato",
@@ -564,6 +644,12 @@
      "plural": "sweet potatoes"
     }
    },
+   "aliases": [
+    "Kūmara",
+    "Suesskartoffel",
+    "Bataten",
+    "Batate"
+   ],
    "nutrients": {
     "1": 86,
     "2": 0.05,
@@ -573,7 +659,8 @@
     "6": 3,
     "7": 1.57,
     "8": 0.138
-   }
+   },
+   "wikidata": "Q37937"
   },
   {
    "key": "food.radish",
@@ -614,6 +701,16 @@
      "plural": "beets"
     }
    },
+   "aliases": [
+    "Rahne",
+    "Rande",
+    "Rohnen",
+    "Gelbe Bete",
+    "table beet",
+    "garden beet",
+    "red beet",
+    "Beetroot"
+   ],
    "nutrients": {
     "1": 43,
     "2": 0.17,
@@ -623,7 +720,8 @@
     "6": 2.8,
     "7": 1.61,
     "8": 0.195
-   }
+   },
+   "wikidata": "Q165437"
   },
   {
    "key": "food.green_beans",
@@ -639,6 +737,12 @@
      "plural": "green beans"
     }
    },
+   "aliases": [
+    "string bean",
+    "snap bean",
+    "filet bean",
+    "fine bean"
+   ],
    "nutrients": {
     "1": 31,
     "2": 0.22,
@@ -648,7 +752,8 @@
     "6": 2.7,
     "7": 1.83,
     "8": 0.015
-   }
+   },
+   "wikidata": "Q2987371"
   },
   {
    "key": "food.snow_peas",
@@ -689,6 +794,10 @@
      "plural": "cherry tomatoes"
     }
    },
+   "aliases": [
+    "Cocktailtomate",
+    "Kischtomate"
+   ],
    "nutrients": {
     "1": 18,
     "2": 0.2,
@@ -698,7 +807,8 @@
     "6": 1.2,
     "7": 0.88,
     "8": 0.013
-   }
+   },
+   "wikidata": "Q6540634"
   },
   {
    "key": "food.spring_onion",
@@ -773,7 +883,8 @@
     "6": 2.4,
     "7": 0.26,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q89"
   },
   {
    "key": "food.banana",
@@ -798,7 +909,8 @@
     "6": 2.6,
     "7": 1.09,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q503"
   },
   {
    "key": "food.orange",
@@ -839,6 +951,9 @@
      "plural": "lemons"
     }
    },
+   "aliases": [
+    "Limone"
+   ],
    "nutrients": {
     "1": 29,
     "2": 0.3,
@@ -848,7 +963,8 @@
     "6": 2.8,
     "7": 1.1,
     "8": 0.005
-   }
+   },
+   "wikidata": "Q1093742"
   },
   {
    "key": "food.lime",
@@ -889,6 +1005,11 @@
      "plural": "strawberries"
     }
    },
+   "aliases": [
+    "Ananas-Erdbeere",
+    "Kulturerdbeere",
+    "garden strawberry"
+   ],
    "nutrients": {
     "1": 32,
     "2": 0.3,
@@ -898,7 +1019,8 @@
     "6": 2,
     "7": 0.67,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q13158"
   },
   {
    "key": "food.blueberry",
@@ -914,6 +1036,9 @@
      "plural": "blueberries"
     }
    },
+   "aliases": [
+    "Blaubeere"
+   ],
    "nutrients": {
     "1": 57,
     "2": 0.33,
@@ -923,7 +1048,8 @@
     "6": 2.4,
     "7": 0.74,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q13178"
   },
   {
    "key": "food.raspberry",
@@ -939,6 +1065,9 @@
      "plural": "raspberries"
     }
    },
+   "aliases": [
+    "hindberry"
+   ],
    "nutrients": {
     "1": 52,
     "2": 0.65,
@@ -948,7 +1077,8 @@
     "6": 6.5,
     "7": 1.2,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q13179"
   },
   {
    "key": "food.grape",
@@ -964,6 +1094,10 @@
      "plural": "grapes"
     }
    },
+   "aliases": [
+    "Weinbeere",
+    "Traube"
+   ],
    "nutrients": {
     "1": 69,
     "2": 0.16,
@@ -973,7 +1107,8 @@
     "6": 0.9,
     "7": 0.72,
     "8": 0.005
-   }
+   },
+   "wikidata": "Q10978"
   },
   {
    "key": "food.mango",
@@ -989,6 +1124,9 @@
      "plural": "mangoes"
     }
    },
+   "aliases": [
+    "Mangofrucht"
+   ],
    "nutrients": {
     "1": 60,
     "2": 0.38,
@@ -998,7 +1136,8 @@
     "6": 1.6,
     "7": 0.82,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q169"
   },
   {
    "key": "food.pineapple",
@@ -1014,6 +1153,9 @@
      "plural": "pineapples"
     }
    },
+   "aliases": [
+    "anana"
+   ],
    "nutrients": {
     "1": 50,
     "2": 0.12,
@@ -1023,7 +1165,8 @@
     "6": 1.4,
     "7": 0.54,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q10817602"
   },
   {
    "key": "food.watermelon",
@@ -1048,7 +1191,8 @@
     "6": 0.4,
     "7": 0.61,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q17507129"
   },
   {
    "key": "food.peach",
@@ -1064,6 +1208,10 @@
      "plural": "peaches"
     }
    },
+   "aliases": [
+    "Nektarine",
+    "peachfruit"
+   ],
    "nutrients": {
     "1": 39,
     "2": 0.25,
@@ -1073,7 +1221,8 @@
     "6": 1.5,
     "7": 0.91,
     "8": 0
-   }
+   },
+   "wikidata": "Q13202263"
   },
   {
    "key": "food.pear",
@@ -1098,7 +1247,8 @@
     "6": 3.1,
     "7": 0.36,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q13099586"
   },
   {
    "key": "food.cherry",
@@ -1139,6 +1289,9 @@
      "plural": "plums"
     }
    },
+   "aliases": [
+    "Quetsche"
+   ],
    "nutrients": {
     "1": 46,
     "2": 0.28,
@@ -1148,7 +1301,8 @@
     "6": 1.4,
     "7": 0.7,
     "8": 0
-   }
+   },
+   "wikidata": "Q12372598"
   },
   {
    "key": "food.apricot",
@@ -1173,7 +1327,8 @@
     "6": 2,
     "7": 1.4,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q3733836"
   },
   {
    "key": "food.kiwi",
@@ -1214,6 +1369,11 @@
      "plural": "avocados"
     }
    },
+   "aliases": [
+    "avocado pear",
+    "alligator pear",
+    "avocadoes"
+   ],
    "nutrients": {
     "1": 160,
     "2": 14.66,
@@ -1223,7 +1383,8 @@
     "6": 6.7,
     "7": 2,
     "8": 0.018
-   }
+   },
+   "wikidata": "Q961769"
   },
   {
    "key": "food.coconut",
@@ -1264,6 +1425,9 @@
      "plural": "pomegranates"
     }
    },
+   "aliases": [
+    "anar"
+   ],
    "nutrients": {
     "1": 83,
     "2": 1.17,
@@ -1273,7 +1437,8 @@
     "6": 4,
     "7": 1.67,
     "8": 0.007
-   }
+   },
+   "wikidata": "Q13188"
   },
   {
    "key": "food.chicken_breast",
@@ -1289,6 +1454,10 @@
      "plural": "chicken breasts"
     }
    },
+   "aliases": [
+    "Hühnerbrust",
+    "Hähnchenbrustfilet"
+   ],
    "nutrients": {
     "1": 120,
     "2": 2.62,
@@ -1298,7 +1467,8 @@
     "6": 0,
     "7": 22.5,
     "8": 0.113
-   }
+   },
+   "wikidata": "Q2607161"
   },
   {
    "key": "food.chicken_thigh",
@@ -1314,6 +1484,9 @@
      "plural": "chicken thighs"
     }
    },
+   "aliases": [
+    "chicken upper leg"
+   ],
    "nutrients": {
     "1": 121,
     "2": 4.12,
@@ -1323,7 +1496,8 @@
     "6": 0,
     "7": 19.66,
     "8": 0.237
-   }
+   },
+   "wikidata": "Q102354615"
   },
   {
    "key": "food.ground_beef",
@@ -1339,6 +1513,11 @@
      "plural": "ground beef"
     }
    },
+   "aliases": [
+    "Rinderhack",
+    "mince beef meat",
+    "minced meat"
+   ],
    "nutrients": {
     "1": 254,
     "2": 20,
@@ -1348,7 +1527,8 @@
     "6": 0,
     "7": 17.17,
     "8": 0.165
-   }
+   },
+   "wikidata": "Q3408258"
   },
   {
    "key": "food.beef_steak",
@@ -1472,7 +1652,8 @@
     "6": 0,
     "7": 23.66,
     "8": 0.282
-   }
+   },
+   "wikidata": "Q68271752"
   },
   {
    "key": "food.salmon_fillet",
@@ -1792,7 +1973,8 @@
     "6": 0,
     "7": 3.15,
     "8": 0.107
-   }
+   },
+   "wikidata": "Q8495"
   },
   {
    "key": "food.butter",
@@ -1842,7 +2024,8 @@
     "6": 0,
     "7": 2.84,
     "8": 0.068
-   }
+   },
+   "wikidata": "Q134967492"
   },
   {
    "key": "food.sour_cream",
@@ -1933,6 +2116,9 @@
      "plural": "mozzarellas"
     }
    },
+   "aliases": [
+    "mozzarella cheese"
+   ],
    "nutrients": {
     "1": 299,
     "2": 22.14,
@@ -1942,7 +2128,8 @@
     "6": 0,
     "7": 22.17,
     "8": 1.215
-   }
+   },
+   "wikidata": "Q14088"
   },
   {
    "key": "food.parmesan",
@@ -1958,6 +2145,11 @@
      "plural": "parmesan"
     }
    },
+   "aliases": [
+    "Parmigiano Reggiano",
+    "Parmigiano-Reggiano",
+    "Parmigiano"
+   ],
    "nutrients": {
     "1": 392,
     "2": 25,
@@ -1967,7 +2159,8 @@
     "6": 0,
     "7": 35.75,
     "8": 2.938
-   }
+   },
+   "wikidata": "Q155922"
   },
   {
    "key": "food.cheddar",
@@ -2157,7 +2350,8 @@
     "6": 1.3,
     "7": 7.13,
     "8": 0.013
-   }
+   },
+   "wikidata": "Q5090"
   },
   {
    "key": "food.pasta",
@@ -2331,7 +2525,8 @@
     "6": 10.6,
     "7": 16.89,
     "8": 0.005
-   }
+   },
+   "wikidata": "Q24265484"
   },
   {
    "key": "food.quinoa",
@@ -2428,7 +2623,8 @@
     "6": 3.9,
     "7": 12.68,
     "8": 0.003
-   }
+   },
+   "wikidata": "Q7449743"
   },
   {
    "key": "food.breadcrumbs",
@@ -2484,6 +2680,9 @@
      "plural": "black pepper"
     }
    },
+   "aliases": [
+    "peppercorn"
+   ],
    "nutrients": {
     "1": 251,
     "2": 3.26,
@@ -2493,7 +2692,8 @@
     "6": 25.3,
     "7": 10.39,
     "8": 0.05
-   }
+   },
+   "wikidata": "Q43084"
   },
   {
    "key": "food.paprika_powder",
@@ -2583,6 +2783,11 @@
      "plural": "turmeric"
     }
    },
+   "aliases": [
+    "ground turmeric",
+    "powdered turmeric",
+    "turmeric powder"
+   ],
    "nutrients": {
     "1": 312,
     "2": 3.25,
@@ -2592,7 +2797,8 @@
     "6": 22.7,
     "7": 9.68,
     "8": 0.068
-   }
+   },
+   "wikidata": "Q20730193"
   },
   {
    "key": "food.cinnamon",
@@ -2608,6 +2814,11 @@
      "plural": "cinnamon"
     }
    },
+   "aliases": [
+    "Kaneel",
+    "canel",
+    "canella"
+   ],
    "nutrients": {
     "1": 247,
     "2": 1.24,
@@ -2617,7 +2828,8 @@
     "6": 53.1,
     "7": 3.99,
     "8": 0.025
-   }
+   },
+   "wikidata": "Q28165"
   },
   {
    "key": "food.oregano",
@@ -2642,7 +2854,8 @@
     "6": 42.5,
     "7": 9,
     "8": 0.062
-   }
+   },
+   "wikidata": "Q92581152"
   },
   {
    "key": "food.basil",
@@ -2658,6 +2871,12 @@
      "plural": "basil"
     }
    },
+   "aliases": [
+    "Hirnkraut",
+    "Basilienkraut",
+    "Basilie",
+    "Königskraut"
+   ],
    "nutrients": {
     "1": 233,
     "2": 4.07,
@@ -2667,7 +2886,8 @@
     "6": 37.7,
     "7": 22.98,
     "8": 0.19
-   }
+   },
+   "wikidata": "Q38859"
   },
   {
    "key": "food.thyme",
@@ -2692,7 +2912,8 @@
     "6": 37,
     "7": 9.11,
     "8": 0.138
-   }
+   },
+   "wikidata": "Q3215980"
   },
   {
    "key": "food.rosemary",
@@ -2740,7 +2961,8 @@
     "6": 26.3,
     "7": 7.61,
     "8": 0.058
-   }
+   },
+   "wikidata": "Q2370943"
   },
   {
    "key": "food.parsley",
@@ -2756,6 +2978,12 @@
      "plural": "parsley"
     }
    },
+   "aliases": [
+    "Petersil",
+    "Peterling",
+    "Petergrün",
+    "garden parsley"
+   ],
    "nutrients": {
     "1": 36,
     "2": 0.79,
@@ -2765,7 +2993,8 @@
     "6": 3.3,
     "7": 2.97,
     "8": 0.14
-   }
+   },
+   "wikidata": "Q25284"
   },
   {
    "key": "food.chili_flakes",
@@ -2815,7 +3044,8 @@
     "6": 9,
     "7": 16.55,
     "8": 0.15
-   }
+   },
+   "wikidata": "Q10716334"
   },
   {
    "key": "food.onion_powder",
@@ -2840,7 +3070,8 @@
     "6": 15.2,
     "7": 10.41,
     "8": 0.182
-   }
+   },
+   "wikidata": "Q7093931"
   },
   {
    "key": "food.ginger",
@@ -2856,6 +3087,10 @@
      "plural": "ginger"
     }
    },
+   "aliases": [
+    "Ingber",
+    "ginger root"
+   ],
    "nutrients": {
     "1": 80,
     "2": 0.75,
@@ -2865,7 +3100,8 @@
     "6": 2,
     "7": 1.82,
     "8": 0.033
-   }
+   },
+   "wikidata": "Q35625"
   },
   {
    "key": "food.nutmeg",
@@ -2881,6 +3117,10 @@
      "plural": "nutmeg"
     }
    },
+   "aliases": [
+    "Muskat",
+    "nutmeg seed"
+   ],
    "nutrients": {
     "1": 525,
     "2": 36.31,
@@ -2890,7 +3130,8 @@
     "6": 20.8,
     "7": 5.84,
     "8": 0.04
-   }
+   },
+   "wikidata": "Q83165"
   },
   {
    "key": "food.cardamom",
@@ -2906,6 +3147,12 @@
      "plural": "cardamom"
     }
    },
+   "aliases": [
+    "cardamom seeds",
+    "cardamon",
+    "cardamum",
+    "ground cadamom"
+   ],
    "nutrients": {
     "1": 311,
     "2": 6.7,
@@ -2914,7 +3161,8 @@
     "6": 28,
     "7": 10.76,
     "8": 0.045
-   }
+   },
+   "wikidata": "Q14625808"
   },
   {
    "key": "food.chili_powder",
@@ -2930,6 +3178,12 @@
      "plural": "chili powder"
     }
    },
+   "aliases": [
+    "Chilipfeffer",
+    "Chili-Pulver",
+    "chile powder",
+    "chili powder blend"
+   ],
    "nutrients": {
     "1": 282,
     "2": 14.28,
@@ -2939,7 +3193,8 @@
     "6": 34.8,
     "7": 13.46,
     "8": 7.168
-   }
+   },
+   "wikidata": "Q1072946"
   },
   {
    "key": "food.curry_powder",
@@ -2955,6 +3210,11 @@
      "plural": "curry powder"
     }
    },
+   "aliases": [
+    "Curry",
+    "Currygewürz",
+    "Currymischung"
+   ],
    "nutrients": {
     "1": 325,
     "2": 14.01,
@@ -2964,7 +3224,8 @@
     "6": 53.2,
     "7": 14.29,
     "8": 0.13
-   }
+   },
+   "wikidata": "Q1144935"
   },
   {
    "key": "food.smoked_paprika",
@@ -3087,7 +3348,8 @@
     "6": 2.5,
     "7": 3.27,
     "8": 0.007
-   }
+   },
+   "wikidata": "Q61046162"
   },
   {
    "key": "food.olive_oil",
@@ -3178,6 +3440,12 @@
      "plural": "soy sauce"
     }
    },
+   "aliases": [
+    "shoyu",
+    "ganjang",
+    "jiangyou",
+    "soya sauce"
+   ],
    "nutrients": {
     "1": 53,
     "2": 0.57,
@@ -3187,7 +3455,8 @@
     "6": 0.8,
     "7": 8.14,
     "8": 13.732
-   }
+   },
+   "wikidata": "Q229385"
   },
   {
    "key": "food.fish_sauce",
@@ -3203,6 +3472,9 @@
      "plural": "fish sauce"
     }
    },
+   "aliases": [
+    "yúlù"
+   ],
    "nutrients": {
     "1": 35,
     "2": 0.01,
@@ -3212,7 +3484,8 @@
     "6": 0,
     "7": 5.06,
     "8": 19.628
-   }
+   },
+   "wikidata": "Q545985"
   },
   {
    "key": "food.worcestershire_sauce",
@@ -3303,6 +3576,10 @@
      "plural": "apple cider vinegar"
     }
    },
+   "aliases": [
+    "Obstessig",
+    "cider vinegar"
+   ],
    "nutrients": {
     "1": 21,
     "2": 0,
@@ -3312,7 +3589,8 @@
     "6": 0,
     "7": 0,
     "8": 0.013
-   }
+   },
+   "wikidata": "Q618322"
   },
   {
    "key": "food.balsamic_vinegar",
@@ -3677,6 +3955,10 @@
      "plural": "brown sugar"
     }
    },
+   "aliases": [
+    "cassonade",
+    "soft brown sugar"
+   ],
    "nutrients": {
     "1": 380,
     "2": 0,
@@ -3686,7 +3968,8 @@
     "6": 0,
     "7": 0.12,
     "8": 0.07
-   }
+   },
+   "wikidata": "Q11190742"
   },
   {
    "key": "food.powdered_sugar",
@@ -3777,6 +4060,12 @@
      "plural": "cocoa powder"
     }
    },
+   "aliases": [
+    "Kakao",
+    "cocoa",
+    "cacao",
+    "cocoa solids"
+   ],
    "nutrients": {
     "1": 228,
     "2": 13.7,
@@ -3786,7 +4075,8 @@
     "6": 37,
     "7": 19.6,
     "8": 0.052
-   }
+   },
+   "wikidata": "Q1062396"
   },
   {
    "key": "food.dark_chocolate",
@@ -3927,6 +4217,10 @@
      "plural": "peanut butter"
     }
    },
+   "aliases": [
+    "Erdnusscreme",
+    "Erdnussmus"
+   ],
    "nutrients": {
     "1": 598,
     "2": 51.36,
@@ -3936,7 +4230,8 @@
     "6": 5,
     "7": 22.21,
     "8": 0.043
-   }
+   },
+   "wikidata": "Q147651"
   },
   {
    "key": "food.almond_butter",
