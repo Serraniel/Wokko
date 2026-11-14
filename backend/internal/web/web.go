@@ -34,6 +34,14 @@ func worthCompressing(name string) bool {
 	return false
 }
 
+// Go only knows a few types itself, and the container has no list of its own. Without this,
+// favicon.ico would go out as application/octet-stream, which icon fetchers may ignore.
+func init() {
+	if err := mime.AddExtensionType(".ico", "image/x-icon"); err != nil {
+		panic(err)
+	}
+}
+
 func handler(root fs.FS) http.Handler {
 	files := http.FileServerFS(root)
 	// The files never change while the program runs, so each is compressed once.

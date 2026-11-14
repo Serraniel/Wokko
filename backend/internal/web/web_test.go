@@ -68,3 +68,10 @@ func TestUnknownPathsGetTheAppShell(t *testing.T) {
 		t.Fatalf("body %q", w.Body.String())
 	}
 }
+
+func TestFaviconIsAnImage(t *testing.T) {
+	h := handler(fstest.MapFS{"index.html": {Data: []byte("<html>shell</html>")}, "favicon.ico": {Data: []byte("\x00\x00\x01\x00")}})
+	if w := fetch(t, h, "/favicon.ico", "gzip"); w.Code != 200 || w.Header().Get("Content-Type") != "image/x-icon" {
+		t.Fatalf("%d %v", w.Code, w.Header())
+	}
+}

@@ -229,8 +229,13 @@ func write[In any](l *Layer, s *mcp.Server, a app.TokenAccess, name, description
 //
 // Some things are deliberately never offered: finding or listing other people, making a
 // recipe public, account and admin actions, and permanent deletion.
-func (l *Layer) server(a app.TokenAccess) *mcp.Server {
-	s := mcp.NewServer(&mcp.Implementation{Name: "wokko", Title: "Wokko", Version: l.svc.Cfg.Version}, &mcp.ServerOptions{Instructions: instructionsFor(a)})
+func (l *Layer) server(a app.TokenAccess, base string) *mcp.Server {
+	// The icons let an assistant show Wokko's logo next to the connector.
+	info := &mcp.Implementation{Name: "wokko", Title: "Wokko", Version: l.svc.Cfg.Version, WebsiteURL: base, Icons: []mcp.Icon{
+		{Source: base + "/icon-192.png", MIMEType: "image/png", Sizes: []string{"192x192"}},
+		{Source: base + "/favicon.svg", MIMEType: "image/svg+xml", Sizes: []string{"any"}},
+	}}
+	s := mcp.NewServer(info, &mcp.ServerOptions{Instructions: instructionsFor(a)})
 	v, svc := a.Viewer, l.svc
 
 	read(l, s, "search_recipes", "Find recipes this person can see. Without a query it lists the most recently changed.", func(ctx context.Context, in searchArgs) (any, error) {
