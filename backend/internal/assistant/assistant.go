@@ -59,7 +59,7 @@ func New(svc *app.Service, log *slog.Logger) *Layer {
 	l := &Layer{svc: svc, log: log, limit: auth.NewLimiter(600, time.Hour), regs: auth.NewLimiter(30, time.Hour)}
 	l.handler = mcp.NewStreamableHTTPHandler(func(r *http.Request) *mcp.Server {
 		access, _ := r.Context().Value(accessKey{}).(app.TokenAccess)
-		return l.server(access)
+		return l.server(access, l.baseURL(r))
 	}, &mcp.StreamableHTTPOptions{Stateless: true, JSONResponse: true})
 	return l
 }

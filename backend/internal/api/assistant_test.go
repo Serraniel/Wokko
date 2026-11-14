@@ -581,3 +581,14 @@ func TestMCPUsesTheWholeCatalog(t *testing.T) {
 	e.svc.Fetcher = importer.NewFetcher("test", false)
 	callFails(t, s, "set_recipe_photo", map[string]any{"id": made.ID, "image_url": site.URL + "/p.png"})
 }
+
+// TestMCPServerShowsItsIcon lets an assistant show Wokko's logo next to the connector.
+func TestMCPServerShowsItsIcon(t *testing.T) {
+	e := newEnv(t)
+	admin := e.admin()
+	enableMCP(t, admin)
+	info := connect(t, e, newToken(t, admin, "read")).InitializeResult().ServerInfo
+	if info.Title != "Wokko" || len(info.Icons) == 0 || info.Icons[0].Source != "http://wokko.test/icon-192.png" || info.Icons[0].MIMEType != "image/png" {
+		t.Fatalf("server info: %+v", info)
+	}
+}
