@@ -34,6 +34,8 @@ var (
 type FileIngredient struct {
 	Food, Unit, Note, Line string
 	Amount                 *float64
+	// Recipe names the recipe the food is cooked from, when the file says so.
+	Recipe string
 }
 
 type FileStep struct {
@@ -50,6 +52,9 @@ type FileRecipe struct {
 	Keywords                                []string
 	Steps                                   []FileStep
 	Photo                                   []byte
+	// YieldAmount and YieldUnit say how much the recipe makes, when the file says so.
+	YieldAmount float64
+	YieldUnit   string
 }
 
 type fileReader struct {
@@ -348,6 +353,9 @@ func fromTandoor(m map[string]any) *FileRecipe {
 				continue // A section header in Tandoor, which Wokko doesn't have.
 			}
 			ing := FileIngredient{Food: food, Unit: nameOf(i["unit"]), Note: str(i, "note")}
+			if f, ok := i["food"].(map[string]any); ok {
+				ing.Recipe = nameOf(f["recipe"]) // Tandoor's link from a food to its recipe
+			}
 			if a := number(i, "amount"); a > 0 && i["no_amount"] != true {
 				ing.Amount = &a
 			}
@@ -547,7 +555,7 @@ func fromWokko(m map[string]any, fileAt func(string) []byte) *FileRecipe {
 			if !ok {
 				continue
 			}
-			ing := FileIngredient{Food: nameOf(im["food"]), Unit: nameOf(im["unit"]), Note: str(im, "note")}
+			ing := FileIngredient{Food: nameOf(im["food"]), Unit: nameOf(im["unit"]), Note: str(im, "note"), Recipe: nameOf(im["recipe"])}
 			if a, ok := im["amount"].(float64); ok {
 				ing.Amount = &a
 			}
@@ -559,6 +567,9 @@ func fromWokko(m map[string]any, fileAt func(string) []byte) *FileRecipe {
 	}
 	if len(r.Steps) == 0 {
 		r.Steps = []FileStep{{}}
+	}
+	if y, ok := m["yield"].(map[string]any); ok {
+		r.YieldAmount, r.YieldUnit = number(y, "amount"), nameOf(y["unit"])
 	}
 	if fileAt != nil {
 		// Newer exports name the photo's path. Older ones only have the address it was served at.

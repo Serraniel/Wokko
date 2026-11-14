@@ -1195,6 +1195,46 @@ func (s *Service) GetRecipeNutrition(ctx context.Context, v Viewer, id int64) (R
 }
 
 func (s *Service) recipeNutrition(ctx context.Context, q *sqlcgen.Queries, locale string, rec Recipe) (RecipeNutrition, error) {
+	return s.recipeNutritionAt(ctx, q, locale, rec, maxRecipeDepth)
+}
+
+// linkedNutrition counts an ingredient that has no values of its own from the recipe it's
+// cooked from, when that recipe's yield says how much of it the amount is.
+func (s *Service) linkedNutrition(ctx context.Context, q *sqlcgen.Queries, locale string, i Ingredient, depth int) (map[int64]float64, bool, error) {
+	if i.Recipe == nil || depth <= 1 || i.Amount == nil {
+		return nil, false, nil
+	}
+	row, err := q.GetRecipe(ctx, i.Recipe.ID)
+	if isNoRows(err) {
+		return nil, false, nil
+	}
+	if err != nil {
+		return nil, false, err
+	}
+	var unit sql.NullInt64
+	if i.Unit != nil {
+		unit = sql64(i.Unit.ID)
+	}
+	scale, ok, err := yieldScale(ctx, q, row, unit, sql.NullFloat64{Float64: *i.Amount, Valid: true})
+	if err != nil || !ok {
+		return nil, false, err
+	}
+	doc, err := s.buildRecipe(ctx, q, Viewer{Locale: locale}, row)
+	if err != nil {
+		return nil, false, err
+	}
+	n, err := s.recipeNutritionAt(ctx, q, locale, doc, depth-1)
+	if err != nil || n.Counted == 0 {
+		return nil, false, err
+	}
+	out := map[int64]float64{}
+	for _, x := range n.Nutrients {
+		out[x.Nutrient.ID] = x.Total * scale
+	}
+	return out, true, nil
+}
+
+func (s *Service) recipeNutritionAt(ctx context.Context, q *sqlcgen.Queries, locale string, rec Recipe, depth int) (RecipeNutrition, error) {
 	nutrients, err := s.nutrients(ctx, q, locale)
 	if err != nil {
 		return RecipeNutrition{}, err
@@ -1257,6 +1297,19 @@ func (s *Service) recipeNutrition(ctx context.Context, q *sqlcgen.Queries, local
 						grams = *i.Amount * pieceGrams[i.Food.ID]
 					default:
 						known = false
+					}
+				}
+				if !known && values[i.Food.ID] == nil {
+					linked, ok, err := s.linkedNutrition(ctx, q, locale, i, depth)
+					if err != nil {
+						return out, err
+					}
+					if ok {
+						out.Counted++
+						for n, x := range linked {
+							totals[n] += x
+						}
+						continue
 					}
 				}
 				if !known {

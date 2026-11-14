@@ -368,12 +368,26 @@ type unit struct {
 }
 
 type food struct {
-	ID                  int64     `json:"id"`
-	Name                string    `json:"name"`
-	PluralName          *string   `json:"plural_name"`
-	FullName            string    `json:"full_name"`
-	IgnoreShopping      bool      `json:"ignore_shopping"`
-	SupermarketCategory *category `json:"supermarket_category"`
+	ID                  int64       `json:"id"`
+	Name                string      `json:"name"`
+	PluralName          *string     `json:"plural_name"`
+	FullName            string      `json:"full_name"`
+	IgnoreShopping      bool        `json:"ignore_shopping"`
+	SupermarketCategory *category   `json:"supermarket_category"`
+	Recipe              *foodRecipe `json:"recipe"`
+}
+
+// foodRecipe is TandoorFoodRecipe: the recipe a food is cooked from, which kitshn links to.
+type foodRecipe struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
+func toFoodRecipe(l *app.RecipeLink) *foodRecipe {
+	if l == nil {
+		return nil
+	}
+	return &foodRecipe{ID: l.ID, Name: l.Name}
 }
 
 type ingredient struct {
@@ -460,6 +474,7 @@ func toStep(s app.Step, order int) step {
 	out := step{ID: s.ID, Name: s.Name, Instruction: s.Instruction, InstructionsMD: s.Instruction, Time: s.Minutes, Order: order, ShowIngredientsTbl: true, Ingredients: make([]ingredient, len(s.Ingredients))}
 	for i, ing := range s.Ingredients {
 		item := ingredient{ID: ing.ID, Food: toFood(ing.Food), Note: ing.Note, Order: i, NoAmount: ing.Amount == nil}
+		item.Food.Recipe = toFoodRecipe(ing.Recipe)
 		if ing.Amount != nil {
 			item.Amount = *ing.Amount
 		}
