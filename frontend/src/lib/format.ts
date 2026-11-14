@@ -15,6 +15,7 @@ export interface CombinedIngredient {
 	unit: Ingredient['unit'];
 	amount: number | null;
 	notes: string[];
+	recipe?: Ingredient['recipe'];
 }
 
 /** Adds up the same food in the same unit across steps, for the shopping-style overview. */
@@ -28,7 +29,7 @@ export function combineIngredients(steps: Step[]): CombinedIngredient[] {
 				if (cur.amount !== null && ing.amount !== null) cur.amount += ing.amount;
 				if (ing.note && !cur.notes.includes(ing.note)) cur.notes.push(ing.note);
 			} else {
-				out.set(key, { key, name: ing.food.name, plural: ing.food.plural, unit: ing.unit, amount: ing.amount, notes: ing.note ? [ing.note] : [] });
+				out.set(key, { key, name: ing.food.name, plural: ing.food.plural, unit: ing.unit, amount: ing.amount, notes: ing.note ? [ing.note] : [], recipe: ing.recipe });
 			}
 		}
 	}

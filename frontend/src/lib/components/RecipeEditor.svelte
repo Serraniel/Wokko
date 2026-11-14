@@ -42,6 +42,9 @@
 		work: string;
 		wait: string;
 		servings: string;
+		// How much it makes, such as 1.5 l, so recipes using it as an ingredient can scale it.
+		yieldAmount: string;
+		yieldUnit: string;
 		source: string;
 		visibility: string;
 		keywords: string[];
@@ -53,13 +56,15 @@
 	const newStep = (): StepRow => ({ key: nextKey++, name: '', instruction: '', minutes: '', ingredients: [newIngredient()] });
 
 	function fromRecipe(r: Recipe | null): Form {
-		if (!r) return { name: '', description: '', work: '', wait: '', servings: '4', source: '', visibility: 'household', keywords: [], steps: [newStep()] };
+		if (!r) return { name: '', description: '', work: '', wait: '', servings: '4', yieldAmount: '', yieldUnit: '', source: '', visibility: 'household', keywords: [], steps: [newStep()] };
 		return {
 			name: r.name,
 			description: r.description,
 			work: r.work_minutes ? String(r.work_minutes) : '',
 			wait: r.wait_minutes ? String(r.wait_minutes) : '',
 			servings: String(r.servings),
+			yieldAmount: r.yield ? formatNumber(r.yield.amount) : '',
+			yieldUnit: r.yield?.unit?.name ?? '',
 			source: r.source_url,
 			visibility: r.visibility,
 			keywords: r.keywords.map((k) => k.name),
@@ -128,7 +133,7 @@
 			s.key = nextKey++;
 			for (const i of s.ingredients) i.key = nextKey++;
 		}
-		form = v;
+		form = { ...v, yieldAmount: v.yieldAmount ?? '', yieldUnit: v.yieldUnit ?? '' }; // drafts from before the yield field
 		foundDraft = null;
 	}
 
@@ -233,6 +238,7 @@
 			wait_minutes: int(form.wait),
 			servings: int(form.servings) || 1,
 			servings_text: '',
+			yield: { amount: parseAmount(form.yieldAmount) ?? 0, unit_id: 0, unit_name: form.yieldUnit.trim() },
 			source_url: form.source.trim(),
 			visibility: form.visibility,
 			keywords: form.keywords,
@@ -303,6 +309,8 @@
 			work: r.work_minutes ? String(r.work_minutes) : '',
 			wait: r.wait_minutes ? String(r.wait_minutes) : '',
 			servings: String(r.servings),
+			yieldAmount: '',
+			yieldUnit: '',
 			source: r.source_url,
 			visibility: r.visibility,
 			keywords: r.keywords,
@@ -407,6 +415,14 @@
 				<label class="label" for="work">{t('editor.work_time')}</label>
 				<input id="work" class="input" type="text" inputmode="numeric" bind:value={form.work} placeholder="30" />
 			</div>
+		</div>
+		<div>
+			<p class="label">{t('editor.yield')}</p>
+			<div class="grid grid-cols-2 gap-3">
+				<input class="input" type="text" inputmode="decimal" aria-label={t('editor.yield_amount')} placeholder="1,5" bind:value={form.yieldAmount} />
+				<Combobox label={t('editor.yield_unit')} placeholder="l" bind:value={form.yieldUnit} search={searchUnits} />
+			</div>
+			<p class="hint">{t('editor.yield_hint')}</p>
 		</div>
 		<div>
 			<label class="label" for="keyword">{t('editor.tags')}</label>

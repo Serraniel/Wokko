@@ -188,7 +188,7 @@ func (q *Queries) CreatePasswordReset(ctx context.Context, arg CreatePasswordRes
 
 const createRecipe = `-- name: CreateRecipe :one
 INSERT INTO recipes (owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, search_text)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id
 `
 
 type CreateRecipeParams struct {
@@ -235,6 +235,8 @@ func (q *Queries) CreateRecipe(ctx context.Context, arg CreateRecipeParams) (Rec
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.YieldAmount,
+		&i.YieldUnitID,
 	)
 	return i, err
 }
@@ -425,7 +427,7 @@ func (q *Queries) GetPasswordReset(ctx context.Context, arg GetPasswordResetPara
 }
 
 const getRecipe = `-- name: GetRecipe :one
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE id = ?
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE id = ?
 `
 
 func (q *Queries) GetRecipe(ctx context.Context, id int64) (Recipe, error) {
@@ -448,12 +450,14 @@ func (q *Queries) GetRecipe(ctx context.Context, id int64) (Recipe, error) {
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.YieldAmount,
+		&i.YieldUnitID,
 	)
 	return i, err
 }
 
 const getRecipeByPhoto = `-- name: GetRecipeByPhoto :one
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE photo = ? LIMIT 1
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE photo = ? LIMIT 1
 `
 
 func (q *Queries) GetRecipeByPhoto(ctx context.Context, photo sql.NullString) (Recipe, error) {
@@ -476,6 +480,8 @@ func (q *Queries) GetRecipeByPhoto(ctx context.Context, photo sql.NullString) (R
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.DeletedAt,
+		&i.YieldAmount,
+		&i.YieldUnitID,
 	)
 	return i, err
 }
@@ -696,7 +702,7 @@ func (q *Queries) ListCookLog(ctx context.Context, arg ListCookLogParams) ([]Coo
 }
 
 const listExpiredTrash = `-- name: ListExpiredTrash :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE deleted_at IS NOT NULL AND deleted_at < ?
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE deleted_at IS NOT NULL AND deleted_at < ?
 `
 
 func (q *Queries) ListExpiredTrash(ctx context.Context, deletedAt sql.NullString) ([]Recipe, error) {
@@ -725,6 +731,8 @@ func (q *Queries) ListExpiredTrash(ctx context.Context, deletedAt sql.NullString
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
@@ -871,7 +879,7 @@ func (q *Queries) ListKeywordSearchNamesForRecipe(ctx context.Context, recipeID 
 }
 
 const listPublicRecipes = `-- name: ListPublicRecipes :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE visibility = 'public' AND deleted_at IS NULL
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE visibility = 'public' AND deleted_at IS NULL
   AND (CAST(?1 AS TEXT) = '' OR search_text LIKE '%' || CAST(?1 AS TEXT) || '%')
 ORDER BY updated_at DESC, id DESC LIMIT ?3 OFFSET ?2
 `
@@ -908,6 +916,8 @@ func (q *Queries) ListPublicRecipes(ctx context.Context, arg ListPublicRecipesPa
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
@@ -1067,7 +1077,7 @@ func (q *Queries) ListRecipeVersions(ctx context.Context, recipeID int64) ([]Lis
 }
 
 const listRecipesByIDs = `-- name: ListRecipesByIDs :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE id IN (/*SLICE:ids*/?)
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE id IN (/*SLICE:ids*/?)
 `
 
 func (q *Queries) ListRecipesByIDs(ctx context.Context, ids []int64) ([]Recipe, error) {
@@ -1106,6 +1116,8 @@ func (q *Queries) ListRecipesByIDs(ctx context.Context, ids []int64) ([]Recipe, 
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
@@ -1121,7 +1133,7 @@ func (q *Queries) ListRecipesByIDs(ctx context.Context, ids []int64) ([]Recipe, 
 }
 
 const listRecipesByOwner = `-- name: ListRecipesByOwner :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE owner_id = ? ORDER BY id
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE owner_id = ? ORDER BY id
 `
 
 func (q *Queries) ListRecipesByOwner(ctx context.Context, ownerID int64) ([]Recipe, error) {
@@ -1150,6 +1162,8 @@ func (q *Queries) ListRecipesByOwner(ctx context.Context, ownerID int64) ([]Reci
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
@@ -1265,7 +1279,7 @@ func (q *Queries) ListSteps(ctx context.Context, recipeID int64) ([]Step, error)
 }
 
 const listTrash = `-- name: ListTrash :many
-SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at FROM recipes WHERE owner_id = ? AND deleted_at IS NOT NULL ORDER BY deleted_at DESC
+SELECT id, owner_id, name, description, work_minutes, wait_minutes, servings, servings_text, source_url, visibility, photo, version, search_text, created_at, updated_at, deleted_at, yield_amount, yield_unit_id FROM recipes WHERE owner_id = ? AND deleted_at IS NOT NULL ORDER BY deleted_at DESC
 `
 
 func (q *Queries) ListTrash(ctx context.Context, ownerID int64) ([]Recipe, error) {
@@ -1294,6 +1308,8 @@ func (q *Queries) ListTrash(ctx context.Context, ownerID int64) ([]Recipe, error
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.DeletedAt,
+			&i.YieldAmount,
+			&i.YieldUnitID,
 		); err != nil {
 			return nil, err
 		}
@@ -1505,6 +1521,21 @@ type SetRecipeSearchTextParams struct {
 
 func (q *Queries) SetRecipeSearchText(ctx context.Context, arg SetRecipeSearchTextParams) error {
 	_, err := q.db.ExecContext(ctx, setRecipeSearchText, arg.SearchText, arg.ID)
+	return err
+}
+
+const setRecipeYield = `-- name: SetRecipeYield :exec
+UPDATE recipes SET yield_amount = ?, yield_unit_id = ? WHERE id = ?
+`
+
+type SetRecipeYieldParams struct {
+	YieldAmount sql.NullFloat64
+	YieldUnitID sql.NullInt64
+	ID          int64
+}
+
+func (q *Queries) SetRecipeYield(ctx context.Context, arg SetRecipeYieldParams) error {
+	_, err := q.db.ExecContext(ctx, setRecipeYield, arg.YieldAmount, arg.YieldUnitID, arg.ID)
 	return err
 }
 

@@ -77,7 +77,7 @@
 		{#if overview.length}
 			<section class="card p-4 lg:sticky lg:top-4">
 				<div class="mb-2 flex items-center justify-between gap-3">
-					<h2 class="font-semibold">{t('recipe.ingredients')}</h2>
+					<h2 class="font-semibold">{t('recipe.ingredients')}{#if recipe.yield}<span class="ml-2 text-sm font-normal text-muted">{t('recipe.makes', { amount: `${formatNumber(recipe.yield.amount * (servings / (recipe.servings || 1)))}${recipe.yield.unit ? ` ${recipe.yield.unit.abbreviation || recipe.yield.unit.name}` : ''}` })}</span>{/if}</h2>
 					<div class="flex items-center gap-1" role="group" aria-label={t('recipe.servings')}>
 						<button class="print-hide btn btn-soft btn-icon !min-h-9 !w-9" onclick={() => (servings = Math.max(1, servings - 1))} aria-label={t('recipe.fewer_servings')}><Minus size={15} /></button>
 						<span class="inline-flex min-w-11 items-center justify-center gap-1 text-sm font-semibold tabular-nums" aria-live="polite"><Users size={14} />{servings}</span>
@@ -88,7 +88,7 @@
 					{#each overview as i (i.key)}
 						<li class="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 py-2">
 							<span class="text-right font-semibold tabular-nums">{amountText(i.amount)} {unitText(i.unit, i.amount)}</span>
-							<span>{foodText(i.name, i.plural, i.amount)}{#if i.notes.length}<span class="text-muted">, {i.notes.join('; ')}</span>{/if}</span>
+							<span>{#if i.recipe}<a class="inline-flex items-baseline gap-1 underline decoration-line underline-offset-2 hover:text-brand" href={recipeHref(i.recipe.id)} title={t('recipe.linked', { name: i.recipe.name })}>{foodText(i.name, i.plural, i.amount)}<BookOpen size={13} class="shrink-0 self-center text-muted" /></a>{:else}{foodText(i.name, i.plural, i.amount)}{/if}{#if i.notes.length}<span class="text-muted">, {i.notes.join('; ')}</span>{/if}</span>
 						</li>
 					{/each}
 				</ul>

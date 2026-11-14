@@ -284,6 +284,8 @@ type Recipe struct {
 	CreatedAt    string
 	UpdatedAt    string
 	DeletedAt    sql.NullString
+	YieldAmount  sql.NullFloat64
+	YieldUnitID  sql.NullInt64
 }
 
 type RecipeBook struct {

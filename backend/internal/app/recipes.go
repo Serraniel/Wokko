@@ -222,6 +222,9 @@ func (s *Service) buildRecipe(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 		return Recipe{}, err
 	}
 	out.CanManage = v.User != nil && v.id() == r.OwnerID
+	if out.Yield, err = recipeYield(ctx, q, r, v.locale()); err != nil {
+		return Recipe{}, err
+	}
 	return out, nil
 }
 
@@ -551,6 +554,9 @@ func (s *Service) writeContent(ctx context.Context, q *sqlcgen.Queries, v Viewer
 		if err := q.DeleteStep(ctx, oldSteps[i].ID); err != nil {
 			return "", err
 		}
+	}
+	if err := s.writeYield(ctx, q, v, recipeID, in.Yield); err != nil {
+		return "", err
 	}
 	if err := q.DeleteRecipeKeywords(ctx, recipeID); err != nil {
 		return "", err
@@ -949,6 +955,13 @@ func (s *Service) RestoreVersion(ctx context.Context, v Viewer, id, versionID in
 	in := RecipeInput{
 		Name: doc.Name, Description: doc.Description, WorkMinutes: doc.WorkMinutes, WaitMinutes: doc.WaitMinutes, Servings: doc.Servings,
 		ServingsText: doc.ServingsText, SourceURL: doc.SourceURL, Visibility: cur.Visibility, BaseVersion: cur.Version,
+		Yield: &RecipeYieldInput{},
+	}
+	if doc.Yield != nil {
+		in.Yield.Amount = doc.Yield.Amount
+		if doc.Yield.Unit != nil {
+			in.Yield.UnitID, in.Yield.UnitName = doc.Yield.Unit.ID, doc.Yield.Unit.Name
+		}
 	}
 	for _, k := range doc.Keywords {
 		in.Keywords = append(in.Keywords, k.Name)

@@ -9,6 +9,7 @@ export function toInput(r: Recipe): RecipeInput {
 		wait_minutes: r.wait_minutes,
 		servings: r.servings,
 		servings_text: r.servings_text,
+		yield: r.yield ? { amount: r.yield.amount, unit_id: r.yield.unit?.id ?? 0, unit_name: r.yield.unit?.name ?? '' } : null,
 		source_url: r.source_url,
 		visibility: r.visibility,
 		keywords: r.keywords.map((k) => k.name),

@@ -206,3 +206,6 @@ SELECT search_name FROM food_aliases WHERE food_id IN (sqlc.slice(ids));
 
 -- name: ListKeywordSearchNamesForRecipe :many
 SELECT n.search_name FROM keyword_names n JOIN recipe_keywords k ON k.keyword_id = n.keyword_id WHERE k.recipe_id = ?;
+
+-- name: SetRecipeYield :exec
+UPDATE recipes SET yield_amount = ?, yield_unit_id = ? WHERE id = ?;

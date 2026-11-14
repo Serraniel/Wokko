@@ -130,6 +130,11 @@ export interface Ingredient {
 export interface RecipeLink {
   id: number /* int64 */;
   name: string;
+  /**
+   * Servings and HasYield tell whether shopping can scale it by itself or asks for servings.
+   */
+  servings: number /* int64 */;
+  has_yield: boolean;
 }
 export interface Step {
   id: number /* int64 */;
@@ -158,7 +163,26 @@ export interface RecipeSummary {
   updated_at: string;
   deleted_at: string;
 }
+/**
+ * RecipeYield is how much a recipe makes, such as 1.5 l.
+ */
+export interface RecipeYield {
+  amount: number /* float64 */;
+  unit: UnitRef | null;
+}
+/**
+ * RecipeYieldInput sets how much a recipe makes. An amount of 0 removes it.
+ */
+export interface RecipeYieldInput {
+  amount: number /* float64 */;
+  unit_id: number /* int64 */;
+  unit_name: string;
+}
 export interface Recipe extends RecipeSummary {
+  /**
+   * Yield is how much the recipe makes, when known.
+   */
+  yield: RecipeYield | null;
   source_url: string;
   version: number /* int64 */;
   can_edit: boolean;
@@ -197,6 +221,11 @@ export interface RecipeInput {
    * BaseVersion is the version this edit started from, used to detect conflicting edits.
    */
   base_version: number /* int64 */;
+  /**
+   * Yield sets how much the recipe makes. Leaving it out keeps it, so apps that don't know
+   * about it don't erase it.
+   */
+  yield: RecipeYieldInput | null;
 }
 export interface RecipeVersion {
   id: number /* int64 */;
@@ -454,6 +483,19 @@ export interface ShoppingAddRecipe {
   servings: number /* float64 */;
   meal_plan_id: number /* int64 */;
   ingredient_ids: number /* int64 */[];
+  /**
+   * Cook lists ingredients that link to a recipe and are cooked rather than bought: that
+   * recipe's ingredients go on the list instead, scaled to the amount needed.
+   */
+  cook: CookChoice[];
+}
+/**
+ * CookChoice cooks one ingredient from its linked recipe. Servings is used when that recipe's
+ * yield doesn't say how much of it is needed; without either, the whole recipe is added.
+ */
+export interface CookChoice {
+  ingredient_id: number /* int64 */;
+  servings: number /* float64 */;
 }
 export interface ShoppingCheckInput {
   ids: number /* int64 */[];

@@ -13,6 +13,7 @@
 	import ExportSheet from '#lib/components/ExportSheet.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
 	import { formatDate, formatNumber, t } from '#lib/i18n/index.svelte.ts';
+	import { parseAmount } from '#lib/format.ts';
 	import { toasts } from '#lib/toast.svelte.ts';
 
 	const id = $derived(page.params.id);
@@ -90,11 +91,27 @@
 		}
 	}
 
+	// Ingredients cooked from a recipe of their own can be bought or cooked: then that recipe's
+	// ingredients go on the list instead.
+	let shopOpen = $state(false);
+	let cookChoice = $state<Record<number, { cook: boolean; servings: string }>>({});
+	const linkedIngredients = $derived(recipe ? recipe.steps.flatMap((s) => s.ingredients).filter((i) => i.recipe) : []);
+
 	async function addToShopping() {
 		moreOpen = false;
 		if (!recipe) return;
+		if (linkedIngredients.length && !shopOpen) {
+			cookChoice = Object.fromEntries(linkedIngredients.map((i) => [i.id, { cook: false, servings: String(i.recipe?.servings || '') }]));
+			await tick();
+			shopOpen = true;
+			return;
+		}
+		const cook = linkedIngredients
+			.filter((i) => cookChoice[i.id]?.cook)
+			.map((i) => ({ ingredient_id: i.id, servings: i.recipe?.has_yield ? 0 : (parseAmount(cookChoice[i.id].servings) ?? 0) }));
 		try {
-			await api.post('/shopping/recipes', { recipe_id: recipe.id, servings: recipe.servings });
+			await api.post('/shopping/recipes', { recipe_id: recipe.id, servings: recipe.servings, cook });
+			shopOpen = false;
 			forget('shopping');
 			toasts.show(t('shopping.added'));
 		} catch (e) {
@@ -203,7 +220,35 @@
 		{#if recipe.can_manage}
 			<ShareSheet bind:open={shareOpen} {recipe} onchange={(r) => (recipe = remember(`recipe:${r.id}`, r))} />
 		{/if}
-		<Sheet bind:open={moreOpen} title={recipe.name}>
+		<Sheet bind:open={shopOpen} title={t('recipe.add_to_shopping')}>
+	<div class="space-y-3">
+		<p class="hint !mt-0">{t('shopping.cook_hint')}</p>
+		<ul class="divide-y divide-line">
+			{#each linkedIngredients as i (i.id)}
+				{@const c = cookChoice[i.id]}
+				{#if c}
+					<li class="space-y-2 py-3">
+						<p class="font-medium">{i.food.name}{#if i.amount}<span class="font-normal text-muted">{' · '}{formatNumber(i.amount)}{i.unit ? ` ${i.unit.abbreviation || i.unit.name}` : ''}</span>{/if}</p>
+						<div class="grid grid-cols-2 gap-1 rounded-xl bg-surface-2 p-1" role="group" aria-label={i.food.name}>
+							<button type="button" class="rounded-lg py-2 text-sm font-medium {c.cook ? 'text-muted' : 'bg-surface shadow-card'}" aria-pressed={!c.cook} onclick={() => (c.cook = false)}>{t('shopping.buy_it')}</button>
+							<button type="button" class="rounded-lg py-2 text-sm font-medium {c.cook ? 'bg-surface shadow-card' : 'text-muted'}" aria-pressed={c.cook} onclick={() => (c.cook = true)}>{t('shopping.cook_it', { name: i.recipe?.name ?? '' })}</button>
+						</div>
+						{#if c.cook && !i.recipe?.has_yield}
+							<div>
+								<label class="label" for="cook-{i.id}">{t('shopping.cook_servings', { name: i.recipe?.name ?? '' })}</label>
+								<input id="cook-{i.id}" class="input" inputmode="decimal" bind:value={c.servings} />
+								<p class="hint">{t('shopping.cook_servings_hint')}</p>
+							</div>
+						{/if}
+					</li>
+				{/if}
+			{/each}
+		</ul>
+		<button class="btn btn-primary w-full" onclick={addToShopping}>{t('recipe.add_to_shopping')}</button>
+	</div>
+</Sheet>
+
+<Sheet bind:open={moreOpen} title={recipe.name}>
 			<div class="divide-y divide-line">
 				<button class="flex min-h-12 w-full items-center gap-3 text-left font-medium" onclick={async () => { moreOpen = false; await tick(); window.print(); }}><Printer size={18} class="text-muted" />{t('recipe.print')}</button>
 				<a class="flex min-h-12 items-center gap-3 font-medium" href={planLink}><CalendarPlus size={18} class="text-muted" />{t('recipe.add_to_plan')}</a>

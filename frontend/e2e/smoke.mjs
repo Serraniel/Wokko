@@ -334,11 +334,16 @@ await step('kitchen knowledge explains a recipe', async () => {
 });
 await step('a recipe used as an ingredient links to its recipe', async () => {
   const make = async (data) => (await (await p.request.post(base + '/api/v1/recipes', { data })).json());
-  const stock = await make({ name: 'Wokko-Brühe', servings: 4, visibility: 'private', steps: [{ instruction: 'Kochen.', ingredients: [{ food_name: 'Suppenhuhn' }] }] });
+  const stock = await make({ name: 'Wokko-Brühe', servings: 4, visibility: 'private', yield: { amount: 1.5, unit_id: 0, unit_name: 'l' }, steps: [{ instruction: 'Kochen.', ingredients: [{ food_name: 'Suppenhuhn', amount: 1 }] }] });
   const dish = await make({ name: 'Wokko-Frikassee', servings: 2, visibility: 'private', steps: [{ instruction: 'Rühren.', ingredients: [{ food_name: 'Wokko-Brühe', unit_name: 'ml', amount: 450 }] }] });
   await p.goto(base + '/ingredients'); await p.fill('input[type=search]', 'Wokko-Brühe'); await p.click('button:has-text("Wokko-Brühe")');
   await p.fill('input[aria-label="Can be cooked from"]', 'Wokko-Br'); await p.click('li[role=option]:has-text("Wokko-Brühe")'); await p.click('form button:has-text("Save")'); await p.waitForTimeout(300);
-  await p.goto(base + '/recipes/' + dish.id); await p.click('a[title="Recipe: Wokko-Brühe"]'); await p.waitForURL('**/recipes/' + stock.id); await p.waitForSelector('h1:has-text("Wokko-Brühe")');
+  await p.goto(base + '/recipes/' + dish.id); await p.click('a[title="Recipe: Wokko-Brühe"]'); await p.waitForURL('**/recipes/' + stock.id); await p.waitForSelector('h1:has-text("Wokko-Brühe")'); await p.waitForSelector('text=makes 1.5 l');
+  // Shopping can cook the stock instead of buying it: 450 ml of 1.5 l is 0.3 of a hen.
+  await p.goto(base + '/recipes/' + dish.id); await p.click('button[aria-label="More"]'); await p.click('dialog[open] button:has-text("Add to shopping")');
+  await p.click('dialog[open] button:has-text("Cook Wokko-Brühe")'); await shot('40-cook-or-buy'); await p.click('dialog[open] button.btn-primary:has-text("Add to shopping")'); await p.waitForSelector('text=Added to shopping');
+  const list = await (await p.request.get(base + '/api/v1/shopping')).json(); const hen = list.find((i) => i.food.name === 'Suppenhuhn');
+  if (!hen || Math.abs(hen.amount - 0.3) > 1e-9 || list.some((i) => i.food.name === 'Wokko-Brühe')) throw new Error('cooked stock on the list: ' + JSON.stringify(list.map((i) => [i.food.name, i.amount])));
 });
 await step('a used or expired photo upload link explains itself', async () => {
   await p.goto(base + '/upload/not-a-real-token'); await p.waitForSelector('text=This link no longer works'); await p.waitForSelector('text=Ask the assistant for a new one');
