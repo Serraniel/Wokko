@@ -1,0 +1,55 @@
+{
+ "steps": [
+  {
+   "text": "Eigelb mit Zucker schaumig schlagen, Mascarpone unterrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 4
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 80,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mascarpone"
+     ],
+     "amount": 500,
+     "unit": "g"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Löffelbiskuits in Espresso tunken, abwechselnd mit der Creme schichten und mit Kakao bestäuben. Über Nacht kalt stellen.",
+   "ingredients": [
+    {
+     "names": [
+      "Löffelbiskuits"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Espresso"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Kakao"
+     ]
+    }
+   ],
+   "minutes": 20
+  }
+ ]
+}

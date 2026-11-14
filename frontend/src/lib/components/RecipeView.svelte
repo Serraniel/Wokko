@@ -7,9 +7,11 @@
 	import { renderMarkdown } from '#lib/markdown.ts';
 	import { prefs } from '#lib/prefs.svelte.ts';
 	import ExportSheet from './ExportSheet.svelte';
+	import RecipeInsights from './RecipeInsights.svelte';
 
 	// exportBase, on pages without an account, offers the recipe as a file to take elsewhere.
-	let { recipe, actions, footer, cookHref, exportBase }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string; exportBase?: string } = $props();
+	// insightsUrl is where Wokko's kitchen knowledge about this recipe is read from.
+	let { recipe, actions, footer, cookHref, exportBase, insightsUrl }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string; exportBase?: string; insightsUrl?: string } = $props();
 	let exportOpen = $state(false);
 
 	let servings = $state(0);
@@ -115,6 +117,8 @@
 					</ol>
 				</section>
 			{/if}
+
+			{#if insightsUrl}<RecipeInsights url={insightsUrl} version={recipe.version} />{/if}
 
 			{#if recipe.source_url}
 				<a href={recipe.source_url} rel="noopener noreferrer nofollow" target="_blank" class="print-hide inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-muted underline-offset-2 hover:text-ink hover:underline"><ExternalLink size={14} />{t('recipe.source')}</a>

@@ -30,7 +30,7 @@ jobs:
       - name: Generated code is up to date
         run: |
           make generate
-          git diff --exit-code -- backend/internal/store/sqlcgen frontend/src/lib/api/types.gen.ts
+          git diff --exit-code -- backend/internal/store/sqlcgen frontend/src/lib/api/types.gen.ts frontend/src/lib/api/knowledge.gen.ts
 
       - name: Backend tests
         run: |

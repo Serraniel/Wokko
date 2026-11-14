@@ -1,0 +1,21 @@
+{
+ "steps": [
+  {
+   "text": "Das Hähnchen unter kaltem Wasser abwaschen und trocken tupfen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hähnchen"
+     ],
+     "amount": 1
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Im Ofen bei 200 °C 70 Minuten braten.",
+   "ingredients": [],
+   "minutes": 70
+  }
+ ]
+}

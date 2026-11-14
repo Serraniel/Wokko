@@ -1,0 +1,31 @@
+{
+ "steps": [
+  {
+   "text": "Hackfleisch anbraten, Kidneybohnen aus der Dose und Tomaten zugeben und 30 Minuten köcheln.",
+   "ingredients": [
+    {
+     "names": [
+      "Hackfleisch"
+     ],
+     "amount": 500,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Kidneybohnen"
+     ],
+     "amount": 1,
+     "unit": "Dose"
+    },
+    {
+     "names": [
+      "Dosentomaten"
+     ],
+     "amount": 400,
+     "unit": "g"
+    }
+   ],
+   "minutes": 30
+  }
+ ]
+}

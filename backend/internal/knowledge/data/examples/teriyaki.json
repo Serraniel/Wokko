@@ -1,0 +1,38 @@
+{
+ "steps": [
+  {
+   "text": "Sojasauce, Mirin, Sake und Zucker aufkochen und dickflüssig einkochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Sojasauce"
+     ],
+     "amount": 60,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Mirin"
+     ],
+     "amount": 60,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Sake"
+     ],
+     "amount": 30,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 8
+  }
+ ]
+}

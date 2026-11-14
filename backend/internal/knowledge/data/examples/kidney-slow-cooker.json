@@ -1,0 +1,35 @@
+{
+ "steps": [
+  {
+   "text": "Getrocknete Kidneybohnen über Nacht einweichen.",
+   "ingredients": [
+    {
+     "names": [
+      "Kidneybohnen"
+     ],
+     "amount": 300,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Mit Tomaten und Gewürzen im Slow Cooker 8 Stunden auf niedriger Stufe garen.",
+   "ingredients": [
+    {
+     "names": [
+      "Dosentomaten"
+     ],
+     "amount": 800,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Kreuzkümmel"
+     ]
+    }
+   ],
+   "minutes": 480
+  }
+ ]
+}

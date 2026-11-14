@@ -1,0 +1,43 @@
+{
+ "steps": [
+  {
+   "text": "Sear the steaks and set them aside.",
+   "ingredients": [
+    {
+     "names": [
+      "beef steak"
+     ],
+     "amount": 2
+    }
+   ],
+   "minutes": 8
+  },
+  {
+   "text": "Deglaze the pan with red wine, add stock and reduce, then finish with cold butter.",
+   "ingredients": [
+    {
+     "names": [
+      "red wine"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "beef stock"
+     ],
+     "amount": 150,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 20,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

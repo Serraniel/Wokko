@@ -1,0 +1,47 @@
+{
+ "steps": [
+  {
+   "text": "Rote Currypaste in etwas Kokosmilch anbraten, bis sich das Öl absetzt.",
+   "ingredients": [
+    {
+     "names": [
+      "Rote Currypaste"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Kokosmilch"
+     ],
+     "amount": 400,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Hähnchenstreifen zugeben und 10 Minuten köcheln, mit Fischsauce und Limettensaft abschmecken.",
+   "ingredients": [
+    {
+     "names": [
+      "Hähnchenschenkel"
+     ],
+     "amount": 400,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Fischsauce"
+     ]
+    },
+    {
+     "names": [
+      "Limettensaft"
+     ]
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

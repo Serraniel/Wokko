@@ -1,0 +1,42 @@
+{
+ "steps": [
+  {
+   "text": "Knochen und Gemüse mit Wasser und reichlich Salz aufsetzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Markknochen"
+     ],
+     "amount": 1,
+     "unit": "kg"
+    },
+    {
+     "names": [
+      "Karotten"
+     ],
+     "amount": 2
+    },
+    {
+     "names": [
+      "Salz"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Wasser"
+     ],
+     "amount": 3,
+     "unit": "l"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "3 Stunden köcheln und dann auf die Hälfte reduzieren.",
+   "ingredients": [],
+   "minutes": 180
+  }
+ ]
+}

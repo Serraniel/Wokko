@@ -1,0 +1,35 @@
+{
+ "steps": [
+  {
+   "text": "Knoblauch zerdrücken, mit Eigelb verrühren und Olivenöl tropfenweise unterschlagen.",
+   "ingredients": [
+    {
+     "names": [
+      "Knoblauch"
+     ],
+     "amount": 2,
+     "unit": "Zehen"
+    },
+    {
+     "names": [
+      "Eigelb"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Olivenöl"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Salz"
+     ]
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

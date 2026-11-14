@@ -1,0 +1,1393 @@
+{
+ "entries": [
+  {
+   "id": "sauce.veloute",
+   "kind": "sauce",
+   "names": {
+    "en": "Velouté",
+    "de": "Velouté"
+   },
+   "explain": {
+    "en": "One of the five mother sauces: a light roux with light stock (chicken, veal or fish). Cream, egg yolk, wine or mushrooms turn it into many other sauces.",
+    "de": "Eine der fünf Grundsoßen: eine helle Mehlschwitze mit heller Brühe (Huhn, Kalb oder Fisch). Mit Sahne, Eigelb, Wein oder Pilzen wird daraus eine Vielzahl weiterer Soßen."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "entry": "technique.roux"
+       },
+       {
+        "all": [
+         {
+          "class": "liquid.stock"
+         },
+         {
+          "not": {
+           "class": "liquid.stock.meat"
+          }
+         }
+        ]
+       }
+      ],
+      "window": 2
+     },
+     {
+      "not": {
+       "entry": "sauce.espagnole"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "bechamel-lasagne",
+     "brown-sauce",
+     "gulasch-mehlbutter"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Keep the roux pale and the heat gentle; browning would make it a brown sauce.",
+     "de": "Die Mehlschwitze hell und die Hitze sanft halten; Bräunung macht daraus eine braune Soße."
+    }
+   ]
+  },
+  {
+   "id": "sauce.supreme",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce suprême",
+    "de": "Sauce suprême"
+   },
+   "explain": {
+    "en": "A velouté finished with cream.",
+    "de": "Eine mit Sahne verfeinerte Velouté."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.veloute"
+     },
+     {
+      "class": "dairy.cream"
+     },
+     {
+      "not": {
+       "class": "egg.yolk"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "veloute-cream"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "parent": "sauce.veloute"
+  },
+  {
+   "id": "sauce.allemande",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce allemande",
+    "de": "Sauce allemande"
+   },
+   "explain": {
+    "en": "A velouté bound with egg yolk and cream, the classic sauce of a German fricassee. It is richer and glossier than a plain velouté.",
+    "de": "Eine mit Eigelb und Sahne legierte Velouté, die klassische Soße des Frikassees. Sie ist voller und glänzender als eine einfache Velouté."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.veloute"
+     },
+     {
+      "any": [
+       {
+        "class": "egg.yolk"
+       },
+       {
+        "entry": "technique.liaison"
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "huehnerfrikassee"
+    ],
+    "no_match": [
+     "veloute-cream"
+    ]
+   },
+   "parent": "sauce.veloute"
+  },
+  {
+   "id": "sauce.bechamel",
+   "kind": "sauce",
+   "names": {
+    "en": "Béchamel",
+    "de": "Béchamel"
+   },
+   "explain": {
+    "en": "One of the five mother sauces: a light roux with milk, often seasoned with nutmeg. Used for lasagne, gratins and as the base of Mornay.",
+    "de": "Eine der fünf Grundsoßen: eine helle Mehlschwitze mit Milch, oft mit Muskat gewürzt. Für Lasagne, Gratins und als Basis der Mornay."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "technique.roux"
+     },
+     {
+      "class": "dairy.milk"
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "sauce.mornay",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce Mornay",
+    "de": "Sauce Mornay"
+   },
+   "explain": {
+    "en": "A béchamel with cheese melted into it, for gratins and croque monsieur.",
+    "de": "Eine Béchamel mit eingeschmolzenem Käse, für Gratins und Croque Monsieur."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.bechamel"
+     },
+     {
+      "class": "dairy.cheese"
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "mac-and-cheese"
+    ],
+    "no_match": [
+     "bechamel-lasagne"
+    ]
+   },
+   "parent": "sauce.bechamel"
+  },
+  {
+   "id": "sauce.espagnole",
+   "kind": "sauce",
+   "names": {
+    "en": "Espagnole (brown sauce)",
+    "de": "Espagnole (braune Grundsoße)"
+   },
+   "explain": {
+    "en": "One of the five mother sauces: a brown roux with brown stock from roasted bones and vegetables, usually with tomato. Reduced with more stock, it becomes demi-glace.",
+    "de": "Eine der fünf Grundsoßen: eine braune Mehlschwitze mit dunklem Fond aus gerösteten Knochen und Gemüse, meist mit Tomate. Mit weiterem Fond reduziert wird daraus Demi-glace."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "entry": "technique.roux"
+       },
+       {
+        "class": "liquid.stock.meat"
+       }
+      ],
+      "window": 2
+     },
+     {
+      "any": [
+       {
+        "class": "veg.tomato"
+       },
+       {
+        "words": [
+         "röst",
+         "braun",
+         "dunkel",
+         "brown"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "brown-sauce"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   }
+  },
+  {
+   "id": "sauce.hollandaise",
+   "kind": "sauce",
+   "names": {
+    "en": "Hollandaise",
+    "de": "Sauce hollandaise"
+   },
+   "explain": {
+    "en": "One of the five mother sauces: egg yolks whipped warm with an acid, with melted or clarified butter beaten in to form an emulsion.",
+    "de": "Eine der fünf Grundsoßen: Eigelb wird mit etwas Säure warm aufgeschlagen, dann wird flüssige oder geklärte Butter zu einer Emulsion eingerührt."
+   },
+   "detect": {
+    "all": [
+     {
+      "all": [
+       {
+        "class": "egg.yolk"
+       },
+       {
+        "class": "fat.butter"
+       },
+       {
+        "any": [
+         {
+          "class": "fruit.citrus"
+         },
+         {
+          "class": "acid.vinegar"
+         },
+         {
+          "class": "alcohol.wine"
+         }
+        ]
+       }
+      ],
+      "window": 2
+     },
+     {
+      "not": {
+       "entry": "technique.roux"
+      }
+     },
+     {
+      "not": {
+       "class": "sweet.sugar"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "hollandaise",
+     "steak-bearnaise"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Whisk over barely simmering water: above about 65 °C the yolks scramble. If it splits, whisk a spoon of warm water or a fresh yolk and add the sauce slowly.",
+     "de": "Über kaum siedendem Wasser aufschlagen: über etwa 65 °C stockt das Eigelb. Gerinnt sie, einen Löffel warmes Wasser oder ein frisches Eigelb aufschlagen und die Soße langsam einrühren."
+    },
+    {
+     "en": "Add the butter slowly at first so the emulsion can form.",
+     "de": "Die Butter anfangs langsam zugeben, damit sich die Emulsion bilden kann."
+    }
+   ]
+  },
+  {
+   "id": "sauce.bearnaise",
+   "kind": "sauce",
+   "names": {
+    "en": "Béarnaise",
+    "de": "Sauce béarnaise"
+   },
+   "explain": {
+    "en": "A hollandaise made with a reduction of vinegar or wine with shallot, and flavoured with tarragon and chervil.",
+    "de": "Eine Hollandaise mit einer Reduktion aus Essig oder Wein und Schalotte, gewürzt mit Estragon und Kerbel."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.hollandaise"
+     },
+     {
+      "any": [
+       {
+        "class": "herb.delicate.tarragon"
+       },
+       {
+        "words": [
+         "estragon",
+         "tarragon"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "steak-bearnaise"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "parent": "sauce.hollandaise"
+  },
+  {
+   "id": "sauce.choron",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce Choron",
+    "de": "Sauce Choron"
+   },
+   "explain": {
+    "en": "A béarnaise coloured and flavoured with tomato.",
+    "de": "Eine Béarnaise mit Tomate."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.bearnaise"
+     },
+     {
+      "class": "veg.tomato"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "choron"
+    ],
+    "no_match": [
+     "steak-bearnaise"
+    ]
+   },
+   "parent": "sauce.bearnaise"
+  },
+  {
+   "id": "sauce.tomato",
+   "kind": "sauce",
+   "names": {
+    "en": "Tomato sauce",
+    "de": "Tomatensoße"
+   },
+   "explain": {
+    "en": "One of the five mother sauces: tomatoes cooked down, usually with onion, garlic and herbs.",
+    "de": "Eine der fünf Grundsoßen: eingekochte Tomaten, meist mit Zwiebel, Knoblauch und Kräutern."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "veg.tomato"
+     },
+     {
+      "words": [
+       "köchel",
+       "einkoch",
+       "simmer",
+       "reduz",
+       "sugo",
+       "sauce",
+       "soße",
+       "sosse"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Hühnerfrikassee cooking video (transcript)",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "bechamel-lasagne"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "A pinch of sugar or a longer simmer softens the acidity of canned tomatoes.",
+     "de": "Eine Prise Zucker oder längeres Köcheln mildert die Säure von Dosentomaten."
+    }
+   ]
+  },
+  {
+   "id": "sauce.mayonnaise",
+   "kind": "sauce",
+   "names": {
+    "en": "Mayonnaise",
+    "de": "Mayonnaise"
+   },
+   "explain": {
+    "en": "A cold emulsion of egg yolk and oil, usually with mustard and an acid. The yolk's lecithin holds the oil droplets in suspension.",
+    "de": "Eine kalte Emulsion aus Eigelb und Öl, meist mit Senf und Säure. Das Lecithin im Eigelb hält die Öltröpfchen in der Schwebe."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "egg.yolk"
+     },
+     {
+      "class": "fat.oil"
+     },
+     {
+      "words": [
+       "tropfen",
+       "dünnem strahl",
+       "aufschlag",
+       "unterschlag",
+       "emulg",
+       "drop by drop",
+       "thin stream",
+       "whisk",
+       "stabmixer",
+       "pürierstab",
+       "blender"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "mayonnaise"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Have everything at room temperature and add the oil drop by drop until it thickens. A split mayonnaise is saved by whisking it slowly into a fresh yolk.",
+     "de": "Alles zimmerwarm verwenden und das Öl erst tropfenweise zugeben, bis es andickt. Geronnene Mayonnaise langsam in ein frisches Eigelb rühren."
+    }
+   ]
+  },
+  {
+   "id": "sauce.vinaigrette",
+   "kind": "sauce",
+   "names": {
+    "en": "Vinaigrette",
+    "de": "Vinaigrette"
+   },
+   "explain": {
+    "en": "Oil and vinegar shaken or whisked together, often with mustard to keep them together for longer. The classic ratio is about three parts oil to one part vinegar.",
+    "de": "Öl und Essig verschüttelt oder verrührt, oft mit Senf, damit sie länger verbunden bleiben. Klassisch etwa drei Teile Öl auf einen Teil Essig."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "fat.oil"
+     },
+     {
+      "class": "acid.vinegar"
+     },
+     {
+      "any": [
+       {
+        "words": [
+         "dressing",
+         "vinaigrette",
+         "marinade"
+        ]
+       },
+       {
+        "class": "seasoning.mustard"
+       }
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "vinaigrette"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   }
+  },
+  {
+   "id": "sauce.beurre_blanc",
+   "kind": "sauce",
+   "names": {
+    "en": "Beurre blanc",
+    "de": "Beurre blanc"
+   },
+   "explain": {
+    "en": "A warm emulsion of cold butter whisked into a reduction of wine or vinegar with shallot. Served with fish and vegetables.",
+    "de": "Eine warme Emulsion: kalte Butter wird in eine Reduktion aus Wein oder Essig mit Schalotte geschlagen. Passt zu Fisch und Gemüse."
+   },
+   "detect": {
+    "all": [
+     {
+      "any": [
+       {
+        "class": "alcohol.wine"
+       },
+       {
+        "class": "acid.vinegar"
+       }
+      ]
+     },
+     {
+      "class": "fat.butter"
+     },
+     {
+      "class": "veg.onion"
+     },
+     {
+      "words": [
+       "reduz",
+       "einkoch",
+       "reduce"
+      ]
+     },
+     {
+      "not": {
+       "class": "egg.yolk"
+      }
+     },
+     {
+      "not": {
+       "entry": "technique.roux"
+      }
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "beurre-blanc"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Keep it warm but never let it boil, or the butter separates.",
+     "de": "Warm halten, aber nie kochen lassen, sonst trennt sich die Butter."
+    }
+   ]
+  },
+  {
+   "id": "sauce.pan_sauce",
+   "kind": "sauce",
+   "names": {
+    "en": "Pan sauce",
+    "de": "Bratensoße aus der Pfanne"
+   },
+   "explain": {
+    "en": "A quick sauce made in the pan after searing: deglaze, reduce, and finish with butter or cream.",
+    "de": "Eine schnelle Soße direkt in der Pfanne nach dem Anbraten: ablöschen, einkochen und mit Butter oder Sahne vollenden."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "technique.deglaze"
+     },
+     {
+      "any": [
+       {
+        "class": "liquid.stock"
+       },
+       {
+        "class": "alcohol.wine"
+       },
+       {
+        "class": "dairy.cream"
+       }
+      ]
+     },
+     {
+      "not": {
+       "min_minutes": 20
+      }
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "pan-sauce"
+    ],
+    "no_match": [
+     "bechamel-lasagne"
+    ]
+   }
+  },
+  {
+   "id": "sauce.pesto",
+   "kind": "sauce",
+   "names": {
+    "en": "Pesto",
+    "de": "Pesto"
+   },
+   "explain": {
+    "en": "An uncooked sauce of pounded herbs, nuts or seeds, hard cheese, garlic and oil. Pesto alla genovese uses basil and pine nuts.",
+    "de": "Eine ungekochte Soße aus zerstoßenen Kräutern, Nüssen oder Kernen, Hartkäse, Knoblauch und Öl. Pesto alla genovese nimmt Basilikum und Pinienkerne."
+   },
+   "detect": {
+    "any": [
+     {
+      "words": [
+       "pesto"
+      ]
+     },
+     {
+      "all": [
+       {
+        "class": "herb.delicate"
+       },
+       {
+        "class": "fat.oil"
+       },
+       {
+        "any": [
+         {
+          "class": "nut"
+         },
+         {
+          "class": "seed"
+         }
+        ]
+       }
+      ],
+      "window": 1
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "pesto"
+    ],
+    "no_match": [
+     "vinaigrette"
+    ]
+   }
+  },
+  {
+   "id": "sauce.aurore",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce aurore",
+    "de": "Sauce aurore"
+   },
+   "explain": {
+    "en": "A velouté with tomato purée stirred in, giving it a pink colour.",
+    "de": "Eine Velouté mit eingerührtem Tomatenmark oder -püree, das sie rosa färbt."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.veloute"
+     },
+     {
+      "class": "veg.tomato"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sauce-aurore"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "parent": "sauce.veloute"
+  },
+  {
+   "id": "sauce.poulette",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce poulette",
+    "de": "Sauce poulette"
+   },
+   "explain": {
+    "en": "An allemande with mushrooms, lemon juice and parsley.",
+    "de": "Eine Allemande mit Pilzen, Zitronensaft und Petersilie."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.allemande"
+     },
+     {
+      "class": "veg.mushroom"
+     },
+     {
+      "class": "fruit.citrus"
+     },
+     {
+      "class": "herb.delicate"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sauce-poulette"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "parent": "sauce.allemande"
+  },
+  {
+   "id": "sauce.paloise",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce paloise",
+    "de": "Sauce paloise"
+   },
+   "explain": {
+    "en": "A béarnaise made with mint instead of tarragon, traditionally served with lamb.",
+    "de": "Eine Béarnaise mit Minze statt Estragon, klassisch zu Lamm."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.hollandaise"
+     },
+     {
+      "words": [
+       "minze",
+       "mint"
+      ]
+     },
+     {
+      "not": {
+       "words": [
+        "estragon",
+        "tarragon"
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sauce-paloise"
+    ],
+    "no_match": [
+     "steak-bearnaise"
+    ]
+   },
+   "parent": "sauce.hollandaise"
+  },
+  {
+   "id": "sauce.maltaise",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce maltaise",
+    "de": "Sauce maltaise"
+   },
+   "explain": {
+    "en": "A hollandaise with blood orange juice and zest, classic with asparagus.",
+    "de": "Eine Hollandaise mit Saft und Schale von Blutorangen, klassisch zu Spargel."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.hollandaise"
+     },
+     {
+      "words": [
+       "blutorange",
+       "blood orange",
+       "orangensaft",
+       "orange juice",
+       "orange zest",
+       "orangenschale",
+       "orangenabrieb"
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sauce-maltaise"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "parent": "sauce.hollandaise"
+  },
+  {
+   "id": "sauce.mousseline",
+   "kind": "sauce",
+   "names": {
+    "en": "Sauce mousseline",
+    "de": "Sauce mousseline"
+   },
+   "explain": {
+    "en": "A hollandaise lightened with whipped cream folded in just before serving.",
+    "de": "Eine Hollandaise, unter die kurz vor dem Servieren geschlagene Sahne gehoben wird."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.hollandaise"
+     },
+     {
+      "class": "dairy.cream"
+     },
+     {
+      "words": [
+       "geschlagen",
+       "unterheb",
+       "whipped",
+       "fold"
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sauce-mousseline"
+    ],
+    "no_match": [
+     "hollandaise"
+    ]
+   },
+   "parent": "sauce.hollandaise"
+  },
+  {
+   "id": "sauce.aioli",
+   "kind": "sauce",
+   "names": {
+    "en": "Aioli",
+    "de": "Aioli"
+   },
+   "explain": {
+    "en": "A garlic mayonnaise. The traditional Provençal aioli is only garlic pounded with oil, without egg.",
+    "de": "Eine Knoblauchmayonnaise. Die traditionelle provenzalische Aioli ist nur Knoblauch, mit Öl zerstoßen, ohne Ei."
+   },
+   "detect": {
+    "any": [
+     {
+      "words": [
+       "aioli"
+      ]
+     },
+     {
+      "all": [
+       {
+        "entry": "sauce.mayonnaise"
+       },
+       {
+        "class": "veg.garlic"
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    },
+    {
+     "title": "Harold McGee, On Food and Cooking (2004)",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "aioli"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "parent": "sauce.mayonnaise"
+  },
+  {
+   "id": "sauce.remoulade",
+   "kind": "sauce",
+   "names": {
+    "en": "Remoulade",
+    "de": "Remoulade"
+   },
+   "explain": {
+    "en": "A mayonnaise with chopped pickles, capers and herbs, sometimes anchovy.",
+    "de": "Eine Mayonnaise mit gehackten Gewürzgurken, Kapern und Kräutern, manchmal mit Sardellen."
+   },
+   "detect": {
+    "all": [
+     {
+      "entry": "sauce.mayonnaise"
+     },
+     {
+      "any": [
+       {
+        "class": "acid.caper"
+       },
+       {
+        "class": "veg.pickle"
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Auguste Escoffier, Le Guide Culinaire (1903), and common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "remoulade"
+    ],
+    "no_match": [
+     "mayonnaise"
+    ]
+   },
+   "parent": "sauce.mayonnaise"
+  },
+  {
+   "id": "sauce.gravy",
+   "kind": "sauce",
+   "names": {
+    "en": "Gravy",
+    "de": "Bratensoße"
+   },
+   "explain": {
+    "en": "Pan juices and fat from a roast, bound with flour or starch and loosened with stock.",
+    "de": "Bratensaft und -fett aus dem Bräter, mit Mehl oder Stärke gebunden und mit Brühe aufgegossen."
+   },
+   "detect": {
+    "all": [
+     {
+      "words": [
+       "bratensaft",
+       "bratenfett",
+       "bratensatz",
+       "drippings",
+       "pan juices",
+       "roasting juices"
+      ]
+     },
+     {
+      "any": [
+       {
+        "class": "grain.gluten.flour"
+       },
+       {
+        "class": "starch"
+       }
+      ]
+     },
+     {
+      "class": "liquid.stock"
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "gravy"
+    ],
+    "no_match": [
+     "pan-sauce"
+    ]
+   }
+  },
+  {
+   "id": "sauce.teriyaki",
+   "kind": "sauce",
+   "names": {
+    "en": "Teriyaki",
+    "de": "Teriyaki"
+   },
+   "explain": {
+    "en": "Soy sauce with mirin, sake and sugar, reduced to a shiny glaze.",
+    "de": "Sojasauce mit Mirin, Sake und Zucker, zu einer glänzenden Glasur eingekocht."
+   },
+   "detect": {
+    "any": [
+     {
+      "words": [
+       "teriyaki"
+      ]
+     },
+     {
+      "all": [
+       {
+        "class": "legume.soy.sauce"
+       },
+       {
+        "any": [
+         {
+          "words": [
+           "mirin"
+          ]
+         },
+         {
+          "class": "sweet.sugar"
+         },
+         {
+          "class": "sweet.honey"
+         }
+        ]
+       },
+       {
+        "words": [
+         "einkoch",
+         "reduz",
+         "glasier",
+         "dickflüssig",
+         "reduce",
+         "glaze",
+         "thicken"
+        ]
+       }
+      ],
+      "window": 1
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "teriyaki"
+    ],
+    "no_match": [
+     "pan-sauce"
+    ]
+   }
+  },
+  {
+   "id": "sauce.sweet_sour",
+   "kind": "sauce",
+   "names": {
+    "en": "Sweet and sour sauce",
+    "de": "Süß-saure Soße"
+   },
+   "explain": {
+    "en": "Vinegar and sugar balanced with ketchup or fruit such as pineapple, thickened with a starch slurry at the end.",
+    "de": "Essig und Zucker im Gleichgewicht, mit Ketchup oder Früchten wie Ananas, zum Schluss mit angerührter Stärke gebunden."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "acid.vinegar"
+     },
+     {
+      "class": "sweet.sugar"
+     },
+     {
+      "class": "starch"
+     },
+     {
+      "any": [
+       {
+        "class": "fruit.protease"
+       },
+       {
+        "class": "condiment"
+       },
+       {
+        "class": "veg.tomato"
+       }
+      ]
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "sweet-sour"
+    ],
+    "no_match": [
+     "vinaigrette"
+    ]
+   }
+  },
+  {
+   "id": "sauce.thai_curry",
+   "kind": "sauce",
+   "names": {
+    "en": "Thai curry",
+    "de": "Thai-Curry"
+   },
+   "explain": {
+    "en": "A curry paste fried in coconut cream until the oil separates, then loosened with coconut milk. Fish sauce, palm sugar and lime balance it.",
+    "de": "Currypaste wird in Kokoscreme gebraten, bis sich das Öl absetzt, dann mit Kokosmilch aufgegossen. Fischsauce, Palmzucker und Limette runden ab."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "condiment.curry_paste"
+     },
+     {
+      "class": "fruit.coconut"
+     }
+    ],
+    "window": 2
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "thai-curry"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Most Thai curry pastes contain shrimp paste, so they aren't vegetarian unless the label says so.",
+     "de": "Die meisten Thai-Currypasten enthalten Garnelenpaste und sind nur vegetarisch, wenn es auf dem Etikett steht."
+    }
+   ]
+  },
+  {
+   "id": "sauce.satay",
+   "kind": "sauce",
+   "names": {
+    "en": "Satay sauce",
+    "de": "Satésoße"
+   },
+   "explain": {
+    "en": "A peanut sauce with coconut milk, soy sauce, chili and lime.",
+    "de": "Eine Erdnusssoße mit Kokosmilch, Sojasauce, Chili und Limette."
+   },
+   "detect": {
+    "any": [
+     {
+      "class": "condiment.satay"
+     },
+     {
+      "all": [
+       {
+        "class": "peanut"
+       },
+       {
+        "class": "fruit.coconut"
+       }
+      ],
+      "window": 1
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Common culinary teaching",
+     "added": "2026-11-14"
+    }
+   ],
+   "examples": {
+    "match": [
+     "satay"
+    ],
+    "no_match": [
+     "thai-curry"
+    ]
+   }
+  }
+ ]
+}

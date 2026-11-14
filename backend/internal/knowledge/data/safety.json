@@ -1,0 +1,527 @@
+{
+ "entries": [
+  {
+   "id": "safety.raw_egg",
+   "kind": "safety",
+   "names": {
+    "en": "Raw egg",
+    "de": "Rohes Ei"
+   },
+   "explain": {
+    "en": "Egg is used and nothing heats it afterwards. Raw egg can carry salmonella. Small children, pregnant people, older people and people with weak immune systems shouldn't eat it.",
+    "de": "Ei wird verwendet und danach nicht erhitzt. Rohes Ei kann Salmonellen enthalten. Kleine Kinder, Schwangere, ältere und immungeschwächte Menschen sollten es nicht essen."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "egg"
+     },
+     {
+      "not": {
+       "words": [
+        "back",
+        "bake",
+        "ofen",
+        "oven",
+        "koch",
+        "boil",
+        "simmer",
+        "köchel",
+        "brat",
+        "fry",
+        "fried",
+        "grill",
+        "erhitz",
+        "heat",
+        "dünst",
+        "dämpf",
+        "steam",
+        "pochier",
+        "poach",
+        "schmor",
+        "braise",
+        "roast",
+        "röst",
+        "garen",
+        "gart ",
+        "gegart",
+        "cook",
+        "sous vide",
+        "wasserbad",
+        "water bath",
+        "frittier",
+        "stocken"
+       ]
+      }
+     },
+     {
+      "not": {
+       "words": [
+        "pasteur"
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "BfR, kitchen hygiene with eggs",
+     "added": "2026-11-14",
+     "url": "https://www.bfr.bund.de/presseinformation/kuechenhygiene-bei-eiern-nicht-nur-zu-ostern-relevant/"
+    }
+   ],
+   "examples": {
+    "match": [
+     "mayonnaise",
+     "tiramisu"
+    ],
+    "no_match": [
+     "hollandaise",
+     "ruehrkuchen"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use very fresh eggs kept at 7 °C or less, eat the dish soon and keep it cold, or use pasteurised eggs.",
+     "de": "Sehr frische, bei höchstens 7 °C gelagerte Eier verwenden, bald essen und kühl halten, oder pasteurisierte Eier nehmen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "safety.uncooked_meat",
+   "kind": "safety",
+   "names": {
+    "en": "Poultry or minced meat not cooked",
+    "de": "Geflügel oder Hackfleisch nicht gegart"
+   },
+   "explain": {
+    "en": "Poultry or minced meat appears, but no step cooks it. Both often carry salmonella, campylobacter or E. coli.",
+    "de": "Geflügel oder Hackfleisch kommt vor, aber kein Schritt gart es. Beides trägt häufig Salmonellen, Campylobacter oder E. coli."
+   },
+   "detect": {
+    "all": [
+     {
+      "any": [
+       {
+        "class": "meat.poultry"
+       },
+       {
+        "class": "meat.minced"
+       }
+      ]
+     },
+     {
+      "not": {
+       "words": [
+        "back",
+        "bake",
+        "ofen",
+        "oven",
+        "koch",
+        "boil",
+        "simmer",
+        "köchel",
+        "brat",
+        "fry",
+        "fried",
+        "grill",
+        "erhitz",
+        "heat",
+        "dünst",
+        "dämpf",
+        "steam",
+        "pochier",
+        "poach",
+        "schmor",
+        "braise",
+        "roast",
+        "röst",
+        "garen",
+        "gart ",
+        "gegart",
+        "cook",
+        "sous vide",
+        "wasserbad",
+        "water bath",
+        "frittier",
+        "stocken"
+       ]
+      }
+     },
+     {
+      "not": {
+       "words": [
+        "mett",
+        "tatar",
+        "tartare"
+       ]
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "BfR, preparing poultry safely",
+     "added": "2026-11-14",
+     "url": "https://www.bfr.bund.de/presseinformation/mehr-salmonellen-infektionen-in-europa-hygieneregeln-helfen-gefluegel-sicher-zuzubereiten/"
+    },
+    {
+     "title": "UK Food Standards Agency, cooking your food",
+     "added": "2026-11-14",
+     "url": "https://www.food.gov.uk/safety-hygiene/cooking-your-food"
+    }
+   ],
+   "examples": {
+    "match": [
+     "raw-chicken-salad"
+    ],
+    "no_match": [
+     "huehnerfrikassee",
+     "bechamel-lasagne"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Cook until the core has reached 70 °C for 2 minutes and no pink is left.",
+     "de": "Garen, bis der Kern 2 Minuten lang 70 °C erreicht hat und nichts mehr rosa ist."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "safety.wash_poultry",
+   "kind": "safety",
+   "names": {
+    "en": "Washing raw poultry",
+    "de": "Rohes Geflügel waschen"
+   },
+   "explain": {
+    "en": "Raw poultry is washed or rinsed. The splashes spread campylobacter around the sink and kitchen; cooking kills the germs anyway.",
+    "de": "Rohes Geflügel wird gewaschen oder abgespült. Die Spritzer verteilen Campylobacter in Spüle und Küche; das Garen tötet die Keime ohnehin."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "meat.poultry"
+     },
+     {
+      "words": [
+       "abwasch",
+       "waschen",
+       "abspül",
+       "abbraus",
+       "wash the",
+       "rinse the",
+       "rinse under"
+      ]
+     }
+    ],
+    "window": 1
+   },
+   "sources": [
+    {
+     "title": "BfR, preparing poultry safely",
+     "added": "2026-11-14",
+     "url": "https://www.bfr.bund.de/presseinformation/mehr-salmonellen-infektionen-in-europa-hygieneregeln-helfen-gefluegel-sicher-zuzubereiten/"
+    }
+   ],
+   "examples": {
+    "match": [
+     "washed-chicken"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Pat it dry with kitchen paper instead and throw the paper away.",
+     "de": "Stattdessen mit Küchenpapier trocken tupfen und das Papier wegwerfen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "safety.kidney_beans",
+   "kind": "safety",
+   "names": {
+    "en": "Kidney beans not boiled hard",
+    "de": "Kidneybohnen nicht sprudelnd gekocht"
+   },
+   "explain": {
+    "en": "Dried kidney beans contain a toxin (phytohaemagglutinin) that only a hard boil destroys. Slow cookers on low can make it worse than raw.",
+    "de": "Getrocknete Kidneybohnen enthalten ein Gift (Phasin), das nur sprudelndes Kochen zerstört. Im Slow Cooker auf niedriger Stufe kann es schlimmer werden als roh."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "legume.kidney"
+     },
+     {
+      "words": [
+       "getrocknet",
+       "eingeweicht",
+       "einweich",
+       "dried",
+       "soak"
+      ]
+     },
+     {
+      "any": [
+       {
+        "words": [
+         "slow cooker",
+         "schongarer",
+         "crockpot",
+         "crock-pot"
+        ]
+       },
+       {
+        "not": {
+         "words": [
+          "sprudelnd",
+          "10 minuten",
+          "10 minutes",
+          "boil hard",
+          "hard boil",
+          "rapid boil",
+          "rolling boil"
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "FDA, Bad Bug Book (2nd ed.)",
+     "added": "2026-11-14",
+     "url": "https://www.fda.gov/food/foodborne-pathogens/bad-bug-book-second-edition"
+    }
+   ],
+   "examples": {
+    "match": [
+     "kidney-slow-cooker"
+    ],
+    "no_match": [
+     "chili-canned"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Soak them, then boil them hard for at least 10 minutes before any slow cooking. Canned beans are already cooked.",
+     "de": "Einweichen und dann mindestens 10 Minuten sprudelnd kochen, bevor sie langsam garen. Bohnen aus der Dose sind schon gekocht."
+    }
+   ],
+   "severity": "warning"
+  },
+  {
+   "id": "safety.raw_flour",
+   "kind": "safety",
+   "names": {
+    "en": "Raw flour",
+    "de": "Rohes Mehl"
+   },
+   "explain": {
+    "en": "Flour is used and nothing bakes or cooks it. Raw flour can carry E. coli and salmonella.",
+    "de": "Mehl wird verwendet und weder gebacken noch gekocht. Rohes Mehl kann E. coli und Salmonellen enthalten."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "grain.gluten.flour"
+     },
+     {
+      "not": {
+       "words": [
+        "back",
+        "bake",
+        "ofen",
+        "oven",
+        "koch",
+        "boil",
+        "simmer",
+        "köchel",
+        "brat",
+        "fry",
+        "fried",
+        "grill",
+        "erhitz",
+        "heat",
+        "dünst",
+        "dämpf",
+        "steam",
+        "pochier",
+        "poach",
+        "schmor",
+        "braise",
+        "roast",
+        "röst",
+        "garen",
+        "gart ",
+        "gegart",
+        "cook",
+        "sous vide",
+        "wasserbad",
+        "water bath",
+        "frittier",
+        "stocken"
+       ]
+      }
+     },
+     {
+      "not": {
+       "words": [
+        "hitzebehandelt",
+        "heat-treated",
+        "heat treated"
+       ]
+      }
+     },
+     {
+      "not": {
+       "entry": "technique.roux"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "CDC, raw flour and dough",
+     "added": "2026-11-14",
+     "url": "https://www.cdc.gov/food-safety/foods/no-raw-dough.html"
+    }
+   ],
+   "examples": {
+    "match": [
+     "cookie-dough"
+    ],
+    "no_match": [
+     "ruehrkuchen",
+     "roux-not-boiled"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use heat-treated flour for no-bake recipes.",
+     "de": "Für Rezepte ohne Backen hitzebehandeltes Mehl verwenden."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "safety.rice_kept",
+   "kind": "safety",
+   "names": {
+    "en": "Cooked rice kept for later",
+    "de": "Gekochter Reis aufbewahrt"
+   },
+   "explain": {
+    "en": "Cooked rice is kept for later. Bacillus cereus spores survive cooking and, at room temperature, form a toxin that reheating doesn't destroy.",
+    "de": "Gekochter Reis wird aufbewahrt. Sporen von Bacillus cereus überleben das Kochen und bilden bei Raumtemperatur ein Gift, das Aufwärmen nicht zerstört."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "grain.rice"
+     },
+     {
+      "words": [
+       "vom vortag",
+       "über nacht",
+       "uber nacht",
+       "ubrig",
+       "day-old",
+       "day old",
+       "leftover",
+       "overnight"
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Food Standards Scotland, rice",
+     "added": "2026-11-14",
+     "url": "https://www.foodstandards.gov.scot/consumers/food-safety/at-home/rice"
+    }
+   ],
+   "examples": {
+    "match": [
+     "fried-rice"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Cool cooked rice within an hour, keep it in the fridge, eat it within a day, and reheat it only once until steaming hot.",
+     "de": "Gekochten Reis innerhalb einer Stunde abkühlen, im Kühlschrank lagern, innerhalb eines Tages essen und nur einmal dampfend heiß aufwärmen."
+    }
+   ],
+   "severity": "info"
+  },
+  {
+   "id": "safety.raw_fish",
+   "kind": "safety",
+   "names": {
+    "en": "Raw fish",
+    "de": "Roher Fisch"
+   },
+   "explain": {
+    "en": "Fish is eaten raw or only cured. Wild fish can carry parasites, which freezing kills.",
+    "de": "Fisch wird roh oder nur gebeizt gegessen. Wildfisch kann Parasiten tragen, die Einfrieren abtötet."
+   },
+   "detect": {
+    "all": [
+     {
+      "class": "fish"
+     },
+     {
+      "words": [
+       "sushi",
+       "sashimi",
+       "ceviche",
+       "tatar",
+       "tartare",
+       "gravlax",
+       "gebeizt",
+       "crudo",
+       "poke"
+      ]
+     },
+     {
+      "not": {
+       "class": "fish.worcestershire"
+      }
+     }
+    ]
+   },
+   "sources": [
+    {
+     "title": "Regulation (EC) No 853/2004, Annex III, Section VIII",
+     "added": "2026-11-14",
+     "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02004R0853-20230215"
+    }
+   ],
+   "examples": {
+    "match": [
+     "ceviche"
+    ],
+    "no_match": [
+     "huehnerfrikassee"
+    ]
+   },
+   "tips": [
+    {
+     "en": "Use fish sold for raw eating, or freeze it first: at least 24 hours at −20 °C.",
+     "de": "Fisch in Sushi-Qualität verwenden oder vorher einfrieren: mindestens 24 Stunden bei −20 °C."
+    }
+   ],
+   "severity": "info"
+  }
+ ]
+}

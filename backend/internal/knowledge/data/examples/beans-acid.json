@@ -1,0 +1,31 @@
+{
+ "steps": [
+  {
+   "text": "Die eingeweichten Kidneybohnen mit Dosentomaten und Rotwein 2 Stunden köcheln.",
+   "ingredients": [
+    {
+     "names": [
+      "Kidneybohnen"
+     ],
+     "amount": 250,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Dosentomaten"
+     ],
+     "amount": 800,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Rotwein"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 120
+  }
+ ]
+}

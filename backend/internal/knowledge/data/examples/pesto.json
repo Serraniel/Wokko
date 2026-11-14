@@ -1,0 +1,45 @@
+{
+ "steps": [
+  {
+   "text": "Basilikum, Pinienkerne, Knoblauch und Parmesan im Mörser zerstoßen und mit Olivenöl verrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Basilikum"
+     ],
+     "amount": 2,
+     "unit": "Bund"
+    },
+    {
+     "names": [
+      "Pinienkerne"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Knoblauch"
+     ],
+     "amount": 1,
+     "unit": "Zehe"
+    },
+    {
+     "names": [
+      "Parmesan"
+     ],
+     "amount": 50,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Olivenöl"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 10
+  }
+ ]
+}

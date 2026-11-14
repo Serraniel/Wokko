@@ -239,6 +239,9 @@ func (l *Layer) server(a app.TokenAccess) *mcp.Server {
 	read(l, s, "get_recipe", "Read a whole recipe, with its steps, ingredients and version.", func(ctx context.Context, in idArgs) (any, error) {
 		return svc.GetRecipe(ctx, v, in.ID)
 	})
+	read(l, s, "get_recipe_insights", "Read what Wokko's built-in kitchen knowledge finds in a recipe: its sauces and techniques with tips, allergens (maybe means: depends on the product), whether it's vegetarian or vegan, food safety notes and likely problems. Use it to explain a recipe or, with the person's agreement, to fix problems with update_recipe.", func(ctx context.Context, in idArgs) (any, error) {
+		return svc.RecipeInsights(ctx, v, in.ID)
+	})
 	read(l, s, "get_recipe_nutrition", "Estimate a recipe's nutrition. 'missing' lists ingredients that couldn't be counted.", func(ctx context.Context, in idArgs) (any, error) {
 		return svc.GetRecipeNutrition(ctx, v, in.ID)
 	})

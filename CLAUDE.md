@@ -12,6 +12,7 @@ License: EUPL-1.2. Requirements and their reasoning: `docs/plans/2026-11-07-rewr
 - `backend/internal/importer` — recipe import from links and pasted text. Its downloads refuse private addresses at connection time
 - `backend/internal/store` — SQLite, migrations, sqlc queries
 - `backend/internal/assistant` — MCP server and OAuth endpoints for AI assistants
+- `backend/internal/knowledge` — built-in kitchen knowledge: food classes, allergens, sauces, techniques and problem rules as JSON in `data/`, each entry tested against the example recipes in `data/examples/`
 - `backend/internal/backup`, `media`, `auth`, `text`, `config`, `web`
 - `frontend/` — SvelteKit static app. `src/lib/i18n/messages/*.json` holds the UI text, and `src/service-worker/` keeps it usable offline
 - `docker-compose.yml` builds from source. `docker-compose.example.yml` is what the README tells people to run
@@ -29,6 +30,7 @@ Use Conventional Commits with these scopes:
 - `feat(backup)` — Backups, restore, data safety
 - `feat(plan)` — Meal plans, shopping lists, supermarkets, nutrition
 - `feat(mcp)` — Model Context Protocol integration
+- `feat(knowledge)` — Built-in kitchen knowledge: allergens, diets, sauces, techniques, problem hints
 - `feat(i18n)` — Internationalization
 - `feat(ui)` — Frontend UI components
 - `fix(*)` — Bug fixes (use relevant scope)
@@ -62,7 +64,7 @@ release-please reads Conventional Commits on `main`: `fix` bumps the patch, `fea
 - Call an AI model from Wokko. Assistants connect from outside through MCP
 
 ## Changelog Categories (for GitHub PR labels and release notes)
-Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, i18n, UI, Infra, Fix
+Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, Knowledge, i18n, UI, Infra, Fix
 
 ## Architecture Decisions
 - SQLite in WAL mode with `synchronous=FULL` and `foreign_keys=ON` on every connection, one writer connection. It replaced PostgreSQL on purpose: no separate service, credentials or major upgrades. Strict tables, stable integer IDs that are never reused
@@ -76,6 +78,7 @@ Auth, Recipes, Ingredients, Units, Sharing, Planning, Kitshn, Backup, MCP, i18n,
 - Imports only produce a draft for the editor, private by default. They use the site's published recipe data first and never pretend to be a browser
 - Meal plans, shopping and supermarkets belong to a household. A private recipe's name never reaches others through them
 - The service worker stores only an explicit list of read-only addresses, and logging out deletes them. Offline writes exist only for the shopping list, through a queue
+- Kitchen knowledge is curated data shipped in the binary, never learned at runtime or fetched. Entries are written in Wokko's own words with a named source, and each must match its example recipes. Allergens it can't be sure of are "may contain"
 - MCP is off by default. Tokens are stored hashed, act as their owner, and their scope decides which tools exist
 - kitshn compatibility targets a stated version (`kitshn.SupportedKitshn`). Its response types match kitshn's data classes
 

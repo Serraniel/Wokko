@@ -1,0 +1,51 @@
+{
+ "steps": [
+  {
+   "text": "Melt butter, stir in flour, then whisk in cold milk and bring to a boil.",
+   "ingredients": [
+    {
+     "names": [
+      "butter"
+     ],
+     "amount": 40,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "all-purpose flour"
+     ],
+     "amount": 40,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "milk"
+     ],
+     "amount": 600,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Stir in grated cheddar until melted and mix with the cooked macaroni.",
+   "ingredients": [
+    {
+     "names": [
+      "cheddar"
+     ],
+     "amount": 200,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "pasta"
+     ],
+     "amount": 400,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

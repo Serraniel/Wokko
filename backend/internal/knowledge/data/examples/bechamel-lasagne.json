@@ -1,0 +1,95 @@
+{
+ "steps": [
+  {
+   "text": "Hackfleisch scharf anbraten, Tomatenmark kurz mitrösten, mit Rotwein ablöschen, Dosentomaten zugeben und 60 Minuten köcheln lassen.",
+   "ingredients": [
+    {
+     "names": [
+      "Hackfleisch"
+     ],
+     "amount": 500,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Tomatenmark"
+     ],
+     "amount": 2,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Rotwein"
+     ],
+     "amount": 150,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Dosentomaten"
+     ],
+     "amount": 800,
+     "unit": "g"
+    }
+   ],
+   "minutes": 60
+  },
+  {
+   "text": "Butter schmelzen, Mehl einrühren. Nach und nach kalte Milch zugießen, glatt rühren, aufkochen und mit Muskat würzen.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 40,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 40,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Milch"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Muskatnuss"
+     ]
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Lasagneplatten, Soße und Béchamel abwechselnd schichten.",
+   "ingredients": [
+    {
+     "names": [
+      "Lasagneplatten"
+     ],
+     "amount": 12
+    }
+   ],
+   "minutes": 10
+  },
+  {
+   "text": "Mit Parmesan bestreuen und 40 Minuten backen.",
+   "ingredients": [
+    {
+     "names": [
+      "Parmesan"
+     ],
+     "amount": 50,
+     "unit": "g"
+    }
+   ],
+   "minutes": 40
+  }
+ ]
+}

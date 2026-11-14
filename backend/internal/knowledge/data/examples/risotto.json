@@ -1,0 +1,57 @@
+{
+ "steps": [
+  {
+   "text": "Zwiebel in Butter glasig anschwitzen, Risottoreis zugeben und mit Weißwein ablöschen.",
+   "minutes": 5,
+   "ingredients": [
+    {
+     "names": [
+      "Zwiebel"
+     ],
+     "amount": 1
+    },
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Risottoreis"
+     ],
+     "amount": 300,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Weißwein"
+     ],
+     "amount": 100,
+     "unit": "ml"
+    }
+   ]
+  },
+  {
+   "text": "Nach und nach heiße Gemüsebrühe zugießen und 18 Minuten rühren. Parmesan unterrühren.",
+   "minutes": 18,
+   "ingredients": [
+    {
+     "names": [
+      "Gemüsebrühe"
+     ],
+     "amount": 1,
+     "unit": "l"
+    },
+    {
+     "names": [
+      "Parmesan"
+     ],
+     "amount": 60,
+     "unit": "g"
+    }
+   ]
+  }
+ ]
+}

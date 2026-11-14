@@ -1,0 +1,24 @@
+{
+ "steps": [
+  {
+   "text": "Agar-Agar in den warmen Saft rühren und kalt stellen.",
+   "ingredients": [
+    {
+     "names": [
+      "Agar-Agar"
+     ],
+     "amount": 4,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Orangensaft"
+     ],
+     "amount": 500,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 5
+  }
+ ]
+}

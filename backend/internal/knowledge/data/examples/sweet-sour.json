@@ -1,0 +1,51 @@
+{
+ "steps": [
+  {
+   "text": "Essig, Zucker, Ketchup und Ananassaft aufkochen.",
+   "ingredients": [
+    {
+     "names": [
+      "Reisessig"
+     ],
+     "amount": 60,
+     "unit": "ml"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 50,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Ketchup"
+     ],
+     "amount": 3,
+     "unit": "EL"
+    },
+    {
+     "names": [
+      "Ananas"
+     ],
+     "amount": 200,
+     "unit": "g"
+    }
+   ],
+   "minutes": 5
+  },
+  {
+   "text": "Mit angerührter Speisestärke binden.",
+   "ingredients": [
+    {
+     "names": [
+      "Speisestärke"
+     ],
+     "amount": 1,
+     "unit": "EL"
+    }
+   ],
+   "minutes": 1
+  }
+ ]
+}

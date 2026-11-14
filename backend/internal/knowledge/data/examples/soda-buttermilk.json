@@ -1,0 +1,38 @@
+{
+ "steps": [
+  {
+   "text": "Mehl, Zucker, Natron und Buttermilch verrühren und 25 Minuten backen.",
+   "ingredients": [
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 250,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Zucker"
+     ],
+     "amount": 100,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Natron"
+     ],
+     "amount": 1,
+     "unit": "TL"
+    },
+    {
+     "names": [
+      "Buttermilch"
+     ],
+     "amount": 200,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 25
+  }
+ ]
+}

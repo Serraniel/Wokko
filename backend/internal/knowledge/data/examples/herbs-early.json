@@ -1,0 +1,31 @@
+{
+ "steps": [
+  {
+   "text": "Simmer the tomatoes with basil and garlic for an hour.",
+   "ingredients": [
+    {
+     "names": [
+      "canned tomatoes"
+     ],
+     "amount": 800,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "basil"
+     ],
+     "amount": 1,
+     "unit": "bunch"
+    },
+    {
+     "names": [
+      "garlic"
+     ],
+     "amount": 2,
+     "unit": "cloves"
+    }
+   ],
+   "minutes": 60
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "steps": [
+  {
+   "text": "Butter schmelzen und Mehl einrühren.",
+   "ingredients": [
+    {
+     "names": [
+      "Butter"
+     ],
+     "amount": 30,
+     "unit": "g"
+    },
+    {
+     "names": [
+      "Mehl"
+     ],
+     "amount": 30,
+     "unit": "g"
+    }
+   ],
+   "minutes": 3
+  },
+  {
+   "text": "Milch einrühren, bis eine glatte Soße entsteht, und sofort servieren.",
+   "ingredients": [
+    {
+     "names": [
+      "Milch"
+     ],
+     "amount": 300,
+     "unit": "ml"
+    }
+   ],
+   "minutes": 3
+  }
+ ]
+}
