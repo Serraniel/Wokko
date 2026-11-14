@@ -332,6 +332,14 @@ await step('kitchen knowledge explains a recipe', async () => {
   await p.click('a[aria-label="Edit"]'); await p.waitForURL(/edit$/); await p.waitForSelector('#hints-title'); await p.waitForSelector('text=Allergens: Eggs, Milk');
   await p.locator('#hints-title').scrollIntoViewIfNeeded(); await shot('39-editor-hints'); await p.click('a:has-text("Cancel")');
 });
+await step('a recipe used as an ingredient links to its recipe', async () => {
+  const make = async (data) => (await (await p.request.post(base + '/api/v1/recipes', { data })).json());
+  const stock = await make({ name: 'Wokko-Brühe', servings: 4, visibility: 'private', steps: [{ instruction: 'Kochen.', ingredients: [{ food_name: 'Suppenhuhn' }] }] });
+  const dish = await make({ name: 'Wokko-Frikassee', servings: 2, visibility: 'private', steps: [{ instruction: 'Rühren.', ingredients: [{ food_name: 'Wokko-Brühe', unit_name: 'ml', amount: 450 }] }] });
+  await p.goto(base + '/ingredients'); await p.fill('input[type=search]', 'Wokko-Brühe'); await p.click('button:has-text("Wokko-Brühe")');
+  await p.fill('input[aria-label="Can be cooked from"]', 'Wokko-Br'); await p.click('li[role=option]:has-text("Wokko-Brühe")'); await p.click('form button:has-text("Save")'); await p.waitForTimeout(300);
+  await p.goto(base + '/recipes/' + dish.id); await p.click('a[title="Recipe: Wokko-Brühe"]'); await p.waitForURL('**/recipes/' + stock.id); await p.waitForSelector('h1:has-text("Wokko-Brühe")');
+});
 await step('a used or expired photo upload link explains itself', async () => {
   await p.goto(base + '/upload/not-a-real-token'); await p.waitForSelector('text=This link no longer works'); await p.waitForSelector('text=Ask the assistant for a new one');
 });

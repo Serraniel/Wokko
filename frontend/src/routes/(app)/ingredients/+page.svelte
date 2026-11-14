@@ -2,7 +2,7 @@
 	import { Plus, Search, X } from '@lucide/svelte';
 	import { api, errorText, query } from '#lib/api/client.ts';
 	import type { ClassInfo } from '#lib/api/knowledge.gen.ts';
-	import type { Food, FoodNutrition, Nutrient, NutritionSuggestion, Page, Translation, Unit } from '#lib/api/types.gen.ts';
+	import type { Food, FoodNutrition, Nutrient, NutritionSuggestion, Page, RecipeSummary, Translation, Unit } from '#lib/api/types.gen.ts';
 	import Combobox, { type Option } from '#lib/components/Combobox.svelte';
 	import ErrorNote from '#lib/components/ErrorNote.svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
@@ -160,8 +160,19 @@
 		}
 	}
 
+	// The recipe a food can be cooked from, such as chicken stock from its own recipe.
+	let linkedRecipe = $state<{ id: number; name: string } | null>(null);
+	let recipeQuery = $state('');
+
+	async function searchRecipes(q: string): Promise<Option[]> {
+		const p = await api.get<Page<RecipeSummary>>(`/recipes${query({ q, limit: 8 })}`);
+		return p.items.map((r) => ({ id: r.id, label: r.name }));
+	}
+
 	function openEntry(e: Entry) {
 		editing = e;
+		linkedRecipe = 'recipe' in e ? (e.recipe ?? null) : null;
+		recipeQuery = linkedRecipe?.name ?? '';
 		if (kind === 'foods') loadNutrition(e.id);
 		rows = buildRows(e.translations);
 		aliases = e.aliases.join(', ');
@@ -184,7 +195,7 @@
 			translations: rows.filter((r) => r.name.trim()),
 			aliases: aliases.split(',').map((a) => a.trim()).filter(Boolean),
 			default_unit_id: editing && 'default_unit' in editing ? (editing.default_unit?.id ?? null) : null,
-			...(kind === 'foods' ? { knowledge_classes: classes } : {})
+			...(kind === 'foods' ? { knowledge_classes: classes, ...(editing ? { recipe_id: linkedRecipe?.id ?? 0 } : {}) } : {})
 		};
 		try {
 			if (editing) await api.put(`/${kind}/${editing.id}`, body);
@@ -312,6 +323,20 @@
 						{t('catalog.kinds_hint')}
 					</p>
 				</div>
+				{#if editing}
+					<div>
+						<p class="label">{t('catalog.recipe_link')}</p>
+						{#if linkedRecipe}
+							<p class="flex flex-wrap items-center gap-2 text-sm">
+								<a class="font-medium underline underline-offset-2 hover:text-brand" href="/recipes/{linkedRecipe.id}">{linkedRecipe.name}</a>
+								{#if !readOnly}<button type="button" class="btn btn-ghost !min-h-8 text-sm" onclick={() => { linkedRecipe = null; recipeQuery = ''; }}><X size={14} />{t('catalog.recipe_link_remove')}</button>{/if}
+							</p>
+						{:else if !readOnly}
+							<Combobox label={t('catalog.recipe_link')} placeholder={t('catalog.recipe_link_placeholder')} bind:value={recipeQuery} search={searchRecipes} onpick={(o) => { if (o) linkedRecipe = { id: o.id, name: o.label }; }} allowCreate={false} />
+						{/if}
+						<p class="hint">{t('catalog.recipe_link_hint')}</p>
+					</div>
+				{/if}
 			{/if}
 		</fieldset>
 		{#if !readOnly}<button class="btn btn-primary w-full" disabled={busy}>{t('common.save')}</button>{/if}

@@ -32,7 +32,7 @@
 <PublicShell>
 	<ErrorNote text={error} />
 	{#if recipe}
-		<RecipeView {recipe} cookHref="/s/{page.params.token}/cook" exportBase="/api/v1/public/share/{page.params.token}/export" insightsUrl="/public/share/{page.params.token}/insights" />
+		<RecipeView {recipe} cookHref="/s/{page.params.token}/cook" recipeHref={(id) => `/gallery/${id}`} exportBase="/api/v1/public/share/{page.params.token}/export" insightsUrl="/public/share/{page.params.token}/insights" />
 	{:else if missing}
 		<div class="flex flex-col items-center gap-3 p-10 text-center">
 			<Mascot />

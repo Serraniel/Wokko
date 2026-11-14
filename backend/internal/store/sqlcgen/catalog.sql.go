@@ -127,7 +127,7 @@ func (q *Queries) CountUnits(ctx context.Context, q_ string) (int64, error) {
 }
 
 const createFood = `-- name: CreateFood :one
-INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked
+INSERT INTO foods (default_unit_id, created_by) VALUES (?, ?) RETURNING id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked, recipe_id
 `
 
 type CreateFoodParams struct {
@@ -147,6 +147,7 @@ func (q *Queries) CreateFood(ctx context.Context, arg CreateFoodParams) (Food, e
 		&i.PieceGrams,
 		&i.NutritionSource,
 		&i.NutritionUnchecked,
+		&i.RecipeID,
 	)
 	return i, err
 }
@@ -289,7 +290,7 @@ func (q *Queries) FindUnitIDByName(ctx context.Context, name string) (int64, err
 }
 
 const getFood = `-- name: GetFood :one
-SELECT id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked FROM foods WHERE id = ?
+SELECT id, default_unit_id, created_by, created_at, updated_at, piece_grams, nutrition_source, nutrition_unchecked, recipe_id FROM foods WHERE id = ?
 `
 
 func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
@@ -304,6 +305,7 @@ func (q *Queries) GetFood(ctx context.Context, id int64) (Food, error) {
 		&i.PieceGrams,
 		&i.NutritionSource,
 		&i.NutritionUnchecked,
+		&i.RecipeID,
 	)
 	return i, err
 }
@@ -629,6 +631,48 @@ func (q *Queries) ListFoodNames(ctx context.Context, ids []int64) ([]FoodName, e
 			&i.Plural,
 			&i.SearchName,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listFoodRecipeLinks = `-- name: ListFoodRecipeLinks :many
+SELECT id, recipe_id FROM foods WHERE id IN (/*SLICE:ids*/?) AND recipe_id IS NOT NULL
+`
+
+type ListFoodRecipeLinksRow struct {
+	ID       int64
+	RecipeID sql.NullInt64
+}
+
+func (q *Queries) ListFoodRecipeLinks(ctx context.Context, ids []int64) ([]ListFoodRecipeLinksRow, error) {
+	query := listFoodRecipeLinks
+	var queryParams []interface{}
+	if len(ids) > 0 {
+		for _, v := range ids {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:ids*/?", strings.Repeat(",?", len(ids))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
+	}
+	rows, err := q.db.QueryContext(ctx, query, queryParams...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListFoodRecipeLinksRow{}
+	for rows.Next() {
+		var i ListFoodRecipeLinksRow
+		if err := rows.Scan(&i.ID, &i.RecipeID); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -995,6 +1039,20 @@ type SetFoodDefaultUnitParams struct {
 
 func (q *Queries) SetFoodDefaultUnit(ctx context.Context, arg SetFoodDefaultUnitParams) error {
 	_, err := q.db.ExecContext(ctx, setFoodDefaultUnit, arg.DefaultUnitID, arg.ID)
+	return err
+}
+
+const setFoodRecipe = `-- name: SetFoodRecipe :exec
+UPDATE foods SET recipe_id = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?
+`
+
+type SetFoodRecipeParams struct {
+	RecipeID sql.NullInt64
+	ID       int64
+}
+
+func (q *Queries) SetFoodRecipe(ctx context.Context, arg SetFoodRecipeParams) error {
+	_, err := q.db.ExecContext(ctx, setFoodRecipe, arg.RecipeID, arg.ID)
 	return err
 }
 

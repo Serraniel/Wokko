@@ -95,6 +95,7 @@ type Food struct {
 	PieceGrams         sql.NullFloat64
 	NutritionSource    string
 	NutritionUnchecked int64
+	RecipeID           sql.NullInt64
 }
 
 type FoodAlias struct {

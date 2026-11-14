@@ -117,6 +117,11 @@ func search[T any](in catalogArgs, fn func(query string, limit int64) (app.Page[
 	return out, nil
 }
 
+type linkRecipeArgs struct {
+	FoodID   int64 `json:"food_id"`
+	RecipeID int64 `json:"recipe_id" jsonschema:"the recipe the food is cooked from, or 0 to remove the link"`
+}
+
 type suggestNutritionArgs struct {
 	FoodID int64  `json:"food_id"`
 	Query  string `json:"query,omitempty" jsonschema:"an English search, such as cooked ham. Leave out to search with all of the food's names"`
@@ -336,6 +341,10 @@ func (l *Layer) server(a app.TokenAccess, base string) *mcp.Server {
 			}
 			r, err := svc.UpdateRecipe(ctx, v, in.ID, draft)
 			return r, r.Name, err
+		})
+		write(l, s, a, "link_food_recipe", "Say that a food can be cooked from one of the person's recipes, such as the food chicken stock from their chicken stock recipe. Recipes that use the food then link to that recipe. 0 removes the link. A recipe that already uses the food is refused.", func(ctx context.Context, in linkRecipeArgs) (any, string, error) {
+			f, err := svc.LinkFoodRecipe(ctx, v, in.FoodID, in.RecipeID)
+			return f, f.Name, err
 		})
 		write(l, s, a, "set_food_nutrition", "Fill in a food's missing nutrition values per 100 g, for example for a food that was just added. Existing values are never changed. Look the food up with suggest_food_nutrition first and name that entry as source. Only estimate when nothing fits, and then say estimate in source. Implausible values are refused.", func(ctx context.Context, in fillNutritionArgs) (any, string, error) {
 			out, err := svc.FillFoodNutrition(ctx, v, in.FoodID, in.values(), in.PieceGrams, in.Source, in.Confirmed)

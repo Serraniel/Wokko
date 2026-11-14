@@ -175,3 +175,9 @@ INSERT INTO food_knowledge_classes (food_id, class) VALUES (?, ?) ON CONFLICT DO
 
 -- name: MoveFoodKnowledgeClasses :exec
 UPDATE OR IGNORE food_knowledge_classes SET food_id = sqlc.arg(target) WHERE food_id = sqlc.arg(source);
+
+-- name: SetFoodRecipe :exec
+UPDATE foods SET recipe_id = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?;
+
+-- name: ListFoodRecipeLinks :many
+SELECT id, recipe_id FROM foods WHERE id IN (sqlc.slice(ids)) AND recipe_id IS NOT NULL;
