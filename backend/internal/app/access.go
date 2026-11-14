@@ -39,9 +39,20 @@ func (s *Service) ListAPITokens(ctx context.Context, v Viewer) ([]APIToken, erro
 		return nil, err
 	}
 	now := s.stamp(s.Now())
+	// An app stays connected as long as it can renew its short-lived token, even when it
+	// hasn't been used for a while.
+	connected, err := s.Store.Queries.ListConnectedOAuthClients(ctx, sqlcgen.ListConnectedOAuthClientsParams{UserID: v.id(), ExpiresAt: now})
+	if err != nil {
+		return nil, err
+	}
 	out := []APIToken{}
 	for _, t := range rows {
-		if !t.ExpiresAt.Valid || t.ExpiresAt.String > now {
+		live := !t.ExpiresAt.Valid || t.ExpiresAt.String > now
+		if t.ClientID != "" && slices.Contains(connected, t.ClientID) {
+			tk := toAPIToken(t)
+			tk.ExpiresAt = "" // it renews itself
+			out = append(out, tk)
+		} else if live && t.ClientID == "" {
 			out = append(out, toAPIToken(t))
 		}
 	}
@@ -327,7 +338,7 @@ func (s *Service) issueOAuthTokens(ctx context.Context, q *sqlcgen.Queries, clie
 	}
 	access, refresh = tokenPrefix+access, tokenPrefix+refresh
 	now := s.Now()
-	if err := q.DeleteExpiredAPITokens(ctx, nullStr(s.stamp(now))); err != nil {
+	if err := q.DeleteExpiredAPITokens(ctx, s.stamp(now)); err != nil {
 		return OAuthTokens{}, err
 	}
 	// Each app shows once in settings, however often its short-lived token renews.
