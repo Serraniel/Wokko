@@ -184,6 +184,10 @@ Each [release](https://github.com/Serraniel/Wokko/releases) also has software bi
 
 The changelog is in [`CHANGELOG.md`](CHANGELOG.md), and in the app under **Changelog** in the footer.
 
+Once a month, a workflow adds names and aliases for the starter foods from [Wikidata](https://www.wikidata.org) (CC0) and opens one pull request to review. It only adds; it never changes or removes values. To run it by hand: `cd backend && go run ./cmd/catalog-refresh`.
+
+**For maintainers:** pull requests opened by workflows don't start CI by themselves. Create a [fine-grained token](https://github.com/settings/personal-access-tokens/new) for this repository only, with **Contents** and **Pull requests** set to read and write, and store it as the repository secret `WOKKO_BOT_TOKEN`. Release and catalog PRs then run their checks without approval. Releases and tags keep using the built-in token.
+
 ## License
 
 [EUPL-1.2](LICENSE)

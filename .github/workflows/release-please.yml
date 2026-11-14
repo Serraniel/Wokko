@@ -18,11 +18,22 @@ jobs:
       created: ${{ steps.release.outputs.release_created }}
       tag: ${{ steps.release.outputs.tag_name }}
     steps:
+      # Releases and tags use the default token, so a tag never starts the publish workflow
+      # a second time.
       - id: release
         uses: googleapis/release-please-action@v5
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
+      # The release PR uses WOKKO_BOT_TOKEN when it's set (see catalog-refresh.yml), so its
+      # CI starts by itself instead of waiting for someone to approve the run.
+      - uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ secrets.WOKKO_BOT_TOKEN || github.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          skip-github-release: true
 
   # A tag pushed by this workflow's own token doesn't start other workflows, so the image is
   # published from here.

@@ -1,6 +1,6 @@
 # Starter catalog updates
 
-Status: steps 1 to 3 built (pack, provenance, start-up sync, admin suggestions). Step 4, the generator and the monthly workflow, is still open and needs bot credentials. Tracking issue: #107.
+Status: built. The pack, provenance, start-up sync and admin suggestions, plus a monthly Wikidata refresh that opens a reviewed PR. USDA values aren't refreshed automatically: SR Legacy is a final dataset, so nutrient corrections are made by hand. Tracking issue: #107.
 
 ## Problem
 

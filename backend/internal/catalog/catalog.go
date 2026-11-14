@@ -45,7 +45,9 @@ type Entry struct {
 	Names       map[string]Name    `json:"names"`
 	Aliases     []string           `json:"aliases,omitempty"`
 	Nutrients   map[string]float64 `json:"nutrients,omitempty"`
-	// Curated marks values people improved by hand, which a generator must keep.
+	// Wikidata is the item names and aliases are refreshed from, such as Q23485.
+	Wikidata string `json:"wikidata,omitempty"`
+	// Curated marks entries people improved by hand. The refresh leaves them alone.
 	Curated bool `json:"curated,omitempty"`
 }
 
@@ -231,4 +233,31 @@ func Merge(base, ours, theirs Fields, auto bool) Result {
 		}
 	}
 	return r
+}
+
+// Files lists the data files and the kind each holds.
+var Files = map[string]string{"foods.json": Food, "units.json": Unit, "tags.json": Tag}
+
+// Encode writes entries the way the data files are kept, so a refresh only shows real changes.
+func Encode(kind string, entries []Entry) ([]byte, error) {
+	name := map[string]string{Food: "foods", Unit: "units", Tag: "tags"}[kind]
+	var buf strings.Builder
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", " ")
+	if err := enc.Encode(map[string][]Entry{name: entries}); err != nil {
+		return nil, err
+	}
+	return []byte(buf.String()), nil
+}
+
+// Decode reads one data file.
+func Decode(raw []byte) (map[string][]Entry, error) {
+	var f file
+	dec := json.NewDecoder(strings.NewReader(string(raw)))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&f); err != nil {
+		return nil, err
+	}
+	return f.byKind(), nil
 }
