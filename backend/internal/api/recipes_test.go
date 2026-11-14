@@ -718,3 +718,24 @@ func TestWokkoExportImportsIntoAnotherWokko(t *testing.T) {
 		t.Fatalf("second import: %+v %v", result, err)
 	}
 }
+
+func TestIngredientsWrittenWithAnAliasUseTheKnownEntry(t *testing.T) {
+	e := newEnv(t)
+	c := e.admin()
+	var food app.Food
+	c.ok("POST", v1+"/foods", app.FoodInput{Translations: []app.Translation{{Locale: "de", Name: "Wokkolauch"}}, Aliases: []string{"Wokkozwiebel"}}, 201).decode(t, &food)
+	var unit app.Unit
+	c.ok("POST", v1+"/units", app.UnitInput{Translations: []app.Translation{{Locale: "en", Name: "wokko bunch"}}, Aliases: []string{"Wokkobund"}}, 201).decode(t, &unit)
+	in := simpleRecipe("Salat")
+	in.Steps = []app.StepInput{{Instruction: "Schneiden", Ingredients: []app.IngredientInput{{FoodName: "wokkozwiebel", UnitName: "Wokkobund", Amount: ptr(1.0)}}}}
+	r := c.createRecipe(in)
+	got := r.Steps[0].Ingredients[0]
+	if got.Food.ID != food.ID || got.Unit == nil || got.Unit.ID != unit.ID {
+		t.Fatalf("ingredient: food %+v unit %+v, want %d and %d", got.Food, got.Unit, food.ID, unit.ID)
+	}
+	var foods app.Page[app.Food]
+	c.ok("GET", v1+"/foods?q=wokko", nil, 200).decode(t, &foods)
+	if foods.Total != 1 {
+		t.Fatalf("a duplicate food was created: %+v", foods.Items)
+	}
+}
