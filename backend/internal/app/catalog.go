@@ -233,6 +233,11 @@ func (s *Service) foodDetail(ctx context.Context, q *sqlcgen.Queries, v Viewer, 
 		return Food{}, err
 	}
 	f := Food{FoodRef: refs[id], Uses: uses, CanEdit: s.canEditCatalog(v, row.CreatedBy.Int64), Translations: []Translation{}, Aliases: []string{}}
+	links, err := s.recipeLinks(ctx, q, v, []int64{id})
+	if err != nil {
+		return Food{}, err
+	}
+	f.Recipe = links[id]
 	for _, n := range names {
 		f.Translations = append(f.Translations, Translation{Locale: n.Locale, Name: n.Name, Plural: n.Plural.String})
 	}
@@ -323,6 +328,11 @@ func (s *Service) CreateFood(ctx context.Context, v Viewer, in FoodInput) (Food,
 		if err := s.writeKnowledgeClasses(ctx, q, id, in.KnowledgeClasses); err != nil {
 			return err
 		}
+		if in.RecipeID != nil {
+			if err := s.setFoodRecipe(ctx, q, v, id, *in.RecipeID); err != nil {
+				return err
+			}
+		}
 		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})
 	if err != nil {
@@ -381,6 +391,11 @@ func (s *Service) UpdateFood(ctx context.Context, v Viewer, id int64, in FoodInp
 		}
 		if err := s.writeKnowledgeClasses(ctx, q, id, in.KnowledgeClasses); err != nil {
 			return err
+		}
+		if in.RecipeID != nil {
+			if err := s.setFoodRecipe(ctx, q, v, id, *in.RecipeID); err != nil {
+				return err
+			}
 		}
 		return s.reindexFood(ctx, q, id) // Recipes stay findable under the new name.
 	})

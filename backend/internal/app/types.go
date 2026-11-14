@@ -71,6 +71,8 @@ type Food struct {
 	// match is a suggestion only. MatchedName is the spelling that matched.
 	Match       string `json:"match,omitempty"`
 	MatchedName string `json:"matched_name,omitempty"`
+	// Recipe is the recipe this food can be cooked from, when the viewer may see it.
+	Recipe *RecipeLink `json:"recipe"`
 }
 
 type Unit struct {
@@ -87,6 +89,9 @@ type FoodInput struct {
 	Aliases       []string      `json:"aliases"`
 	// KnowledgeClasses replaces the set classes. Leaving it out keeps them.
 	KnowledgeClasses *[]string `json:"knowledge_classes"`
+	// RecipeID links the food to the recipe it can be cooked from. 0 removes the link, and
+	// leaving it out keeps it.
+	RecipeID *int64 `json:"recipe_id"`
 }
 
 type UnitInput struct {
@@ -117,6 +122,14 @@ type Ingredient struct {
 	Unit   *UnitRef `json:"unit"`
 	Amount *float64 `json:"amount"`
 	Note   string   `json:"note"`
+	// Recipe is the recipe this food can be cooked from, when the viewer may see it.
+	Recipe *RecipeLink `json:"recipe"`
+}
+
+// RecipeLink points to a recipe that the viewer may see.
+type RecipeLink struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
 }
 
 type Step struct {

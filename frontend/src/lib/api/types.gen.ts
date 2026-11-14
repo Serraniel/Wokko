@@ -70,6 +70,10 @@ export interface Food extends FoodRef {
    */
   match: string | null;
   matched_name: string | null;
+  /**
+   * Recipe is the recipe this food can be cooked from, when the viewer may see it.
+   */
+  recipe: RecipeLink | null;
 }
 export interface Unit extends UnitRef {
   translations: Translation[];
@@ -85,6 +89,11 @@ export interface FoodInput {
    * KnowledgeClasses replaces the set classes. Leaving it out keeps them.
    */
   knowledge_classes: string[] | null;
+  /**
+   * RecipeID links the food to the recipe it can be cooked from. 0 removes the link, and
+   * leaving it out keeps it.
+   */
+  recipe_id: number /* int64 */ | null;
 }
 export interface UnitInput {
   translations: Translation[];
@@ -110,6 +119,17 @@ export interface Ingredient {
   unit: UnitRef | null;
   amount: number /* float64 */ | null;
   note: string;
+  /**
+   * Recipe is the recipe this food can be cooked from, when the viewer may see it.
+   */
+  recipe: RecipeLink | null;
+}
+/**
+ * RecipeLink points to a recipe that the viewer may see.
+ */
+export interface RecipeLink {
+  id: number /* int64 */;
+  name: string;
 }
 export interface Step {
   id: number /* int64 */;

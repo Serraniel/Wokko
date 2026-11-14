@@ -189,9 +189,16 @@ func (s *Service) buildRecipe(ctx context.Context, q *sqlcgen.Queries, v Viewer,
 	if err != nil {
 		return Recipe{}, err
 	}
+	links, err := s.recipeLinks(ctx, q, v, foodIDs)
+	if err != nil {
+		return Recipe{}, err
+	}
 	byStep := map[int64][]Ingredient{}
 	for _, i := range ings {
 		ing := Ingredient{ID: i.ID, Food: foods[i.FoodID], Note: i.Note}
+		if l := links[i.FoodID]; l != nil && l.ID != r.ID {
+			ing.Recipe = l
+		}
 		if i.UnitID.Valid {
 			u := units[i.UnitID.Int64]
 			ing.Unit = &u

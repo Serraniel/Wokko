@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChefHat, Clock, Download, ExternalLink, Hourglass, Minus, Plus, Printer, Star, Users } from '@lucide/svelte';
+	import { BookOpen, ChefHat, Clock, Download, ExternalLink, Hourglass, Minus, Plus, Printer, Star, Users } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 	import type { Ingredient, Recipe, UnitRef } from '#lib/api/types.gen.ts';
 	import { asFraction, combineIngredients, roundAmount } from '#lib/format.ts';
@@ -11,7 +11,8 @@
 
 	// exportBase, on pages without an account, offers the recipe as a file to take elsewhere.
 	// insightsUrl is where Wokko's kitchen knowledge about this recipe is read from.
-	let { recipe, actions, footer, cookHref, exportBase, insightsUrl }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string; exportBase?: string; insightsUrl?: string } = $props();
+	// recipeHref is where a linked recipe opens: the app for people logged in, the public gallery on public pages.
+	let { recipe, actions, footer, cookHref, exportBase, insightsUrl, recipeHref = (id: number) => `/recipes/${id}` }: { recipe: Recipe; actions?: Snippet; footer?: Snippet; cookHref?: string; exportBase?: string; insightsUrl?: string; recipeHref?: (id: number) => string } = $props();
 	let exportOpen = $state(false);
 
 	let servings = $state(0);
@@ -107,7 +108,7 @@
 									{#if step.instruction}<p class="whitespace-pre-line leading-relaxed">{@html renderMarkdown(step.instruction)}</p>{/if}
 									{#if perStep && step.ingredients.length}
 										<ul class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
-											{#each step.ingredients as ing (ing.id)}<li>{line(ing)}{#if ing.note}, {ing.note}{/if}</li>{/each}
+											{#each step.ingredients as ing (ing.id)}<li>{#if ing.recipe}<a class="inline-flex items-baseline gap-1 underline decoration-line underline-offset-2 hover:text-brand" href={recipeHref(ing.recipe.id)} title={t('recipe.linked', { name: ing.recipe.name })}>{line(ing)}<BookOpen size={13} class="shrink-0 self-center text-muted" /></a>{:else}{line(ing)}{/if}{#if ing.note}, {ing.note}{/if}</li>{/each}
 										</ul>
 									{/if}
 									{#if step.minutes}<p class="inline-flex items-center gap-1 text-xs text-muted"><Clock size={12} />{formatMinutes(step.minutes)}</p>{/if}
