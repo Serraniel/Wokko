@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.5.0](https://github.com/Serraniel/Wokko/compare/v0.4.0...v0.5.0) (2026-11-20)
+
+
+### Features
+
+* **auth:** admins create accounts with a one-time setup link ([#152](https://github.com/Serraniel/Wokko/issues/152)) ([fd78070](https://github.com/Serraniel/Wokko/commit/fd7807030294ffa0c9516b02db2a7fe4aa667ed1)), closes [#150](https://github.com/Serraniel/Wokko/issues/150)
+* **auth:** optional mail for invites, setup links and forgotten passwords ([#153](https://github.com/Serraniel/Wokko/issues/153)) ([3746a87](https://github.com/Serraniel/Wokko/commit/3746a87f750b8d094d3fd306d5bacda4a94356ba)), closes [#151](https://github.com/Serraniel/Wokko/issues/151)
+* **i18n:** switch language and theme without an account, and the theme in one click ([#134](https://github.com/Serraniel/Wokko/issues/134)) ([4ab1727](https://github.com/Serraniel/Wokko/commit/4ab1727ef8bd46c6178c3ad23228eeddaf543568)), closes [#131](https://github.com/Serraniel/Wokko/issues/131)
+* **ingredients:** add everyday staples to the starter catalog ([#140](https://github.com/Serraniel/Wokko/issues/140)) ([c381992](https://github.com/Serraniel/Wokko/commit/c381992b45a5bfdca30a7eb2a67e6748cf040604)), closes [#126](https://github.com/Serraniel/Wokko/issues/126)
+* **ingredients:** more names for starter foods from Wikidata ([#115](https://github.com/Serraniel/Wokko/issues/115)) ([67d38d8](https://github.com/Serraniel/Wokko/commit/67d38d805e7125eb466459c536c3fc902d9a7e80))
+* **mcp:** let assistants fill in missing nutrition values ([#139](https://github.com/Serraniel/Wokko/issues/139)) ([31a1f99](https://github.com/Serraniel/Wokko/commit/31a1f992781cc62ce18d24db05a09e652d1b6354)), closes [#125](https://github.com/Serraniel/Wokko/issues/125)
+* **mcp:** set recipe photos without a public address ([#141](https://github.com/Serraniel/Wokko/issues/141)) ([9408cc5](https://github.com/Serraniel/Wokko/commit/9408cc5fa7e66a12416779f0c1f38c7fba4269ad)), closes [#128](https://github.com/Serraniel/Wokko/issues/128)
+* **plan:** cook a linked recipe instead of buying it ([#148](https://github.com/Serraniel/Wokko/issues/148)) ([ae6cbdf](https://github.com/Serraniel/Wokko/commit/ae6cbdf9f60216ca1e634936cf3af274ce7deb55))
+* **plan:** look up a food's nutrition values offline ([#138](https://github.com/Serraniel/Wokko/issues/138)) ([2f58aa5](https://github.com/Serraniel/Wokko/commit/2f58aa5bad5f27a394fc6b0ac1623d422a8e658f)), closes [#124](https://github.com/Serraniel/Wokko/issues/124)
+* **recipes:** count linked recipes for nutrition, allergens, kitshn and imports ([#149](https://github.com/Serraniel/Wokko/issues/149)) ([b390cfe](https://github.com/Serraniel/Wokko/commit/b390cfe7b8e6fb64ebddfb4964983d7eaa3114e9)), closes [#136](https://github.com/Serraniel/Wokko/issues/136)
+* **recipes:** import a recipe file from New recipe ([#143](https://github.com/Serraniel/Wokko/issues/143)) ([c9b9348](https://github.com/Serraniel/Wokko/commit/c9b93489ed4926c328d35b6e1d3fee1647d5ba68)), closes [#121](https://github.com/Serraniel/Wokko/issues/121)
+* **recipes:** link an ingredient to the recipe it's cooked from ([#147](https://github.com/Serraniel/Wokko/issues/147)) ([be628bc](https://github.com/Serraniel/Wokko/commit/be628bc7a1be17a89adb00720daf17294a509c06))
+* **sharing:** link previews for shared recipes and every other page ([#146](https://github.com/Serraniel/Wokko/issues/146)) ([2cc6df8](https://github.com/Serraniel/Wokko/commit/2cc6df85bbefdfd8e3baec18c47d409ee07cdcb8)), closes [#130](https://github.com/Serraniel/Wokko/issues/130)
+* **sharing:** make clear which links need a login ([#135](https://github.com/Serraniel/Wokko/issues/135)) ([aca858c](https://github.com/Serraniel/Wokko/commit/aca858c593943ff90806f477605c7164912d811d)), closes [#129](https://github.com/Serraniel/Wokko/issues/129)
+* **ui:** blur the page slightly behind sheets and dialogs ([#133](https://github.com/Serraniel/Wokko/issues/133)) ([2796402](https://github.com/Serraniel/Wokko/commit/27964026e78391330e1a206b53d668226ebb116b)), closes [#119](https://github.com/Serraniel/Wokko/issues/119)
+* **ui:** integrations as an overview of cards with a dialog each ([#145](https://github.com/Serraniel/Wokko/issues/145)) ([6d3c705](https://github.com/Serraniel/Wokko/commit/6d3c7050f117036f562d061970ff373130111ff3))
+
+
+### Fixes
+
+* **ingredients:** find known foods inside longer names ([#137](https://github.com/Serraniel/Wokko/issues/137)) ([c57a0d5](https://github.com/Serraniel/Wokko/commit/c57a0d5b945c8ed9e5607899f6c143dccc97297c)), closes [#127](https://github.com/Serraniel/Wokko/issues/127)
+* **mcp:** keep idle assistant apps listed so they can be disconnected ([#144](https://github.com/Serraniel/Wokko/issues/144)) ([a8c3fd3](https://github.com/Serraniel/Wokko/commit/a8c3fd3b8c6fd649b87bfde72659fa9c6fff0f28))
+* **mcp:** show Wokko's logo for the connector in assistants ([#123](https://github.com/Serraniel/Wokko/issues/123)) ([bf90bbd](https://github.com/Serraniel/Wokko/commit/bf90bbdfdfaa5acf23e10a539e4872b492711ead))
+* **recipes:** stop concurrent requests from crashing search ([#142](https://github.com/Serraniel/Wokko/issues/142)) ([ceee9cf](https://github.com/Serraniel/Wokko/commit/ceee9cf619aa530145e31e154adad24d2633dd09))
+* **ui:** show the pointer cursor on everything clickable ([#132](https://github.com/Serraniel/Wokko/issues/132)) ([80a7775](https://github.com/Serraniel/Wokko/commit/80a77750658197a53b01e5f1a6ca7852ec1e3867)), closes [#118](https://github.com/Serraniel/Wokko/issues/118)
+
 ## [0.4.0](https://github.com/Serraniel/Wokko/compare/v0.3.0...v0.4.0) (2026-11-14)
 
 
