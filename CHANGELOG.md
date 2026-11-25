@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.1](https://github.com/Serraniel/Wokko/compare/v0.5.0...v0.5.1) (2026-11-25)
+
+
+### Dependencies
+
+* bump @lucide/svelte from 1.70.0 to 1.76.0 in /frontend ([#162](https://github.com/Serraniel/Wokko/issues/162)) ([252e316](https://github.com/Serraniel/Wokko/commit/252e316fb96a308a28e391c93672bc01a0f6a072))
+* bump @lucide/svelte from 1.76.0 to 1.77.0 in /frontend ([#165](https://github.com/Serraniel/Wokko/issues/165)) ([4462cde](https://github.com/Serraniel/Wokko/commit/4462cdef5a1108563708421ac0068983ba130fe7))
+* bump golang.org/x/net from 0.62.0 to 0.63.0 in /backend ([#160](https://github.com/Serraniel/Wokko/issues/160)) ([252e316](https://github.com/Serraniel/Wokko/commit/252e316fb96a308a28e391c93672bc01a0f6a072))
+* bump modernc.org/sqlite from 1.62.0 to 1.63.0 in /backend ([#164](https://github.com/Serraniel/Wokko/issues/164)) ([c2fb44d](https://github.com/Serraniel/Wokko/commit/c2fb44dc2f980cf5c605d6a9cd7e1b1f23fcafa7))
+* bump svelte from 5.57.3 to 5.58.0 in /frontend ([#161](https://github.com/Serraniel/Wokko/issues/161)) ([252e316](https://github.com/Serraniel/Wokko/commit/252e316fb96a308a28e391c93672bc01a0f6a072))
+
 ## [0.5.0](https://github.com/Serraniel/Wokko/compare/v0.4.0...v0.5.0) (2026-11-20)
 
 
