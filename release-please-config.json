@@ -16,6 +16,10 @@
       "section": "Fixes"
     },
     {
+      "type": "deps",
+      "section": "Dependencies"
+    },
+    {
       "type": "perf",
       "section": "Performance"
     },

@@ -1,3 +1,6 @@
+# Updates that reach the product use the commit type "deps": release-please lists them under
+# Dependencies and makes a release for them, security fixes included. Updates to tests, checks
+# and CI don't change what's shipped, so they stay "chore" and wait for the next release.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -5,21 +8,33 @@ updates:
     schedule:
       interval: "daily"
     labels: ["Infra"]
+    commit-message:
+      prefix: "chore(ci)"
 
+  # Everything in go.mod is built into the binary.
   - package-ecosystem: "gomod"
     directory: "/backend"
     schedule:
       interval: "daily"
     labels: ["Infra"]
+    commit-message:
+      prefix: "deps"
 
+  # "dependencies" ship in the app or build it; "devDependencies" only test and check it.
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "daily"
     labels: ["Infra"]
+    commit-message:
+      prefix: "deps"
+      prefix-development: "chore(deps)"
 
+  # The base images build the binary and run it.
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"
     labels: ["Infra"]
+    commit-message:
+      prefix: "deps"

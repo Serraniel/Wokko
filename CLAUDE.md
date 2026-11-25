@@ -37,9 +37,12 @@ Use Conventional Commits with these scopes:
 - `fix(*)` — Bug fixes (use relevant scope)
 - `chore(infra)` — Docker, CI, dependencies
 - `chore(ci)` — GitHub Actions workflows
+- `deps` — Dependency updates that reach the product: Go modules, the frontend's `dependencies`, Docker base images. Dependabot uses it; it makes a release. Updates to test tools (`devDependencies`) and CI stay `chore`
 
 ## Releases
-release-please reads Conventional Commits on `main`: `fix` bumps the patch, `feat` the minor version while before 1.0, and `feat!` the major one after. Merging its release PR tags the release, updates `CHANGELOG.md` and publishes the image. Never edit versions or the changelog by hand.
+release-please reads Conventional Commits on `main`: `fix` bumps the patch, `feat` the minor version while before 1.0, and `feat!` the major one after. `deps` bumps the patch and is listed under Dependencies, so security updates get released. Merging its release PR tags the release, updates `CHANGELOG.md` and publishes the image. Never edit versions or the changelog by hand.
+
+In the frontend, `dependencies` are what ships in or builds the app, and `devDependencies` only test or check it. Keep that split: Dependabot's commit type follows it.
 
 ## ALWAYS
 - Use `git -c commit.gpgsign=false commit` for ALL commits (no GPG signing ever)
